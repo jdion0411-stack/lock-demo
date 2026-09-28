@@ -538,7 +538,7 @@
                 <span class="icon">✚</span>
                 <div class="portal-indicator-text">
                     <h3>EYEOTA Medical Records Vault</h3>
-                    <p>Correctly Use Multi Authentication to Unlock</p>
+                    <p>Play your custom backend beat near mic to unlock</p>
                 </div>
             </div>
             <span class="portal-indicator-status">Active</span>
@@ -552,7 +552,7 @@
 
             <div class="match-bar-wrapper">
                 <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:#94a3b8;">
-                    <span>Factor 1: Acoustic Match</span>
+                    <span>Factor 1: Custom Beat Acoustic Match</span>
                     <span id="matchPercent">0%</span>
                 </div>
                 <div class="bar-container">
@@ -623,6 +623,9 @@
 </div>
 
 <script>
+    // Configured backend audio link for verification
+    const audioUrl = "https://raw.githubusercontent.com/jdion0411/jdion0411-stack/main/jaydee.mp3";
+
     const outerNotes = [
         '♩', '♪', '♫', '♬', '♭', '♯', '𝄞', '𝄢',
         '♩', '♪', '♫', '♬', '♭', '♯', '𝄞', '𝄢',
