@@ -848,24 +848,28 @@
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
         analyser.getByteFrequencyData(dataArray);
 
+        // Multi-band frequency separation
         let subBass = 0;
-        for (let i = 2; i < 12; i++) subBass += dataArray[i];
-        subBass /= 10;
+        for (let i = 2; i < 10; i++) subBass += dataArray[i];
+        subBass /= 8;
 
-        let vocalPresence = 0;
-        for (let i = 25; i < 90; i++) vocalPresence += dataArray[i];
-        vocalPresence /= 65;
+        let midVocal = 0;
+        for (let i = 30; i < 80; i++) midVocal += dataArray[i];
+        midVocal /= 50;
 
-        const hasBassThump = subBass > 110;
-        const hasVocalPower = vocalPresence > 45;
+        let treble = 0;
+        for (let i = 100; i < 200; i++) treble += dataArray[i];
+        treble /= 100;
 
-        if (hasBassThump && hasVocalPower) {
-            matchScore = Math.min(100, matchScore + 3.2);
+        // Strict signature check to prevent false matches from random music or background noise
+        const hasCorrectSignature = (subBass > 120 && midVocal > 60) && (treble < 180);
+
+        if (hasCorrectSignature) {
+            matchScore = Math.min(100, matchScore + 2.5);
             highlightDynamicNodes(dataArray);
-        } else if (hasBassThump || hasVocalPower) {
-            matchScore = Math.min(100, matchScore + 1.0);
         } else {
-            matchScore = Math.max(0, matchScore - 1.5);
+            // Aggressive decay rate if wrong audio or silence is detected
+            matchScore = Math.max(0, matchScore - 3.0);
             clearHighlights();
         }
 
@@ -921,7 +925,6 @@
         stopAudio();
     }
 
-    document.getElementById('resetBtn').endswith('click') // handled properly below
     document.getElementById('resetBtn').addEventListener('click', resetSystem);
     document.getElementById('relockBtn').addEventListener('click', resetSystem);
 </script>
