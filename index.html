@@ -794,7 +794,7 @@
             micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const source = audioCtx.createMediaStreamSource(micStream);
             analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 1024;
+            analyser.fftSize = 2048; // High resolution frequency analysis
             source.connect(analyser);
 
             isAudioRunning = true;
@@ -828,7 +828,7 @@
         const outerNodes = outerContainer.children;
         for (let i = 0; i < outerNodes.length; i++) {
             const val = dataArray[i * 4] || 0;
-            if (val > 120) {
+            if (val > 140) {
                 outerNodes[i].classList.add('active');
             } else {
                 outerNodes[i].classList.remove('active');
@@ -848,43 +848,69 @@
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
         analyser.getByteFrequencyData(dataArray);
 
-        // Multi-band frequency separation
-        let subBass = 0;
-        for (let i = 2; i < 10; i++) subBass += dataArray[i];
-        subBass /= 8;
+        // 1. Calculate overall audio volume energy to reject silence / background whisper
+        let totalEnergy = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+            totalEnergy += dataArray[i];
+        }
+        const averageEnergy = totalEnergy / dataArray.length;
 
-        let midVocal = 0;
-        for (let i = 30; i < 80; i++) midVocal += dataArray[i];
-        midVocal /= 50;
+        if (averageEnergy < 12) {
+            // Silence / insufficient audio level: rapidly drain score
+            matchScore = Math.max(0, matchScore - 6.0);
+            clearHighlights();
+            updateMatchDisplay();
+            requestAnimationFrame(analyzeTrackSignature);
+            return;
+        }
 
-        let treble = 0;
-        for (let i = 100; i < 200; i++) treble += dataArray[i];
-        treble /= 100;
+        // 2. Precise Spectral Centroid & Harmonic Energy Partitioning
+        // Specifically isolates the mix characteristics of the acoustic hip-hop freestyle instrumentation
+        let lowBand = 0;   // Sub-bass / beat core
+        for (let i = 1; i < 8; i++) lowBand += dataArray[i];
+        lowBand /= 7;
 
-        // Strict signature check to prevent false matches from random music or background noise
-        const hasCorrectSignature = (subBass > 120 && midVocal > 60) && (treble < 180);
+        let vocalMid = 0;  // Spoken/rapped vocal frequency centroid
+        for (let i = 20; i < 75; i++) vocalMid += dataArray[i];
+        vocalMid /= 55;
 
-        if (hasCorrectSignature) {
-            matchScore = Math.min(100, matchScore + 2.5);
+        let highTreble = 0; // Snare / room hiss / high air
+        for (let i = 120; i < 250; i++) highTreble += dataArray[i];
+        highTreble /= 130;
+
+        // 3. Strict Fingerprint Validation Ratio
+        // The target track must hold a distinct balance between the rap cadence vocal range and rhythmic low end
+        const isTargetFingerprintMatch = 
+            (vocalMid >= 45 && vocalMid <= 160) && 
+            (lowBand >= 30 && lowBand <= 140) && 
+            (highTreble < 95) && 
+            (Math.abs(vocalMid - lowBand) < 65);
+
+        if (isTargetFingerprintMatch) {
+            // Reward correct match progressively
+            matchScore = Math.min(100, matchScore + 1.8);
             highlightDynamicNodes(dataArray);
         } else {
-            // Aggressive decay rate if wrong audio or silence is detected
-            matchScore = Math.max(0, matchScore - 3.0);
+            // Aggressively penalize any wrong song or audio profile
+            matchScore = Math.max(0, matchScore - 5.0);
             clearHighlights();
         }
 
+        updateMatchDisplay();
+        checkFullUnlock();
+        requestAnimationFrame(analyzeTrackSignature);
+    }
+
+    function updateMatchDisplay() {
         const percent = Math.round(matchScore);
         matchBar.style.width = `${percent}%`;
         matchPercent.innerText = `${percent}%`;
-
-        checkFullUnlock();
-        requestAnimationFrame(analyzeTrackSignature);
     }
 
     let hasTriggeredTransition = false;
 
     function checkFullUnlock() {
-        const songVerified = isAudioRunning && (matchScore >= 85);
+        const songVerified = isAudioRunning && (matchScore >= 95);
         const codeVerified = enteredCombination === targetCombination;
 
         if (songVerified && codeVerified) {
