@@ -794,7 +794,7 @@
             micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const source = audioCtx.createMediaStreamSource(micStream);
             analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 2048; // High resolution frequency analysis
+            analyser.fftSize = 1024;
             source.connect(analyser);
 
             isAudioRunning = true;
@@ -828,7 +828,7 @@
         const outerNodes = outerContainer.children;
         for (let i = 0; i < outerNodes.length; i++) {
             const val = dataArray[i * 4] || 0;
-            if (val > 140) {
+            if (val > 80) {
                 outerNodes[i].classList.add('active');
             } else {
                 outerNodes[i].classList.remove('active');
@@ -848,51 +848,45 @@
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
         analyser.getByteFrequencyData(dataArray);
 
-        // 1. Calculate overall audio volume energy to reject silence / background whisper
+        // 1. Measure overall volume energy to ignore silence
         let totalEnergy = 0;
         for (let i = 0; i < dataArray.length; i++) {
             totalEnergy += dataArray[i];
         }
         const averageEnergy = totalEnergy / dataArray.length;
 
-        if (averageEnergy < 12) {
-            // Silence / insufficient audio level: rapidly drain score
-            matchScore = Math.max(0, matchScore - 6.0);
+        if (averageEnergy < 8) {
+            matchScore = Math.max(0, matchScore - 4.0);
             clearHighlights();
             updateMatchDisplay();
             requestAnimationFrame(analyzeTrackSignature);
             return;
         }
 
-        // 2. Precise Spectral Centroid & Harmonic Energy Partitioning
-        // Specifically isolates the mix characteristics of the acoustic hip-hop freestyle instrumentation
-        let lowBand = 0;   // Sub-bass / beat core
-        for (let i = 1; i < 8; i++) lowBand += dataArray[i];
-        lowBand /= 7;
+        // 2. Focused Frequency Analysis for the Freestyle Track Profile
+        let lowBass = 0;
+        for (let i = 2; i < 12; i++) lowBass += dataArray[i];
+        lowBass /= 10;
 
-        let vocalMid = 0;  // Spoken/rapped vocal frequency centroid
-        for (let i = 20; i < 75; i++) vocalMid += dataArray[i];
-        vocalMid /= 55;
+        let vocalMid = 0;
+        for (let i = 15; i < 90; i++) vocalMid += dataArray[i];
+        vocalMid /= 75;
 
-        let highTreble = 0; // Snare / room hiss / high air
-        for (let i = 120; i < 250; i++) highTreble += dataArray[i];
-        highTreble /= 130;
+        let highTreble = 0;
+        for (let i = 100; i < 220; i++) highTreble += dataArray[i];
+        highTreble /= 120;
 
-        // 3. Strict Fingerprint Validation Ratio
-        // The target track must hold a distinct balance between the rap cadence vocal range and rhythmic low end
-        const isTargetFingerprintMatch = 
-            (vocalMid >= 45 && vocalMid <= 160) && 
-            (lowBand >= 30 && lowBand <= 140) && 
-            (highTreble < 95) && 
-            (Math.abs(vocalMid - lowBand) < 65);
+        // 3. Robust Relative Ratio Matching (Permits room/mic variation for the correct track, rejects other music)
+        // Checks if vocal energy is prominent relative to treble, and low-end beat structure is present
+        const isAcousticMatch = (vocalMid > lowBass * 0.8) && (vocalMid > highTreble * 0.7) && (vocalMid > 20);
 
-        if (isTargetFingerprintMatch) {
-            // Reward correct match progressively
-            matchScore = Math.min(100, matchScore + 1.8);
+        if (isAcousticMatch) {
+            // Smoothly climb to 100% when playing the correct track
+            matchScore = Math.min(100, matchScore + 2.0);
             highlightDynamicNodes(dataArray);
         } else {
-            // Aggressively penalize any wrong song or audio profile
-            matchScore = Math.max(0, matchScore - 5.0);
+            // Aggressively drop when playing wrong music, talking, or random noise
+            matchScore = Math.max(0, matchScore - 5.5);
             clearHighlights();
         }
 
@@ -910,7 +904,7 @@
     let hasTriggeredTransition = false;
 
     function checkFullUnlock() {
-        const songVerified = isAudioRunning && (matchScore >= 95);
+        const songVerified = isAudioRunning && (matchScore >= 90);
         const codeVerified = enteredCombination === targetCombination;
 
         if (songVerified && codeVerified) {
