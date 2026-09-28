@@ -855,38 +855,45 @@
         }
         const averageEnergy = totalEnergy / dataArray.length;
 
-        if (averageEnergy < 8) {
-            matchScore = Math.max(0, matchScore - 4.0);
+        if (averageEnergy < 6) {
+            matchScore = Math.max(0, matchScore - 8.0);
             clearHighlights();
             updateMatchDisplay();
             requestAnimationFrame(analyzeTrackSignature);
             return;
         }
 
-        // 2. Focused Frequency Analysis for the Freestyle Track Profile
-        let lowBass = 0;
-        for (let i = 2; i < 12; i++) lowBass += dataArray[i];
-        lowBass /= 10;
+        // 2. Strict Multi-Point Frequency Profile for the Target Freestyle Track
+        let subBass = 0;
+        for (let i = 2; i < 6; i++) subBass += dataArray[i];
+        subBass /= 4;
 
-        let vocalMid = 0;
-        for (let i = 15; i < 90; i++) vocalMid += dataArray[i];
-        vocalMid /= 75;
+        let midVocals = 0;
+        for (let i = 12; i < 50; i++) midVocals += dataArray[i];
+        midVocals /= 38;
+
+        let presence = 0;
+        for (let i = 55; i < 110; i++) presence += dataArray[i];
+        presence /= 55;
 
         let highTreble = 0;
-        for (let i = 100; i < 220; i++) highTreble += dataArray[i];
-        highTreble /= 120;
+        for (let i = 130; i < 220; i++) highTreble += dataArray[i];
+        highTreble /= 90;
 
-        // 3. Robust Relative Ratio Matching (Permits room/mic variation for the correct track, rejects other music)
-        // Checks if vocal energy is prominent relative to treble, and low-end beat structure is present
-        const isAcousticMatch = (vocalMid > lowBass * 0.8) && (vocalMid > highTreble * 0.7) && (vocalMid > 20);
+        // Specific structural profile for Jay-Z's raw vocal freestyle over subtle instrumentation
+        const isExactTargetMatch = (midVocals > 26) && 
+                                   (presence > 20) && 
+                                   (midVocals > subBass * 1.3) && 
+                                   (presence > highTreble * 0.85) &&
+                                   (Math.abs(midVocals - presence) < 32);
 
-        if (isAcousticMatch) {
-            // Smoothly climb to 100% when playing the correct track
-            matchScore = Math.min(100, matchScore + 2.0);
+        if (isExactTargetMatch) {
+            // Slow, deliberate accumulation for the correct track
+            matchScore = Math.min(100, matchScore + 1.2);
             highlightDynamicNodes(dataArray);
         } else {
-            // Aggressively drop when playing wrong music, talking, or random noise
-            matchScore = Math.max(0, matchScore - 5.5);
+            // Highly aggressive decay for any other music or background noise
+            matchScore = Math.max(0, matchScore - 12.0);
             clearHighlights();
         }
 
@@ -904,7 +911,7 @@
     let hasTriggeredTransition = false;
 
     function checkFullUnlock() {
-        const songVerified = isAudioRunning && (matchScore >= 90);
+        const songVerified = isAudioRunning && (matchScore >= 100);
         const codeVerified = enteredCombination === targetCombination;
 
         if (songVerified && codeVerified) {
