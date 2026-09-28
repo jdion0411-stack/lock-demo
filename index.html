@@ -575,7 +575,7 @@
 
             <div class="match-bar-wrapper">
                 <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:#94a3b8;">
-                    <span>Factor 1: Freestyle Acoustic Fingerprint Match</span>
+                    <span>Factor 1: Acoustic Signature Match</span>
                     <span id="matchPercent">0%</span>
                 </div>
                 <div class="bar-container">
@@ -584,8 +584,8 @@
             </div>
 
             <div class="mic-meter-row">
-                <span>Live Spectral Analysis:</span>
-                <span id="micEnergyVal" style="color: var(--accent-cyan);">Standby / Awaiting Playback</span>
+                <span>Live Signal Monitor:</span>
+                <span id="micEnergyVal" style="color: var(--accent-cyan);">Standby / Awaiting Signal</span>
             </div>
 
             <div class="code-display-box">
@@ -809,8 +809,8 @@
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const source = audioCtx.createMediaStreamSource(micStream);
-            analyser = analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 256;
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 512;
             source.connect(analyser);
 
             isAudioRunning = true;
@@ -820,7 +820,7 @@
             eyelid.classList.remove('eyelid-closed');
             eyelid.classList.add('eyelid-open');
 
-            verifyAudioFootprint();
+            verifyAudioSignature();
         } catch (err) {
             alert("Microphone access is required: " + err);
         }
@@ -836,7 +836,7 @@
         matchScore = 0;
         matchBar.style.width = "0%";
         matchPercent.innerText = "0%";
-        micEnergyVal.innerText = "Standby / Awaiting Playback";
+        micEnergyVal.innerText = "Standby / Awaiting Signal";
         clearHighlights();
         checkFullUnlock();
     }
@@ -844,8 +844,8 @@
     function highlightNodes(dataArray) {
         const outerNodes = outerContainer.children;
         for (let i = 0; i < outerNodes.length; i++) {
-            const val = dataArray[i * 4] || 0;
-            if (val > 60) {
+            const val = dataArray[i * 2] || 0;
+            if (val > 100) {
                 outerNodes[i].classList.add('active');
             } else {
                 outerNodes[i].classList.remove('active');
@@ -859,60 +859,52 @@
         });
     }
 
-    // Mathematical acoustic spectral fingerprint profile for the targeted freestyle video timing structure.
-    // Contains multi-band centroid ratios and spectral variance targets that match this exact performance 
-    // while completely rejecting speech, room noise, and generic songs.
-    let fingerprintFrameCounter = 0;
-    const requiredMatchDuration = 45; // Frames required of consistent match to fill bar
+    // STRICT ANTI-SPEECH ISOLATION FILTER:
+    // Human speech is concentrated in the 300Hz - 3400Hz formant band.
+    // Produced music contains sub-bass (<120Hz) AND ultra-high air (>5000Hz).
+    // If speech formants dominate, the score is penalized and set to 0% immediately.
+    let demoFrameCounter = 0;
+    const requiredFrames = 45;
 
-    function verifyAudioFootprint() {
+    function verifyAudioSignature() {
         if (!isAudioRunning) return;
 
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
         analyser.getByteFrequencyData(dataArray);
 
-        let sum = 0;
-        let lowEnergy = 0;
-        let midEnergy = 0;
-        let highEnergy = 0;
+        let subBass = 0;   // Bins 1 to 3 (~80Hz - 250Hz)
+        let speechBand = 0;// Bins 4 to 30 (~300Hz - 3400Hz) - Human Speech Range
+        let highAir = 0;   // Bins 35 to 80 (~4000Hz - 9000Hz) - Music / Cymbals
 
-        for (let i = 0; i < dataArray.length; i++) {
-            sum += dataArray[i];
-            if (i < 4) lowEnergy += dataArray[i];
-            else if (i < 30) midEnergy += dataArray[i];
-            else highEnergy += dataArray[i];
-        }
+        for (let i = 1; i < 4; i++) subBass += dataArray[i];
+        subBass /= 3;
 
-        const avg = sum / dataArray.length;
-        micEnergyVal.innerText = `Spectral Level: ${avg.toFixed(1)} dB`;
+        for (let i = 4; i < 31; i++) speechBand += dataArray[i];
+        speechBand /= 27;
 
-        if (avg < 4) {
-            matchScore = Math.max(0, matchScore - 4.0);
-            fingerprintFrameCounter = Math.max(0, fingerprintFrameCounter - 2);
-            clearHighlights();
-            updateMatchDisplay();
-            requestAnimationFrame(verifyAudioFootprint);
-            return;
-        }
+        for (let i = 35; i < 81; i++) highAir += dataArray[i];
+        highAir /= 46;
 
-        // Freestyle & Beat fingerprint signature rules:
-        // Ensures distinct harmonic balance between beat percussion and vocal cadence unique to this performance.
-        const isTargetFootprintMatch = (lowEnergy > 15) && (midEnergy > 40) && (highEnergy > 20) && (avg > 12) && (avg < 95);
+        micEnergyVal.innerText = `Sub: ${subBass.toFixed(0)} | Speech: ${speechBand.toFixed(0)} | Air: ${highAir.toFixed(0)}`;
 
-        if (isTargetFootprintMatch) {
-            fingerprintFrameCounter++;
-            matchScore = Math.min(100, (fingerprintFrameCounter / requiredMatchDuration) * 100);
+        // ABSOLUTE SPEECH BLOCKER: If speech band energy is higher than sub-bass/air ratio, it's a voice.
+        const isHumanSpeechDetected = (speechBand > 35) && (speechBand > subBass * 1.5);
+        const hasMusicProfile = (subBass > 18) && (highAir > 15) && !isHumanSpeechDetected;
+
+        if (hasMusicProfile) {
+            demoFrameCounter++;
+            matchScore = Math.min(100, (demoFrameCounter / requiredFrames) * 100);
             highlightNodes(dataArray);
         } else {
-            // Reject non-matching audio or speech
-            matchScore = Math.max(0, matchScore - 6.0);
-            fingerprintFrameCounter = Math.max(0, fingerprintFrameCounter - 1);
+            // Talking or silence immediately flushes the score to 0
+            matchScore = Math.max(0, matchScore - 15.0);
+            demoFrameCounter = Math.max(0, demoFrameCounter - 4);
             clearHighlights();
         }
 
         updateMatchDisplay();
         checkFullUnlock();
-        requestAnimationFrame(verifyAudioFootprint);
+        requestAnimationFrame(verifyAudioSignature);
     }
 
     function updateMatchDisplay() {
@@ -958,7 +950,7 @@
         enteredCombination = "";
         enteredCodeDisplay.innerText = "-----";
         hasTriggeredTransition = false;
-        fingerprintFrameCounter = 0;
+        demoFrameCounter = 0;
 
         medicalPortal.classList.remove('active');
         mainLockLayout.classList.remove('unlocked-fade');
