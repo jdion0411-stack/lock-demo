@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EYEOTA Interactive Lock - MFA Dial</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --panel-bg: #151c2c;
+            --accent-cyan: #00f2ff;
+            --accent-gold: #ffb700;
+            --accent-green: #00ff88;
+            --text-dark: #0f172a;
+            --text-light: #f8fafc;
+            --dial-size: 480px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .lock-container {
+            position: relative;
+            width: var(--dial-size);
+            height: var(--dial-size);
+            background: #ffffff;
+            border-radius: 50%;
+            border: 8px solid #1e293b;
+            box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        /* Top Pointer for 12 O'Clock Lock Alignment */
+        .top-pointer {
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 14px solid #0284c7;
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        .ring-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .center-artwork {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 25;
+        }
+
+        .eyelid {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+
+        .eyelid-closed { transform: scaleY(1); }
+        .eyelid-open { transform: scaleY(0); }
+
+        #outerRingContainer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        #innerRingContainer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            transform-origin: 240px 240px;
+            transition: transform 0.2s ease-out;
+            z-index: 15;
+        }
+
+        .dial-node {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-dark);
+            font-weight: bold;
+            transition: color 0.2s, background-color 0.2s;
+        }
+
+        .outer-symbol {
+            width: 28px;
+            height: 28px;
+            font-size: 18px;
+            line-height: 28px;
+            border-radius: 50%;
+        }
+
+        .inner-alphabet {
+            width: 26px;
+            height: 26px;
+            font-size: 15px;
+            line-height: 26px;
+            font-family: 'Courier New', Courier, monospace;
+            border-radius: 50%;
+        }
+
+        .char-span {
+            display: inline-block;
+            transition: transform 0.2s ease-out;
+        }
+
+        .dial-node.active {
+            color: #ffffff !important;
+            background-color: #0284c7;
+            box-shadow: 0 0 10px rgba(2, 132, 199, 0.8);
+        }
+
+        .brand-footer {
+            text-align: center;
+            margin-top: -10px;
+        }
+
+        .brand-footer h2 {
+            font-size: 30px;
+            letter-spacing: 8px;
+            color: #ffffff;
+        }
+
+        .brand-footer p {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #94a3b8;
+        }
+
+        .control-panel {
+            background: var(--panel-bg);
+            border-radius: 14px;
+            padding: 20px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            border: 1px solid #334155;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0f172a;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+
+        .value-highlight {
+            color: var(--accent-cyan);
+            font-size: 1rem;
+        }
+
+        .lock-badge {
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .badge-locked {
+            background: #7f1d1d;
+            color: #fca5a5;
+        }
+
+        .badge-unlocked {
+            background: #14532d;
+            color: #86efac;
+        }
+
+        .code-display-box {
+            background: #0f172a;
+            padding: 10px 14px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: monospace;
+        }
+
+        .code-input-val {
+            letter-spacing: 4px;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+
+        .match-bar-wrapper {
+            width: 100%;
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .bar-container {
+            width: 100%;
+            height: 10px;
+            background: #1e293b;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #0284c7, #00ff88);
+            transition: width 0.1s ease;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #0284c7;
+            color: white;
+            grid-column: span 2;
+        }
+
+        .btn-primary:hover { background: #0369a1; }
+
+        .btn-secondary {
+            background: #334155;
+            color: white;
+        }
+
+        .btn-secondary:hover { background: #475569; }
+    </style>
+</head>
+<body>
+
+<div class="main-layout">
+
+    <div class="lock-container" id="lockInterface">
+        <div class="top-pointer"></div>
+
+        <svg class="ring-canvas" viewBox="0 0 480 480">
+            <circle cx="240" cy="240" r="216" fill="none" stroke="#cbd5e1" stroke-width="2"/>
+            <circle cx="240" cy="240" r="162" fill="none" stroke="#cbd5e1" stroke-width="2"/>
+        </svg>
+
+        <!-- Center Integrated Artwork -->
+        <div class="center-artwork">
+            <svg width="140" height="200" viewBox="0 0 140 200">
+                <g transform="translate(62, 10)">
+                    <rect x="0" y="0" width="16" height="24" rx="8" fill="#ffffff" stroke="#0f172a" stroke-width="2.5"/>
+                    <path d="M 4 8 C 4 4, 12 4, 12 8 M 4 12 C 4 8, 12 8, 12 12 M 4 16 C 4 12, 12 12, 12 16" fill="none" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round"/>
+                </g>
+
+                <line x1="70" y1="42" x2="70" y2="135" stroke="#0f172a" stroke-width="5" stroke-linecap="round"/>
+
+                <g transform="translate(70, 145)">
+                    <path d="M -35 0 Q 0 -28 35 0 Q 0 28 -35 0 Z" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+                    <circle cx="0" cy="0" r="11" fill="#0f172a"/>
+                    <circle cx="3" cy="-3" r="3.5" fill="#ffffff"/>
+                    <path id="eyelid" class="eyelid eyelid-closed" d="M -35 0 Q 0 -30 35 0 Q 0 30 -35 0 Z" fill="#0f172a"/>
+                </g>
+            </svg>
+        </div>
+
+        <div id="outerRingContainer"></div>
+        <div id="innerRingContainer"></div>
+    </div>
+
+    <div class="brand-footer">
+        <h2>EYEOTA</h2>
+        <p>DOCUMENT SOLUTIONS</p>
+    </div>
+
+    <div class="control-panel">
+        <div class="status-row">
+            <span>System Access Status:</span>
+            <div class="lock-badge badge-locked" id="lockStatus">LOCKED</div>
+        </div>
+
+        <div class="match-bar-wrapper">
+            <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:#94a3b8;">
+                <span>Factor 1: Song Acoustic Match</span>
+                <span id="matchPercent">0%</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" id="matchBar"></div>
+            </div>
+        </div>
+
+        <div class="code-display-box">
+            <span>Factor 2: Combination Input</span>
+            <span class="code-input-val" id="enteredCodeDisplay">-----</span>
+        </div>
+
+        <div class="btn-grid">
+            <button class="btn-primary" id="micToggleBtn">Start Song Listening Mode</button>
+            <button class="btn-secondary" id="rotateLeftBtn">↺ Rotate Left</button>
+            <button class="btn-secondary" id="rotateRightBtn">↻ Rotate Right</button>
+            <button class="btn-secondary" id="selectLetterBtn">Select Letter</button>
+            <button class="btn-secondary" id="resetBtn">Reset All</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const outerNotes = [
+        '♩', '♪', '♫', '♬', '♭', '♯', '𝄞', '𝄢',
+        '♩', '♪', '♫', '♬', '♭', '♯', '𝄞', '𝄢',
+        '♩', '♪', '♫', '♬', '♭', '♯', '𝄞', '𝄢'
+    ];
+
+    const innerAlphabet = [
+        'A','B','C','D','E','F','G','H','I','J','K','L','M',
+        'N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
+    ];
+
+    const targetCombination = "SWAGG";
+    let enteredCombination = "";
+
+    const outerContainer = document.getElementById('outerRingContainer');
+    const innerContainer = document.getElementById('innerRingContainer');
+    const eyelid = document.getElementById('eyelid');
+    const lockStatus = document.getElementById('lockStatus');
+    const matchBar = document.getElementById('matchBar');
+    const matchPercent = document.getElementById('matchPercent');
+    const enteredCodeDisplay = document.getElementById('enteredCodeDisplay');
+
+    let currentRotationAngle = 0;
+    const stepAngle = 360 / innerAlphabet.length;
+
+    function renderDials() {
+        outerContainer.innerHTML = '';
+        innerContainer.innerHTML = '';
+        const cx = 240, cy = 240;
+
+        // Outer Musical Ring
+        const outerRadius = 216;
+        const outerTotal = outerNotes.length;
+        outerNotes.forEach((symbol, i) => {
+            const angle = (i * (360 / outerTotal) - 90) * (Math.PI / 180);
+            const x = cx + outerRadius * Math.cos(angle);
+            const y = cy + outerRadius * Math.sin(angle);
+
+            const node = document.createElement('div');
+            node.className = 'dial-node outer-symbol';
+            node.innerText = symbol;
+            node.style.left = `${x.toFixed(2)}px`;
+            node.style.top = `${y.toFixed(2)}px`;
+            outerContainer.appendChild(node);
+        });
+
+        // Inner Upright Alphabet Ring
+        const innerRadius = 162;
+        const innerTotal = innerAlphabet.length;
+        innerAlphabet.forEach((char, i) => {
+            const angle = (i * (360 / innerTotal) - 90) * (Math.PI / 180);
+            const x = cx + innerRadius * Math.cos(angle);
+            const y = cy + innerRadius * Math.sin(angle);
+
+            const node = document.createElement('div');
+            node.className = 'dial-node inner-alphabet';
+            node.style.left = `${x.toFixed(2)}px`;
+            node.style.top = `${y.toFixed(2)}px`;
+
+            const span = document.createElement('span');
+            span.className = 'char-span';
+            span.innerText = char;
+            node.appendChild(span);
+
+            innerContainer.appendChild(node);
+        });
+
+        updateUprightOrientations();
+    }
+
+    function updateUprightOrientations() {
+        innerContainer.style.transform = `rotate(${currentRotationAngle}deg)`;
+        
+        document.querySelectorAll('.char-span').forEach(span => {
+            span.style.transform = `rotate(${-currentRotationAngle}deg)`;
+        });
+    }
+
+    renderDials();
+
+    document.getElementById('rotateLeftBtn').addEventListener('click', () => {
+        currentRotationAngle -= stepAngle;
+        updateUprightOrientations();
+    });
+
+    document.getElementById('rotateRightBtn').addEventListener('click', () => {
+        currentRotationAngle += stepAngle;
+        updateUprightOrientations();
+    });
+
+    document.getElementById('selectLetterBtn').addEventListener('click', () => {
+        let normalizedAngle = (-currentRotationAngle) % 360;
+        if (normalizedAngle < 0) normalizedAngle += 360;
+
+        const index = Math.round(normalizedAngle / stepAngle) % innerAlphabet.length;
+        const selectedChar = innerAlphabet[index];
+
+        if (enteredCombination.length < targetCombination.length) {
+            enteredCombination += selectedChar;
+            enteredCodeDisplay.innerText = enteredCombination.padEnd(targetCombination.length, '-');
+            checkFullUnlock();
+        }
+    });
+
+    // Audio Analysis & Strict Simultaneous Verification
+    let audioCtx, analyser, micStream, isAudioRunning = false;
+    let matchScore = 0;
+    const micToggleBtn = document.getElementById('micToggleBtn');
+
+    micToggleBtn.addEventListener('click', async () => {
+        if (isAudioRunning) {
+            stopAudio();
+            return;
+        }
+
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const source = audioCtx.createMediaStreamSource(micStream);
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 512;
+            source.connect(analyser);
+
+            isAudioRunning = true;
+            micToggleBtn.innerText = "Stop Listening";
+            micToggleBtn.style.background = "#b91c1c";
+
+            eyelid.classList.remove('eyelid-closed');
+            eyelid.classList.add('eyelid-open');
+
+            analyzeTrackSignature();
+        } catch (err) {
+            alert("Microphone access is required: " + err);
+        }
+    });
+
+    function stopAudio() {
+        if (micStream) micStream.getTracks().forEach(track => track.stop());
+        if (audioCtx) audioCtx.close();
+        isAudioRunning = false;
+        micToggleBtn.innerText = "Start Song Listening Mode";
+        micToggleBtn.style.background = "#0284c7";
+
+        matchScore = 0;
+        matchBar.style.width = "0%";
+        matchPercent.innerText = "0%";
+        clearHighlights();
+        
+        // Re-evaluate status immediately upon stopping audio
+        checkFullUnlock();
+    }
+
+    function analyzeTrackSignature() {
+        if (!isAudioRunning) return;
+
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(dataArray);
+
+        let bassEnergy = 0, midEnergy = 0, highEnergy = 0;
+        for (let i = 2; i < 10; i++) bassEnergy += dataArray[i];
+        for (let i = 20; i < 60; i++) midEnergy += dataArray[i];
+        for (let i = 100; i < 180; i++) highEnergy += dataArray[i];
+
+        bassEnergy /= 8; midEnergy /= 40; highEnergy /= 80;
+
+        if (bassEnergy > 140 && midEnergy > 50 && highEnergy > 30) {
+            matchScore = Math.min(100, matchScore + 2.5);
+            highlightDynamicNodes(dataArray);
+        } else {
+            matchScore = Math.max(0, matchScore - 1.2);
+            clearHighlights();
+        }
+
+        const percent = Math.round(matchScore);
+        matchBar.style.width = `${percent}%`;
+        matchPercent.innerText = `${percent}%`;
+
+        checkFullUnlock();
+        requestAnimationFrame(analyzeTrackSignature);
+    }
+
+    function checkFullUnlock() {
+        const songVerified = isAudioRunning && (matchScore >= 85);
+        const codeVerified = enteredCombination === targetCombination;
+
+        // Strictly requires BOTH conditions to be true simultaneously
+        if (songVerified && codeVerified) {
+            lockStatus.innerText = "FULL ACCESS GRANTED";
+            lockStatus.className = "lock-badge badge-unlocked";
+            eyelid.classList.remove('eyelid-closed');
+            eyelid.classList.add('eyelid-open');
+        } else {
+            lockStatus.innerText = "LOCKED";
+            lockStatus.className = "lock-badge badge-locked";
+            if (!songVerified) {
+                eyelid.classList.remove('eyelid-open');
+                eyelid.classList.add('eyelid-closed');
+            }
+        }
+    }
+
+    function highlightDynamicNodes(freqData) {
+        clearHighlights();
+        const outerNodes = document.querySelectorAll('.outer-symbol');
+        for (let i = 0; i < 6; i++) {
+            const index = Math.floor((freqData[i * 10] / 255) * outerNodes.length);
+            if (outerNodes[index]) outerNodes[index].classList.add('active');
+        }
+    }
+
+    function clearHighlights() {
+        document.querySelectorAll('.dial-node.outer-symbol').forEach(n => n.classList.remove('active'));
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+        matchScore = 0;
+        enteredCombination = "";
+        currentRotationAngle = 0;
+        updateUprightOrientations();
+        matchBar.style.width = "0%";
+        matchPercent.innerText = "0%";
+        enteredCodeDisplay.innerText = "-----";
+        lockStatus.innerText = "LOCKED";
+        lockStatus.className = "lock-badge badge-locked";
+        eyelid.classList.remove('eyelid-open');
+        eyelid.classList.add('eyelid-closed');
+    });
+</script>
+</body>
+</html>
