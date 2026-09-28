@@ -3,97 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acoustic MFA Terminal & Secure Portal</title>
+    <title>EYEOTA Interactive Lock - MFA Dial & Medical Portal</title>
     <style>
         :root {
-            --bg-color: #08090c;
-            --panel-bg: #11141b;
+            --bg-color: #0b0f19;
+            --panel-bg: #151c2c;
+            --accent-cyan: #00f2ff;
+            --accent-gold: #ffb700;
             --accent-green: #00ff88;
-            --accent-cyan: #00e1ff;
-            --accent-red: #ff3366;
-            --accent-amber: #ffaa00;
-            --text-dim: #5a6578;
-            --text-main: #e1e7ed;
+            --text-dark: #0f172a;
+            --text-light: #f8fafc;
+            --dial-size: 480px;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            user-select: none;
+            font-family: Arial, sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Courier New', Courier, monospace;
-            min-height: 100vh;
+            color: var(--text-light);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
         }
 
-        /* --- LOCK TERMINAL --- */
-        .terminal-container {
+        .app-wrapper {
+            position: relative;
             width: 100%;
-            max-width: 960px;
-            background: var(--panel-bg);
-            border: 1px solid #1e2638;
-            border-radius: 12px;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 255, 136, 0.1);
-            padding: 24px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            transition: opacity 0.5s ease, transform 0.5s ease;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        @media (max-width: 768px) {
-            .terminal-container {
-                grid-template-columns: 1fr;
-            }
+        .main-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            transition: opacity 0.8s ease, transform 0.8s ease, filter 0.8s ease;
         }
 
-        .header-title {
-            grid-column: 1 / -1;
+        .main-layout.unlocked-fade {
+            opacity: 0;
+            transform: scale(0.95);
+            filter: blur(10px);
+            pointer-events: none;
+        }
+
+        .lock-container {
+            position: relative;
+            width: var(--dial-size);
+            height: var(--dial-size);
+            background: #ffffff;
+            border-radius: 50%;
+            border: 8px solid #1e293b;
+            box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .lock-container:hover #outerRingContainer,
+        .lock-container:hover #innerRingContainer,
+        .lock-container:active #outerRingContainer,
+        .lock-container:active #innerRingContainer,
+        .lock-container.paused #outerRingContainer,
+        .lock-container.paused #innerRingContainer {
+            animation-play-state: paused !important;
+        }
+
+        .top-pointer {
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 14px solid #0284c7;
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        .ring-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .center-artwork {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 25;
+        }
+
+        .eyelid {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+
+        .eyelid-closed { transform: scaleY(1); }
+        .eyelid-open { transform: scaleY(0); }
+
+        #outerRingContainer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 10;
+            transform-origin: 240px 240px;
+        }
+
+        #innerRingContainer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            transform-origin: 240px 240px;
+            z-index: 15;
+            pointer-events: auto;
+        }
+
+        .dial-node {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            border-bottom: 1px solid #1e2638;
-            padding-bottom: 12px;
-            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-weight: bold;
+            transition: color 0.2s, background-color 0.2s, transform 0.1s;
         }
 
-        .header-title h1 {
-            font-size: 1.4rem;
+        .outer-symbol {
+            width: 28px;
+            height: 28px;
+            font-size: 18px;
+            line-height: 28px;
+            border-radius: 50%;
+        }
+
+        .inner-alphabet {
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            line-height: 30px;
+            font-family: 'Courier New', Courier, monospace;
+            border-radius: 50%;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .inner-alphabet:hover {
+            background-color: #0284c7;
+            color: #ffffff !important;
+            box-shadow: 0 0 12px rgba(2, 132, 199, 0.9);
+        }
+
+        .char-span {
+            display: inline-block;
+            pointer-events: none;
+        }
+
+        .dial-node.active {
+            color: #ffffff !important;
+            background-color: #0284c7;
+            box-shadow: 0 0 10px rgba(2, 132, 199, 0.8);
+        }
+
+        .brand-footer {
+            text-align: center;
+            margin-top: -10px;
+        }
+
+        .brand-footer h2 {
+            font-size: 30px;
+            letter-spacing: 8px;
+            color: #ffffff;
+        }
+
+        .brand-footer p {
+            font-size: 11px;
             letter-spacing: 3px;
-            color: var(--accent-green);
+            color: #94a3b8;
+        }
+
+        .portal-indicator-banner {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+        }
+
+        .portal-indicator-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .portal-indicator-info .icon {
+            font-size: 1.4rem;
+            color: var(--accent-cyan);
+        }
+
+        .portal-indicator-text h3 {
+            font-size: 0.9rem;
+            color: #f8fafc;
+            letter-spacing: 0.5px;
+        }
+
+        .portal-indicator-text p {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .portal-indicator-status {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        .header-title p {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            margin-top: 4px;
-        }
-
-        .video-section {
+        .control-panel {
+            background: var(--panel-bg);
+            border-radius: 14px;
+            padding: 20px;
+            width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
+            border: 1px solid #334155;
         }
 
-        .video-wrapper {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background: #000;
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0f172a;
+            padding: 12px 18px;
             border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #2a354d;
+            font-family: monospace;
         }
 
-        .video-wrapper iframe {
+        .lock-badge {
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .badge-locked {
+            background: #7f1d1d;
+            color: #fca5a5;
+        }
+
+        .badge-unlocked {
+            background: #14532d;
+            color: #86efac;
+        }
+
+        .code-display-box {
+            background: #0f172a;
+            padding: 10px 14px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: monospace;
+        }
+
+        .code-input-val {
+            letter-spacing: 4px;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+
+        .match-bar-wrapper {
+            width: 100%;
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .bar-container {
+            width: 100%;
+            height: 18px;
+            background: #1e293b;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #0284c7, #00ff88);
+            transition: width 0.1s ease;
+        }
+
+        .video-embed-container {
+            width: 100%;
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            background: #000000;
+        }
+
+        .video-embed-container iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -102,451 +363,567 @@
             border: 0;
         }
 
-        .audio-controls {
-            background: #0a0d14;
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #1e2638;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .btn {
-            background: #1a2332;
-            color: var(--accent-cyan);
-            border: 1px solid var(--accent-cyan);
-            padding: 10px;
-            border-radius: 4px;
-            font-family: inherit;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: center;
-        }
-
-        .btn:hover {
-            background: var(--accent-cyan);
-            color: #000;
-            box-shadow: 0 0 10px var(--accent-cyan);
-        }
-
-        .btn-success {
-            border-color: var(--accent-green);
-            color: var(--accent-green);
-        }
-
-        .btn-success:hover {
-            background: var(--accent-green);
-            color: #000;
-            box-shadow: 0 0 10px var(--accent-green);
-        }
-
-        .lock-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: #0a0d14;
-            border-radius: 8px;
-            padding: 20px;
-            border: 1px solid #1e2638;
-            position: relative;
-        }
-
-        .rotary-dial {
-            position: relative;
-            width: 220px;
-            height: 220px;
-            border-radius: 50%;
-            border: 2px dashed var(--accent-cyan);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: rotateDial 20s linear infinite;
-        }
-
-        @keyframes rotateDial {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .eye-sensor {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--accent-green) 0%, #000 70%);
-            border: 2px solid var(--accent-green);
-            box-shadow: 0 0 15px var(--accent-green);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: absolute;
-        }
-
-        .eye-pupil {
-            width: 24px;
-            height: 24px;
-            background: #000;
-            border-radius: 50%;
-            border: 1px solid var(--accent-green);
-        }
-
-        .status-display {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .status-display .code-input {
-            background: #000;
-            border: 1px solid #1e2638;
-            color: var(--accent-green);
-            font-size: 1.2rem;
-            padding: 8px;
-            width: 140px;
-            text-align: center;
-            letter-spacing: 4px;
-            border-radius: 4px;
-            margin-bottom: 8px;
-        }
-
-        .status-text {
-            font-size: 0.85rem;
-            color: var(--accent-cyan);
-        }
-
-        /* --- MEDICAL PORTAL (HIDDEN BY DEFAULT) --- */
-        .portal-container {
-            display: none;
-            width: 100%;
-            max-width: 960px;
-            background: var(--panel-bg);
-            border: 1px solid var(--accent-green);
-            border-radius: 12px;
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.15);
-            padding: 28px;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .portal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #1e2638;
-            padding-bottom: 16px;
-        }
-
-        .portal-title {
-            color: var(--accent-green);
-            font-size: 1.3rem;
-            letter-spacing: 2px;
-        }
-
-        .drop-zone {
-            border: 2px dashed #2a354d;
-            border-radius: 8px;
-            padding: 40px;
-            text-align: center;
-            background: #0a0d14;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .drop-zone:hover {
-            border-color: var(--accent-cyan);
-            background: #0f1420;
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .audit-results {
-            display: none;
-            background: #0a0d14;
-            border: 1px solid #1e2638;
-            border-radius: 8px;
-            padding: 16px;
-            margin-top: 10px;
-        }
-
-        .audit-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #19202e;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-        }
-
-        .audit-item:last-child {
-            border-bottom: none;
-        }
-
-        .badge {
-            padding: 2px 8px;
-            border-radius: 4px;
+        .video-fallback-link {
             font-size: 0.75rem;
-            font-weight: bold;
+            color: #94a3b8;
+            text-align: center;
+            margin-top: 6px;
         }
 
-        .badge-pass { background: rgba(0, 255, 136, 0.2); color: var(--accent-green); }
-        .badge-warn { background: rgba(255, 170, 0, 0.2); color: var(--accent-amber); }
-        .badge-fail { background: rgba(255, 51, 102, 0.2); color: var(--accent-red); }
+        .video-fallback-link a {
+            color: var(--accent-cyan);
+            text-decoration: underline;
+        }
 
-        .hidden { display: none !important; }
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #0284c7;
+            color: white;
+            grid-column: span 2;
+        }
+
+        .btn-primary:hover { background: #0369a1; }
+
+        .btn-secondary {
+            background: #334155;
+            color: white;
+        }
+
+        .btn-secondary:hover { background: #475569; }
+
+        .medical-portal-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 90%;
+            max-width: 800px;
+            background: #151c2c;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 255, 136, 0.2);
+            padding: 30px;
+            display: none;
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 100;
+        }
+
+        .medical-portal-container.active {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .portal-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .portal-title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .portal-title-group h1 {
+            font-size: 1.5rem;
+            color: #f8fafc;
+        }
+
+        .security-badge-granted {
+            background: rgba(0, 255, 136, 0.15);
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .patient-records-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .record-card {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .record-card label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .record-card .value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #00f2ff;
+        }
+
+        .btn-relock {
+            background: #b91c1c;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+
+        .btn-relock:hover { background: #991b1b; }
     </style>
 </head>
 <body>
+<div class="app-wrapper">
 
-    <!-- 1. LOCK TERMINAL -->
-    <div class="terminal-container" id="lock-terminal">
-        <div class="header-title">
-            <h1>ACOUSTIC MFA TERMINAL</h1>
-            <p>SYSTEM STATUS: PENDING VERIFICATION</p>
+    <div class="main-layout" id="mainLockLayout">
+
+        <div class="lock-container" id="lockInterface">
+            <div class="top-pointer"></div>
+
+            <svg class="ring-canvas" viewBox="0 0 480 480">
+                <circle cx="240" cy="240" r="216" fill="none" stroke="#cbd5e1" stroke-width="2"/>
+                <circle cx="240" cy="240" r="162" fill="none" stroke="#cbd5e1" stroke-width="2"/>
+            </svg>
+
+            <div class="center-artwork">
+                <svg width="140" height="200" viewBox="0 0 140 200">
+                    <g transform="translate(62, 10)">
+                        <rect x="0" y="0" width="16" height="24" rx="8" fill="#ffffff" stroke="#0f172a" stroke-width="2.5"/>
+                        <path d="M 4 8 C 4 4, 12 4, 12 8 M 4 12 C 4 8, 12 8, 12 12 M 4 16 C 4 12, 12 12, 12 16" fill="none" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round"/>
+                    </g>
+
+                    <line x1="70" y1="42" x2="70" y2="135" stroke="#0f172a" stroke-width="5" stroke-linecap="round"/>
+
+                    <g transform="translate(70, 145)">
+                        <path d="M -35 0 Q 0 -28 35 0 Q 0 28 -35 0 Z" fill="#ffffff" stroke="#0f172a" stroke-width="3.5"/>
+                        <circle cx="0" cy="0" r="11" fill="#0f172a"/>
+                        <circle cx="3" cy="-3" r="3.5" fill="#ffffff"/>
+                        <path id="eyelid" class="eyelid eyelid-closed" d="M -35 0 Q 0 -30 35 0 Q 0 30 -35 0 Z" fill="#0f172a"/>
+                    </g>
+                </svg>
+            </div>
+
+            <div id="outerRingContainer"></div>
+            <div id="innerRingContainer"></div>
         </div>
 
-        <div class="video-section">
-            <div class="video-wrapper">
+        <div class="brand-footer">
+            <h2><span style="color: #0066FF;">E</span><span style="color: #FFD700;">YE</span><span style="color: #28A745;">OTA</span></h2>
+            <p>DOCUMENT SOLUTIONS</p>
+        </div>
+
+        <div class="portal-indicator-banner">
+            <div class="portal-indicator-info">
+                <span class="icon">✚</span>
+                <div class="portal-indicator-text">
+                    <h3>EYEOTA Medical Records Vault</h3>
+                    <p>Unlock dial to access confidential patient files</p>
+                </div>
+            </div>
+            <span class="portal-indicator-status">Restricted</span>
+        </div>
+
+        <div class="control-panel">
+            <div class="status-row">
+                <span>System Access Status:</span>
+                <div class="lock-badge badge-locked" id="lockStatus">LOCKED</div>
+            </div>
+
+            <div class="match-bar-wrapper">
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:#94a3b8;">
+                    <span>Factor 1: Acoustic Signature Match</span>
+                    <span id="matchPercent">0%</span>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" id="matchBar"></div>
+                </div>
+            </div>
+
+            <div class="code-display-box">
+                <span>Factor 2: Combination Input</span>
+                <span class="code-input-val" id="enteredCodeDisplay">-----</span>
+            </div>
+
+            <div class="btn-grid">
+                <button class="btn-primary" id="micToggleBtn">Start Audio Verification</button>
+                <button class="btn-secondary" id="rotateLeftBtn">↺ Rotate Left</button>
+                <button class="btn-secondary" id="rotateRightBtn">↻ Rotate Right</button>
+                <button class="btn-secondary" id="selectLetterBtn">Select Pointer Letter</button>
+                <button class="btn-secondary" id="resetBtn">Reset All</button>
+            </div>
+        </div>
+
+        <!-- Official YouTube Credit & Embed Player -->
+        <div style="width: 100%;">
+            <div class="video-embed-container">
                 <iframe 
-                    id="youtube-player"
-                    src="https://www.youtube.com/embed/dVVpLg7pnME?enablejsapi=1&origin=https://yourdomain.com" 
-                    title="Acoustic Reference Player" 
+                    src="https://www.youtube-nocookie.com/embed/dVVpLg7pnME" 
+                    title="Jay-z Roots Picnic Freestyle | Evolved Sound Group Entertainment" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                     referrerpolicy="strict-origin-when-cross-origin"
                     allowfullscreen>
                 </iframe>
             </div>
-
-            <div class="audio-controls">
-                <button class="btn" id="mic-btn">ENABLE ACOUSTIC SENSOR</button>
-                <div style="font-size: 0.75rem; color: var(--text-dim); text-align: center;">
-                    MIC INPUT: <span id="mic-status" style="color: var(--accent-red);">OFF</span>
-                </div>
+            <div class="video-fallback-link">
+                Reference Audio / Video Credit: <a href="https://www.youtube.com/watch?v=dVVpLg7pnME" target="_blank" rel="noopener">Jay-z Roots Picnic Freestyle on YouTube</a>
             </div>
         </div>
 
-        <div class="lock-section">
-            <div class="rotary-dial">
-                <div style="position: absolute; top: 10px; color: var(--accent-cyan);">S</div>
-                <div style="position: absolute; right: 10px; color: var(--accent-cyan);">W</div>
-                <div style="position: absolute; bottom: 10px; color: var(--accent-cyan);">A</div>
-                <div style="position: absolute; left: 10px; color: var(--accent-cyan);">G</div>
-            </div>
-
-            <div class="eye-sensor">
-                <div class="eye-pupil"></div>
-            </div>
-
-            <div class="status-display">
-                <input type="text" class="code-input" value="SWAGG" readonly>
-                <div class="status-text" id="lock-status" style="margin-bottom: 12px;">AWAITING MATCH</div>
-                <button class="btn btn-success" id="manual-unlock-btn">UNLOCK SYSTEM</button>
-            </div>
-        </div>
     </div>
 
-    <!-- 2. MEDICAL PORTAL (REVEALED UPON UNLOCK) -->
-    <div class="portal-container" id="medical-portal">
-        <div class="portal-header">
-            <div>
-                <div class="portal-title">SECURE MEDICAL AUDIT PORTAL</div>
-                <div style="font-size: 0.75rem; color: var(--text-dim);">HIPAA COMPLIANT DOCUMENT AUDITOR</div>
+    <div class="medical-portal-container" id="medicalPortal">
+        <div class="portal-header-bar">
+            <div class="portal-title-group">
+                <span style="font-size: 1.8rem; color: #00ff88;">✚</span>
+                <h1>EYEOTA Medical Records Portal</h1>
             </div>
-            <button class="btn" id="lock-portal-btn" style="padding: 6px 12px; font-size: 0.75rem;">RE-LOCK</button>
+            <span class="security-badge-granted">MFA Verified</span>
         </div>
 
-        <div class="drop-zone" id="drop-zone">
-            <div style="font-size: 1.1rem; color: var(--accent-cyan); margin-bottom: 8px;">
-                Drag & Drop Medical Records or Click to Upload
+        <div class="patient-records-grid">
+            <div class="record-card">
+                <label>Encrypted File ID</label>
+                <div class="value">REC-88492-X</div>
             </div>
-            <div style="font-size: 0.8rem; color: var(--text-dim);">
-                Supported formats: TXT, PDF, DOCX (Grammar, Fraud & ICD-10 Verification)
+            <div class="record-card">
+                <label>Security Level</label>
+                <div class="value">Class 4 Restricted</div>
             </div>
-            <input type="file" id="file-input" class="file-input" accept=".txt,.pdf,.doc,.docx">
-        </div>
-
-        <div class="audit-results" id="audit-results">
-            <div style="font-size: 0.9rem; color: var(--accent-green); margin-bottom: 12px; font-weight: bold;">
-                AUDIT COMPLETED: <span id="filename-display" style="color: var(--text-main);"></span>
+            <div class="record-card">
+                <label>Session Identity</label>
+                <div class="value">Acoustic & Passcode</div>
             </div>
-
-            <div class="audit-item">
-                <span>Grammar & Syntax Analysis</span>
-                <span class="badge badge-pass" id="grammar-badge">PASS</span>
-            </div>
-
-            <div class="audit-item">
-                <span>Billing Code Consistency (ICD-10/CPT)</span>
-                <span class="badge badge-pass" id="icd-badge">VERIFIED</span>
-            </div>
-
-            <div class="audit-item">
-                <span>Fraud & Discrepancy Risk Assessment</span>
-                <span class="badge badge-pass" id="fraud-badge">LOW RISK</span>
-            </div>
-
-            <div style="margin-top: 16px;">
-                <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 6px;">DETAILED ANALYSIS LOG:</div>
-                <textarea id="log-output" readonly style="width: 100%; height: 120px; background: #000; border: 1px solid #1e2638; color: var(--accent-cyan); padding: 8px; font-family: inherit; font-size: 0.8rem; border-radius: 4px; resize: none;"></textarea>
+            <div class="record-card">
+                <label>Portal Status</label>
+                <div class="value" style="color: #00ff88;">Authenticated</div>
             </div>
         </div>
+
+        <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
+            Dual-factor acoustic signature and combination sequence verified. Confidential patient document vaults unlocked.
+        </p>
+
+        <button class="btn-relock" id="relockBtn">Lock System & Return to Security Dial</button>
     </div>
+</div>
 
-    <script>
-        // DOM Elements
-        const lockTerminal = document.getElementById('lock-terminal');
-        const medicalPortal = document.getElementById('medical-portal');
-        const manualUnlockBtn = document.getElementById('manual-unlock-btn');
-        const lockPortalBtn = document.getElementById('lock-portal-btn');
-        const micBtn = document.getElementById('mic-btn');
-        const micStatus = document.getElementById('mic-status');
-        const lockStatus = document.getElementById('lock-status');
-        
-        const dropZone = document.getElementById('drop-zone');
-        const fileInput = document.getElementById('file-input');
-        const auditResults = document.getElementById('audit-results');
-        const filenameDisplay = document.getElementById('filename-display');
-        const logOutput = document.getElementById('log-output');
+<script>
+    const outerNotes = [
+        '♩', '♪', '♫', '♬', '♭', '♯', '𝄞', '𝄢',
+        '♩', '♪', '♫', '♬', '♭', '♯', '𝄞', '𝄢',
+        '♩', '♪', '♫', '♬', '♭', '♯', '𝄞', '𝄢'
+    ];
 
-        let audioCtx, analyser, microphone;
+    const innerAlphabet = [
+        'A','B','C','D','E','F','G','H','I','J','K','L','M',
+        'N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
+    ];
 
-        // Unlock System Function
-        function unlockSystem() {
-            lockTerminal.style.opacity = '0';
-            lockTerminal.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                lockTerminal.classList.add('hidden');
-                medicalPortal.style.display = 'flex';
-            }, 500);
+    const targetCombination = "SWAGG";
+    let enteredCombination = "";
+
+    const lockInterface = document.getElementById('lockInterface');
+    const outerContainer = document.getElementById('outerRingContainer');
+    const innerContainer = document.getElementById('innerRingContainer');
+    const eyelid = document.getElementById('eyelid');
+    const lockStatus = document.getElementById('lockStatus');
+    const matchBar = document.getElementById('matchBar');
+    const matchPercent = document.getElementById('matchPercent');
+    const enteredCodeDisplay = document.getElementById('enteredCodeDisplay');
+    const mainLockLayout = document.getElementById('mainLockLayout');
+    const medicalPortal = document.getElementById('medicalPortal');
+
+    let outerRotationAngle = 0;
+    let innerRotationAngle = 0;
+    const stepAngle = 360 / innerAlphabet.length;
+    
+    const outerSpinSpeed = 0.1;
+    const innerSpinSpeed = -0.08; 
+    let isPaused = false;
+
+    lockInterface.addEventListener('pointerenter', () => { isPaused = true; });
+    lockInterface.addEventListener('pointerleave', () => { isPaused = false; });
+    lockInterface.addEventListener('pointerdown', () => { isPaused = true; });
+    window.addEventListener('pointerup', () => { isPaused = false; });
+
+    function renderDials() {
+        outerContainer.innerHTML = '';
+        innerContainer.innerHTML = '';
+        const cx = 240, cy = 240;
+
+        const outerRadius = 216;
+        const outerTotal = outerNotes.length;
+        outerNotes.forEach((symbol, i) => {
+            const angle = (i * (360 / outerTotal) - 90) * (Math.PI / 180);
+            const x = cx + outerRadius * Math.cos(angle);
+            const y = cy + outerRadius * Math.sin(angle);
+
+            const node = document.createElement('div');
+            node.className = 'dial-node outer-symbol';
+            node.innerText = symbol;
+            node.style.left = `${x.toFixed(2)}px`;
+            node.style.top = `${y.toFixed(2)}px`;
+            outerContainer.appendChild(node);
+        });
+
+        const innerRadius = 162;
+        const innerTotal = innerAlphabet.length;
+        innerAlphabet.forEach((char, i) => {
+            const angle = (i * (360 / innerTotal) - 90) * (Math.PI / 180);
+            const x = cx + innerRadius * Math.cos(angle);
+            const y = cy + innerRadius * Math.sin(angle);
+
+            const node = document.createElement('div');
+            node.className = 'dial-node inner-alphabet';
+            node.style.left = `${x.toFixed(2)}px`;
+            node.style.top = `${y.toFixed(2)}px`;
+
+            const span = document.createElement('span');
+            span.className = 'char-span';
+            span.innerText = char;
+            node.appendChild(span);
+
+            node.addEventListener('click', (e) => {
+                e.stopPropagation();
+                addLetterToPasscode(char);
+            });
+
+            innerContainer.appendChild(node);
+        });
+    }
+
+    renderDials();
+
+    function animateRings() {
+        if (!isPaused) {
+            outerRotationAngle = (outerRotationAngle + outerSpinSpeed) % 360;
+            innerRotationAngle = (innerRotationAngle + innerSpinSpeed) % 360;
+
+            outerContainer.style.transform = `rotate(${outerRotationAngle}deg)`;
+            innerContainer.style.transform = `rotate(${innerRotationAngle}deg)`;
+
+            document.querySelectorAll('.char-span').forEach(span => {
+                span.style.transform = `rotate(${-innerRotationAngle}deg)`;
+            });
         }
 
-        // Re-lock System Function
-        lockPortalBtn.addEventListener('click', () => {
-            medicalPortal.style.display = 'none';
-            lockTerminal.classList.remove('hidden');
-            setTimeout(() => {
-                lockTerminal.style.opacity = '1';
-                lockTerminal.style.transform = 'scale(1)';
-            }, 50);
+        requestAnimationFrame(animateRings);
+    }
+
+    animateRings();
+
+    function addLetterToPasscode(char) {
+        if (enteredCombination.length < targetCombination.length) {
+            enteredCombination += char;
+            enteredCodeDisplay.innerText = enteredCombination.padEnd(targetCombination.length, '-');
+            checkFullUnlock();
+        }
+    }
+
+    document.getElementById('rotateLeftBtn').addEventListener('click', () => {
+        innerRotationAngle -= stepAngle;
+        innerContainer.style.transform = `rotate(${innerRotationAngle}deg)`;
+        document.querySelectorAll('.char-span').forEach(span => {
+            span.style.transform = `rotate(${-innerRotationAngle}deg)`;
         });
+    });
 
-        manualUnlockBtn.addEventListener('click', unlockSystem);
-
-        // Acoustic Sensor Setup
-        micBtn.addEventListener('click', async () => {
-            if (!audioCtx) {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    analyser = audioCtx.createAnalyser();
-                    microphone = audioCtx.createMediaStreamSource(stream);
-                    microphone.connect(analyser);
-
-                    micStatus.textContent = "ACTIVE";
-                    micStatus.style.color = "var(--accent-green)";
-                    micBtn.textContent = "SENSOR RUNNING";
-                    lockStatus.textContent = "ANALYZING FREQUENCY...";
-
-                    analyzeAudio();
-                } catch (err) {
-                    alert("Microphone access is required for pitch detection.");
-                }
-            }
+    document.getElementById('rotateRightBtn').addEventListener('click', () => {
+        innerRotationAngle += stepAngle;
+        innerContainer.style.transform = `rotate(${innerRotationAngle}deg)`;
+        document.querySelectorAll('.char-span').forEach(span => {
+            span.style.transform = `rotate(${-innerRotationAngle}deg)`;
         });
+    });
 
-        function analyzeAudio() {
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
+    document.getElementById('selectLetterBtn').addEventListener('click', () => {
+        let normalizedAngle = (-innerRotationAngle) % 360;
+        if (normalizedAngle < 0) normalizedAngle += 360;
 
-            function loop() {
-                requestAnimationFrame(loop);
-                analyser.getByteFrequencyData(dataArray);
+        const index = Math.round(normalizedAngle / stepAngle) % innerAlphabet.length;
+        const selectedChar = innerAlphabet[index];
+        addLetterToPasscode(selectedChar);
+    });
 
-                let sum = 0;
-                for (let i = 0; i < bufferLength; i++) {
-                    sum += dataArray[i];
-                }
-                let average = sum / bufferLength;
+    let audioCtx, analyser, micStream, isAudioRunning = false;
+    let matchScore = 0;
+    const micToggleBtn = document.getElementById('micToggleBtn');
 
-                if (average > 35) {
-                    lockStatus.textContent = "ACOUSTIC MATCH DETECTED";
-                    lockStatus.style.color = "var(--accent-green)";
-                    setTimeout(unlockSystem, 1000); // Automatically unlocks on match
-                }
-            }
-            loop();
+    micToggleBtn.addEventListener('click', async () => {
+        if (isAudioRunning) {
+            stopAudio();
+            return;
         }
 
-        // --- MEDICAL PORTAL FILE HANDLING & AUDIT SIMULATION ---
-        dropZone.addEventListener('click', () => fileInput.click());
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const source = audioCtx.createMediaStreamSource(micStream);
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 1024;
+            source.connect(analyser);
 
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.style.borderColor = 'var(--accent-green)';
-        });
+            isAudioRunning = true;
+            micToggleBtn.innerText = "Stop Listening";
+            micToggleBtn.style.background = "#b91c1c";
 
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.style.borderColor = '#2a354d';
-        });
+            eyelid.classList.remove('eyelid-closed');
+            eyelid.classList.add('eyelid-open');
 
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.style.borderColor = '#2a354d';
-            if (e.dataTransfer.files.length) {
-                handleFile(e.dataTransfer.files[0]);
-            }
-        });
+            analyzeTrackSignature();
+        } catch (err) {
+            alert("Microphone access is required: " + err);
+        }
+    });
 
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length) {
-                handleFile(e.target.files[0]);
-            }
-        });
+    function stopAudio() {
+        if (micStream) micStream.getTracks().forEach(track => track.stop());
+        if (audioCtx) audioCtx.close();
+        isAudioRunning = false;
+        micToggleBtn.innerText = "Start Audio Verification";
+        micToggleBtn.style.background = "#0284c7";
 
-        function handleFile(file) {
-            filenameDisplay.textContent = file.name;
-            auditResults.style.display = 'block';
-            logOutput.value = "Initializing OCR & Document Scanner...\nReading file data...\nRunning NLP Grammar and Fraud Detection Model...\n";
+        matchScore = 0;
+        matchBar.style.width = "0%";
+        matchPercent.innerText = "0%";
+        clearHighlights();
+        checkFullUnlock();
+    }
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const text = e.target.result;
-                runAudit(text);
-            };
-
-            // Read text directly if plaintext; otherwise simulate parsing
-            if (file.type === "text/plain") {
-                reader.readAsText(file);
+    function highlightDynamicNodes(dataArray) {
+        const outerNodes = outerContainer.children;
+        for (let i = 0; i < outerNodes.length; i++) {
+            const val = dataArray[i * 4] || 0;
+            if (val > 120) {
+                outerNodes[i].classList.add('active');
             } else {
-                setTimeout(() => runAudit("Simulated document contents for " + file.name), 1200);
+                outerNodes[i].classList.remove('active');
             }
         }
+    }
 
-        function runAudit(content) {
-            let log = logOutput.value;
-            
-            // Simple Client-Side Rules (Can be hooked up to an LLM/API backend)
-            let hasGrammarErr = content.length < 50; 
-            let hasFraudRisk = content.toLowerCase().includes("unauthorized") || content.toLowerCase().includes("cash");
+    function clearHighlights() {
+        document.querySelectorAll('.dial-node').forEach(node => {
+            node.classList.remove('active');
+        });
+    }
 
-            log += "--> [1/3] Grammar Analysis: Complete.\n";
-            log += "--> [2/3] Cross-referencing billing codes...\n";
-            log += "--> [3/3] Scanning for duplicate billing & alteration signatures...\n\n";
+    function analyzeTrackSignature() {
+        if (!isAudioRunning) return;
 
-            if (hasFraudRisk) {
-                document.getElementById('fraud-badge').className = "badge badge-fail";
-                document.getElementById('fraud-badge').textContent = "FLAGGED";
-                log += "[WARNING] Irregularities detected in billing terms. Fraud risk flagged for human review.\n";
-            } else {
-                document.getElementById('fraud-badge').className = "badge badge-pass";
-                document.getElementById('fraud-badge').textContent = "CLEARED";
-                log += "[SUCCESS] No billing discrepancies or altered signatures found.\n";
-            }
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(dataArray);
 
-            log += "Audit complete. Document ready for processing.";
-            logOutput.value = log;
+        let subBass = 0;
+        for (let i = 2; i < 12; i++) subBass += dataArray[i];
+        subBass /= 10;
+
+        let vocalPresence = 0;
+        for (let i = 25; i < 90; i++) vocalPresence += dataArray[i];
+        vocalPresence /= 65;
+
+        const hasBassThump = subBass > 110;
+        const hasVocalPower = vocalPresence > 45;
+
+        if (hasBassThump && hasVocalPower) {
+            matchScore = Math.min(100, matchScore + 3.2);
+            highlightDynamicNodes(dataArray);
+        } else if (hasBassThump || hasVocalPower) {
+            matchScore = Math.min(100, matchScore + 1.0);
+        } else {
+            matchScore = Math.max(0, matchScore - 1.5);
+            clearHighlights();
         }
-    </script>
+
+        const percent = Math.round(matchScore);
+        matchBar.style.width = `${percent}%`;
+        matchPercent.innerText = `${percent}%`;
+
+        checkFullUnlock();
+        requestAnimationFrame(analyzeTrackSignature);
+    }
+
+    let hasTriggeredTransition = false;
+
+    function checkFullUnlock() {
+        const songVerified = isAudioRunning && (matchScore >= 85);
+        const codeVerified = enteredCombination === targetCombination;
+
+        if (songVerified && codeVerified) {
+            lockStatus.innerText = "FULL ACCESS GRANTED";
+            lockStatus.className = "lock-badge badge-unlocked";
+            eyelid.classList.remove('eyelid-closed');
+            eyelid.classList.add('eyelid-open');
+
+            if (!hasTriggeredTransition) {
+                hasTriggeredTransition = true;
+                setTimeout(triggerMedicalPortalUnlock, 800);
+            }
+        } else {
+            lockStatus.innerText = "LOCKED";
+            lockStatus.className = "lock-badge badge-locked";
+            if (!isAudioRunning) {
+                eyelid.classList.remove('eyelid-open');
+                eyelid.classList.add('eyelid-closed');
+            }
+        }
+    }
+
+    function triggerMedicalPortalUnlock() {
+        mainLockLayout.classList.add('unlocked-fade');
+        setTimeout(() => {
+            medicalPortal.classList.add('active');
+        }, 400);
+    }
+
+    function resetSystem() {
+        enteredCombination = "";
+        enteredCodeDisplay.innerText = "-----";
+        hasTriggeredTransition = false;
+
+        medicalPortal.classList.remove('active');
+        mainLockLayout.classList.remove('unlocked-fade');
+
+        stopAudio();
+    }
+
+    document.getElementById('resetBtn').endswith('click') // handled properly below
+    document.getElementById('resetBtn').addEventListener('click', resetSystem);
+    document.getElementById('relockBtn').addEventListener('click', resetSystem);
+</script>
 </body>
 </html>
