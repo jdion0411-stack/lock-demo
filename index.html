@@ -5,16 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EYEOTA Interactive Lock - MFA Dial</title>
     <style>
-        CSS
-.ring:hover,
-.ring:active {
-  animation-play-state: paused !important;
-}
-
-.ring:hover .letter,
-.ring:active .letter {
-  animation-play-state: paused !important;
-}
         :root {
             --bg-color: #0b0f19;
             --panel-bg: #151c2c;
@@ -66,6 +56,17 @@
             justify-content: center;
             user-select: none;
             overflow: hidden;
+            cursor: pointer;
+        }
+
+        /* Freeze rotation on hover or active click/touch */
+        .lock-container:hover #outerRingContainer,
+        .lock-container:hover #innerRingContainer,
+        .lock-container:active #outerRingContainer,
+        .lock-container:active #innerRingContainer,
+        .lock-container.paused #outerRingContainer,
+        .lock-container.paused #innerRingContainer {
+            animation-play-state: paused !important;
         }
 
         /* Top Pointer for 12 O'Clock Lock Alignment */
@@ -130,6 +131,7 @@
             left: 0;
             transform-origin: 240px 240px;
             z-index: 15;
+            pointer-events: auto;
         }
 
         .dial-node {
@@ -141,7 +143,7 @@
             text-align: center;
             color: var(--text-dark);
             font-weight: bold;
-            transition: color 0.2s, background-color 0.2s;
+            transition: color 0.2s, background-color 0.2s, transform 0.1s;
         }
 
         .outer-symbol {
@@ -153,16 +155,25 @@
         }
 
         .inner-alphabet {
-            width: 26px;
-            height: 26px;
-            font-size: 15px;
-            line-height: 26px;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            line-height: 30px;
             font-family: 'Courier New', Courier, monospace;
             border-radius: 50%;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .inner-alphabet:hover {
+            background-color: #0284c7;
+            color: #ffffff !important;
+            box-shadow: 0 0 12px rgba(2, 132, 199, 0.9);
         }
 
         .char-span {
             display: inline-block;
+            pointer-events: none;
         }
 
         .dial-node.active {
@@ -353,7 +364,7 @@
 
         <div class="match-bar-wrapper">
             <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:#94a3b8;">
-                <span>Factor 1: Song Acoustic Match</span>
+                <span>Factor 1: Song Acoustic Match (Jay-Z Roots Freestyle)</span>
                 <span id="matchPercent">0%</span>
             </div>
             <div class="bar-container">
@@ -370,7 +381,7 @@
             <button class="btn-primary" id="micToggleBtn">Start Song Listening Mode</button>
             <button class="btn-secondary" id="rotateLeftBtn">↺ Rotate Left</button>
             <button class="btn-secondary" id="rotateRightBtn">↻ Rotate Right</button>
-            <button class="btn-secondary" id="selectLetterBtn">Select Letter</button>
+            <button class="btn-secondary" id="selectLetterBtn">Select Pointer Letter</button>
             <button class="btn-secondary" id="resetBtn">Reset All</button>
         </div>
     </div>
@@ -392,6 +403,7 @@
     const targetCombination = "SWAGG";
     let enteredCombination = "";
 
+    const lockInterface = document.getElementById('lockInterface');
     const outerContainer = document.getElementById('outerRingContainer');
     const innerContainer = document.getElementById('innerRingContainer');
     const eyelid = document.getElementById('eyelid');
@@ -404,9 +416,16 @@
     let innerRotationAngle = 0;
     const stepAngle = 360 / innerAlphabet.length;
     
-    // Continuous rotation speed (degrees per frame) -> ~60 seconds per full loop
+    // Continuous rotation speed
     const outerSpinSpeed = 0.1;
     const innerSpinSpeed = -0.08; 
+    let isPaused = false;
+
+    // Freeze spin on pointer interaction
+    lockInterface.addEventListener('pointerenter', () => { isPaused = true; });
+    lockInterface.addEventListener('pointerleave', () => { isPaused = false; });
+    lockInterface.addEventListener('pointerdown', () => { isPaused = true; });
+    window.addEventListener('pointerup', () => { isPaused = false; });
 
     function renderDials() {
         outerContainer.innerHTML = '';
@@ -447,6 +466,12 @@
             span.innerText = char;
             node.appendChild(span);
 
+            // Allow direct clicking on letters
+            node.addEventListener('click', (e) => {
+                e.stopPropagation();
+                addLetterToPasscode(char);
+            });
+
             innerContainer.appendChild(node);
         });
     }
@@ -455,29 +480,47 @@
 
     // Continuous Animation Loop
     function animateRings() {
-        outerRotationAngle = (outerRotationAngle + outerSpinSpeed) % 360;
-        innerRotationAngle = (innerRotationAngle + innerSpinSpeed) % 360;
+        if (!isPaused) {
+            outerRotationAngle = (outerRotationAngle + outerSpinSpeed) % 360;
+            innerRotationAngle = (innerRotationAngle + innerSpinSpeed) % 360;
 
-        outerContainer.style.transform = `rotate(${outerRotationAngle}deg)`;
-        innerContainer.style.transform = `rotate(${innerRotationAngle}deg)`;
+            outerContainer.style.transform = `rotate(${outerRotationAngle}deg)`;
+            innerContainer.style.transform = `rotate(${innerRotationAngle}deg)`;
 
-        // Keep all inner letters right side up at all times
-        document.querySelectorAll('.char-span').forEach(span => {
-            span.style.transform = `rotate(${-innerRotationAngle}deg)`;
-        });
+            // Keep all inner letters right side up at all times
+            document.querySelectorAll('.char-span').forEach(span => {
+                span.style.transform = `rotate(${-innerRotationAngle}deg)`;
+            });
+        }
 
         requestAnimationFrame(animateRings);
     }
 
     animateRings();
 
+    function addLetterToPasscode(char) {
+        if (enteredCombination.length < targetCombination.length) {
+            enteredCombination += char;
+            enteredCodeDisplay.innerText = enteredCombination.padEnd(targetCombination.length, '-');
+            checkFullUnlock();
+        }
+    }
+
     // Manual Step Rotation Buttons
     document.getElementById('rotateLeftBtn').addEventListener('click', () => {
         innerRotationAngle -= stepAngle;
+        innerContainer.style.transform = `rotate(${innerRotationAngle}deg)`;
+        document.querySelectorAll('.char-span').forEach(span => {
+            span.style.transform = `rotate(${-innerRotationAngle}deg)`;
+        });
     });
 
     document.getElementById('rotateRightBtn').addEventListener('click', () => {
         innerRotationAngle += stepAngle;
+        innerContainer.style.transform = `rotate(${innerRotationAngle}deg)`;
+        document.querySelectorAll('.char-span').forEach(span => {
+            span.style.transform = `rotate(${-innerRotationAngle}deg)`;
+        });
     });
 
     document.getElementById('selectLetterBtn').addEventListener('click', () => {
@@ -486,15 +529,10 @@
 
         const index = Math.round(normalizedAngle / stepAngle) % innerAlphabet.length;
         const selectedChar = innerAlphabet[index];
-
-        if (enteredCombination.length < targetCombination.length) {
-            enteredCombination += selectedChar;
-            enteredCodeDisplay.innerText = enteredCombination.padEnd(targetCombination.length, '-');
-            checkFullUnlock();
-        }
+        addLetterToPasscode(selectedChar);
     });
 
-    // Audio Analysis & Simultaneous Verification
+    // Audio Analysis Tuned for Jay-Z Roots Picnic Freestyle
     let audioCtx, analyser, micStream, isAudioRunning = false;
     let matchScore = 0;
     const micToggleBtn = document.getElementById('micToggleBtn');
@@ -510,7 +548,7 @@
             micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const source = audioCtx.createMediaStreamSource(micStream);
             analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 512;
+            analyser.fftSize = 1024; // Higher FFT resolution for live acoustic dynamics
             source.connect(analyser);
 
             isAudioRunning = true;
@@ -546,18 +584,32 @@
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
         analyser.getByteFrequencyData(dataArray);
 
-        let bassEnergy = 0, midEnergy = 0, highEnergy = 0;
-        for (let i = 2; i < 10; i++) bassEnergy += dataArray[i];
-        for (let i = 20; i < 60; i++) midEnergy += dataArray[i];
-        for (let i = 100; i < 180; i++) highEnergy += dataArray[i];
+        // Frequency profile calibrated for Live Rap Performance (The Roots Band + Jay-Z)
+        // 1. Sub & Mid Bass (20Hz - 250Hz): Live drums & bassline
+        let subBass = 0;
+        for (let i = 2; i < 12; i++) subBass += dataArray[i];
+        subBass /= 10;
 
-        bassEnergy /= 8; midEnergy /= 40; highEnergy /= 80;
+        // 2. Vocal Presence / Snare (500Hz - 3kHz): Jay-Z vocal projection & snare crack
+        let vocalPresence = 0;
+        for (let i = 25; i < 90; i++) vocalPresence += dataArray[i];
+        vocalPresence /= 65;
 
-        if (bassEnergy > 140 && midEnergy > 50 && highEnergy > 30) {
-            matchScore = Math.min(100, matchScore + 2.5);
+        // 3. High End (4kHz - 10kHz): Live cymbals & crowd energy
+        let highEnd = 0;
+        for (let i = 120; i < 250; i++) highEnd += dataArray[i];
+        highEnd /= 130;
+
+        const hasBassThump = subBass > 110;
+        const hasVocalPower = vocalPresence > 45;
+
+        if (hasBassThump && hasVocalPower) {
+            matchScore = Math.min(100, matchScore + 3.2);
             highlightDynamicNodes(dataArray);
+        } else if (hasBassThump || hasVocalPower) {
+            matchScore = Math.min(100, matchScore + 1.0);
         } else {
-            matchScore = Math.max(0, matchScore - 1.2);
+            matchScore = Math.max(0, matchScore - 1.5);
             clearHighlights();
         }
 
