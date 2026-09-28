@@ -220,11 +220,6 @@
             font-family: monospace;
         }
 
-        .value-highlight {
-            color: var(--accent-cyan);
-            font-size: 1rem;
-        }
-
         .lock-badge {
             font-weight: bold;
             padding: 6px 12px;
@@ -283,6 +278,28 @@
             width: 0%;
             background: linear-gradient(90deg, #0284c7, #00ff88);
             transition: width 0.1s ease;
+        }
+
+        /* Below-Dial Embedded Media Player */
+        .video-embed-container {
+            width: 100%;
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            background: #000000;
+        }
+
+        .video-embed-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
         }
 
         .btn-grid {
@@ -364,7 +381,7 @@
 
         <div class="match-bar-wrapper">
             <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:#94a3b8;">
-                <span>Factor 1: Song Acoustic Match (Jay-Z Roots Freestyle)</span>
+                <span>Factor 1: Acoustic Signature Match</span>
                 <span id="matchPercent">0%</span>
             </div>
             <div class="bar-container">
@@ -378,12 +395,22 @@
         </div>
 
         <div class="btn-grid">
-            <button class="btn-primary" id="micToggleBtn">Start Song Listening Mode</button>
+            <button class="btn-primary" id="micToggleBtn">Start Audio Verification</button>
             <button class="btn-secondary" id="rotateLeftBtn">↺ Rotate Left</button>
             <button class="btn-secondary" id="rotateRightBtn">↻ Rotate Right</button>
             <button class="btn-secondary" id="selectLetterBtn">Select Pointer Letter</button>
             <button class="btn-secondary" id="resetBtn">Reset All</button>
         </div>
+    </div>
+
+    <!-- Official YouTube Embedded Player directly below the dial controls -->
+    <div class="video-embed-container">
+        <iframe 
+            src="https://www.youtube-nocookie.com/embed/dVVpLg7pnME" 
+            title="Acoustic Reference Player" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+        </iframe>
     </div>
 
 </div>
@@ -487,7 +514,7 @@
             outerContainer.style.transform = `rotate(${outerRotationAngle}deg)`;
             innerContainer.style.transform = `rotate(${innerRotationAngle}deg)`;
 
-            // Keep all inner letters right side up at all times
+            // Keep inner letters upright
             document.querySelectorAll('.char-span').forEach(span => {
                 span.style.transform = `rotate(${-innerRotationAngle}deg)`;
             });
@@ -532,7 +559,7 @@
         addLetterToPasscode(selectedChar);
     });
 
-    // Audio Analysis Tuned for Jay-Z Roots Picnic Freestyle
+    // Audio Analysis & Verification Logic
     let audioCtx, analyser, micStream, isAudioRunning = false;
     let matchScore = 0;
     const micToggleBtn = document.getElementById('micToggleBtn');
@@ -548,7 +575,7 @@
             micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const source = audioCtx.createMediaStreamSource(micStream);
             analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 1024; // Higher FFT resolution for live acoustic dynamics
+            analyser.fftSize = 1024;
             source.connect(analyser);
 
             isAudioRunning = true;
@@ -568,7 +595,7 @@
         if (micStream) micStream.getTracks().forEach(track => track.stop());
         if (audioCtx) audioCtx.close();
         isAudioRunning = false;
-        micToggleBtn.innerText = "Start Song Listening Mode";
+        micToggleBtn.innerText = "Start Audio Verification";
         micToggleBtn.style.background = "#0284c7";
 
         matchScore = 0;
@@ -584,18 +611,18 @@
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
         analyser.getByteFrequencyData(dataArray);
 
-        // Frequency profile calibrated for Live Rap Performance (The Roots Band + Jay-Z)
-        // 1. Sub & Mid Bass (20Hz - 250Hz): Live drums & bassline
+        // Targeted Frequency Bands for Live Rap Performance
+        // 1. Sub & Mid Bass (20Hz - 250Hz): Live kick drum & bassline
         let subBass = 0;
         for (let i = 2; i < 12; i++) subBass += dataArray[i];
         subBass /= 10;
 
-        // 2. Vocal Presence / Snare (500Hz - 3kHz): Jay-Z vocal projection & snare crack
+        // 2. Vocal Presence / Snare (500Hz - 3kHz): Dynamic vocal projection & snare crack
         let vocalPresence = 0;
         for (let i = 25; i < 90; i++) vocalPresence += dataArray[i];
         vocalPresence /= 65;
 
-        // 3. High End (4kHz - 10kHz): Live cymbals & crowd energy
+        // 3. High End (4kHz - 10kHz): Live cymbals & crowd ambience
         let highEnd = 0;
         for (let i = 120; i < 250; i++) highEnd += dataArray[i];
         highEnd /= 130;
