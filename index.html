@@ -109,6 +109,7 @@
             left: 0;
             pointer-events: none;
             z-index: 10;
+            transform-origin: 240px 240px;
         }
 
         #innerRingContainer {
@@ -118,7 +119,6 @@
             top: 0;
             left: 0;
             transform-origin: 240px 240px;
-            transition: transform 0.2s ease-out;
             z-index: 15;
         }
 
@@ -153,7 +153,6 @@
 
         .char-span {
             display: inline-block;
-            transition: transform 0.2s ease-out;
         }
 
         .dial-node.active {
@@ -391,8 +390,13 @@
     const matchPercent = document.getElementById('matchPercent');
     const enteredCodeDisplay = document.getElementById('enteredCodeDisplay');
 
-    let currentRotationAngle = 0;
+    let outerRotationAngle = 0;
+    let innerRotationAngle = 0;
     const stepAngle = 360 / innerAlphabet.length;
+    
+    // Continuous rotation speed (degrees per frame) -> ~60 seconds per full loop
+    const outerSpinSpeed = 0.1;
+    const innerSpinSpeed = -0.08; 
 
     function renderDials() {
         outerContainer.innerHTML = '';
@@ -435,32 +439,39 @@
 
             innerContainer.appendChild(node);
         });
-
-        updateUprightOrientations();
-    }
-
-    function updateUprightOrientations() {
-        innerContainer.style.transform = `rotate(${currentRotationAngle}deg)`;
-        
-        document.querySelectorAll('.char-span').forEach(span => {
-            span.style.transform = `rotate(${-currentRotationAngle}deg)`;
-        });
     }
 
     renderDials();
 
+    // Continuous Animation Loop
+    function animateRings() {
+        outerRotationAngle = (outerRotationAngle + outerSpinSpeed) % 360;
+        innerRotationAngle = (innerRotationAngle + innerSpinSpeed) % 360;
+
+        outerContainer.style.transform = `rotate(${outerRotationAngle}deg)`;
+        innerContainer.style.transform = `rotate(${innerRotationAngle}deg)`;
+
+        // Keep all inner letters right side up at all times
+        document.querySelectorAll('.char-span').forEach(span => {
+            span.style.transform = `rotate(${-innerRotationAngle}deg)`;
+        });
+
+        requestAnimationFrame(animateRings);
+    }
+
+    animateRings();
+
+    // Manual Step Rotation Buttons
     document.getElementById('rotateLeftBtn').addEventListener('click', () => {
-        currentRotationAngle -= stepAngle;
-        updateUprightOrientations();
+        innerRotationAngle -= stepAngle;
     });
 
     document.getElementById('rotateRightBtn').addEventListener('click', () => {
-        currentRotationAngle += stepAngle;
-        updateUprightOrientations();
+        innerRotationAngle += stepAngle;
     });
 
     document.getElementById('selectLetterBtn').addEventListener('click', () => {
-        let normalizedAngle = (-currentRotationAngle) % 360;
+        let normalizedAngle = (-innerRotationAngle) % 360;
         if (normalizedAngle < 0) normalizedAngle += 360;
 
         const index = Math.round(normalizedAngle / stepAngle) % innerAlphabet.length;
@@ -473,7 +484,7 @@
         }
     });
 
-    // Audio Analysis & Strict Simultaneous Verification
+    // Audio Analysis & Simultaneous Verification
     let audioCtx, analyser, micStream, isAudioRunning = false;
     let matchScore = 0;
     const micToggleBtn = document.getElementById('micToggleBtn');
@@ -516,8 +527,6 @@
         matchBar.style.width = "0%";
         matchPercent.innerText = "0%";
         clearHighlights();
-        
-        // Re-evaluate status immediately upon stopping audio
         checkFullUnlock();
     }
 
@@ -554,7 +563,6 @@
         const songVerified = isAudioRunning && (matchScore >= 85);
         const codeVerified = enteredCombination === targetCombination;
 
-        // Strictly requires BOTH conditions to be true simultaneously
         if (songVerified && codeVerified) {
             lockStatus.innerText = "FULL ACCESS GRANTED";
             lockStatus.className = "lock-badge badge-unlocked";
@@ -586,8 +594,6 @@
     document.getElementById('resetBtn').addEventListener('click', () => {
         matchScore = 0;
         enteredCombination = "";
-        currentRotationAngle = 0;
-        updateUprightOrientations();
         matchBar.style.width = "0%";
         matchPercent.innerText = "0%";
         enteredCodeDisplay.innerText = "-----";
