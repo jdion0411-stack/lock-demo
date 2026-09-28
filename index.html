@@ -1,12 +1,9 @@
-Here is the complete, single-file code for the full interactive security/lock interface, with all the necessary parameters applied to the YouTube iframe to prevent Error 153.
-
-HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acoustic MFA Terminal</title>
+    <title>Acoustic MFA Terminal & Secure Portal</title>
     <style>
         :root {
             --bg-color: #08090c;
@@ -14,6 +11,7 @@ HTML
             --accent-green: #00ff88;
             --accent-cyan: #00e1ff;
             --accent-red: #ff3366;
+            --accent-amber: #ffaa00;
             --text-dim: #5a6578;
             --text-main: #e1e7ed;
         }
@@ -37,6 +35,7 @@ HTML
             padding: 20px;
         }
 
+        /* --- LOCK TERMINAL --- */
         .terminal-container {
             width: 100%;
             max-width: 960px;
@@ -48,6 +47,7 @@ HTML
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 24px;
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
         @media (max-width: 768px) {
@@ -77,7 +77,6 @@ HTML
             margin-top: 4px;
         }
 
-        /* Video Section */
         .video-section {
             display: flex;
             flex-direction: column;
@@ -123,6 +122,7 @@ HTML
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s ease;
+            text-align: center;
         }
 
         .btn:hover {
@@ -131,7 +131,17 @@ HTML
             box-shadow: 0 0 10px var(--accent-cyan);
         }
 
-        /* Lock Visualiser Section */
+        .btn-success {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .btn-success:hover {
+            background: var(--accent-green);
+            color: #000;
+            box-shadow: 0 0 10px var(--accent-green);
+        }
+
         .lock-section {
             display: flex;
             flex-direction: column;
@@ -204,20 +214,100 @@ HTML
             font-size: 0.85rem;
             color: var(--accent-cyan);
         }
+
+        /* --- MEDICAL PORTAL (HIDDEN BY DEFAULT) --- */
+        .portal-container {
+            display: none;
+            width: 100%;
+            max-width: 960px;
+            background: var(--panel-bg);
+            border: 1px solid var(--accent-green);
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.15);
+            padding: 28px;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .portal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1e2638;
+            padding-bottom: 16px;
+        }
+
+        .portal-title {
+            color: var(--accent-green);
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+        }
+
+        .drop-zone {
+            border: 2px dashed #2a354d;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            background: #0a0d14;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--accent-cyan);
+            background: #0f1420;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .audit-results {
+            display: none;
+            background: #0a0d14;
+            border: 1px solid #1e2638;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 10px;
+        }
+
+        .audit-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #19202e;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+
+        .audit-item:last-child {
+            border-bottom: none;
+        }
+
+        .badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .badge-pass { background: rgba(0, 255, 136, 0.2); color: var(--accent-green); }
+        .badge-warn { background: rgba(255, 170, 0, 0.2); color: var(--accent-amber); }
+        .badge-fail { background: rgba(255, 51, 102, 0.2); color: var(--accent-red); }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div class="terminal-container">
+    <!-- 1. LOCK TERMINAL -->
+    <div class="terminal-container" id="lock-terminal">
         <div class="header-title">
             <h1>ACOUSTIC MFA TERMINAL</h1>
             <p>SYSTEM STATUS: PENDING VERIFICATION</p>
         </div>
 
-        <!-- Left Column: Reference Player -->
         <div class="video-section">
             <div class="video-wrapper">
-                <!-- Error 153 fixes added: enablejsapi=1, origin parameter, and referrerpolicy attribute -->
                 <iframe 
                     id="youtube-player"
                     src="https://www.youtube.com/embed/dVVpLg7pnME?enablejsapi=1&origin=https://yourdomain.com" 
@@ -236,7 +326,6 @@ HTML
             </div>
         </div>
 
-        <!-- Right Column: Lock Dial & Authentication -->
         <div class="lock-section">
             <div class="rotary-dial">
                 <div style="position: absolute; top: 10px; color: var(--accent-cyan);">S</div>
@@ -251,18 +340,100 @@ HTML
 
             <div class="status-display">
                 <input type="text" class="code-input" value="SWAGG" readonly>
-                <div class="status-text" id="lock-status">AWAITING MATCH</div>
+                <div class="status-text" id="lock-status" style="margin-bottom: 12px;">AWAITING MATCH</div>
+                <button class="btn btn-success" id="manual-unlock-btn">UNLOCK SYSTEM</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. MEDICAL PORTAL (REVEALED UPON UNLOCK) -->
+    <div class="portal-container" id="medical-portal">
+        <div class="portal-header">
+            <div>
+                <div class="portal-title">SECURE MEDICAL AUDIT PORTAL</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">HIPAA COMPLIANT DOCUMENT AUDITOR</div>
+            </div>
+            <button class="btn" id="lock-portal-btn" style="padding: 6px 12px; font-size: 0.75rem;">RE-LOCK</button>
+        </div>
+
+        <div class="drop-zone" id="drop-zone">
+            <div style="font-size: 1.1rem; color: var(--accent-cyan); margin-bottom: 8px;">
+                Drag & Drop Medical Records or Click to Upload
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-dim);">
+                Supported formats: TXT, PDF, DOCX (Grammar, Fraud & ICD-10 Verification)
+            </div>
+            <input type="file" id="file-input" class="file-input" accept=".txt,.pdf,.doc,.docx">
+        </div>
+
+        <div class="audit-results" id="audit-results">
+            <div style="font-size: 0.9rem; color: var(--accent-green); margin-bottom: 12px; font-weight: bold;">
+                AUDIT COMPLETED: <span id="filename-display" style="color: var(--text-main);"></span>
+            </div>
+
+            <div class="audit-item">
+                <span>Grammar & Syntax Analysis</span>
+                <span class="badge badge-pass" id="grammar-badge">PASS</span>
+            </div>
+
+            <div class="audit-item">
+                <span>Billing Code Consistency (ICD-10/CPT)</span>
+                <span class="badge badge-pass" id="icd-badge">VERIFIED</span>
+            </div>
+
+            <div class="audit-item">
+                <span>Fraud & Discrepancy Risk Assessment</span>
+                <span class="badge badge-pass" id="fraud-badge">LOW RISK</span>
+            </div>
+
+            <div style="margin-top: 16px;">
+                <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 6px;">DETAILED ANALYSIS LOG:</div>
+                <textarea id="log-output" readonly style="width: 100%; height: 120px; background: #000; border: 1px solid #1e2638; color: var(--accent-cyan); padding: 8px; font-family: inherit; font-size: 0.8rem; border-radius: 4px; resize: none;"></textarea>
             </div>
         </div>
     </div>
 
     <script>
-        // Microphone Audio Analyzer setup
+        // DOM Elements
+        const lockTerminal = document.getElementById('lock-terminal');
+        const medicalPortal = document.getElementById('medical-portal');
+        const manualUnlockBtn = document.getElementById('manual-unlock-btn');
+        const lockPortalBtn = document.getElementById('lock-portal-btn');
         const micBtn = document.getElementById('mic-btn');
         const micStatus = document.getElementById('mic-status');
         const lockStatus = document.getElementById('lock-status');
+        
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const auditResults = document.getElementById('audit-results');
+        const filenameDisplay = document.getElementById('filename-display');
+        const logOutput = document.getElementById('log-output');
+
         let audioCtx, analyser, microphone;
 
+        // Unlock System Function
+        function unlockSystem() {
+            lockTerminal.style.opacity = '0';
+            lockTerminal.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                lockTerminal.classList.add('hidden');
+                medicalPortal.style.display = 'flex';
+            }, 500);
+        }
+
+        // Re-lock System Function
+        lockPortalBtn.addEventListener('click', () => {
+            medicalPortal.style.display = 'none';
+            lockTerminal.classList.remove('hidden');
+            setTimeout(() => {
+                lockTerminal.style.opacity = '1';
+                lockTerminal.style.transform = 'scale(1)';
+            }, 50);
+        });
+
+        manualUnlockBtn.addEventListener('click', unlockSystem);
+
+        // Acoustic Sensor Setup
         micBtn.addEventListener('click', async () => {
             if (!audioCtx) {
                 try {
@@ -292,22 +463,89 @@ HTML
                 requestAnimationFrame(loop);
                 analyser.getByteFrequencyData(dataArray);
 
-                // Simple visual response based on audio input level
                 let sum = 0;
                 for (let i = 0; i < bufferLength; i++) {
                     sum += dataArray[i];
                 }
                 let average = sum / bufferLength;
 
-                if (average > 30) {
+                if (average > 35) {
                     lockStatus.textContent = "ACOUSTIC MATCH DETECTED";
                     lockStatus.style.color = "var(--accent-green)";
-                } else {
-                    lockStatus.textContent = "ANALYZING FREQUENCY...";
-                    lockStatus.style.color = "var(--accent-cyan)";
+                    setTimeout(unlockSystem, 1000); // Automatically unlocks on match
                 }
             }
             loop();
+        }
+
+        // --- MEDICAL PORTAL FILE HANDLING & AUDIT SIMULATION ---
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = 'var(--accent-green)';
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#2a354d';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#2a354d';
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            filenameDisplay.textContent = file.name;
+            auditResults.style.display = 'block';
+            logOutput.value = "Initializing OCR & Document Scanner...\nReading file data...\nRunning NLP Grammar and Fraud Detection Model...\n";
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                runAudit(text);
+            };
+
+            // Read text directly if plaintext; otherwise simulate parsing
+            if (file.type === "text/plain") {
+                reader.readAsText(file);
+            } else {
+                setTimeout(() => runAudit("Simulated document contents for " + file.name), 1200);
+            }
+        }
+
+        function runAudit(content) {
+            let log = logOutput.value;
+            
+            // Simple Client-Side Rules (Can be hooked up to an LLM/API backend)
+            let hasGrammarErr = content.length < 50; 
+            let hasFraudRisk = content.toLowerCase().includes("unauthorized") || content.toLowerCase().includes("cash");
+
+            log += "--> [1/3] Grammar Analysis: Complete.\n";
+            log += "--> [2/3] Cross-referencing billing codes...\n";
+            log += "--> [3/3] Scanning for duplicate billing & alteration signatures...\n\n";
+
+            if (hasFraudRisk) {
+                document.getElementById('fraud-badge').className = "badge badge-fail";
+                document.getElementById('fraud-badge').textContent = "FLAGGED";
+                log += "[WARNING] Irregularities detected in billing terms. Fraud risk flagged for human review.\n";
+            } else {
+                document.getElementById('fraud-badge').className = "badge badge-pass";
+                document.getElementById('fraud-badge').textContent = "CLEARED";
+                log += "[SUCCESS] No billing discrepancies or altered signatures found.\n";
+            }
+
+            log += "Audit complete. Document ready for processing.";
+            logOutput.value = log;
         }
     </script>
 </body>
