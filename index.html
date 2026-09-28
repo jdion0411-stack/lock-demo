@@ -628,7 +628,7 @@
                 <span style="font-size: 1.8rem; color: #00ff88;">✚</span>
                 <h1>EYEOTA Medical Records Portal</h1>
             </div>
-            <span class="security-badge-granted">MFA Verified</span>
+            <security-badge-granted class="security-badge-granted">MFA Verified</security-badge-granted>
         </div>
 
         <div class="patient-records-grid">
@@ -883,32 +883,32 @@
             return;
         }
 
-        // Multi-band frequency extraction
-        let lowBass = 0;
-        for (let i = 1; i < 6; i++) lowBass += dataArray[i];
-        lowBass /= 5;
+        // Anti-Speech Filter (Multi-Band Spectrum Analysis):
+        // Music tracks (like hip-hop beats with vocals) contain concurrent Low Sub-Bass (kick/beat), 
+        // Mid Vocals, and High-Frequency Master Mix presence (snares/cymbals).
+        // Human speech has mid-range formants, but virtually NO consistent sub-bass beat or high-frequency mix air.
+        let subBass = 0;
+        for (let i = 1; i < 5; i++) subBass += dataArray[i];
+        subBass /= 4;
 
         let midVocals = 0;
-        for (let i = 6; i < 60; i++) midVocals += dataArray[i];
-        midVocals /= 54;
+        for (let i = 6; i < 50; i++) midVocals += dataArray[i];
+        midVocals /= 44;
 
         let highPresence = 0;
-        for (let i = 60; i < 140; i++) highPresence += dataArray[i];
-        highPresence /= 80;
+        for (let i = 50; i < 120; i++) highPresence += dataArray[i];
+        highPresence /= 70;
 
-        // Balanced and robust criteria:
-        // Requires decent mid-range / vocal energy presence and reasonable overall signal, 
-        // while penalizing songs dominated by heavy sub-bass (like EDM/heavy hip-hop beats).
-        const hasGoodVolume = averageEnergy > 6;
-        const hasVocalPresence = midVocals > 12;
-        const notOverwhelmingBass = lowBass < (midVocals * 2.2);
+        // STRICT MUSIC CHECK: Requires low-end beat pulse AND high-end mix air alongside vocals. 
+        // This instantly causes plain human speech / talking to fail.
+        const isFullMusicTrack = (subBass > 8) && (midVocals > 14) && (highPresence > 8);
 
-        if (hasGoodVolume && hasVocalPresence && notOverwhelmingBass) {
+        if (isFullMusicTrack) {
             matchScore = Math.min(100, matchScore + 1.2);
             highlightDynamicNodes(dataArray);
         } else {
-            // Gradual penalty drain so it doesn't instantly snap to zero on minor vocal pauses
-            matchScore = Math.max(0, matchScore - 3.0);
+            // Drain score if talking or non-music noise is detected
+            matchScore = Math.max(0, matchScore - 8.0);
             clearHighlights();
         }
 
