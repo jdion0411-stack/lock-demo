@@ -1338,7 +1338,7 @@ button {
     transform: scale(1.08);
 }
 /* MUSIC SYMBOL LOCK FACTOR */
-.music-code-box{margin-top:9px;padding:10px 14px;background:var(--dark);border-radius:8px}.music-code-label{display:flex;justify-content:space-between;align-items:center;color:#94a3b8;font-size:11px;margin-bottom:7px}.music-code{display:flex;align-items:center;gap:5px;min-height:30px}.music-code-symbol{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;background:#334155;color:#fff;font-size:18px;text-shadow:0 0 7px rgba(0,242,255,.5);transition:transform .2s ease,background .2s ease}.music-code-symbol.active{background:#075985;transform:scale(1.08)}.note{cursor:pointer;pointer-events:auto;user-select:none;touch-action:manipulation}.note:hover{transform:scale(1.15)}.note.music-selected{border-color:#00f2ff;box-shadow:0 0 0 3px rgba(0,242,255,.22),0 0 18px rgba(0,242,255,.65);color:#00f2ff}
+.music-code-box{margin-top:9px;padding:10px 14px;background:var(--dark);border-radius:8px}.music-code-label{display:flex;justify-content:space-between;align-items:center;color:#94a3b8;font-size:11px;margin-bottom:7px}.music-code{display:grid;grid-template-columns:repeat(8,minmax(28px,1fr));align-items:center;justify-items:center;gap:6px;min-height:72px;width:100%}.music-code-symbol{width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border-radius:7px;background:#0b1220;border:1px solid rgba(0,242,255,.38);color:#ffffff;font-size:19px;line-height:1;text-shadow:0 0 7px rgba(0,242,255,.65);transition:transform .2s ease,background .2s ease,box-shadow .2s ease}.music-code-symbol.active{background:#075985;border-color:#00f2ff;box-shadow:0 0 10px rgba(0,242,255,.55);transform:scale(1.08)}.note{cursor:pointer;pointer-events:auto;user-select:none;touch-action:manipulation;z-index:70;opacity:1;visibility:visible}.note:hover{transform:scale(1.15)}.note.music-selected{border-color:#00f2ff;box-shadow:0 0 0 3px rgba(0,242,255,.35),0 0 18px rgba(0,242,255,.8);color:#00f2ff;background:#061a2e}.letter{z-index:65;opacity:1;visibility:visible}.letter.selected{z-index:100}
 
 
 /* ==========================================================
@@ -2997,9 +2997,9 @@ const TEST_PIN =
    Three fixed music-note positions form the music key for this
    prototype. The user may toggle any note on/off in any order.
 */
-const MUSIC_KEY_SIZE = 3;
+const MUSIC_KEY_SIZE = 16;
 let TARGET_MUSIC_POSITIONS;
-const TARGET_MUSIC_CREDENTIAL = "3-7-11";
+const TARGET_MUSIC_CREDENTIAL = "1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16";
 
 /* ==========================================================
    ELEMENT REFERENCES
@@ -3086,7 +3086,7 @@ const notes = [
    The key is position-based and the three selected symbols are different.
    Key positions: 3 = ♬, 7 = 𝄞, 11 = 𝄫.
 */
-TARGET_MUSIC_POSITIONS = new Set([3, 7, 11]);
+TARGET_MUSIC_POSITIONS = new Set(Array.from({ length: 16 }, (_, i) => i + 1));
 
 /* ==========================================================
    EXACTLY 26 PREDEFINED COLORS
@@ -3776,7 +3776,7 @@ function renderMusicCombination() {
             span.classList.add("active");
             span.title = `Music credential position ${position}`;
         } else {
-            span.textContent = "-";
+            span.textContent = "·";
         }
 
         musicCodeDisplay.appendChild(span);
