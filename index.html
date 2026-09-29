@@ -2694,8 +2694,8 @@ body::before, body::after {
 
             <div class="music-code-box">
                 <div class="music-code-label">
-                    <span>Music Symbol Key:</span>
-                    <span id="musicCodeStatus">0 / 4</span>
+                    <span>Music Access Code:</span>
+                    <span id="musicCodeStatus">No symbols selected</span>
                 </div>
                 <div class="music-code" id="musicCodeDisplay"></div>
             </div>
@@ -3783,7 +3783,9 @@ function renderMusicCombination() {
     }
 
     if (musicCodeStatus) {
-        musicCodeStatus.textContent = `${selectedPositions.length} / ${MUSIC_KEY_SIZE}`;
+        musicCodeStatus.textContent = selectedPositions.length === 0
+            ? "No symbols selected"
+            : `${selectedPositions.length} selected`;
     }
 }
 
