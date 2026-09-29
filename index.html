@@ -2375,8 +2375,16 @@ body.eye-test-mode .eyeota-wip-disclaimer{display:block!important}
 
 <style id="eyeota-mobile-arrow-fix">
 @media(max-width:700px){
+  /* Make room beside the dial so arrows can stay OUTSIDE it like desktop. */
+  #dialStage{
+    width:calc(100% - 88px)!important;
+    max-width:520px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+    overflow:visible!important;
+  }
   #eyeModeArrow.eye-mode-arrow{
-    left:6px!important;
+    left:-42px!important;
     right:auto!important;
     transform:translateY(-50%)!important;
     z-index:100000!important;
@@ -2385,10 +2393,11 @@ body.eye-test-mode .eyeota-wip-disclaimer{display:block!important}
     opacity:1!important;
   }
   #dialModeArrow{
-    right:6px!important;
+    right:-42px!important;
     left:auto!important;
     transform:translateY(-50%)!important;
     z-index:100000!important;
+    display:flex!important;
     visibility:visible!important;
     opacity:1!important;
   }
@@ -6311,7 +6320,7 @@ document.addEventListener('DOMContentLoaded', function(){
     cancelAnimationFrame(frame); locked=false; startTime=0; trialStarted=performance.now(); feedback.textContent=''; press.disabled=false; press.style.display='inline-block';
     const t=trials[index],w=dial.clientWidth,h=dial.clientHeight,cx=w/2,cy=h/2;
     trialEl.textContent='TRIAL '+(index+1)+' OF 10';
-    instruction.textContent='Keep looking at the center. Press when you see '+t.c+' reach the center circle.';
+    instruction.textContent='Keep looking at the center. Press while '+t.c+' is inside the center circle.';
     stims.forEach(function(e,k){
       if(k<t.n){ e.style.display='block'; e.textContent=k===0?t.c:t.ds[k-1]; e.style.fontSize=(k===0?t.sz:t.sz+3)+'px'; }
       else e.style.display='none';
@@ -6323,11 +6332,12 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!active||locked)return;
     if(!startTime)startTime=now;
     const t=trials[index],f=Math.min(1,(now-startTime)/t.d),w=dial.clientWidth,h=dial.clientHeight,cx=w/2,cy=h/2,r=Math.max(70,Math.min(w,h)*0.42);
-    const a=t.a*Math.PI/180, rr=r*(1-f);
+    /* Travel from one edge, through fixation at f=.5, and out the opposite edge. */
+    const a=t.a*Math.PI/180, rr=r*(1-(2*f));
     pos.x=cx+Math.cos(a)*rr; pos.y=cy+Math.sin(a)*rr;
     stims[0].style.left=pos.x+'px'; stims[0].style.top=pos.y+'px';
-    if(t.n>1){const a2=(t.a+125)*Math.PI/180,r2=r*(.95-.58*f);stims[1].style.left=(cx+Math.cos(a2)*r2)+'px';stims[1].style.top=(cy+Math.sin(a2)*r2)+'px';}
-    if(t.n>2){const a3=(t.a+245)*Math.PI/180,r3=r*(.9-.50*f);stims[2].style.left=(cx+Math.cos(a3)*r3)+'px';stims[2].style.top=(cy+Math.sin(a3)*r3)+'px';}
+    if(t.n>1){const a2=(t.a+125)*Math.PI/180,r2=r*(.95-(1.90*f));stims[1].style.left=(cx+Math.cos(a2)*r2)+'px';stims[1].style.top=(cy+Math.sin(a2)*r2)+'px';}
+    if(t.n>2){const a3=(t.a+245)*Math.PI/180,r3=r*(.90-(1.80*f));stims[2].style.left=(cx+Math.cos(a3)*r3)+'px';stims[2].style.top=(cy+Math.sin(a3)*r3)+'px';}
     if(f>=1){finish(false);return;}
     frame=requestAnimationFrame(animate);
   }
@@ -6335,11 +6345,11 @@ document.addEventListener('DOMContentLoaded', function(){
   function finish(success){
     if(locked)return; locked=true; cancelAnimationFrame(frame); press.disabled=true;
     const t=trials[index],response=Math.round(performance.now()-trialStarted);
-    feedback.textContent=success?'✓ RECORDED':'✕ MISSED';
+    feedback.textContent=success?'✓ TIMING RECORDED':'✕ OUTSIDE TARGET';
     const mark=document.createElement('div'); mark.className='field-mark '+(success?'ok':''); mark.textContent=success?'':'×';
     const a=t.a*Math.PI/180,rad=38; mark.style.left=(50+Math.cos(a)*rad)+'%'; mark.style.top=(50+Math.sin(a)*rad)+'%'; field.appendChild(mark);
     const row=document.createElement('tr');
-    row.innerHTML='<td>'+(index+1)+'</td><td>'+t.c+'</td><td>'+t.a+'°</td><td>'+t.sz+' px</td><td>'+t.d+' ms</td><td>'+(success?'Seen':'Missed')+'</td><td>'+response+' ms</td>';
+    row.innerHTML='<td>'+(index+1)+'</td><td>'+t.c+'</td><td>'+t.a+'°</td><td>'+t.sz+' px</td><td>'+t.d+' ms</td><td>'+(success?'In target':'Outside / missed')+'</td><td>'+response+' ms</td>';
     tbody.appendChild(row); count.textContent=(index+1)+' of 10 trials complete';
     setTimeout(function(){
       if(!active)return;
