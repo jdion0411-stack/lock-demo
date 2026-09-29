@@ -10,6 +10,7 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
 >
 
+<!-- EYEOTA YO exact-rhyme functional fix -->
 <title>EYEOTA Personal Records Access</title>
 
 <style>
@@ -2200,6 +2201,45 @@ button:active {
     }
 }
 
+
+
+/* ==========================================================
+   EYEOTA RHYME DIAL MODE
+========================================================== */
+.dial-stage{position:relative;width:var(--dial-size);margin:0 auto;}
+.dial-mode-arrow{position:absolute;right:-58px;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid rgba(0,242,255,.75);background:rgba(5,15,30,.92);color:#e8fbff;font-size:29px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:180;box-shadow:0 0 18px rgba(0,242,255,.28);transition:.2s ease;}
+.dial-mode-arrow:hover{transform:translateY(-50%) scale(1.08);box-shadow:0 0 25px rgba(0,242,255,.55);}
+.dial-mode-arrow .arrow-glyph{display:block;transform:translateX(1px);}
+.dial-mode-arrow[aria-label*="Music"] .arrow-glyph{transform:rotate(180deg);}
+.mode-chip{position:absolute;left:50%;top:-15px;transform:translateX(-50%);z-index:170;padding:6px 13px;border-radius:999px;background:rgba(4,12,25,.92);border:1px solid rgba(0,242,255,.48);color:#dffbff;font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;white-space:nowrap;box-shadow:0 0 14px rgba(0,242,255,.18);}
+
+.rhyme-builder{display:grid;gap:12px;margin:12px 0 16px}.rhyme-tools{display:flex;flex-wrap:wrap;gap:8px}.rhyme-btn,.vowel-btn{border:1px solid rgba(0,242,255,.34);background:#0b1728;color:#dffcff;border-radius:8px;padding:8px 11px;cursor:pointer}.vowel-btn.active{background:#00f2ff;color:#04101b;font-weight:800}.fragment-strip{display:flex;flex-wrap:wrap;gap:7px;min-height:42px;padding:8px;border:1px solid rgba(148,163,184,.22);border-radius:10px;background:#050b16}.fragment{border:1px solid rgba(255,255,255,.16);background:#111c2d;color:#fff;border-radius:8px;padding:8px 10px;cursor:pointer}.fragment.active{border-color:#ffb700;box-shadow:0 0 0 2px rgba(255,183,0,.13);color:#ffd76b}.sound-stage{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center}.sound-stage label{font-size:12px;color:#94a3b8}.sound-output{font-size:20px;font-weight:800;letter-spacing:1px;color:#fff;padding:10px 12px;border-radius:9px;background:#07111f;border:1px solid rgba(255,183,0,.3)}.youtube-beat{margin:16px 0;display:grid;gap:9px}.youtube-row{display:flex;gap:8px}.youtube-row input{flex:1;min-width:0;border:1px solid rgba(255,183,0,.3);border-radius:9px;background:#08111f;color:#fff;padding:10px 12px}.beat-frame{display:none;aspect-ratio:16/9;width:100%;border:0;border-radius:10px;background:#000}.beat-frame.loaded{display:block}.copyright-note{font-size:11px;color:#94a3b8;line-height:1.45}.copyright-note strong{color:#ffcf55}@media(max-width:620px){.youtube-row{flex-direction:column}.sound-stage{grid-template-columns:1fr}}
+
+.rhyme-workspace{display:none;width:min(760px,calc(100vw - 24px));margin:18px auto 0;padding:18px;border:1px solid rgba(0,242,255,.35);border-radius:14px;background:rgba(7,15,30,.90);box-shadow:0 18px 50px rgba(0,0,0,.28);}
+.rhyme-workspace h2{font-size:18px;color:#fff;letter-spacing:.8px;margin-bottom:4px;}
+.rhyme-workspace .rhyme-sub{font-size:12px;color:#94a3b8;margin-bottom:14px;line-height:1.5;}
+.rhyme-word-row{display:flex;gap:9px;margin-bottom:12px;}
+.rhyme-word-input{flex:1;min-width:0;border:1px solid rgba(0,242,255,.32);border-radius:9px;background:#08111f;color:#fff;padding:11px 12px;font-size:15px;outline:none;}
+.rhyme-word-input:focus,.rap-pad:focus{border-color:#00f2ff;box-shadow:0 0 0 2px rgba(0,242,255,.12);}
+.rhyme-hint{min-height:20px;color:#67e8f9;font-size:12px;margin:0 0 10px;}
+.rap-pad{display:block;width:100%;min-height:240px;resize:vertical;border:1px solid rgba(148,163,184,.25);border-radius:10px;background:#050b16;color:#f8fafc;padding:15px;font:15px/1.7 Consolas,Monaco,monospace;outline:none;}
+.rap-meta{display:flex;justify-content:space-between;gap:12px;margin-top:9px;color:#64748b;font-size:11px;}
+body.rhyme-mode .personal-gateway,body.rhyme-mode .banner,body.rhyme-mode .color-panel,body.rhyme-mode .panel{display:none!important;}
+body.rhyme-mode .rhyme-workspace{display:block;}
+body.rhyme-mode #dial .note-track,body.rhyme-mode #dial .note{display:none!important;}
+body.rhyme-mode #dial .letter{pointer-events:auto!important;cursor:pointer!important;}
+body.rhyme-mode #dial .wave-network{opacity:.42;}
+body.rhyme-mode #dial .center-artwork{filter:hue-rotate(30deg) saturate(.9);}
+@media(max-width:620px){.dial-mode-arrow{right:4px;top:50%;width:42px;height:42px;background:rgba(5,15,30,.96)}.mode-chip{top:5px}.rhyme-workspace{margin-top:14px;padding:14px}.rap-pad{min-height:210px}}
+
+
+
+.rhyme-cycle-controls{display:flex;align-items:center;justify-content:center;gap:14px;margin:4px 0 13px}.rhyme-cycle-controls button{width:48px;height:42px;border-radius:10px;border:1px solid rgba(0,242,255,.48);background:#081728;color:#e9fdff;font-size:24px;font-weight:900;cursor:pointer;box-shadow:0 0 13px rgba(0,242,255,.12)}.rhyme-cycle-controls button:hover{border-color:#00f2ff;box-shadow:0 0 19px rgba(0,242,255,.34)}#rhymeCycleLetter{min-width:52px;text-align:center;font:900 24px/1 Courier New,monospace;color:#fff;text-shadow:0 0 12px rgba(0,242,255,.85)}body.rhyme-mode #dial .letter.rhyme-current-letter{box-shadow:0 0 0 3px rgba(255,255,255,.98),0 0 0 7px rgba(0,242,255,.60),0 0 32px rgba(0,242,255,1)!important;filter:brightness(1.3)!important;z-index:150!important}
+
+/* RHYME DIAL V3 */
+.analysis-options,.rhyme-results{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 12px}.analysis-chip,.rhyme-result{border:1px solid rgba(0,242,255,.3);background:#081526;color:#e8fbff;border-radius:999px;padding:7px 10px;cursor:pointer;font-size:12px}.analysis-chip.active{border-color:#ffb700;color:#ffd76b}.rhyme-result{font-size:14px;font-weight:700}.rhyme-result:hover{border-color:#00f2ff}.family-label{font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.8px;margin-top:6px}.active-piece-line{color:#fff;font-size:13px;margin:6px 0}.active-piece-line strong{color:#ffd76b}
+
+.rhyme-choice-row{display:grid;grid-template-columns:auto minmax(190px,1fr) minmax(150px,.8fr);gap:8px;align-items:center;margin:10px 0 12px}.rhyme-choice-row label{font-size:12px;font-weight:800;color:#dffcff}.rhyme-choice-row select,.rhyme-choice-row input{min-width:0;border:1px solid rgba(0,242,255,.34);border-radius:9px;background:#08111f;color:#fff;padding:10px 11px}.rhyme-choice-row input[hidden]{display:none!important}@media(max-width:620px){.rhyme-choice-row{grid-template-columns:1fr}.rhyme-choice-row label{margin-top:2px}}
 </style>
 
 
@@ -2303,6 +2343,37 @@ body::before, body::after {
 }
 </style>
 
+
+<style id="eyeota-rhyme-writer-styles">
+/* Rhyme mode: center the complete workspace and remove the fixed homepage video. */
+body.rhyme-mode .music-dock { display:none !important; visibility:hidden !important; }
+body.rhyme-mode .main-layout { width:100% !important; max-width:100% !important; }
+body.rhyme-mode .left-column { width:100% !important; max-width:100% !important; margin-inline:auto !important; }
+body.rhyme-mode .rhyme-workspace {
+  box-sizing:border-box !important;
+  width:min(980px, calc(100% - 32px)) !important;
+  max-width:980px !important;
+  margin:18px auto 32px !important;
+  left:auto !important; right:auto !important;
+}
+body.rhyme-mode .beat-studio, body.rhyme-mode .writer-studio { width:100%; box-sizing:border-box; }
+body.rhyme-mode .paper-writer { box-sizing:border-box; width:100%; }
+@media (max-width:700px){
+ body.rhyme-mode .rhyme-workspace{width:calc(100% - 16px)!important;margin:10px auto 24px!important;padding:14px 10px!important;}
+ .writer-toolbar{gap:5px!important;padding:7px!important;}
+ .writer-toolbar button,.writer-toolbar select{min-height:40px!important;}
+ .writer-toolbar select{max-width:none!important;flex:1 1 120px!important;}
+ .color-tool{min-height:40px!important;}
+ .paper-writer{min-height:55vh!important;max-height:none!important;padding:22px 15px!important;font-size:16px!important;line-height:32px!important;}
+ .beat-link-row{grid-template-columns:1fr 1fr!important;}
+ .beat-link-row input{grid-column:1/-1!important;font-size:16px!important;}
+ .beat-link-row button{min-height:42px!important;}
+ .user-beat-frame{width:100%!important;}
+}
+.eyeota-feature-line{margin-top:7px;font-size:12px;font-weight:900;letter-spacing:1.5px;color:#e6fbff;text-shadow:0 2px 8px #000}.eyeota-feature-line span{color:#00f2ff;margin:0 7px}
+body.rhyme-mode .music-dock{display:none!important}.rhyme-workspace{width:min(920px,calc(100vw - 24px))!important}.beat-studio,.writer-studio{margin-top:18px;padding-top:16px;border-top:1px solid rgba(148,163,184,.22)}.studio-heading{font-size:14px;font-weight:900;letter-spacing:.8px;color:#fff;margin-bottom:9px}.beat-link-row{display:grid;grid-template-columns:1fr auto auto;gap:8px}.beat-link-row input{min-width:0;border:1px solid rgba(0,242,255,.3);border-radius:9px;background:#08111f;color:#fff;padding:10px 12px}.beat-link-row button,.writer-toolbar button,.writer-toolbar select{border:1px solid rgba(0,242,255,.3);border-radius:7px;background:#0b1728;color:#e8fbff;padding:7px 9px;cursor:pointer}.beat-message{font-size:11px;color:#94a3b8;margin:7px 0}.user-beat-frame{display:none;width:100%;aspect-ratio:16/9;border:0;border-radius:11px;background:#000;margin-top:10px}.user-beat-frame.loaded{display:block}.writer-toolbar{display:flex;flex-wrap:wrap;gap:6px;padding:9px;border:1px solid rgba(148,163,184,.22);border-radius:10px 10px 0 0;background:#0a1422}.writer-toolbar select{max-width:145px}.writer-toolbar button:hover,.beat-link-row button:hover{border-color:#00f2ff}.writer-toolbar .save-writing{background:#087c8b;border-color:#19e8f4;font-weight:800}.color-tool{display:flex;align-items:center;gap:4px;padding:3px 6px;border:1px solid rgba(0,242,255,.3);border-radius:7px;color:#fff;font-weight:800}.color-tool input{width:27px;height:27px;border:0;background:transparent;padding:0}.paper-writer{min-height:520px;max-height:72vh;overflow:auto;padding:30px 34px;color:#111827;font:16px/32px Arial,sans-serif;outline:none;border:1px solid #cbd5e1;border-top:0;border-radius:0 0 10px 10px;background-color:#fffef8;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 31px,rgba(72,116,166,.28) 31px,rgba(72,116,166,.28) 32px);background-attachment:local;white-space:pre-wrap;overflow-wrap:anywhere;caret-color:#111827}.paper-writer:empty:before{content:attr(data-placeholder);color:#94a3b8;pointer-events:none}.writer-status{display:flex;justify-content:space-between;gap:12px;font-size:11px;color:#94a3b8;margin-top:6px}.rhyme-result{user-select:none}.rhyme-result.clickable{cursor:pointer}
+@media(max-width:650px){.beat-link-row{grid-template-columns:1fr 1fr}.beat-link-row input{grid-column:1/-1}.paper-writer{min-height:420px;padding:24px 18px}.writer-status{flex-direction:column;gap:3px}}
+</style>
 </head>
 
 <body>
@@ -2328,6 +2399,10 @@ body::before, body::after {
         <!-- ==================================================
              DIAL
         =================================================== -->
+
+        <div class="dial-stage" id="dialStage">
+            <div class="mode-chip" id="modeChip">Music Lock</div>
+            <button class="dial-mode-arrow" id="dialModeArrow" type="button" aria-label="Open Rhyme Dial" title="Open Rhyme Dial"><span class="arrow-glyph">›</span></button>
 
         <div
             class="lock-container"
@@ -2540,6 +2615,7 @@ body::before, body::after {
             ></div>
 
         </div>
+        </div>
 
         <!-- BRAND -->
 
@@ -2549,11 +2625,82 @@ body::before, body::after {
                 <span style="color:#0066FF">E</span><span style="color:#FFD700">YE</span><span style="color:#28A745">OTA</span>
             </h1>
 
-            <p>
-                DOCUMENT SOLUTIONS
-            </p>
+            <p>DOCUMENT SOLUTIONS</p>
+            <div class="eyeota-feature-line" aria-label="EYEOTA features">EYEOTA LOCK <span>•</span> RHYME DIAL</div>
 
         </div>
+
+        <!-- ==================================================
+             RHYME DIAL WRITING WORKSPACE
+        =================================================== -->
+        <section class="rhyme-workspace" id="rhymeWorkspace" aria-label="Rhyme Dial workspace">
+            <h2>Rhyme Dial</h2>
+            <div class="rhyme-sub">Type a word, then use the arrows to cycle A–Z. The active letter lights on the dial and available rhymes appear below.</div>
+            <div class="rhyme-word-row">
+                <input class="rhyme-word-input" id="rhymeWord" type="text" maxlength="80" placeholder="Type a word — example: yo" autocomplete="off">
+            </div>
+            <div class="rhyme-choice-row">
+                <label for="rhymeStyle">How do you want to rhyme?</label>
+                <select id="rhymeStyle">
+                    <option value="">Choose rhyme style…</option>
+                    <option value="exact">Exact sound rhyme</option>
+                    <option value="near">Near / slant rhyme</option>
+                    <option value="custom">Choose the ending sound yourself</option>
+                </select>
+                <input id="customRhymeSound" type="text" maxlength="24" placeholder="Ending sound, e.g. oh" hidden>
+            </div>
+            <div class="eyeota-range-panel" id="eyeotaRangePanel">
+<label for="rhymeRange"><strong>Rhyme Range</strong> <span id="rhymeRangeName">Exact</span></label>
+<input id="rhymeRange" type="range" min="0" max="4" step="1" value="0" aria-label="Rhyme range from exact to experimental">
+<div class="eyeota-range-labels"><span>Exact</span><span>Close</span><span>Slant</span><span>Loose</span><span>Experimental</span></div>
+<div class="eyeota-range-help" id="rhymeRangeHelp">Perfect pronunciation rhyme. Move right to deliberately widen the sound match.</div>
+</div>
+<div class="rhyme-cycle-controls" aria-label="Cycle dial letters">
+                <button id="rhymePrevLetter" type="button" aria-label="Previous letter">←</button>
+                <div id="rhymeCycleLetter" aria-live="polite">A</div>
+                <button id="rhymeNextLetter" type="button" aria-label="Next letter">→</button>
+            </div>
+            <div class="rhyme-hint" id="rhymeHint">Type YO, then use the arrows to cycle through the dial.</div>
+            <div class="family-label" id="dialLetterLabel">Choose a letter on the dial</div>
+            <div class="rhyme-results" id="rhymeResults" aria-live="polite"></div>
+
+            <div class="beat-studio">
+                <div class="studio-heading">Beat Player</div>
+                <div class="beat-link-row">
+                    <input id="beatUrl" type="url" placeholder="Paste a YouTube beat link">
+                    <button id="loadBeat" type="button">Load Beat</button>
+                    <button id="clearBeat" type="button">Clear</button>
+                </div>
+                <div class="beat-message" id="beatMessage">Paste a YouTube link to keep the beat playing while you write.</div>
+                <iframe id="userBeatFrame" class="user-beat-frame" title="User beat player" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+
+            <div class="writer-studio">
+                <div class="studio-heading">Writing Pad</div>
+                <div class="writer-toolbar" role="toolbar" aria-label="Writing formatting controls">
+                    <select id="writerFont" aria-label="Font">
+                        <option value="Arial">Arial</option><option value="Georgia">Georgia</option><option value="'Courier New'">Courier New</option><option value="Verdana">Verdana</option><option value="'Times New Roman'">Times New Roman</option><option value="Trebuchet MS">Trebuchet</option>
+                    </select>
+                    <select id="writerSize" aria-label="Font size">
+                        <option value="2">12</option><option value="3" selected>16</option><option value="4">18</option><option value="5">24</option><option value="6">32</option><option value="7">48</option>
+                    </select>
+                    <button type="button" data-cmd="bold" title="Bold"><b>B</b></button>
+                    <button type="button" data-cmd="italic" title="Italic"><i>I</i></button>
+                    <button type="button" data-cmd="underline" title="Underline"><u>U</u></button>
+                    <button type="button" data-cmd="justifyLeft" title="Align left">≡</button>
+                    <button type="button" data-cmd="justifyCenter" title="Center">≡</button>
+                    <button type="button" data-cmd="justifyRight" title="Align right">≡</button>
+                    <label class="color-tool" title="Text color">A <input id="writerColor" type="color" value="#111827" aria-label="Text color"></label>
+                    <label class="color-tool" title="Highlight color">▰ <input id="writerHighlight" type="color" value="#fff59d" aria-label="Highlight color"></label>
+                    <button type="button" data-cmd="undo" title="Undo">↶</button>
+                    <button type="button" data-cmd="redo" title="Redo">↷</button>
+                    <button id="clearWriting" type="button" title="Clear writing">Clear</button>
+                    <button id="saveWriting" type="button" class="save-writing" title="Save document">Save Document</button>
+                </div>
+                <div id="rapWriter" class="paper-writer" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Write your verse here..."></div>
+                <div class="writer-status"><span id="writerCount">0 characters</span><span id="saveStatus">Autosaved in this browser</span></div>
+            </div>
+        </section>
 
         <!-- ==================================================
              PERSONAL RECORDS GATEWAY
@@ -2990,7 +3137,7 @@ body::before, body::after {
     </div>
 
     <iframe
-        src="https://www.youtube-nocookie.com/embed/ArWFWMCBhIQ?rel=0&modestbranding=1&playsinline=1"
+        src="https://www.youtube-nocookie.com/embed/D4hAVemuQXY?rel=0&modestbranding=1&playsinline=1"
         title="New Video Embed"
         loading="lazy"
         allow="autoplay; encrypted-media; picture-in-picture"
@@ -5740,7 +5887,289 @@ checkUnlock();
     dial.addEventListener('pointerdown', trigger, {passive:true});
 })();
 
+
+
+/* ==========================================================
+   MUSIC LOCK <-> RHYME DIAL MODE SWITCH
+========================================================== */
+(function setupRhymeDialMode(){
+    const arrow=document.getElementById('dialModeArrow');
+    const chip=document.getElementById('modeChip');
+    const rhymeWord=document.getElementById('rhymeWord');
+    const rhymeHint=document.getElementById('rhymeHint');
+    const results=document.getElementById('rhymeResults');
+    const letterLabel=document.getElementById('dialLetterLabel');
+    const prev=document.getElementById('rhymePrevLetter');
+    const next=document.getElementById('rhymeNextLetter');
+    const cycleLetter=document.getElementById('rhymeCycleLetter');
+    const rhymeStyle=document.getElementById('rhymeStyle');
+    const customRhymeSound=document.getElementById('customRhymeSound');
+    const letters='abcdefghijklmnopqrstuvwxyz'.split('');
+    let rhymeMode=false;
+    let index=0;
+
+    // First focused prototype: the spoken long-O / "oh" family used by YO.
+    // Includes common words, names, contractions/interjections and useful informal spellings.
+    const yoRhymes={
+        a:[],
+        b:['beau','beaux','bow'],
+        c:['Coe'],
+        d:['doe','dough','doh'],
+        e:[],
+        f:['foe'],
+        g:['go'],
+        h:['hoe','ho'],
+        i:[],
+        j:['Joe'],
+        k:[],
+        l:['lo','low'],
+        m:['Moe','mow'],
+        n:['no','know'],
+        o:['oh','owe'],
+        p:['Poe'],
+        q:[],
+        r:['roe','row'],
+        s:['so','sew','sow'],
+        t:['toe','tow'],
+        u:[],
+        v:[],
+        w:['woe','whoa','woah'],
+        x:[],
+        y:['yo'],
+        z:['Zoe']
+    };
+
+    function cleanWord(){return (rhymeWord?.value||'').trim().toLowerCase().replace(/[^a-z]/g,'');}
+    function current(){return letters[index];}
+    function highlight(){
+        document.querySelectorAll('#dial .letter').forEach(el=>el.classList.remove('rhyme-current-letter'));
+        const l=current();
+        const el=document.querySelector(`#dial .letter[data-letter="${l.toUpperCase()}"]`);
+        if(el) el.classList.add('rhyme-current-letter');
+        if(cycleLetter) cycleLetter.textContent=l.toUpperCase();
+    }
+    function render(){
+        if(!results)return;
+        results.innerHTML='';
+        highlight();
+        const word=cleanWord();
+        const lead=current();
+        const style=rhymeStyle?.value||'';
+        const custom=(customRhymeSound?.value||'').trim();
+        if(!word){letterLabel.textContent='Choose a word first';rhymeHint.textContent='Type a word, then choose how you want to rhyme it.';return;}
+        if(!style){letterLabel.textContent='Choose how you want to rhyme';rhymeHint.textContent='Pick Exact, Near / Slant, or choose the ending sound yourself. The dial will not assume “OH”.';return;}
+        if(style==='custom' && !custom){letterLabel.textContent='Enter the ending sound';rhymeHint.textContent='Type the sound you want to keep, for example “oh”, then cycle the dial.';return;}
+        const target=style==='custom'?custom:(word==='yo'?'oh':'the word’s pronunciation');
+        letterLabel.textContent=`${lead.toUpperCase()} • ${style==='exact'?'Exact rhyme':style==='near'?'Near / slant rhyme':'Ending sound: “'+target+'”'}`;
+        if(word!=='yo' || style!=='exact'){
+            rhymeHint.textContent='This control is now set correctly. The next phase connects these choices to the full pronunciation-based English rhyme engine.';
+            return;
+        }
+        rhymeHint.textContent='Exact YO /oʊ/ rhyme selected. Cycle A–Z; results below update for the highlighted letter.';
+        const words=yoRhymes[lead]||[];
+        if(!words.length){
+            const empty=document.createElement('span');
+            empty.className='rhyme-result';
+            empty.textContent='No useful YO rhyme found for this letter';
+            results.appendChild(empty);
+            return;
+        }
+        words.forEach(w=>{const b=document.createElement('button');b.type='button';b.className='rhyme-result clickable';b.textContent=w;b.title='Click to insert into writing pad';b.addEventListener('click',()=>{const ed=document.getElementById('rapWriter');if(ed){ed.focus();document.execCommand('insertText',false,w+' ');ed.dispatchEvent(new Event('input',{bubbles:true}));}});results.appendChild(b);});
+    }
+    function cycle(delta){index=(index+delta+letters.length)%letters.length;render();}
+    function setMode(nextMode){
+        rhymeMode=!!nextMode;
+        document.body.classList.toggle('rhyme-mode',rhymeMode);
+        const legacyDock=document.querySelector('.music-dock');
+        const legacyFrame=legacyDock?.querySelector('iframe');
+        if(legacyDock) legacyDock.hidden=rhymeMode;
+        if(legacyFrame){
+            if(rhymeMode){
+                if(!legacyFrame.dataset.eyeotaSrc) legacyFrame.dataset.eyeotaSrc=legacyFrame.getAttribute('src')||'';
+                legacyFrame.removeAttribute('src');
+            } else if(legacyFrame.dataset.eyeotaSrc && !legacyFrame.getAttribute('src')){
+                legacyFrame.setAttribute('src',legacyFrame.dataset.eyeotaSrc);
+            }
+        }
+        chip.textContent=rhymeMode?'Rhyme Dial':'Music Lock';
+        arrow.setAttribute('aria-label',rhymeMode?'Return to Music Lock':'Open Rhyme Dial');
+        arrow.title=rhymeMode?'Return to Music Lock':'Open Rhyme Dial';
+        if(rhymeMode){
+            dialActive=false;colorsShuffling=false;
+            if(colorShuffleTimer){clearInterval(colorShuffleTimer);colorShuffleTimer=null;}
+            render();setTimeout(()=>rhymeWord?.focus(),180);
+        }else{
+            dialActive=true;
+            document.querySelectorAll('#dial .letter').forEach(el=>el.classList.remove('rhyme-current-letter'));
+        }
+    }
+    prev?.addEventListener('click',()=>cycle(-1));
+    next?.addEventListener('click',()=>cycle(1));
+    arrow?.addEventListener('click',()=>setMode(!rhymeMode));
+    rhymeWord?.addEventListener('input',()=>{index=0;render();});
+    rhymeStyle?.addEventListener('change',()=>{if(customRhymeSound) customRhymeSound.hidden=rhymeStyle.value!=='custom';render();});
+    customRhymeSound?.addEventListener('input',render);
+    document.addEventListener('keydown',e=>{
+        if(!rhymeMode || document.activeElement===rhymeWord)return;
+        if(e.key==='ArrowLeft'){e.preventDefault();cycle(-1);}
+        if(e.key==='ArrowRight'){e.preventDefault();cycle(1);}
+    });
+    render();
+})()
 </script>
+
+
+<script id="eyeota-rhyme-writer-script">
+(function(){
+ const safeStore={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},remove(k){try{localStorage.removeItem(k)}catch(e){}}};
+ const beatUrl=document.getElementById('beatUrl'), loadBeat=document.getElementById('loadBeat'), clearBeat=document.getElementById('clearBeat'), frame=document.getElementById('userBeatFrame'), beatMessage=document.getElementById('beatMessage');
+ function youtubeId(raw){try{const u=new URL((raw||'').trim());let id='';if(u.hostname==='youtu.be'||u.hostname==='www.youtu.be') id=u.pathname.slice(1).split('/')[0];else if(u.hostname.endsWith('youtube.com')){id=u.searchParams.get('v')||((u.pathname.match(/\/(?:embed|shorts|live)\/([^/?#]+)/)||[])[1]||'');}return /^[A-Za-z0-9_-]{6,20}$/.test(id)?id:'';}catch(e){return '';}}
+ function load(){const id=youtubeId(beatUrl.value);if(!id){beatMessage.textContent='Please paste a valid YouTube video link.';frame.classList.remove('loaded');frame.removeAttribute('src');return;}frame.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+'?rel=0&playsinline=1';frame.classList.add('loaded');beatMessage.textContent='Beat loaded. Playback stays here while you write.';safeStore.set('eyeotaBeatUrl',beatUrl.value);}
+ loadBeat?.addEventListener('click',load);beatUrl?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();load();}});clearBeat?.addEventListener('click',()=>{beatUrl.value='';frame.removeAttribute('src');frame.classList.remove('loaded');beatMessage.textContent='Paste a YouTube link to keep the beat playing while you write.';safeStore.remove('eyeotaBeatUrl');});
+ const oldBeat=safeStore.get('eyeotaBeatUrl');if(oldBeat&&beatUrl){beatUrl.value=oldBeat;}
+
+ const editor=document.getElementById('rapWriter'), count=document.getElementById('writerCount'), status=document.getElementById('saveStatus');
+ function focusEditor(){editor?.focus();}
+ function cmd(c,v=null){focusEditor();document.execCommand(c,false,v);saveLocal();}
+ document.querySelectorAll('.writer-toolbar [data-cmd]').forEach(b=>b.addEventListener('click',()=>cmd(b.dataset.cmd)));
+ document.getElementById('writerFont')?.addEventListener('change',e=>cmd('fontName',e.target.value));
+ document.getElementById('writerSize')?.addEventListener('change',e=>cmd('fontSize',e.target.value));
+ document.getElementById('writerColor')?.addEventListener('input',e=>cmd('foreColor',e.target.value));
+ document.getElementById('writerHighlight')?.addEventListener('input',e=>cmd('hiliteColor',e.target.value));
+ function updateCount(){if(count&&editor)count.textContent=(editor.innerText||'').length.toLocaleString()+' characters';}
+ let saveTimer;function saveLocal(){if(!editor)return;clearTimeout(saveTimer);saveTimer=setTimeout(()=>{safeStore.set('eyeotaRhymeWriting',editor.innerHTML);updateCount();if(status)status.textContent='Autosaved in this browser';},120);}
+ editor?.addEventListener('input',saveLocal);
+ const saved=safeStore.get('eyeotaRhymeWriting');if(saved&&editor){editor.innerHTML=saved;updateCount();}
+ document.getElementById('clearWriting')?.addEventListener('click',()=>{if(!editor)return;if(confirm('Clear the writing pad?')){editor.innerHTML='';safeStore.remove('eyeotaRhymeWriting');updateCount();}});
+ document.getElementById('saveWriting')?.addEventListener('click',()=>{if(!editor)return;const body='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title><style>body{max-width:850px;margin:50px auto;padding:0 35px;font-family:Arial,sans-serif;line-height:2;color:#111827}p,div{min-height:1em}</style></head><body>'+editor.innerHTML+'
+
+
+<style id="eyeota-rhyme-range-style">
+.eyeota-range-panel{width:min(760px,100%);margin:12px auto 16px;padding:12px 14px;border-radius:12px;background:rgba(5,15,28,.88);border:1px solid rgba(0,242,255,.25);box-sizing:border-box}.eyeota-range-panel label{display:flex;justify-content:space-between;gap:12px;color:#e2e8f0;margin-bottom:8px}.eyeota-range-panel input[type=range]{width:100%;accent-color:#00d9ff}.eyeota-range-labels{display:grid;grid-template-columns:repeat(5,1fr);font-size:10px;color:#94a3b8;text-align:center;gap:4px}.eyeota-range-help{margin-top:8px;color:#cbd5e1;font-size:12px;line-height:1.35;text-align:center}@media(max-width:600px){.eyeota-range-panel{padding:10px}.eyeota-range-labels{font-size:8px}.eyeota-range-help{font-size:11px}}
+</style>
+<script id="eyeota-rhyme-range-engine-v2">
+(function(){
+ const $=id=>document.getElementById(id), A='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+ const range=$('rhymeRange'), rangeName=$('rhymeRangeName'), rangeHelp=$('rhymeRangeHelp');
+ const names=['Exact','Close','Slant','Loose','Experimental'];
+ const helps=['Perfect pronunciation rhyme.','Perfect rhymes plus very close pronunciation neighbors.','Allows noticeable slant-rhyme differences.','Broadens the ending sound for writing possibilities.','Widens the sound search aggressively for creative exploration.'];
+ const cache=new Map(); let token=0;
+ const fallback={
+  dad:{exact:['bad','brad','cad','clad','fad','glad','had','lad','mad','pad','sad','tad'],close:['bad','brad','cad','clad','fad','glad','had','lad','mad','pad','sad','tad','ad','add'],slant:['bad','brad','cad','clad','fad','glad','had','lad','mad','pad','sad','tad','dab','dam','dan','dash','drag','jam','lab','lag','map','rag','ram','ran','sap','sat'],loose:['bad','brad','cad','clad','fad','glad','had','lad','mad','pad','sad','tad','dab','dam','jam','lab','lag','map','rag','ram','slab','stab','tab'],experimental:['bad','brad','cad','clad','fad','glad','had','lad','mad','pad','sad','tad','dab','dam','jam','lab','lag','map','rag','ram','slab','stab','tab','bag','bat','cap','cat','crab','grab','lap','snap']},
+  yo:{exact:['beau','beaux','bow','Coe','doe','dough','doh','foe','go','hoe','Joe','low','mow','no','know','oh','owe','Poe','pro','row','so','show','slow','snow','stow','toe','tow','though','woe','whoa','woah','yo']}
+ };
+ function clean(){return (($('rhymeWord')||{}).value||'').trim().toLowerCase().replace(/[^a-z'-]/g,'');}
+ function activeLetter(){const el=$('rhymeCycleLetter');return ((el&&el.textContent)||'A').trim().charAt(0).toUpperCase();}
+ function level(){return +(range?range.value:0)}
+ function setStatus(title,hint){const a=$('dialLetterLabel'),b=$('rhymeHint');if(a)a.textContent=title;if(b)b.textContent=hint;}
+ function insert(word){const ed=$('writerEditor');if(!ed)return;ed.focus();document.execCommand('insertText',false,word+' ');ed.dispatchEvent(new Event('input',{bubbles:true}));}
+ function render(words,letter){const box=$('rhymeResults');if(!box)return;box.innerHTML='';const filtered=[...new Set(words)].filter(w=>w&&w.charAt(0).toUpperCase()===letter).sort((a,b)=>a.length-b.length||a.localeCompare(b));if(!filtered.length){const x=document.createElement('span');x.className='rhyme-result';x.textContent='No matches at this range for '+letter;box.appendChild(x);return 0;}filtered.slice(0,80).forEach(w=>{const b=document.createElement('button');b.type='button';b.className='rhyme-result';b.textContent=w;b.title='Insert into writing pad';b.addEventListener('click',()=>insert(w));box.appendChild(b)});return filtered.length;}
+ async function dm(param,word){const key=param+'|'+word;if(cache.has(key))return cache.get(key);const u='https://api.datamuse.com/words?'+param+'='+encodeURIComponent(word)+'&max=1000';const r=await fetch(u,{headers:{Accept:'application/json'}});if(!r.ok)throw Error(String(r.status));const j=await r.json();const v=j.map(x=>x.word).filter(Boolean);cache.set(key,v);return v;}
+ async function search(word,lvl){const exact=await dm('rel_rhy',word);if(lvl===0)return exact;const near=await dm('rel_nry',word).catch(()=>[]);if(lvl===1)return [...exact,...near];const sound=await dm('sl',word).catch(()=>[]);if(lvl===2)return [...exact,...near,...sound.slice(0,350)];if(lvl===3)return [...exact,...near,...sound.slice(0,700)];return [...exact,...near,...sound];}
+ async function draw(){const word=clean(), letter=activeLetter(), lvl=level(), mine=++token; if(rangeName)rangeName.textContent=names[lvl];if(rangeHelp)rangeHelp.textContent=helps[lvl]; const style=$('rhymeStyle');if(style&&style.value==='custom'){setStatus(letter+' • Custom ending sound','Custom sound mode remains separate from the phonetic range control.');return;}if(!word){setStatus(letter+' • Enter a word','Type a word, then cycle A–Z.');return;}setStatus(letter+' • '+names[lvl]+' range for '+word,'Searching pronunciation relationships…');try{let words=await search(word,lvl);if(mine!==token)return;const fb=fallback[word];if(fb){const key=names[lvl].toLowerCase();words=[...words,...(fb[key]||fb.exact||[])];}const n=render(words,letter);setStatus(letter+' • '+names[lvl]+' range for '+word,n?('Showing '+n+' result'+(n===1?'':'s')+' beginning with '+letter+'.'):('No '+names[lvl].toLowerCase()+' matches beginning with '+letter+'. Move the range right to search more loosely.'));}catch(e){if(mine!==token)return;const fb=fallback[word];const key=names[lvl].toLowerCase();const words=fb?((fb[key]||fb.exact)||[]):[];const n=render(words,letter);setStatus(letter+' • '+names[lvl]+' range for '+word,n?'Offline fallback results shown.':'Live rhyme lookup needs an internet connection.');}}
+ window.eyeotaRangeDraw=draw;
+ range&&range.addEventListener('input',draw);$('rhymeWord')&&$('rhymeWord').addEventListener('input',draw);$('rhymeStyle')&&$('rhymeStyle').addEventListener('change',draw);$('rhymePrevLetter')&&$('rhymePrevLetter').addEventListener('click',()=>setTimeout(draw,0));$('rhymeNextLetter')&&$('rhymeNextLetter').addEventListener('click',()=>setTimeout(draw,0));
+ setTimeout(draw,50);
+})();
+</script>
+
+<style id="eyeota-rhyme-beta-notice-style">
+#eyeotaRhymeBetaNotice{
+  position:fixed;
+  right:16px;
+  bottom:16px;
+  z-index:9999;
+  width:min(330px,calc(100vw - 32px));
+  padding:10px 13px;
+  border:1px solid rgba(103,232,249,.55);
+  border-radius:12px;
+  background:rgba(2,6,23,.88);
+  box-shadow:0 8px 28px rgba(0,0,0,.32),0 0 18px rgba(34,211,238,.10);
+  color:#e2e8f0;
+  font:600 12px/1.35 Arial,sans-serif;
+  backdrop-filter:blur(7px);
+}
+#eyeotaRhymeBetaNotice strong{
+  display:block;
+  margin-bottom:3px;
+  color:#67e8f9;
+  font-size:12px;
+  letter-spacing:.08em;
+}
+#eyeotaRhymeBetaNotice span{
+  display:block;
+  font-weight:500;
+  color:#cbd5e1;
+}
+@media(max-width:600px){
+  #eyeotaRhymeBetaNotice{
+    right:10px;
+    bottom:10px;
+    width:min(290px,calc(100vw - 20px));
+    padding:8px 10px;
+    font-size:11px;
+  }
+}
+</style>
+<div id="eyeotaRhymeBetaNotice" role="note" aria-label="Rhyme Dial development notice">
+  <strong>RHYME DIAL — BETA</strong>
+  <span>Still being built. Rhyme vocabulary, matching, and features will continue to improve.</span>
+</div>
+
+</body></html>';const blob=new Blob([body],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='EYEOTA-Rhyme-Dial-Writing.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(status)status.textContent='Document saved';});
+})();
+</script>
+
+<script id="eyeota-live-rhyme-cycle-fix">
+/* Independent live rhyme renderer: arrow click -> active dial letter -> results. */
+(function(){
+  const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const exactYo={
+    A:[],B:['beau','beaux','bow'],C:['Coe'],D:['doe','dough','doh'],E:[],F:['foe'],G:['go'],H:['hoe','ho'],I:[],J:['Joe'],K:[],L:['lo','low'],M:['Moe','mow'],N:['no','know'],O:['oh','owe'],P:['Poe'],Q:[],R:['roe','row'],S:['so','sew','sow'],T:['toe','tow'],U:[],V:[],W:['woe','whoa','woah'],X:[],Y:['yo'],Z:['Zoe']
+  };
+  let pos=0;
+  const $=id=>document.getElementById(id);
+  function word(){return (($('rhymeWord')?.value)||'').trim().toLowerCase().replace(/[^a-z]/g,'');}
+  function style(){return $('rhymeStyle')?.value||'';}
+  function mark(letter){
+    document.querySelectorAll('#dial .letter').forEach(e=>e.classList.remove('rhyme-current-letter'));
+    const e=document.querySelector('#dial .letter[data-letter="'+letter+'"]');
+    if(e)e.classList.add('rhyme-current-letter');
+    if($('rhymeCycleLetter'))$('rhymeCycleLetter').textContent=letter;
+  }
+  function insertWord(w){
+    const ed=$('rapWriter'); if(!ed)return; ed.focus();
+    try{document.execCommand('insertText',false,w+' ')}catch(e){ed.textContent+=(ed.textContent?' ':'')+w;}
+    ed.dispatchEvent(new Event('input',{bubbles:true}));
+  }
+  function draw(){
+    const letter=alphabet[pos], box=$('rhymeResults'), hint=$('rhymeHint'), label=$('dialLetterLabel');
+    mark(letter); if(!box)return; box.innerHTML='';
+    if(!word()){ if(label)label.textContent=letter+' • Enter a word'; if(hint)hint.textContent='Type YO, choose Exact sound rhyme, then use the arrows.'; return; }
+    if(!style()){ if(label)label.textContent=letter+' • Choose rhyme style'; if(hint)hint.textContent='Choose Exact sound rhyme, then cycle the dial.'; return; }
+    if(word()!=='yo' || style()!=='exact'){
+      if(label)label.textContent=letter+' • '+(style()==='near'?'Near / slant rhyme':'Selected rhyme method');
+      if(hint)hint.textContent='The full-English engine is the next phase. YO + Exact is live now.'; return;
+    }
+    if(label)label.textContent=letter+' • Exact rhyme with YO /oʊ/';
+    const arr=exactYo[letter]||[];
+    if(hint)hint.textContent=arr.length ? 'Rhymes beginning with '+letter+':' : 'No useful exact YO rhyme beginning with '+letter+'.';
+    if(!arr.length){ const x=document.createElement('span');x.className='rhyme-result';x.textContent='No exact rhyme for '+letter;box.appendChild(x);return; }
+    arr.forEach(w=>{const b=document.createElement('button');b.type='button';b.className='rhyme-result clickable';b.textContent=w;b.addEventListener('click',()=>insertWord(w));box.appendChild(b);});
+  }
+  function step(d){pos=(pos+d+26)%26;draw();}
+  document.addEventListener('click',function(e){
+    if(e.target.closest('#rhymePrevLetter')){e.preventDefault();e.stopImmediatePropagation();step(-1);}
+    if(e.target.closest('#rhymeNextLetter')){e.preventDefault();e.stopImmediatePropagation();step(1);}
+  },true);
+  $('rhymeWord')?.addEventListener('input',()=>{pos=0;draw();});
+  $('rhymeStyle')?.addEventListener('change',draw);
+  window.addEventListener('load',draw);
+  draw();
+})();
+</script>
+
+
 
 </body>
 </html>
