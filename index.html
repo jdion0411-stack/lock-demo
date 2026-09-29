@@ -69,6 +69,88 @@ button {
 
 
 /* ==========================================================
+   COPY SITE BAR
+========================================================== */
+
+.copy-site-bar {
+    width: 100%;
+    max-width: 620px;
+
+    margin: 0 auto 14px;
+
+    display: flex;
+    justify-content: center;
+}
+
+.copy-site-button {
+    width: 100%;
+
+    min-height: 46px;
+
+    padding: 12px 18px;
+
+    border: 1px solid rgba(0,242,255,.55);
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f2942,
+            #123a59
+        );
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    box-shadow:
+        0 0 18px rgba(0,242,255,.12);
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        transform .15s ease,
+        box-shadow .2s ease;
+}
+
+.copy-site-button:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #123a59,
+            #15547d
+        );
+
+    box-shadow:
+        0 0 25px rgba(0,242,255,.22);
+}
+
+.copy-site-button:active {
+    transform: scale(.98);
+}
+
+.copy-site-button.copied {
+    background:
+        linear-gradient(
+            135deg,
+            #14532d,
+            #166534
+        );
+
+    border-color: #00ff88;
+
+    color: #86efac;
+
+    box-shadow:
+        0 0 20px rgba(0,255,136,.2);
+}
+
+
+/* ==========================================================
    APP
 ========================================================== */
 
@@ -131,6 +213,8 @@ button {
     -webkit-user-select: none;
 
     touch-action: manipulation;
+
+    cursor: pointer;
 }
 
 
@@ -262,7 +346,7 @@ button {
 
     border-radius: 50%;
 
-    color: #0f172a;
+    color: #ffffff;
 
     font-family: "Courier New", monospace;
 
@@ -272,10 +356,15 @@ button {
 
     cursor: pointer;
 
+    border: 2px solid rgba(15,23,42,.35);
+
+    text-shadow:
+        0 1px 2px rgba(0,0,0,.65);
+
     transition:
-        background .15s ease,
-        color .15s ease,
-        box-shadow .15s ease;
+        background .4s ease,
+        color .2s ease,
+        box-shadow .2s ease;
 
     user-select: none;
     -webkit-user-select: none;
@@ -285,20 +374,14 @@ button {
     touch-action: manipulation;
 }
 
-.letter:hover {
-    background: #0284c7;
-    color: white;
+.letter.selected {
+    border: 3px solid #0f172a;
 
     box-shadow:
-        0 0 12px rgba(2,132,199,.8);
-}
+        0 0 0 3px rgba(255,255,255,.95),
+        0 0 18px rgba(0,242,255,.95);
 
-.letter:active {
-    background: #0369a1;
-    color: white;
-
-    box-shadow:
-        0 0 16px rgba(2,132,199,1);
+    z-index: 100;
 }
 
 
@@ -438,6 +521,237 @@ button {
     font-weight: bold;
 
     letter-spacing: 1px;
+}
+
+
+/* ==========================================================
+   COLOR PANEL
+========================================================== */
+
+.color-panel {
+    width: 100%;
+
+    padding: 14px;
+
+    background: var(--panel);
+
+    border: 1px solid #334155;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 0 20px rgba(0,242,255,.05);
+}
+
+.color-panel-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+}
+
+.color-panel-title {
+    font-size: 12px;
+
+    color: #94a3b8;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+.selected-letter-name {
+    color: #ffffff;
+
+    font-size: 18px;
+
+    font-weight: bold;
+}
+
+.selected-color-info {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+.selected-color-dot {
+    width: 28px;
+    height: 28px;
+
+    border-radius: 50%;
+
+    border: 2px solid white;
+
+    background: #64748b;
+
+    box-shadow:
+        0 0 12px rgba(0,0,0,.5);
+}
+
+
+/* ==========================================================
+   COLOR SWATCHES
+========================================================== */
+
+.color-choice-title {
+    margin-bottom: 8px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+.color-swatches {
+    display: grid;
+
+    grid-template-columns:
+        repeat(13, 1fr);
+
+    gap: 5px;
+
+    width: 100%;
+}
+
+.color-swatch {
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    min-width: 0;
+
+    min-height: 28px;
+
+    padding: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+
+    border: 2px solid rgba(15,23,42,.5);
+
+    cursor: pointer;
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    line-height: 1;
+
+    text-shadow:
+        0 1px 2px rgba(0,0,0,.6);
+
+    transition:
+        transform .15s ease,
+        box-shadow .15s ease,
+        border-color .15s ease;
+}
+
+.color-swatch:hover {
+    transform: scale(1.08);
+
+    box-shadow:
+        0 0 10px rgba(255,255,255,.4);
+}
+
+.color-swatch.active {
+    border-color: #ffffff;
+
+    box-shadow:
+        0 0 0 2px #00f2ff,
+        0 0 12px rgba(0,242,255,.8);
+
+    transform: scale(1.08);
+}
+
+
+/* Special emphasis for Color 12 */
+
+.color-swatch[data-color="#0066FF"] {
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,.5),
+        0 0 10px rgba(0,102,255,.75);
+}
+
+.color-swatch[data-color="#0066FF"]::after {
+    content: "";
+}
+
+
+.color-help {
+    margin-top: 9px;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    line-height: 1.4;
+}
+
+
+/* ==========================================================
+   COLOR SHUFFLING STATUS
+========================================================== */
+
+.shuffle-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 9px;
+
+    color: #64748b;
+
+    font-size: 9px;
+
+    letter-spacing: .5px;
+}
+
+.shuffle-dot {
+    width: 7px;
+    height: 7px;
+
+    flex: 0 0 auto;
+
+    border-radius: 50%;
+
+    background: #00ff88;
+
+    box-shadow:
+        0 0 8px #00ff88;
+
+    animation:
+        pulse 1s infinite;
+}
+
+@keyframes pulse {
+
+    0%,100% {
+        opacity: .35;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
 }
 
 
@@ -598,15 +912,46 @@ button {
 }
 
 .code {
-    flex: 0 0 auto;
+    display: flex;
 
-    color: var(--gold);
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 2px;
+
+    min-height: 30px;
 
     font-size: 18px;
 
-    letter-spacing: 4px;
+    letter-spacing: 2px;
 
     font-weight: bold;
+}
+
+.code-letter {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 24px;
+
+    height: 28px;
+
+    border-radius: 5px;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 1px 3px rgba(0,0,0,.7);
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+.code-letter.active {
+    transform: scale(1.08);
 }
 
 
@@ -971,13 +1316,14 @@ button:active {
 
 
 /* ==========================================================
-   YOUTUBE VIDEO SECTION
+   YOUTUBE VIDEO
 ========================================================== */
 
 .youtube-section {
     width: 100%;
 
     margin-top: 35px;
+
     margin-bottom: 20px;
 
     padding: 20px;
@@ -1013,11 +1359,6 @@ button:active {
 
     font-size: 11px;
 }
-
-
-/*
-   Responsive 16:9 video container.
-*/
 
 .youtube-wrapper {
     position: relative;
@@ -1090,6 +1431,15 @@ button:active {
             18px;
     }
 
+    .copy-site-bar {
+        margin-bottom: 10px;
+    }
+
+    .copy-site-button {
+        min-height: 44px;
+        font-size: 10px;
+    }
+
     .main-layout {
         gap: 13px;
     }
@@ -1134,10 +1484,25 @@ button:active {
 
     .status {
         font-size: 8px;
-
         padding: 4px 6px;
-
         letter-spacing: .7px;
+    }
+
+    .color-panel {
+        padding: 12px;
+    }
+
+    .color-swatches {
+        grid-template-columns:
+            repeat(13, 1fr);
+
+        gap: 4px;
+    }
+
+    .color-swatch {
+        border-radius: 5px;
+        min-height: 24px;
+        font-size: 7px;
     }
 
     .panel {
@@ -1155,6 +1520,7 @@ button:active {
 
     .badge {
         font-size: 9px;
+
         padding: 5px 7px;
     }
 
@@ -1164,12 +1530,18 @@ button:active {
 
     .code-box {
         padding: 10px;
+
         font-size: 11px;
     }
 
     .code {
-        font-size: 17px;
-        letter-spacing: 3px;
+        font-size: 16px;
+        gap: 1px;
+    }
+
+    .code-letter {
+        min-width: 22px;
+        height: 27px;
     }
 
     .buttons {
@@ -1216,15 +1588,9 @@ button:active {
         padding: 12px;
     }
 
-    /*
-       Mobile video adjustments.
-    */
-
     .youtube-section {
         margin-top: 25px;
-
         padding: 12px;
-
         border-radius: 12px;
     }
 
@@ -1295,13 +1661,17 @@ button:active {
     }
 
     .code {
-        font-size: 15px;
-        letter-spacing: 2px;
+        font-size: 14px;
+    }
+
+    .code-letter {
+        min-width: 20px;
     }
 
     .youtube-section {
         padding: 8px;
     }
+
 }
 
 
@@ -1329,6 +1699,7 @@ button:active {
     .brand {
         transform: scale(.9);
     }
+
 }
 
 </style>
@@ -1337,12 +1708,31 @@ button:active {
 
 <body>
 
+
+<!-- ==========================================================
+     EASY COPY BUTTON
+========================================================== -->
+
+<div class="copy-site-bar">
+
+    <button
+        type="button"
+        class="copy-site-button"
+        id="copySiteButton"
+    >
+        📋 COPY ENTIRE SITE
+    </button>
+
+</div>
+
+
 <div class="app">
 
     <div
         class="main-layout"
         id="mainLayout"
     >
+
 
         <!-- ==================================================
              DIAL
@@ -1354,6 +1744,7 @@ button:active {
         >
 
             <div class="top-pointer"></div>
+
 
             <svg
                 class="dial-svg"
@@ -1383,9 +1774,7 @@ button:active {
             </svg>
 
 
-            <!-- ==================================================
-                 CENTER EYE
-            =================================================== -->
+            <!-- CENTER EYE -->
 
             <div class="center-artwork">
 
@@ -1417,6 +1806,7 @@ button:active {
 
                     </g>
 
+
                     <line
                         x1="70"
                         y1="42"
@@ -1426,6 +1816,7 @@ button:active {
                         stroke-width="5"
                         stroke-linecap="round"
                     />
+
 
                     <g transform="translate(70,145)">
 
@@ -1485,9 +1876,7 @@ button:active {
         </div>
 
 
-        <!-- ==================================================
-             BRAND
-        =================================================== -->
+        <!-- BRAND -->
 
         <div class="brand">
 
@@ -1502,9 +1891,7 @@ button:active {
         </div>
 
 
-        <!-- ==================================================
-             AUDIO STATUS
-        =================================================== -->
+        <!-- AUDIO STATUS -->
 
         <div class="banner">
 
@@ -1520,11 +1907,14 @@ button:active {
                         Acoustic MFA Verification
                     </h3>
 
-                    <p></p>
+                    <p>
+                        Select the correct letters and Color 12.
+                    </p>
 
                 </div>
 
             </div>
+
 
             <div
                 class="status"
@@ -1536,9 +1926,79 @@ button:active {
         </div>
 
 
-        <!-- ==================================================
-             CONTROL PANEL
-        =================================================== -->
+        <!-- COLOR PANEL -->
+
+        <div class="color-panel">
+
+            <div class="color-panel-header">
+
+                <div>
+
+                    <div class="color-panel-title">
+                        Selected Letter
+                    </div>
+
+                    <div
+                        class="selected-letter-name"
+                        id="selectedLetterName"
+                    >
+                        None
+                    </div>
+
+                </div>
+
+
+                <div class="selected-color-info">
+
+                    <div
+                        class="selected-color-dot"
+                        id="selectedColorPreview"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="color-choice-title">
+                Choose one of 26 fixed colors
+            </div>
+
+
+            <div
+                class="color-swatches"
+                id="colorSwatches"
+            ></div>
+
+
+            <div class="color-help">
+
+                Tap a letter on the dial to select it,
+                then choose its fixed color.
+                <strong style="color:#60a5fa">
+                    Color 12 is the required blue.
+                </strong>
+
+            </div>
+
+
+            <div
+                class="shuffle-status"
+                id="shuffleStatus"
+            >
+
+                <span class="shuffle-dot"></span>
+
+                <span id="shuffleText">
+                    Dial rotating — colors changing
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTROL PANEL -->
 
         <div class="panel">
 
@@ -1572,6 +2032,7 @@ button:active {
 
                 </div>
 
+
                 <div class="progress">
 
                     <div
@@ -1593,9 +2054,7 @@ button:active {
                 <span
                     class="code"
                     id="codeDisplay"
-                >
-                    -----
-                </span>
+                ></span>
 
             </div>
 
@@ -1675,6 +2134,7 @@ button:active {
                 </h2>
 
             </div>
+
 
             <div class="granted">
                 MFA VERIFIED
@@ -1827,7 +2287,7 @@ button:active {
 
 
     <!-- ======================================================
-         YOUTUBE VIDEO — BOTTOM OF WEBSITE
+         YOUTUBE VIDEO
     ======================================================= -->
 
     <section class="youtube-section">
@@ -1835,10 +2295,11 @@ button:active {
         <div class="youtube-header">
 
             <h2>
-                
+                🎵 Souls Anchored
             </h2>
 
             <p>
+                Required acoustic verification recording
             </p>
 
         </div>
@@ -1848,7 +2309,7 @@ button:active {
 
             <iframe
                 src="https://www.youtube.com/embed/dVVpLg7pnME"
-                title=""
+                title="Souls Anchored"
                 allow="
                     accelerometer;
                     autoplay;
@@ -1877,13 +2338,24 @@ button:active {
 const AUDD_API_TOKEN =
     "PASTE_YOUR_NEW_AUDD_TOKEN_HERE";
 
-
 const TARGET_SONG =
     "Souls Anchored";
 
-
 const TARGET_COMBINATION =
     "SWAGG";
+
+
+/*
+   =========================================================
+   COLOR 12 IS THE CORRECT BLUE
+   =========================================================
+*/
+
+const CORRECT_COLOR =
+    "#0066FF";
+
+const CORRECT_COLOR_NUMBER =
+    12;
 
 
 const TEST_PIN =
@@ -1895,74 +2367,64 @@ const TEST_PIN =
 ========================================================== */
 
 const outerRing =
-    document.getElementById(
-        "outerRing"
-    );
+    document.getElementById("outerRing");
 
 const innerRing =
-    document.getElementById(
-        "innerRing"
-    );
+    document.getElementById("innerRing");
 
 const dial =
-    document.getElementById(
-        "dial"
-    );
+    document.getElementById("dial");
 
 const codeDisplay =
-    document.getElementById(
-        "codeDisplay"
-    );
+    document.getElementById("codeDisplay");
 
 const lockStatus =
-    document.getElementById(
-        "lockStatus"
-    );
+    document.getElementById("lockStatus");
 
 const listenButton =
-    document.getElementById(
-        "listenButton"
-    );
+    document.getElementById("listenButton");
 
 const audioStatus =
-    document.getElementById(
-        "audioStatus"
-    );
+    document.getElementById("audioStatus");
 
 const progressFill =
-    document.getElementById(
-        "progressFill"
-    );
+    document.getElementById("progressFill");
 
 const matchPercent =
-    document.getElementById(
-        "matchPercent"
-    );
+    document.getElementById("matchPercent");
 
 const portal =
-    document.getElementById(
-        "portal"
-    );
+    document.getElementById("portal");
 
 const mainLayout =
-    document.getElementById(
-        "mainLayout"
-    );
+    document.getElementById("mainLayout");
 
 const pinOverlay =
-    document.getElementById(
-        "pinOverlay"
-    );
+    document.getElementById("pinOverlay");
 
 const pinDisplay =
-    document.getElementById(
-        "pinDisplay"
-    );
+    document.getElementById("pinDisplay");
 
 const pinError =
-    document.getElementById(
-        "pinError"
-    );
+    document.getElementById("pinError");
+
+const selectedLetterName =
+    document.getElementById("selectedLetterName");
+
+const selectedColorPreview =
+    document.getElementById("selectedColorPreview");
+
+const colorSwatches =
+    document.getElementById("colorSwatches");
+
+const shuffleText =
+    document.getElementById("shuffleText");
+
+const shuffleStatus =
+    document.getElementById("shuffleStatus");
+
+const copySiteButton =
+    document.getElementById("copySiteButton");
 
 
 /* ==========================================================
@@ -1982,11 +2444,435 @@ const notes = [
 ];
 
 
-let rotation = 0;
+/* ==========================================================
+   26 DISTINCT COLORS
+==========================================================
+
+   HUMAN NUMBER  -> COLOR
+
+   01 RED
+   02 ORANGE
+   03 AMBER
+   04 YELLOW-LIME
+   05 LIME
+   06 GREEN
+   07 TEAL
+   08 CYAN
+   09 SKY BLUE
+   10 INDIGO
+   11 VIOLET
+   12 BLUE  <-- CORRECT
+   13 PURPLE
+   14 MAGENTA
+   15 HOT MAGENTA
+   16 PINK
+   17 CRIMSON
+   18 CORAL
+   19 BROWN
+   20 BLUE-GRAY
+   21 SLATE
+   22 WARM BROWN
+   23 OLIVE
+   24 DARK OLIVE
+   25 DARK TEAL
+   26 PURPLE-BLUE
+========================================================== */
+
+const availableColors = [
+
+    /* 01 */ "#FF1744",
+    /* 02 */ "#FF6D00",
+    /* 03 */ "#FFC400",
+    /* 04 */ "#E6FF00",
+    /* 05 */ "#76FF03",
+    /* 06 */ "#00C853",
+    /* 07 */ "#00BFA5",
+    /* 08 */ "#00E5FF",
+    /* 09 */ "#0091EA",
+    /* 10 */ "#304FFE",
+    /* 11 */ "#6200EA",
+    /* 12 */ "#0066FF",
+    /* 13 */ "#AA00FF",
+    /* 14 */ "#D500F9",
+    /* 15 */ "#FF00CC",
+    /* 16 */ "#FF4081",
+    /* 17 */ "#F50057",
+    /* 18 */ "#FF5252",
+    /* 19 */ "#795548",
+    /* 20 */ "#607D8B",
+    /* 21 */ "#37474F",
+    /* 22 */ "#8D6E63",
+    /* 23 */ "#9E9D24",
+    /* 24 */ "#827717",
+    /* 25 */ "#00897B",
+    /* 26 */ "#5E35B1"
+
+];
 
 
 const STEP =
     360 / alphabet.length;
+
+
+/*
+   Make absolutely certain Color 12
+   cannot accidentally be changed.
+*/
+
+if (
+    availableColors[11].toLowerCase() !==
+    CORRECT_COLOR.toLowerCase()
+) {
+
+    throw new Error(
+        "Configuration error: Color 12 must be #0066FF."
+    );
+
+}
+
+
+/* ==========================================================
+   STATE
+========================================================== */
+
+let rotation = 0;
+
+let dialActive = true;
+
+let colorsShuffling = true;
+
+let selectedLetter = null;
+
+let letterColors = {};
+
+let enteredCombination = "";
+
+let combinationColors = [];
+
+let animationFrame = null;
+
+let colorShuffleTimer = null;
+
+let audioVerified = false;
+
+let recording = false;
+
+let enteredPin = "";
+
+let transitionStarted = false;
+
+
+/* ==========================================================
+   ANIMATION SETTINGS
+========================================================== */
+
+/*
+   VERY SLOW ROTATION.
+
+   Smaller = slower.
+*/
+
+const ROTATION_SPEED =
+    0.010;
+
+
+/*
+   Slow color changes.
+*/
+
+const COLOR_SHUFFLE_INTERVAL =
+    1200;
+
+
+/* ==========================================================
+   SHUFFLE COLORS
+========================================================== */
+
+function shuffledColors() {
+
+    const colors =
+        [...availableColors];
+
+
+    for (
+        let i = colors.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+
+        [
+            colors[i],
+            colors[j]
+        ] =
+        [
+            colors[j],
+            colors[i]
+        ];
+
+    }
+
+
+    return colors;
+
+}
+
+
+/* ==========================================================
+   RANDOMIZE COLORS
+========================================================== */
+
+function randomizeLetterColors() {
+
+    const shuffled =
+        shuffledColors();
+
+
+    alphabet.forEach(
+        (letter, index) => {
+
+            letterColors[letter] =
+                shuffled[index];
+
+        }
+    );
+
+
+    updateDialLetterColors();
+
+
+    if (selectedLetter) {
+
+        updateSelectedColorDisplay();
+
+        updateSwatchSelection();
+
+    }
+
+}
+
+
+/* ==========================================================
+   UPDATE DIAL COLORS
+========================================================== */
+
+function updateDialLetterColors() {
+
+    document
+        .querySelectorAll(".letter")
+        .forEach(
+            element => {
+
+                const letter =
+                    element.dataset.letter;
+
+
+                if (
+                    letterColors[letter]
+                ) {
+
+                    element.style.background =
+                        letterColors[letter];
+
+                }
+
+            }
+        );
+
+}
+
+
+/* ==========================================================
+   START COLOR SHUFFLING
+========================================================== */
+
+function startColorShuffling() {
+
+    stopColorShuffling();
+
+
+    randomizeLetterColors();
+
+
+    colorShuffleTimer =
+        setInterval(
+            () => {
+
+                if (
+                    !colorsShuffling
+                ) {
+
+                    return;
+
+                }
+
+
+                randomizeLetterColors();
+
+            },
+            COLOR_SHUFFLE_INTERVAL
+        );
+
+}
+
+
+/* ==========================================================
+   STOP COLOR SHUFFLING
+========================================================== */
+
+function stopColorShuffling() {
+
+    if (
+        colorShuffleTimer !== null
+    ) {
+
+        clearInterval(
+            colorShuffleTimer
+        );
+
+        colorShuffleTimer = null;
+
+    }
+
+}
+
+
+/* ==========================================================
+   START DIAL ROTATION
+========================================================== */
+
+function startDialRotation() {
+
+    stopDialRotation();
+
+
+    dialActive = true;
+
+
+    function animate() {
+
+        if (
+            !dialActive
+        ) {
+
+            animationFrame = null;
+
+            return;
+
+        }
+
+
+        rotation +=
+            ROTATION_SPEED;
+
+
+        if (
+            rotation >= 360
+        ) {
+
+            rotation -= 360;
+
+        }
+
+
+        applyRotation();
+
+
+        animationFrame =
+            requestAnimationFrame(
+                animate
+            );
+
+    }
+
+
+    animationFrame =
+        requestAnimationFrame(
+            animate
+        );
+
+}
+
+
+/* ==========================================================
+   STOP DIAL ROTATION
+========================================================== */
+
+function stopDialRotation() {
+
+    dialActive =
+        false;
+
+
+    if (
+        animationFrame !== null
+    ) {
+
+        cancelAnimationFrame(
+            animationFrame
+        );
+
+        animationFrame = null;
+
+    }
+
+}
+
+
+/* ==========================================================
+   FREEZE DIAL
+==========================================================
+
+   The FIRST user interaction freezes:
+
+   1. Automatic rotation.
+   2. Automatic color changes.
+
+   The current arrangement remains frozen
+   until Reset All is pressed.
+========================================================== */
+
+function stopDialInteraction() {
+
+    stopDialRotation();
+
+
+    colorsShuffling =
+        false;
+
+
+    stopColorShuffling();
+
+
+    shuffleText.textContent =
+        "Dial stopped — color arrangement locked";
+
+
+    const dot =
+        shuffleStatus.querySelector(
+            ".shuffle-dot"
+        );
+
+
+    if (dot) {
+
+        dot.style.animation =
+            "none";
+
+        dot.style.background =
+            "#64748b";
+
+        dot.style.boxShadow =
+            "none";
+
+    }
+
+}
 
 
 /* ==========================================================
@@ -2003,10 +2889,13 @@ function renderDial() {
     const cx = 240;
     const cy = 240;
 
-
     const outerRadius = 216;
     const innerRadius = 162;
 
+
+    /* ======================================================
+       NOTES
+    ======================================================= */
 
     notes.forEach(
         (symbol, index) => {
@@ -2062,6 +2951,10 @@ function renderDial() {
     );
 
 
+    /* ======================================================
+       LETTERS
+    ======================================================= */
+
     alphabet.forEach(
         (letter, index) => {
 
@@ -2099,6 +2992,10 @@ function renderDial() {
                 letter;
 
 
+            node.dataset.letter =
+                letter;
+
+
             node.style.left =
                 `${(x / 480) * 100}%`;
 
@@ -2107,9 +3004,29 @@ function renderDial() {
                 `${(y / 480) * 100}%`;
 
 
+            node.style.background =
+                letterColors[letter];
+
+
             node.addEventListener(
                 "click",
-                function () {
+                event => {
+
+                    event.stopPropagation();
+
+
+                    /*
+                       Freeze BEFORE reading
+                       the letter's color.
+                    */
+
+                    stopDialInteraction();
+
+
+                    selectLetterForColor(
+                        letter
+                    );
+
 
                     addLetter(
                         letter
@@ -2126,14 +3043,319 @@ function renderDial() {
         }
     );
 
+
+    applyRotation();
+
 }
 
 
-/*
-   Draw dial.
-*/
+/* ==========================================================
+   SELECT LETTER
+========================================================== */
 
-renderDial();
+function selectLetterForColor(
+    letter
+) {
+
+    selectedLetter =
+        letter;
+
+
+    selectedLetterName.textContent =
+        letter;
+
+
+    updateSelectedColorDisplay();
+
+
+    document
+        .querySelectorAll(".letter")
+        .forEach(
+            element => {
+
+                element.classList.remove(
+                    "selected"
+                );
+
+            }
+        );
+
+
+    const selectedElement =
+        document.querySelector(
+            `.letter[data-letter="${letter}"]`
+        );
+
+
+    if (
+        selectedElement
+    ) {
+
+        selectedElement.classList.add(
+            "selected"
+        );
+
+    }
+
+
+    updateSwatchSelection();
+
+}
+
+
+/* ==========================================================
+   SELECTED COLOR
+========================================================== */
+
+function updateSelectedColorDisplay() {
+
+    if (
+        !selectedLetter
+    ) {
+
+        selectedColorPreview.style.background =
+            "#64748b";
+
+        return;
+
+    }
+
+
+    selectedColorPreview.style.background =
+        letterColors[selectedLetter];
+
+}
+
+
+/* ==========================================================
+   RENDER COLOR SWATCHES
+========================================================== */
+
+function renderColorSwatches() {
+
+    colorSwatches.innerHTML = "";
+
+
+    availableColors.forEach(
+        (color, index) => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.type =
+                "button";
+
+
+            button.className =
+                "color-swatch";
+
+
+            button.dataset.color =
+                color;
+
+
+            /*
+               Display the number directly
+               on every swatch.
+            */
+
+            button.textContent =
+                index + 1;
+
+
+            button.title =
+                `Color ${index + 1}`;
+
+
+            button.setAttribute(
+                "aria-label",
+                `Choose color ${index + 1}`
+            );
+
+
+            button.style.background =
+                color;
+
+
+            /*
+               Automatically select black/white
+               text based on brightness.
+            */
+
+            button.style.color =
+                getLuminance(color) > 0.55
+                    ? "#0f172a"
+                    : "#ffffff";
+
+
+            button.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+
+                    stopDialInteraction();
+
+
+                    chooseColor(
+                        color
+                    );
+
+                }
+            );
+
+
+            colorSwatches.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+/* ==========================================================
+   LUMINANCE
+========================================================== */
+
+function getLuminance(hex) {
+
+    const rgb =
+        hex
+            .replace("#", "")
+            .match(/.{2}/g)
+            .map(
+                value =>
+                    parseInt(
+                        value,
+                        16
+                    ) / 255
+            );
+
+
+    return (
+        0.2126 * rgb[0] +
+        0.7152 * rgb[1] +
+        0.0722 * rgb[2]
+    );
+
+}
+
+
+/* ==========================================================
+   CHOOSE COLOR
+========================================================== */
+
+function chooseColor(
+    color
+) {
+
+    if (
+        !selectedLetter
+    ) {
+
+        alert(
+            "Select a letter on the dial first."
+        );
+
+        return;
+
+    }
+
+
+    letterColors[selectedLetter] =
+        color;
+
+
+    const element =
+        document.querySelector(
+            `.letter[data-letter="${selectedLetter}"]`
+        );
+
+
+    if (element) {
+
+        element.style.background =
+            color;
+
+    }
+
+
+    updateSelectedColorDisplay();
+
+    updateSwatchSelection();
+
+
+    /*
+       Update every occurrence of this
+       selected letter in the current code.
+    */
+
+    for (
+        let i = 0;
+        i < enteredCombination.length;
+        i++
+    ) {
+
+        if (
+            enteredCombination[i] ===
+            selectedLetter
+        ) {
+
+            combinationColors[i] =
+                color;
+
+        }
+
+    }
+
+
+    renderCombination();
+
+    checkUnlock();
+
+}
+
+
+/* ==========================================================
+   UPDATE SWATCH SELECTION
+========================================================== */
+
+function updateSwatchSelection() {
+
+    document
+        .querySelectorAll(".color-swatch")
+        .forEach(
+            swatch => {
+
+                swatch.classList.remove(
+                    "active"
+                );
+
+
+                if (
+                    selectedLetter &&
+                    swatch.dataset.color
+                        .toLowerCase() ===
+                    letterColors[selectedLetter]
+                        .toLowerCase()
+                ) {
+
+                    swatch.classList.add(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
+
+}
 
 
 /* ==========================================================
@@ -2151,17 +3373,45 @@ function applyRotation() {
         .forEach(
             letter => {
 
+                /*
+                   Counter-rotate each letter
+                   so it stays upright.
+                */
+
                 letter.style.transform =
                     `rotate(${-rotation}deg)`;
 
             }
         );
 
+
+    if (
+        selectedLetter
+    ) {
+
+        const selectedElement =
+            document.querySelector(
+                `.letter[data-letter="${selectedLetter}"]`
+            );
+
+
+        if (
+            selectedElement
+        ) {
+
+            selectedElement.classList.add(
+                "selected"
+            );
+
+        }
+
+    }
+
 }
 
 
 /* ==========================================================
-   ROTATE LEFT
+   MANUAL ROTATE LEFT
 ========================================================== */
 
 document
@@ -2170,7 +3420,20 @@ document
         "click",
         () => {
 
+            stopDialInteraction();
+
+
             rotation -= STEP;
+
+
+            if (
+                rotation < 0
+            ) {
+
+                rotation += 360;
+
+            }
+
 
             applyRotation();
 
@@ -2179,7 +3442,7 @@ document
 
 
 /* ==========================================================
-   ROTATE RIGHT
+   MANUAL ROTATE RIGHT
 ========================================================== */
 
 document
@@ -2188,7 +3451,20 @@ document
         "click",
         () => {
 
+            stopDialInteraction();
+
+
             rotation += STEP;
+
+
+            if (
+                rotation >= 360
+            ) {
+
+                rotation -= 360;
+
+            }
+
 
             applyRotation();
 
@@ -2197,13 +3473,17 @@ document
 
 
 /* ==========================================================
-   COMBINATION SYSTEM
+   COMBINATION
 ========================================================== */
 
-let enteredCombination = "";
+function addLetter(
+    letter
+) {
 
-
-function addLetter(letter) {
+    /*
+       If five letters already exist,
+       begin a new attempt.
+    */
 
     if (
         enteredCombination.length >=
@@ -2212,6 +3492,8 @@ function addLetter(letter) {
 
         enteredCombination = "";
 
+        combinationColors = [];
+
     }
 
 
@@ -2219,14 +3501,81 @@ function addLetter(letter) {
         letter;
 
 
-    codeDisplay.textContent =
-        enteredCombination.padEnd(
-            TARGET_COMBINATION.length,
-            "-"
-        );
+    combinationColors.push(
+        letterColors[letter]
+    );
 
+
+    renderCombination();
 
     checkUnlock();
+
+}
+
+
+/* ==========================================================
+   RENDER COMBINATION
+========================================================== */
+
+function renderCombination() {
+
+    codeDisplay.innerHTML = "";
+
+
+    for (
+        let i = 0;
+        i < TARGET_COMBINATION.length;
+        i++
+    ) {
+
+        const letter =
+            enteredCombination[i];
+
+
+        const span =
+            document.createElement(
+                "span"
+            );
+
+
+        span.className =
+            "code-letter";
+
+
+        if (
+            letter
+        ) {
+
+            span.textContent =
+                letter;
+
+
+            span.style.background =
+                combinationColors[i] ||
+                "#334155";
+
+
+            span.classList.add(
+                "active"
+            );
+
+        } else {
+
+            span.textContent =
+                "-";
+
+
+            span.style.background =
+                "#334155";
+
+        }
+
+
+        codeDisplay.appendChild(
+            span
+        );
+
+    }
 
 }
 
@@ -2239,7 +3588,18 @@ document
     .getElementById("selectButton")
     .addEventListener(
         "click",
-        () => {
+        event => {
+
+            event.stopPropagation();
+
+
+            stopDialInteraction();
+
+
+            /*
+               Determine the letter directly
+               under the fixed pointer.
+            */
 
             let normalized =
                 (-rotation) % 360;
@@ -2257,12 +3617,21 @@ document
             const index =
                 Math.round(
                     normalized / STEP
-                )
-                % alphabet.length;
+                ) %
+                alphabet.length;
+
+
+            const letter =
+                alphabet[index];
+
+
+            selectLetterForColor(
+                letter
+            );
 
 
             addLetter(
-                alphabet[index]
+                letter
             );
 
         }
@@ -2270,11 +3639,22 @@ document
 
 
 /* ==========================================================
-   PIN SYSTEM
+   ANY DIAL TOUCH / POINTER INTERACTION
 ========================================================== */
 
-let enteredPin = "";
+dial.addEventListener(
+    "pointerdown",
+    () => {
 
+        stopDialInteraction();
+
+    }
+);
+
+
+/* ==========================================================
+   PIN
+========================================================== */
 
 listenButton.addEventListener(
     "click",
@@ -2291,13 +3671,10 @@ listenButton.addEventListener(
 
         enteredPin = "";
 
-
         updatePinDisplay();
-
 
         pinError.textContent =
             "";
-
 
         pinOverlay.classList.add(
             "show"
@@ -2306,6 +3683,10 @@ listenButton.addEventListener(
     }
 );
 
+
+/* ==========================================================
+   PIN BUTTONS
+========================================================== */
 
 document
     .querySelectorAll(
@@ -2407,7 +3788,6 @@ document
 
                 enteredPin = "";
 
-
                 updatePinDisplay();
 
             }
@@ -2417,16 +3797,7 @@ document
 
 
 /* ==========================================================
-   AUDIO RECOGNITION
-========================================================== */
-
-let audioVerified = false;
-
-let recording = false;
-
-
-/* ==========================================================
-   MIME TYPE DETECTION
+   AUDIO
 ========================================================== */
 
 function getSupportedMimeType() {
@@ -2434,11 +3805,8 @@ function getSupportedMimeType() {
     const types = [
 
         "audio/webm;codecs=opus",
-
         "audio/webm",
-
         "audio/mp4",
-
         "audio/ogg;codecs=opus"
 
     ];
@@ -2482,7 +3850,7 @@ async function startAudioRecognition() {
     ) {
 
         alert(
-            "Please add your new AudD API token first."
+            "Please add your AudD API token first."
         );
 
         return;
@@ -2564,8 +3932,7 @@ async function startAudioRecognition() {
                 ? new MediaRecorder(
                     stream,
                     {
-                        mimeType:
-                            mimeType
+                        mimeType
                     }
                 )
                 : new MediaRecorder(
@@ -2749,7 +4116,6 @@ async function identifySong(
                 "https://api.audd.io/",
                 {
                     method: "POST",
-
                     body: formData
                 }
             );
@@ -2784,14 +4150,6 @@ async function identifySong(
             const title =
                 String(
                     data.result.title ||
-                    ""
-                )
-                .toLowerCase();
-
-
-            const artist =
-                String(
-                    data.result.artist ||
                     ""
                 )
                 .toLowerCase();
@@ -2954,20 +4312,49 @@ async function identifySong(
    FINAL AUTHENTICATION
 ========================================================== */
 
-let transitionStarted =
-    false;
-
-
 function checkUnlock() {
+
+    /*
+       EXACT LETTERS
+       SWAGG
+    */
 
     const combinationVerified =
         enteredCombination ===
         TARGET_COMBINATION;
 
 
+    /*
+       EXACTLY FIVE COLORS
+    */
+
+    const correctNumberOfColors =
+        combinationColors.length ===
+        TARGET_COMBINATION.length;
+
+
+    /*
+       ALL FIVE COLORS MUST BE COLOR 12.
+    */
+
+    const colorsVerified =
+        correctNumberOfColors &&
+        combinationColors.every(
+            color =>
+                color &&
+                color.toLowerCase() ===
+                CORRECT_COLOR.toLowerCase()
+        );
+
+
+    /*
+       AUDIO MUST ALSO BE VERIFIED.
+    */
+
     if (
         audioVerified &&
-        combinationVerified
+        combinationVerified &&
+        colorsVerified
     ) {
 
         lockStatus.textContent =
@@ -3008,7 +4395,7 @@ function checkUnlock() {
 
 
 /* ==========================================================
-   OPEN SECURE PORTAL
+   OPEN PORTAL
 ========================================================== */
 
 function openPortal() {
@@ -3038,21 +4425,45 @@ function openPortal() {
 
 function resetSystem() {
 
+    stopDialRotation();
+
+    stopColorShuffling();
+
+
+    /*
+       Restore automatic behavior.
+    */
+
+    dialActive =
+        true;
+
+    colorsShuffling =
+        true;
+
+
+    /*
+       Clear combination.
+    */
+
     enteredCombination =
         "";
 
+    combinationColors =
+        [];
 
-    codeDisplay.textContent =
-        "-----";
 
+    renderCombination();
+
+
+    /*
+       Reset audio.
+    */
 
     audioVerified =
         false;
 
-
     recording =
         false;
-
 
     transitionStarted =
         false;
@@ -3082,6 +4493,10 @@ function resetSystem() {
         false;
 
 
+    /*
+       Close portal.
+    */
+
     portal.classList.remove(
         "active"
     );
@@ -3092,22 +4507,103 @@ function resetSystem() {
     );
 
 
-    rotation = 0;
+    /*
+       Reset dial.
+    */
 
+    rotation =
+        0;
+
+
+    /*
+       New random colors.
+    */
+
+    randomizeLetterColors();
+
+
+    /*
+       Clear selected letter.
+    */
+
+    selectedLetter =
+        null;
+
+
+    selectedLetterName.textContent =
+        "None";
+
+
+    selectedColorPreview.style.background =
+        "#64748b";
+
+
+    document
+        .querySelectorAll(".letter")
+        .forEach(
+            element => {
+
+                element.classList.remove(
+                    "selected"
+                );
+
+            }
+        );
+
+
+    updateSwatchSelection();
+
+
+    /*
+       Restore status.
+    */
+
+    shuffleText.textContent =
+        "Dial rotating — colors changing";
+
+
+    const dot =
+        shuffleStatus.querySelector(
+            ".shuffle-dot"
+        );
+
+
+    if (dot) {
+
+        dot.style.animation =
+            "pulse 1s infinite";
+
+        dot.style.background =
+            "#00ff88";
+
+        dot.style.boxShadow =
+            "0 0 8px #00ff88";
+
+    }
+
+
+    /*
+       Restart idle animation.
+    */
 
     applyRotation();
 
+    startColorShuffling();
+
+    startDialRotation();
+
+
+    /*
+       Reset PIN.
+    */
 
     enteredPin =
         "";
 
-
     updatePinDisplay();
-
 
     pinError.textContent =
         "";
-
 
     pinOverlay.classList.remove(
         "show"
@@ -3124,9 +4620,7 @@ function resetSystem() {
 ========================================================== */
 
 document
-    .getElementById(
-        "resetButton"
-    )
+    .getElementById("resetButton")
     .addEventListener(
         "click",
         resetSystem
@@ -3138,9 +4632,7 @@ document
 ========================================================== */
 
 document
-    .getElementById(
-        "relockButton"
-    )
+    .getElementById("relockButton")
     .addEventListener(
         "click",
         resetSystem
@@ -3194,10 +4686,396 @@ document.addEventListener(
 
 
 /* ==========================================================
+   COPY ENTIRE SITE
+==========================================================
+
+   This button copies the complete HTML document.
+
+   Method 1:
+   navigator.clipboard.writeText()
+
+   Method 2:
+   textarea + document.execCommand("copy")
+
+   This makes it work on older browsers and
+   on many environments where Clipboard API
+   permissions are restricted.
+========================================================== */
+
+async function copyEntireSite() {
+
+    const originalText =
+        copySiteButton.textContent;
+
+
+    /*
+       Get the complete current page,
+       including the user's current HTML.
+    */
+
+    const html =
+        "<!DOCTYPE html>\n" +
+        document.documentElement.outerHTML;
+
+
+    try {
+
+        /*
+           Modern Clipboard API.
+        */
+
+        if (
+            navigator.clipboard &&
+            window.isSecureContext
+        ) {
+
+            await navigator.clipboard.writeText(
+                html
+            );
+
+        } else {
+
+            /*
+               Fallback method.
+            */
+
+            const textarea =
+                document.createElement(
+                    "textarea"
+                );
+
+
+            textarea.value =
+                html;
+
+
+            textarea.setAttribute(
+                "readonly",
+                ""
+            );
+
+
+            textarea.style.position =
+                "fixed";
+
+            textarea.style.left =
+                "-999999px";
+
+            textarea.style.top =
+                "0";
+
+            textarea.style.opacity =
+                "0";
+
+
+            document.body.appendChild(
+                textarea
+            );
+
+
+            textarea.focus();
+
+            textarea.select();
+
+
+            const successful =
+                document.execCommand(
+                    "copy"
+                );
+
+
+            document.body.removeChild(
+                textarea
+            );
+
+
+            if (
+                !successful
+            ) {
+
+                throw new Error(
+                    "Copy command failed."
+                );
+
+            }
+
+        }
+
+
+        copySiteButton.textContent =
+            "✓ COPIED!";
+
+
+        copySiteButton.classList.add(
+            "copied"
+        );
+
+
+        setTimeout(
+            () => {
+
+                copySiteButton.textContent =
+                    originalText;
+
+
+                copySiteButton.classList.remove(
+                    "copied"
+                );
+
+            },
+            2500
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Copy failed:",
+            error
+        );
+
+
+        /*
+           Last-resort fallback:
+           show a selectable copy box.
+        */
+
+        showManualCopyBox(
+            html
+        );
+
+    }
+
+}
+
+
+/* ==========================================================
+   MANUAL COPY FALLBACK
+========================================================== */
+
+function showManualCopyBox(
+    html
+) {
+
+    const existing =
+        document.getElementById(
+            "manualCopyBox"
+        );
+
+
+    if (
+        existing
+    ) {
+
+        existing.remove();
+
+    }
+
+
+    const wrapper =
+        document.createElement(
+            "div"
+        );
+
+
+    wrapper.id =
+        "manualCopyBox";
+
+
+    wrapper.style.position =
+        "fixed";
+
+    wrapper.style.inset =
+        "0";
+
+    wrapper.style.zIndex =
+        "9999";
+
+    wrapper.style.background =
+        "rgba(0,0,0,.85)";
+
+    wrapper.style.padding =
+        "20px";
+
+    wrapper.style.display =
+        "flex";
+
+    wrapper.style.alignItems =
+        "center";
+
+    wrapper.style.justifyContent =
+        "center";
+
+
+    const box =
+        document.createElement(
+            "div"
+        );
+
+
+    box.style.width =
+        "min(700px, 100%)";
+
+    box.style.height =
+        "min(80vh, 700px)";
+
+    box.style.background =
+        "#151c2c";
+
+    box.style.border =
+        "1px solid #334155";
+
+    box.style.borderRadius =
+        "14px";
+
+    box.style.padding =
+        "15px";
+
+    box.style.display =
+        "flex";
+
+    box.style.flexDirection =
+        "column";
+
+    box.style.gap =
+        "10px";
+
+
+    const heading =
+        document.createElement(
+            "div"
+        );
+
+
+    heading.textContent =
+        "Copy the site code below";
+
+
+    heading.style.color =
+        "#ffffff";
+
+    heading.style.fontWeight =
+        "bold";
+
+
+    const textarea =
+        document.createElement(
+            "textarea"
+        );
+
+
+    textarea.value =
+        html;
+
+
+    textarea.style.flex =
+        "1";
+
+    textarea.style.width =
+        "100%";
+
+    textarea.style.resize =
+        "none";
+
+    textarea.style.background =
+        "#0f172a";
+
+    textarea.style.color =
+        "#e2e8f0";
+
+    textarea.style.border =
+        "1px solid #334155";
+
+    textarea.style.borderRadius =
+        "8px";
+
+    textarea.style.padding =
+        "10px";
+
+    textarea.style.fontFamily =
+        "monospace";
+
+    textarea.style.fontSize =
+        "11px";
+
+
+    const close =
+        document.createElement(
+            "button"
+        );
+
+
+    close.textContent =
+        "CLOSE";
+
+
+    close.style.background =
+        "#334155";
+
+
+    close.addEventListener(
+        "click",
+        () => {
+
+            wrapper.remove();
+
+        }
+    );
+
+
+    box.appendChild(
+        heading
+    );
+
+    box.appendChild(
+        textarea
+    );
+
+    box.appendChild(
+        close
+    );
+
+    wrapper.appendChild(
+        box
+    );
+
+    document.body.appendChild(
+        wrapper
+    );
+
+
+    textarea.focus();
+
+    textarea.select();
+
+}
+
+
+/*
+   Connect copy button.
+*/
+
+copySiteButton.addEventListener(
+    "click",
+    copyEntireSite
+);
+
+
+/* ==========================================================
    INITIALIZE
 ========================================================== */
 
-applyRotation();
+randomizeLetterColors();
+
+renderColorSwatches();
+
+renderDial();
+
+renderCombination();
+
+startColorShuffling();
+
+startDialRotation();
 
 checkUnlock();
 
