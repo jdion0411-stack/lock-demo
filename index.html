@@ -2542,6 +2542,7 @@ body.eye-test-mode #musicLockDisclosure{display:none!important}
 }
 </style>
 
+
 </head>
 
 <body>
@@ -6519,6 +6520,26 @@ document.addEventListener('DOMContentLoaded',function(){
     e.preventDefault(); e.stopPropagation();
     document.body.classList.remove('rhyme-beta-collapsed');
   });
+});
+</script>
+
+
+<script id="eyeota-existing-mode-chip-sync">
+document.addEventListener('DOMContentLoaded',function(){
+  const chip=document.getElementById('modeChip');
+  if(!chip)return;
+  function syncModeChip(){
+    if(document.body.classList.contains('eye-test-mode')){
+      chip.textContent='Eye Test';
+    }else if(document.body.classList.contains('rhyme-mode')){
+      chip.textContent='Rhyme Dial';
+    }else{
+      chip.textContent='Music Lock';
+    }
+  }
+  syncModeChip();
+  new MutationObserver(syncModeChip).observe(document.body,{attributes:true,attributeFilter:['class']});
+  document.addEventListener('click',function(){setTimeout(syncModeChip,0);},true);
 });
 </script>
 </body>
