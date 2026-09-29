@@ -2432,35 +2432,7 @@ button:active {
    CONFIGURATION
 ========================================================== */
 
-const AUDD_API_TOKEN =
-    "PASTE_YOUR_NEW_AUDD_TOKEN_HERE";
-
-/*
-   Internal audio verification target.
-   Not displayed in the interface.
-*/
-
-const TARGET_SONG =
-    "Souls Anchored";
-
-/*
-   Internal combination target.
-   Not displayed in the interface.
-*/
-
-const TARGET_COMBINATION =
-    "SWAGG";
-
-/*
-   Internal required color.
-   Not displayed or preselected.
-*/
-
-const CORRECT_COLOR =
-    "#0066FF";
-
-const TEST_PIN =
-    "0411";
+const COMBINATION_LENGTH = 5;
 
 /* ==========================================================
    ELEMENT REFERENCES
@@ -2586,17 +2558,6 @@ if (
 
     throw new Error(
         "The color configuration must contain exactly 26 colors."
-    );
-
-}
-
-if (
-    availableColors[11].toLowerCase() !==
-    CORRECT_COLOR.toLowerCase()
-) {
-
-    throw new Error(
-        "Configuration error."
     );
 
 }
@@ -3397,7 +3358,7 @@ function addLetter(
 
     if (
         enteredCombination.length >=
-        TARGET_COMBINATION.length
+        COMBINATION_LENGTH
     ) {
 
         enteredCombination = "";
@@ -3429,7 +3390,7 @@ function renderCombination() {
 
     for (
         let i = 0;
-        i < TARGET_COMBINATION.length;
+        i < COMBINATION_LENGTH;
         i++
     ) {
 
@@ -3645,29 +3606,79 @@ document
         () => {
 
             if (
-                enteredPin ===
-                TEST_PIN
+                enteredPin.length !== 4
             ) {
 
-                pinOverlay.classList.remove(
-                    "show"
-                );
-
-                startAudioRecognition();
-
-            } else {
-
                 pinError.textContent =
-                    "Incorrect PIN.";
+                    "Enter your 4-digit PIN.";
 
-                enteredPin = "";
-
-                updatePinDisplay();
+                return;
 
             }
 
+            verifyPinWithServer();
+
         }
     );
+
+async function verifyPinWithServer() {
+
+    pinError.textContent =
+        "";
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/verify-pin",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body: JSON.stringify({
+                        pin: enteredPin
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (
+            data.verified
+        ) {
+
+            pinOverlay.classList.remove(
+                "show"
+            );
+
+            startAudioRecognition();
+
+        } else {
+
+            pinError.textContent =
+                "Incorrect PIN.";
+
+            enteredPin = "";
+
+            updatePinDisplay();
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+        pinError.textContent =
+            "Verification service unavailable. Please try again.";
+
+    }
+
+}
 
 /* ==========================================================
    AUDIO
@@ -3711,21 +3722,6 @@ function getSupportedMimeType() {
 ========================================================== */
 
 async function startAudioRecognition() {
-
-    if (
-        !AUDD_API_TOKEN ||
-        AUDD_API_TOKEN.includes(
-            "PASTE_"
-        )
-    ) {
-
-        alert(
-            "Please configure the audio verification service first."
-        );
-
-        return;
-
-    }
 
     if (
         !navigator.mediaDevices ||
@@ -3939,8 +3935,15 @@ async function identifySong(
             new FormData();
 
         formData.append(
-            "api_token",
-            AUDD_API_TOKEN
+            "combination",
+            enteredCombination
+        );
+
+        formData.append(
+            "colors",
+            JSON.stringify(
+                combinationColors
+            )
         );
 
         formData.append(
@@ -3951,7 +3954,7 @@ async function identifySong(
 
         const response =
             await fetch(
-                "https://api.audd.io/",
+                "/api/verify",
                 {
                     method: "POST",
                     body: formData
@@ -3963,7 +3966,7 @@ async function identifySong(
         ) {
 
             throw new Error(
-                "Audio verification request failed: " +
+                "Verification request failed: " +
                 response.status
             );
 
@@ -3973,70 +3976,31 @@ async function identifySong(
             await response.json();
 
         if (
-            data.result
+            data.verified
         ) {
 
-            const title =
-                String(
-                    data.result.title ||
-                    ""
-                )
-                .toLowerCase();
+            audioVerified =
+                true;
 
-            if (
-                title.includes(
-                    TARGET_SONG.toLowerCase()
-                )
-            ) {
+            progressFill.style.width =
+                "100%";
 
-                audioVerified =
-                    true;
+            matchPercent.textContent =
+                "100%";
 
-                progressFill.style.width =
-                    "100%";
+            audioStatus.textContent =
+                "VERIFIED ✔";
 
-                matchPercent.textContent =
-                    "100%";
+            listenButton.textContent =
+                "✓ Acoustic Verification Complete";
 
-                audioStatus.textContent =
-                    "VERIFIED ✔";
+            listenButton.style.background =
+                "#14532d";
 
-                listenButton.textContent =
-                    "✓ Acoustic Verification Complete";
+            listenButton.disabled =
+                true;
 
-                listenButton.style.background =
-                    "#14532d";
-
-                listenButton.disabled =
-                    true;
-
-                checkUnlock();
-
-            } else {
-
-                audioVerified =
-                    false;
-
-                progressFill.style.width =
-                    "0%";
-
-                matchPercent.textContent =
-                    "0%";
-
-                audioStatus.textContent =
-                    "NOT VERIFIED";
-
-                listenButton.textContent =
-                    "🔒 Try Again";
-
-                listenButton.disabled =
-                    false;
-
-                alert(
-                    "The acoustic verification could not be confirmed. Please try again."
-                );
-
-            }
+            checkUnlock();
 
         } else {
 
@@ -4058,9 +4022,22 @@ async function identifySong(
             listenButton.disabled =
                 false;
 
-            alert(
-                "The acoustic verification could not be confirmed. Please try again."
-            );
+            if (
+                data.reason ===
+                "LOCK_REQUIREMENTS_NOT_MET"
+            ) {
+
+                alert(
+                    "The combination or color sequence is incorrect. Please try again."
+                );
+
+            } else {
+
+                alert(
+                    "The acoustic verification could not be confirmed. Please try again."
+                );
+
+            }
 
         }
 
@@ -4089,7 +4066,7 @@ async function identifySong(
             "0%";
 
         alert(
-            "Audio verification error. Please try again."
+            "Verification error. Please try again."
         );
 
     }
@@ -4102,27 +4079,8 @@ async function identifySong(
 
 function checkUnlock() {
 
-    const combinationVerified =
-        enteredCombination ===
-        TARGET_COMBINATION;
-
-    const correctNumberOfColors =
-        combinationColors.length ===
-        TARGET_COMBINATION.length;
-
-    const colorsVerified =
-        correctNumberOfColors &&
-        combinationColors.every(
-            color =>
-                color &&
-                color.toLowerCase() ===
-                CORRECT_COLOR.toLowerCase()
-        );
-
     if (
-        audioVerified &&
-        combinationVerified &&
-        colorsVerified
+        audioVerified
     ) {
 
         lockStatus.textContent =
