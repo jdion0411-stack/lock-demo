@@ -2477,6 +2477,71 @@ body.rhyme-mode #eyeotaRhymeBetaNotice{display:block!important}
 body.eye-test-mode #eyeotaRhymeBetaNotice{display:none!important}
 </style>
 
+
+<style id="music-lock-disclosure-style">
+#musicLockDisclosure{
+  max-width:760px;
+  margin:7px auto 12px;
+  padding:8px 12px;
+  box-sizing:border-box;
+  text-align:center;
+  font-size:11px;
+  line-height:1.35;
+  letter-spacing:.02em;
+  color:rgba(255,255,255,.82);
+  background:rgba(0,0,0,.48);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:8px;
+}
+body.rhyme-mode #musicLockDisclosure,
+body.eye-test-mode #musicLockDisclosure{display:none!important}
+</style>
+
+
+<style id="rhyme-beta-mobile-toggle-style">
+#rhymeBetaToggle{display:none}
+@media(max-width:700px){
+  body.rhyme-mode #eyeotaRhymeBetaNotice{
+    padding-right:38px!important;
+  }
+  body.rhyme-mode #rhymeBetaClose{
+    display:flex!important;
+  }
+  body.rhyme-mode #rhymeBetaToggle{
+    position:fixed;
+    right:10px;
+    bottom:10px;
+    z-index:210000;
+    border:1px solid rgba(255,255,255,.35);
+    border-radius:8px;
+    padding:7px 10px;
+    background:rgba(0,0,0,.82);
+    color:#fff;
+    font:700 11px/1 Arial,sans-serif;
+    cursor:pointer;
+  }
+  body.rhyme-mode.rhyme-beta-collapsed #eyeotaRhymeBetaNotice{display:none!important}
+  body.rhyme-mode.rhyme-beta-collapsed #rhymeBetaToggle{display:block!important}
+}
+#rhymeBetaClose{
+  display:none;
+  position:absolute;
+  top:5px;
+  right:5px;
+  width:28px;
+  height:28px;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:50%;
+  background:rgba(0,0,0,.65);
+  color:#fff;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
+}
+</style>
+
 </head>
 
 <body>
@@ -2729,7 +2794,7 @@ body.eye-test-mode #eyeotaRhymeBetaNotice{display:none!important}
 <div class="eyeota-wip-disclaimer">
   <strong>EYEOTA MOVING-LETTER EYE TEST — WORK IN PROGRESS</strong><br>
   This research/development project explores whether a circular moving-letter interface may be useful for vision testing. It is not a medical device, clinic, diagnosis, prescription, or substitute for an examination by a licensed eye-care professional. The creator is not a doctor or clinic. Prototype results must not be interpreted as a medical diagnosis.
-</div>
+</div><div id="musicLockDisclosure" role="note" aria-label="Music Lock development and patent notice"><strong>WORK IN PROGRESS</strong> — EYEOTA Music Lock is an evolving prototype. Multi-factor authentication technology covered by the inventor’s patent.</div>
 
         </div>
 
@@ -6284,7 +6349,7 @@ checkUnlock();
   }
 }
 </style>
-<div id="eyeotaRhymeBetaNotice" role="note" aria-label="Rhyme Dial development notice">
+<div id="eyeotaRhymeBetaNotice" role="note" aria-label="Rhyme Dial development notice"><button id="rhymeBetaClose" type="button" aria-label="Hide beta notice" title="Hide beta notice">×</button>
   <strong>RHYME DIAL — BETA</strong>
   <span>Still being built. Rhyme vocabulary, matching, and features will continue to improve.</span>
 </div>
@@ -6440,5 +6505,21 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+
+<button id="rhymeBetaToggle" type="button" aria-label="Show beta notice">Beta notice</button>
+<script id="rhyme-beta-mobile-toggle-script">
+document.addEventListener('DOMContentLoaded',function(){
+  const close=document.getElementById('rhymeBetaClose');
+  const reopen=document.getElementById('rhymeBetaToggle');
+  if(close) close.addEventListener('click',function(e){
+    e.preventDefault(); e.stopPropagation();
+    document.body.classList.add('rhyme-beta-collapsed');
+  });
+  if(reopen) reopen.addEventListener('click',function(e){
+    e.preventDefault(); e.stopPropagation();
+    document.body.classList.remove('rhyme-beta-collapsed');
+  });
+});
+</script>
 </body>
 </html>
