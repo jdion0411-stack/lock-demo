@@ -2340,7 +2340,7 @@ body.eye-test-mode #dial .vinyl,
 body.eye-test-mode #dial .vinyl-record{visibility:hidden!important}
 body.eye-test-mode #dial .space-bg{display:block!important;visibility:visible!important;opacity:1!important;background:#fff!important;background-image:none!important;filter:none!important}
 body.eye-test-mode #dial .space-bg::before,body.eye-test-mode #dial .space-bg>*{display:none!important}
-body.eye-test-mode #dialModeArrow{display:none!important}
+body.eye-test-mode #dialModeArrow{display:flex!important}
 body.eye-test-mode #eyeModeArrow{display:flex!important}
 
 #eyeTestOverlay{position:absolute;inset:0;z-index:50000;pointer-events:none;display:none}
@@ -2363,12 +2363,36 @@ body.eye-test-mode #eyeTestOverlay{display:block}
 
 <style id="eyeota-wip-disclaimer-style">
 .eyeota-wip-disclaimer{
+ display:none;
  max-width:760px;margin:7px auto 12px;padding:8px 12px;box-sizing:border-box;
  border:1px solid rgba(255,255,255,.22);border-radius:9px;background:rgba(0,0,0,.38);
  color:rgba(255,255,255,.86);font:11px/1.45 Arial,sans-serif;text-align:center;
 }
 .eyeota-wip-disclaimer strong{color:#fff;font-size:12px;letter-spacing:.25px}
 body.eye-test-mode .eyeota-wip-disclaimer{display:block!important}
+</style>
+
+
+<style id="eyeota-mobile-arrow-fix">
+@media(max-width:700px){
+  #eyeModeArrow.eye-mode-arrow{
+    left:6px!important;
+    right:auto!important;
+    transform:translateY(-50%)!important;
+    z-index:100000!important;
+    display:flex!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+  #dialModeArrow{
+    right:6px!important;
+    left:auto!important;
+    transform:translateY(-50%)!important;
+    z-index:100000!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+}
 </style>
 
 </head>
@@ -6273,6 +6297,14 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   eyeBtn.onclick=function(ev){ ev.preventDefault(); ev.stopPropagation(); if(active) leave(); else enter(); };
+  const rightArrow=document.getElementById('dialModeArrow');
+  if(rightArrow){
+    rightArrow.addEventListener('click',function(ev){
+      if(active){
+        ev.preventDefault(); ev.stopImmediatePropagation(); leave();
+      }
+    },true);
+  }
 
   function setupTrial(){
     if(!active)return;
