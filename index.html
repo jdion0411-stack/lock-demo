@@ -2667,12 +2667,12 @@ body.rhyme-mode .music-dock{display:none!important}.rhyme-workspace{width:min(92
             <div class="beat-studio">
                 <div class="studio-heading">Beat Player</div>
                 <div class="beat-link-row">
-                    <input id="beatUrl" type="url" placeholder="Paste a YouTube beat link">
+                    <input id="beatUrl" type="text" inputmode="url" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="Paste a YouTube beat link">
                     <button id="loadBeat" type="button">Load Beat</button>
                     <button id="clearBeat" type="button">Clear</button>
                 </div>
                 <div class="beat-message" id="beatMessage">Paste a YouTube link to keep the beat playing while you write.</div>
-                <iframe id="userBeatFrame" class="user-beat-frame" title="User beat player" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe id="userBeatFrame" class="user-beat-frame" title="User beat player" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
 
             <div class="writer-studio">
@@ -6023,26 +6023,50 @@ checkUnlock();
 (function(){
  const safeStore={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},remove(k){try{localStorage.removeItem(k)}catch(e){}}};
  const beatUrl=document.getElementById('beatUrl'), loadBeat=document.getElementById('loadBeat'), clearBeat=document.getElementById('clearBeat'), frame=document.getElementById('userBeatFrame'), beatMessage=document.getElementById('beatMessage');
- function youtubeId(raw){try{const u=new URL((raw||'').trim());let id='';if(u.hostname==='youtu.be'||u.hostname==='www.youtu.be') id=u.pathname.slice(1).split('/')[0];else if(u.hostname.endsWith('youtube.com')){id=u.searchParams.get('v')||((u.pathname.match(/\/(?:embed|shorts|live)\/([^/?#]+)/)||[])[1]||'');}return /^[A-Za-z0-9_-]{6,20}$/.test(id)?id:'';}catch(e){return '';}}
- function load(){const id=youtubeId(beatUrl.value);if(!id){beatMessage.textContent='Please paste a valid YouTube video link.';frame.classList.remove('loaded');frame.removeAttribute('src');return;}frame.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+'?rel=0&playsinline=1';frame.classList.add('loaded');beatMessage.textContent='Beat loaded. Playback stays here while you write.';safeStore.set('eyeotaBeatUrl',beatUrl.value);}
- loadBeat?.addEventListener('click',load);beatUrl?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();load();}});clearBeat?.addEventListener('click',()=>{beatUrl.value='';frame.removeAttribute('src');frame.classList.remove('loaded');beatMessage.textContent='Paste a YouTube link to keep the beat playing while you write.';safeStore.remove('eyeotaBeatUrl');});
- const oldBeat=safeStore.get('eyeotaBeatUrl');if(oldBeat&&beatUrl){beatUrl.value=oldBeat;}
+ function youtubeId(raw){
+   raw=(raw||'').trim(); if(!raw)return '';
+   if(/^[A-Za-z0-9_-]{11}$/.test(raw))return raw;
+   try{
+     let candidate=raw; if(!/^https?:\/\//i.test(candidate))candidate='https://'+candidate;
+     const u=new URL(candidate), host=u.hostname.toLowerCase().replace(/^www\./,'').replace(/^m\./,''); let id='';
+     if(host==='youtu.be') id=u.pathname.split('/').filter(Boolean)[0]||'';
+     else if(host==='youtube.com'||host.endsWith('.youtube.com')) id=u.searchParams.get('v')||((u.pathname.match(/\/(?:embed|shorts|live|v)\/([^/?#]+)/i)||[])[1]||'');
+     return /^[A-Za-z0-9_-]{11}$/.test(id)?id:'';
+   }catch(e){return '';}
+ }
+ function loadBeatNow(){
+   if(!beatUrl||!frame||!beatMessage)return;
+   const id=youtubeId(beatUrl.value);
+   if(!id){beatMessage.textContent='That link was not recognized. Paste a YouTube link.';frame.classList.remove('loaded');frame.removeAttribute('src');return;}
+   beatMessage.textContent='Loading beat…'; frame.classList.add('loaded');
+   frame.src='https://www.youtube.com/embed/'+id+'?rel=0&playsinline=1';
+   safeStore.set('eyeotaBeatUrl',beatUrl.value.trim());
+ }
+ if(frame) frame.addEventListener('load',()=>{if(frame.getAttribute('src'))beatMessage.textContent='Beat player loaded. Press play in the player.';});
+ if(loadBeat) loadBeat.addEventListener('click',loadBeatNow);
+ if(beatUrl) beatUrl.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();loadBeatNow();}});
+ if(clearBeat) clearBeat.addEventListener('click',()=>{beatUrl.value='';frame.removeAttribute('src');frame.classList.remove('loaded');beatMessage.textContent='Paste a YouTube link to keep the beat playing while you write.';safeStore.remove('eyeotaBeatUrl');});
+ const oldBeat=safeStore.get('eyeotaBeatUrl'); if(oldBeat&&beatUrl) beatUrl.value=oldBeat;
 
  const editor=document.getElementById('rapWriter'), count=document.getElementById('writerCount'), status=document.getElementById('saveStatus');
- function focusEditor(){editor?.focus();}
- function cmd(c,v=null){focusEditor();document.execCommand(c,false,v);saveLocal();}
+ function updateCount(){if(count&&editor)count.textContent=(editor.innerText||'').length.toLocaleString()+' characters';}
+ function saveLocal(){if(!editor)return;safeStore.set('eyeotaRhymeWriting',editor.innerHTML);updateCount();if(status)status.textContent='Autosaved in this browser';}
+ if(editor){const saved=safeStore.get('eyeotaRhymeWriting');if(saved)editor.innerHTML=saved;updateCount();editor.addEventListener('input',saveLocal);}
+ function cmd(c,v=null){if(!editor)return;editor.focus();document.execCommand(c,false,v);saveLocal();}
  document.querySelectorAll('.writer-toolbar [data-cmd]').forEach(b=>b.addEventListener('click',()=>cmd(b.dataset.cmd)));
  document.getElementById('writerFont')?.addEventListener('change',e=>cmd('fontName',e.target.value));
  document.getElementById('writerSize')?.addEventListener('change',e=>cmd('fontSize',e.target.value));
  document.getElementById('writerColor')?.addEventListener('input',e=>cmd('foreColor',e.target.value));
  document.getElementById('writerHighlight')?.addEventListener('input',e=>cmd('hiliteColor',e.target.value));
- function updateCount(){if(count&&editor)count.textContent=(editor.innerText||'').length.toLocaleString()+' characters';}
- let saveTimer;function saveLocal(){if(!editor)return;clearTimeout(saveTimer);saveTimer=setTimeout(()=>{safeStore.set('eyeotaRhymeWriting',editor.innerHTML);updateCount();if(status)status.textContent='Autosaved in this browser';},120);}
- editor?.addEventListener('input',saveLocal);
- const saved=safeStore.get('eyeotaRhymeWriting');if(saved&&editor){editor.innerHTML=saved;updateCount();}
- document.getElementById('clearWriting')?.addEventListener('click',()=>{if(!editor)return;if(confirm('Clear the writing pad?')){editor.innerHTML='';safeStore.remove('eyeotaRhymeWriting');updateCount();}});
- document.getElementById('saveWriting')?.addEventListener('click',()=>{if(!editor)return;const body='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title><style>body{max-width:850px;margin:50px auto;padding:0 35px;font-family:Arial,sans-serif;line-height:2;color:#111827}p,div{min-height:1em}</style></head><body>'+editor.innerHTML+'
-
+ document.getElementById('clearWriting')?.addEventListener('click',()=>{if(editor&&confirm('Clear the writing pad?')){editor.innerHTML='';safeStore.remove('eyeotaRhymeWriting');updateCount();}});
+ document.getElementById('saveWriting')?.addEventListener('click',()=>{
+   if(!editor)return;
+   const doc='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+editor.innerHTML+'</div></body></html>';
+   const blob=new Blob([doc],{type:'text/html;charset=utf-8'}), url=URL.createObjectURL(blob), a=document.createElement('a');
+   a.href=url;a.download='EYEOTA-Rhyme-Dial-Writing.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);if(status)status.textContent='Document saved';
+ });
+})();
+</script>
 
 <style id="eyeota-rhyme-range-style">
 .eyeota-range-panel{width:min(760px,100%);margin:12px auto 16px;padding:12px 14px;border-radius:12px;background:rgba(5,15,28,.88);border:1px solid rgba(0,242,255,.25);box-sizing:border-box}.eyeota-range-panel label{display:flex;justify-content:space-between;gap:12px;color:#e2e8f0;margin-bottom:8px}.eyeota-range-panel input[type=range]{width:100%;accent-color:#00d9ff}.eyeota-range-labels{display:grid;grid-template-columns:repeat(5,1fr);font-size:10px;color:#94a3b8;text-align:center;gap:4px}.eyeota-range-help{margin-top:8px;color:#cbd5e1;font-size:12px;line-height:1.35;text-align:center}@media(max-width:600px){.eyeota-range-panel{padding:10px}.eyeota-range-labels{font-size:8px}.eyeota-range-help{font-size:11px}}
@@ -6116,7 +6140,7 @@ checkUnlock();
   <span>Still being built. Rhyme vocabulary, matching, and features will continue to improve.</span>
 </div>
 
-</body></html>
+
 
 <script id="eyeota-live-rhyme-cycle-fix">
 /* Independent live rhyme renderer: arrow click -> active dial letter -> results. */
@@ -6166,8 +6190,5 @@ checkUnlock();
   draw();
 })();
 </script>
-
-
-
-\n<script id="eyeota-clean-save-handler">\n(function(){\n  const btn=document.getElementById('saveWriting');\n  const editor=document.getElementById('rapWriter');\n  const status=document.getElementById('saveStatus');\n  if(!btn||!editor) return;\n  btn.addEventListener('click',function(){\n    const content=editor.innerHTML || '';\n    const body='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+content+'</div></body></html>';\n    const blob=new Blob([body],{type:'text/html;charset=utf-8'});\n    const url=URL.createObjectURL(blob);\n    const a=document.createElement('a');\n    a.href=url;\n    a.download='EYEOTA-Rhyme-Dial-Writing.html';\n    document.body.appendChild(a);\n    a.click();\n    a.remove();\n    setTimeout(()=>URL.revokeObjectURL(url),1000);\n    if(status) status.textContent='Document saved';\n  });\n})();\n</script>\n</body>
+</body>
 </html>
