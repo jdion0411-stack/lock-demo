@@ -19,6 +19,7 @@ const upload = multer({
 // PRIVATE VERIFICATION RULES
 // ==========================================================
 
+const TARGET_PIN = "0411";
 const TARGET_SONG = "Souls Anchored";
 const TARGET_COMBINATION = "SWAGG";
 const CORRECT_COLOR = "#0066FF";
@@ -29,6 +30,30 @@ const CORRECT_COLOR = "#0066FF";
 
 app.use(express.json());
 app.use(express.static(__dirname));
+
+// ==========================================================
+// PIN VERIFICATION
+// ==========================================================
+
+app.post("/api/verify-pin", (req, res) => {
+  try {
+    const pin =
+      typeof req.body?.pin === "string"
+        ? req.body.pin
+        : "";
+
+    return res.json({
+      verified: pin === TARGET_PIN
+    });
+  } catch (error) {
+    console.error("PIN verification error:", error);
+
+    return res.status(500).json({
+      verified: false,
+      reason: "PIN_VERIFICATION_ERROR"
+    });
+  }
+});
 
 // ==========================================================
 // AUDIO + LOCK VERIFICATION
