@@ -6116,9 +6116,7 @@ checkUnlock();
   <span>Still being built. Rhyme vocabulary, matching, and features will continue to improve.</span>
 </div>
 
-</body></html>';const blob=new Blob([body],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='EYEOTA-Rhyme-Dial-Writing.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(status)status.textContent='Document saved';});
-})();
-</script>
+</body></html>
 
 <script id="eyeota-live-rhyme-cycle-fix">
 /* Independent live rhyme renderer: arrow click -> active dial letter -> results. */
@@ -6171,5 +6169,5 @@ checkUnlock();
 
 
 
-</body>
+\n<script id="eyeota-clean-save-handler">\n(function(){\n  const btn=document.getElementById('saveWriting');\n  const editor=document.getElementById('rapWriter');\n  const status=document.getElementById('saveStatus');\n  if(!btn||!editor) return;\n  btn.addEventListener('click',function(){\n    const content=editor.innerHTML || '';\n    const body='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+content+'</div></body></html>';\n    const blob=new Blob([body],{type:'text/html;charset=utf-8'});\n    const url=URL.createObjectURL(blob);\n    const a=document.createElement('a');\n    a.href=url;\n    a.download='EYEOTA-Rhyme-Dial-Writing.html';\n    document.body.appendChild(a);\n    a.click();\n    a.remove();\n    setTimeout(()=>URL.revokeObjectURL(url),1000);\n    if(status) status.textContent='Document saved';\n  });\n})();\n</script>\n</body>
 </html>
