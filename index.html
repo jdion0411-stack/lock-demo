@@ -2303,12 +2303,23 @@ body::before,body::after{content:none!important;display:none!important;backgroun
 #eyeotaRhymeBetaNotice{position:fixed!important;right:16px!important;left:auto!important;bottom:16px!important;top:auto!important;z-index:99999!important;transform:none!important;margin:0!important;}
 @media(max-width:600px){#eyeotaRhymeBetaNotice{right:10px!important;bottom:10px!important;left:auto!important;max-width:calc(100vw - 20px)!important;}}
 </style>
+
+<style id="eyeota-mobile-video-performance">
+@media (max-width:700px){
+  #eyeotaPubgBackground{
+    transform:translateZ(0);
+    backface-visibility:hidden;
+  }
+}
+</style>
+
 </head>
 
 <body>
 
 <video id="eyeotaPubgBackground" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
-  <source src="pubg-background.mp4" type="video/mp4">
+  <source media="(max-width: 700px)" src="pubg-background-new-mobile.mp4" type="video/mp4">
+  <source src="pubg-background-new.mp4" type="video/mp4">
 </video>
 <div id="eyeotaPubgShade" aria-hidden="true"></div>
 
@@ -3061,7 +3072,7 @@ body::before,body::after{content:none!important;display:none!important;backgroun
     </div>
 
     <iframe
-        src="https://www.youtube-nocookie.com/embed/D4hAVemuQXY?rel=0&modestbranding=1&playsinline=1"
+        src="https://www.youtube-nocookie.com/embed/hRiZM0_ph10?rel=0&modestbranding=1&playsinline=1"
         title="New Video Embed"
         loading="lazy"
         allow="autoplay; encrypted-media; picture-in-picture"
