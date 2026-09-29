@@ -2266,9 +2266,57 @@ body::before, body::after {
   display: none !important;
 }
 </style>
+
+<style id="eyeota-tiny-flying-doves">
+/* Tiny decorative doves — kept away from controls and text. */
+.eyeota-doves {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+.eyeota-dove {
+  position: absolute;
+  font-size: 15px;
+  line-height: 1;
+  color: rgba(255,255,255,.78);
+  text-shadow: 0 0 6px rgba(255,255,255,.22);
+  opacity: .58;
+  transform-origin: center;
+  animation: eyeotaDoveFloat 11s ease-in-out infinite;
+}
+.eyeota-dove:nth-child(1) { left: 7%; top: 12%; font-size: 13px; animation-delay: -2s; }
+.eyeota-dove:nth-child(2) { left: 88%; top: 17%; font-size: 16px; animation-delay: -7s; }
+.eyeota-dove:nth-child(3) { left: 4%; top: 69%; font-size: 14px; animation-delay: -5s; }
+.eyeota-dove:nth-child(4) { left: 93%; top: 73%; font-size: 13px; animation-delay: -9s; }
+.eyeota-dove:nth-child(5) { left: 17%; top: 91%; font-size: 12px; animation-delay: -4s; }
+.eyeota-dove:nth-child(6) { left: 79%; top: 91%; font-size: 14px; animation-delay: -8s; }
+.eyeota-dove:nth-child(7) { left: 96%; top: 43%; font-size: 11px; animation-delay: -1s; }
+.eyeota-dove:nth-child(8) { left: 2%; top: 39%; font-size: 11px; animation-delay: -6s; }
+@keyframes eyeotaDoveFloat {
+  0%, 100% { transform: translate3d(0,0,0) rotate(-2deg); }
+  50% { transform: translate3d(12px,-7px,0) rotate(2deg); }
+}
+@media (max-width: 700px) {
+  .eyeota-dove { font-size: 11px !important; opacity: .46; }
+}
+</style>
+
 </head>
 
 <body>
+
+<div class="eyeota-doves" aria-hidden="true">
+  <span class="eyeota-dove">🕊</span>
+  <span class="eyeota-dove">🕊</span>
+  <span class="eyeota-dove">🕊</span>
+  <span class="eyeota-dove">🕊</span>
+  <span class="eyeota-dove">🕊</span>
+  <span class="eyeota-dove">🕊</span>
+  <span class="eyeota-dove">🕊</span>
+  <span class="eyeota-dove">🕊</span>
+</div>
 
 <div class="app">
 
@@ -2933,20 +2981,24 @@ body::before, body::after {
 
             <div>
                 <div class="music-dock-title">
-                    🎵 
+                    🎵 Jay-Z Freestyle
                 </div>
 
                 <div class="music-dock-subtitle">
+                    Jay-Z Roots Picnic Freestyle
                 </div>
             </div>
 
         </div>
 
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/EMTUvyAB3zE"
-title="YouTube video player" frameborder="0"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-allowfullscreen>
+        <iframe
+            src="https://www.youtube-nocookie.com/embed/dVVpLg7pnME?rel=0&modestbranding=1&playsinline=1"
+            title="Jay-Z Roots Picnic Freestyle"
+            loading="lazy"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+        ></iframe>
 
     </section>
 
