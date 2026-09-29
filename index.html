@@ -2407,6 +2407,68 @@ body.eye-test-mode .eyeota-wip-disclaimer{display:block!important}
 }
 </style>
 
+
+<style id="eyeota-mobile-eye-test-usability">
+@media(max-width:700px){
+  body.eye-test-mode{
+    padding-bottom:92px!important;
+  }
+
+  /* Keep the dial centered and visible as the primary test surface. */
+  body.eye-test-mode #dialStage{
+    width:100%!important;
+    max-width:100vw!important;
+    margin:0 auto!important;
+    padding-bottom:58px!important;
+  }
+
+  /* Compact the informational panel so it doesn't push the response control away. */
+  body.eye-test-mode #eyeTestPanel{
+    width:calc(100% - 12px)!important;
+    margin:6px auto 16px!important;
+    padding:10px 8px!important;
+  }
+  body.eye-test-mode .eye-head{font-size:16px!important}
+  body.eye-test-mode #eyeInstruction{
+    font-size:13px!important;
+    margin:4px auto 6px!important;
+  }
+
+  /* The user can watch the dial and press without scrolling. */
+  body.eye-test-mode #eyePress{
+    position:fixed!important;
+    left:50%!important;
+    bottom:12px!important;
+    transform:translateX(-50%)!important;
+    width:min(360px,calc(100vw - 24px))!important;
+    min-height:58px!important;
+    z-index:200000!important;
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    box-shadow:0 5px 22px rgba(0,0,0,.55)!important;
+  }
+
+  body.eye-test-mode #eyeFeedback{
+    position:fixed!important;
+    left:50%!important;
+    bottom:74px!important;
+    transform:translateX(-50%)!important;
+    width:90vw!important;
+    z-index:200000!important;
+    pointer-events:none!important;
+    text-shadow:0 2px 5px #000!important;
+  }
+
+  /* Doctor/research material stays below the actual test, not in the way. */
+  body.eye-test-mode .eye-info-grid,
+  body.eye-test-mode #eyeResults,
+  body.eye-test-mode .eye-note{
+    margin-top:12px!important;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -6301,7 +6363,7 @@ document.addEventListener('DOMContentLoaded', function(){
     document.body.classList.remove('rhyme-mode'); document.body.classList.add('eye-test-mode');
     tbody.innerHTML=''; field.querySelectorAll('.field-mark').forEach(e=>e.remove()); count.textContent='0 of 10 trials complete';
     panel.style.display='block'; overlay.style.display='block';
-    requestAnimationFrame(function(){ setupTrial(); });
+    requestAnimationFrame(function(){ setupTrial(); setTimeout(function(){ dial.scrollIntoView({behavior:'smooth',block:'center'}); },50); });
   }
   function leave(){
     active=false; cancelAnimationFrame(frame); document.body.classList.remove('eye-test-mode');
