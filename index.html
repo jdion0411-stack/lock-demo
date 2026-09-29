@@ -2,23 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>EYEOTA Secure Access Portal</title>
 
 <style>
 :root {
     --bg: #0b0f19;
     --panel: #151c2c;
-    --dark: #0f172a;
-    --border: #334155;
-    --cyan: #00f2ff;
     --blue: #0284c7;
-    --green: #00ff88;
+    --cyan: #00f2ff;
     --gold: #ffb700;
-    --red: #b91c1c;
-    --white: #f8fafc;
-    --muted: #94a3b8;
-    --dial-size: 480px;
+    --green: #00ff88;
+    --dark: #0f172a;
+    --light: #f8fafc;
+    --dial-size: min(480px, 92vw);
 }
 
 * {
@@ -29,27 +27,20 @@
 }
 
 body {
-    background:
-        radial-gradient(circle at center, #111827 0%, #0b0f19 65%);
-    color: var(--white);
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: var(--bg);
+    color: var(--light);
     padding: 20px;
     overflow-x: hidden;
 }
 
 .app {
     width: 100%;
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    max-width: 620px;
+    margin: 0 auto;
 }
 
 .main-layout {
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -59,30 +50,41 @@ body {
 
 .main-layout.fade {
     opacity: 0;
-    transform: scale(.94);
+    transform: scale(.95);
     filter: blur(10px);
     pointer-events: none;
 }
 
 /* =========================
-   LOCK DIAL
+   DIAL
 ========================= */
 
 .lock-container {
     position: relative;
     width: var(--dial-size);
     height: var(--dial-size);
-    max-width: 90vw;
-    max-height: 90vw;
-    aspect-ratio: 1;
-    background: #fff;
-    border: 8px solid #1e293b;
+    max-width: 480px;
+    max-height: 480px;
+
+    aspect-ratio: 1 / 1;
+
+    background: white;
+    border: 7px solid #1e293b;
     border-radius: 50%;
+
     box-shadow:
-        0 0 50px rgba(0,242,255,.18),
-        inset 0 0 25px rgba(0,0,0,.08);
+        0 0 45px rgba(0,242,255,.18),
+        inset 0 0 30px rgba(0,0,0,.08);
+
     overflow: hidden;
     user-select: none;
+}
+
+.dial-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .top-pointer {
@@ -90,108 +92,107 @@ body {
     top: 5px;
     left: 50%;
     transform: translateX(-50%);
+
     width: 0;
     height: 0;
+
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
-    border-top: 15px solid var(--blue);
+    border-top: 14px solid #0284c7;
+
     z-index: 50;
 }
 
-.ring-canvas {
+.center-artwork {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-
-#outerRingContainer,
-#innerRingContainer {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-}
-
-#outerRingContainer {
-    z-index: 10;
-    pointer-events: none;
-    transform-origin: 50% 50%;
-}
-
-#innerRingContainer {
-    z-index: 20;
-    transform-origin: 50% 50%;
-}
-
-.dial-node {
-    position: absolute;
+    inset: 50% auto auto 50%;
     transform: translate(-50%, -50%);
+
+    width: 30%;
+    height: 42%;
+
     display: flex;
-    align-items: center;
     justify-content: center;
-    color: #0f172a;
-    font-weight: bold;
-}
+    align-items: center;
 
-.outer-symbol {
-    width: 28px;
-    height: 28px;
-    font-size: 18px;
-}
-
-.inner-letter {
-    width: 31px;
-    height: 31px;
-    border-radius: 50%;
-    font-family: monospace;
-    font-size: 16px;
-    cursor: pointer;
-    pointer-events: auto;
-    transition: .2s;
-}
-
-.inner-letter:hover {
-    background: var(--blue);
-    color: white;
-    box-shadow: 0 0 14px rgba(2,132,199,.9);
-}
-
-.char {
+    z-index: 40;
     pointer-events: none;
 }
 
-/* =========================
-   CENTER ART
-========================= */
+.center-artwork svg {
+    width: 100%;
+    height: 100%;
+}
 
-.center-art {
+.ring {
     position: absolute;
     inset: 0;
-    z-index: 30;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    pointer-events: none;
-}
 
-.center-art svg {
-    width: 140px;
-    height: 200px;
-}
+    width: 100%;
+    height: 100%;
 
-.eyelid {
-    transition: transform .4s ease;
     transform-origin: center;
 }
 
-.eye-closed {
-    transform: scaleY(1);
+.outer-ring {
+    z-index: 10;
+    pointer-events: none;
 }
 
-.eye-open {
-    transform: scaleY(0);
+.inner-ring {
+    z-index: 20;
+}
+
+.letter {
+    position: absolute;
+
+    width: 32px;
+    height: 32px;
+
+    margin-left: -16px;
+    margin-top: -16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: #0f172a;
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    font-size: clamp(13px, 3.5vw, 16px);
+
+    cursor: pointer;
+
+    transition:
+        background .15s,
+        color .15s,
+        box-shadow .15s;
+}
+
+.letter:hover,
+.letter:active {
+    background: #0284c7;
+    color: white;
+    box-shadow: 0 0 12px rgba(2,132,199,.8);
+}
+
+.note {
+    position: absolute;
+
+    width: 28px;
+    height: 28px;
+
+    margin-left: -14px;
+    margin-top: -14px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #0f172a;
+    font-size: 18px;
 }
 
 /* =========================
@@ -202,31 +203,38 @@ body {
     text-align: center;
 }
 
-.brand h2 {
-    font-size: 30px;
-    letter-spacing: 8px;
+.brand h1 {
+    font-size: clamp(25px, 8vw, 34px);
+    letter-spacing: clamp(4px, 2vw, 8px);
 }
 
 .brand p {
-    color: var(--muted);
-    font-size: 11px;
-    letter-spacing: 3px;
     margin-top: 3px;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #94a3b8;
 }
 
 /* =========================
-   STATUS
+   BANNER
 ========================= */
 
 .banner {
     width: 100%;
-    background: rgba(15,23,42,.9);
-    border: 1px solid rgba(0,242,255,.3);
-    border-radius: 12px;
-    padding: 13px 16px;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 12px 15px;
+
+    background: rgba(15,23,42,.9);
+    border: 1px solid rgba(0,242,255,.3);
+    border-radius: 12px;
+
+    box-shadow: 0 0 15px rgba(0,242,255,.08);
 }
 
 .banner-left {
@@ -244,43 +252,25 @@ body {
 }
 
 .banner p {
-    color: var(--muted);
+    margin-top: 2px;
+    color: #94a3b8;
     font-size: 11px;
-    margin-top: 3px;
 }
 
 .status {
-    padding: 5px 10px;
+    white-space: nowrap;
+
+    padding: 5px 9px;
+
     border-radius: 20px;
+
+    color: var(--green);
+    border: 1px solid var(--green);
+    background: rgba(0,255,136,.1);
+
     font-size: 10px;
     font-weight: bold;
     letter-spacing: 1px;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-.status.standby {
-    border: 1px solid #64748b;
-    color: #94a3b8;
-    background: #1e293b;
-}
-
-.status.listening {
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    background: rgba(255,183,0,.1);
-}
-
-.status.success {
-    border: 1px solid var(--green);
-    color: var(--green);
-    background: rgba(0,255,136,.1);
-}
-
-.status.error {
-    border: 1px solid #ef4444;
-    color: #fca5a5;
-    background: rgba(185,28,28,.15);
 }
 
 /* =========================
@@ -289,32 +279,38 @@ body {
 
 .panel {
     width: 100%;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 14px;
+
     padding: 18px;
+
+    background: var(--panel);
+    border: 1px solid #334155;
+    border-radius: 14px;
+
     display: flex;
     flex-direction: column;
-    gap: 13px;
+    gap: 12px;
 }
 
-.status-row,
-.code-box {
-    background: var(--dark);
-    border-radius: 8px;
-    padding: 12px 16px;
+.row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
 
-.status-row {
+    gap: 10px;
+
+    padding: 11px 14px;
+
+    background: var(--dark);
+    border-radius: 8px;
+
     font-family: monospace;
+    font-size: 13px;
 }
 
 .badge {
     padding: 6px 10px;
     border-radius: 6px;
+
     font-size: 11px;
     font-weight: bold;
 }
@@ -329,43 +325,106 @@ body {
     color: #86efac;
 }
 
-.match-box {
+.progress-box {
+    padding: 11px;
+
     background: var(--dark);
     border-radius: 8px;
-    padding: 11px;
 }
 
-.match-header {
+.progress-label {
     display: flex;
     justify-content: space-between;
-    color: var(--muted);
-    font-size: 12px;
+
     margin-bottom: 7px;
+
+    color: #94a3b8;
+    font-size: 12px;
 }
 
-.bar {
-    height: 18px;
-    border-radius: 6px;
+.progress {
+    height: 17px;
+
     background: #1e293b;
+    border-radius: 6px;
+
     overflow: hidden;
 }
 
-.fill {
+.progress-fill {
     width: 0%;
     height: 100%;
-    background: linear-gradient(90deg, var(--blue), var(--green));
-    transition: width .2s ease;
+
+    background: linear-gradient(
+        90deg,
+        #0284c7,
+        #00ff88
+    );
+
+    transition: width .3s ease;
 }
 
 .code-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 11px 14px;
+
+    background: var(--dark);
+    border-radius: 8px;
+
     font-family: monospace;
+    font-size: 13px;
 }
 
-.code-value {
+.code {
     color: var(--gold);
-    font-size: 19px;
+    font-size: 18px;
     letter-spacing: 4px;
     font-weight: bold;
+}
+
+button {
+    min-height: 44px;
+
+    border: 0;
+    border-radius: 8px;
+
+    padding: 11px 14px;
+
+    color: white;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+button:active {
+    transform: scale(.98);
+}
+
+.primary {
+    width: 100%;
+    background: #0284c7;
+}
+
+.primary:hover {
+    background: #0369a1;
+}
+
+.primary:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.secondary {
+    background: #334155;
+}
+
+.secondary:hover {
+    background: #475569;
 }
 
 .buttons {
@@ -374,32 +433,8 @@ body {
     gap: 9px;
 }
 
-button {
-    border: none;
-    border-radius: 8px;
-    padding: 11px 13px;
-    font-weight: bold;
-    cursor: pointer;
-    color: white;
-    transition: .2s;
-}
-
-button:hover {
-    filter: brightness(1.12);
-    transform: translateY(-1px);
-}
-
-.primary {
+.buttons .wide {
     grid-column: span 2;
-    background: var(--blue);
-}
-
-.secondary {
-    background: #334155;
-}
-
-.danger {
-    background: var(--red);
 }
 
 /* =========================
@@ -409,27 +444,35 @@ button:hover {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,.78);
-    backdrop-filter: blur(8px);
+
     display: none;
-    justify-content: center;
+
     align-items: center;
-    z-index: 500;
+    justify-content: center;
+
     padding: 20px;
+
+    background: rgba(0,0,0,.75);
+
+    z-index: 500;
 }
 
-.modal-overlay.active {
+.modal-overlay.show {
     display: flex;
 }
 
 .pin-modal {
     width: 100%;
-    max-width: 350px;
-    background: var(--panel);
-    border: 1px solid #475569;
-    border-radius: 16px;
+    max-width: 360px;
+
     padding: 25px;
-    box-shadow: 0 25px 60px rgba(0,0,0,.7);
+
+    background: #151c2c;
+    border: 1px solid #334155;
+    border-radius: 16px;
+
+    box-shadow: 0 25px 60px rgba(0,0,0,.8);
+
     text-align: center;
 }
 
@@ -438,216 +481,230 @@ button:hover {
 }
 
 .pin-modal p {
-    color: var(--muted);
+    color: #94a3b8;
     font-size: 13px;
     margin-bottom: 18px;
 }
 
 .pin-display {
-    height: 45px;
-    background: var(--dark);
+    width: 100%;
+
+    margin-bottom: 15px;
+
+    padding: 13px;
+
+    background: #0f172a;
     border: 1px solid #334155;
     border-radius: 8px;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    letter-spacing: 9px;
-    font-size: 23px;
-    color: var(--cyan);
+
+    color: var(--gold);
+
+    font-size: 24px;
+    letter-spacing: 7px;
+    text-align: center;
 }
 
-.keypad {
+.pin-keypad {
     display: grid;
     grid-template-columns: repeat(3,1fr);
     gap: 8px;
 }
 
-.keypad button {
-    background: #263449;
-    font-size: 18px;
-    padding: 14px;
+.pin-keypad button {
+    background: #334155;
+    font-size: 17px;
 }
 
-.keypad .clear {
-    background: #7f1d1d;
-}
-
-.keypad .enter {
-    background: #14532d;
+.pin-keypad button:hover {
+    background: #475569;
 }
 
 .pin-error {
-    height: 18px;
+    min-height: 18px;
     margin-top: 10px;
+
     color: #fca5a5;
     font-size: 12px;
 }
 
 /* =========================
-   RECOGNITION MESSAGE
+   PORTAL
 ========================= */
 
-.recognition-box {
-    display: none;
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 8px;
-    padding: 12px;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.recognition-box.active {
-    display: block;
-}
-
-.recognition-title {
-    color: var(--cyan);
-    font-weight: bold;
-}
-
-.recognition-song {
-    color: white;
-    margin-top: 4px;
-}
-
-/* =========================
-   VAULT
-========================= */
-
-.vault {
+.portal {
     position: fixed;
-    z-index: 300;
-    left: 50%;
+
     top: 50%;
-    width: 90%;
-    max-width: 800px;
-    transform: translate(-50%,-50%) scale(.9);
-    background: var(--panel);
+    left: 50%;
+
+    width: min(800px, 92vw);
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: clamp(20px,5vw,30px);
+
+    background: #151c2c;
     border: 1px solid #334155;
     border-radius: 16px;
-    padding: 30px;
-    opacity: 0;
-    display: none;
-    transition: .7s ease;
+
     box-shadow:
-        0 30px 80px rgba(0,0,0,.8),
+        0 25px 60px rgba(0,0,0,.8),
         0 0 30px rgba(0,255,136,.15);
+
+    transform:
+        translate(-50%,-50%)
+        scale(.9);
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: .6s ease;
+
+    z-index: 400;
 }
 
-.vault.active {
-    display: block;
+.portal.active {
     opacity: 1;
-    transform: translate(-50%,-50%) scale(1);
+    transform:
+        translate(-50%,-50%)
+        scale(1);
+
+    pointer-events: auto;
 }
 
-.vault-header {
+.portal-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #334155;
+
+    gap: 15px;
+
     padding-bottom: 15px;
     margin-bottom: 20px;
-    gap: 15px;
+
+    border-bottom: 1px solid #334155;
 }
 
-.vault-title {
+.portal-title {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.vault-title h1 {
-    font-size: 21px;
+.portal-title h2 {
+    font-size: clamp(18px,5vw,24px);
 }
 
-.verified {
-    color: var(--green);
-    border: 1px solid var(--green);
-    background: rgba(0,255,136,.1);
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: bold;
+.granted {
+    padding: 6px 11px;
+
     white-space: nowrap;
+
+    border: 1px solid var(--green);
+    border-radius: 20px;
+
+    color: var(--green);
+    background: rgba(0,255,136,.1);
+
+    font-size: 10px;
+    font-weight: bold;
 }
 
 .records {
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+    grid-template-columns: repeat(auto-fit,minmax(190px,1fr));
     gap: 12px;
 }
 
 .record {
+    padding: 14px;
+
     background: var(--dark);
     border: 1px solid #1e293b;
-    border-radius: 9px;
-    padding: 15px;
+    border-radius: 10px;
 }
 
 .record label {
     display: block;
-    color: var(--muted);
+
+    margin-bottom: 5px;
+
+    color: #94a3b8;
+
     font-size: 10px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    margin-bottom: 5px;
 }
 
-.record div {
+.record strong {
     color: var(--cyan);
-    font-weight: bold;
     font-size: 14px;
 }
 
-.vault-description {
-    color: var(--muted);
+.portal-text {
+    margin: 20px 0;
+
+    color: #94a3b8;
     font-size: 13px;
     line-height: 1.5;
-    margin: 20px 0;
 }
 
 .relock {
     width: 100%;
-    background: var(--red);
+    background: #b91c1c;
+}
+
+.relock:hover {
+    background: #991b1b;
 }
 
 /* =========================
    MOBILE
 ========================= */
 
-@media(max-width:520px) {
-
-    :root {
-        --dial-size: 420px;
-    }
+@media (max-width: 520px) {
 
     body {
-        padding: 10px;
+        padding: 12px;
     }
 
     .panel {
         padding: 13px;
     }
 
-    .banner {
-        padding: 10px;
-    }
-
-    .buttons button {
+    .row {
         font-size: 11px;
     }
 
-    .vault {
-        padding: 20px;
-        max-height: 90vh;
-        overflow-y: auto;
+    .buttons {
+        grid-template-columns: 1fr;
     }
 
-    .vault-header {
+    .buttons .wide {
+        grid-column: span 1;
+    }
+
+    .banner {
+        align-items: flex-start;
+    }
+
+    .banner h3 {
+        font-size: 12px;
+    }
+
+    .status {
+        font-size: 8px;
+        padding: 4px 6px;
+    }
+
+    .portal-header {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .granted {
+        align-self: flex-start;
     }
 }
 </style>
@@ -659,13 +716,12 @@ button:hover {
 
 <div class="main-layout" id="mainLayout">
 
-    <!-- SECURITY DIAL -->
-
-    <div class="lock-container" id="lockInterface">
+    <!-- DIAL -->
+    <div class="lock-container" id="dial">
 
         <div class="top-pointer"></div>
 
-        <svg class="ring-canvas" viewBox="0 0 480 480">
+        <svg class="dial-svg" viewBox="0 0 480 480">
             <circle
                 cx="240"
                 cy="240"
@@ -686,8 +742,7 @@ button:hover {
         </svg>
 
         <!-- CENTER EYE -->
-
-        <div class="center-art">
+        <div class="center-artwork">
 
             <svg viewBox="0 0 140 200">
 
@@ -704,13 +759,12 @@ button:hover {
                     />
 
                     <path
-                        d="M4 8 C4 4 12 4 12 8
-                           M4 12 C4 8 12 8 12 12
-                           M4 16 C4 12 12 12 12 16"
+                        d="M4 8 C4 4,12 4,12 8
+                           M4 12 C4 8,12 8,12 12
+                           M4 16 C4 12,12 12,12 16"
                         fill="none"
                         stroke="#0f172a"
                         stroke-width="1.8"
-                        stroke-linecap="round"
                     />
                 </g>
 
@@ -727,7 +781,7 @@ button:hover {
                 <g transform="translate(70,145)">
 
                     <path
-                        d="M-35 0 Q0 -28 35 0 Q0 28 -35 0Z"
+                        d="M-35 0 Q0-28 35 0 Q0 28-35 0Z"
                         fill="white"
                         stroke="#0f172a"
                         stroke-width="3.5"
@@ -749,29 +803,31 @@ button:hover {
 
                     <path
                         id="eyelid"
-                        class="eyelid eye-closed"
-                        d="M-35 0 Q0 -30 35 0 Q0 30 -35 0Z"
+                        d="M-35 0 Q0-30 35 0 Q0 30-35 0Z"
                         fill="#0f172a"
                     />
 
                 </g>
-
             </svg>
+
         </div>
 
-        <div id="outerRingContainer"></div>
-        <div id="innerRingContainer"></div>
+        <div class="ring outer-ring" id="outerRing"></div>
+        <div class="ring inner-ring" id="innerRing"></div>
 
     </div>
+
 
     <!-- BRAND -->
 
     <div class="brand">
-        <h2>
-            <span style="color:#0066FF;">E</span><span style="color:#FFD700;">YE</span><span style="color:#28A745;">OTA</span>
-        </h2>
+        <h1>
+            <span style="color:#0066FF">E</span><span style="color:#FFD700">YE</span><span style="color:#28A745">OTA</span>
+        </h1>
+
         <p>DOCUMENT SOLUTIONS</p>
     </div>
+
 
     <!-- AUDIO STATUS -->
 
@@ -783,114 +839,100 @@ button:hover {
 
             <div>
                 <h3>Acoustic MFA Verification</h3>
-                <p>Audio identity challenge</p>
+                <p>Souls Anchored Audio Challenge</p>
             </div>
 
         </div>
 
-        <div class="status standby" id="audioStatus">
-            Standby
+        <div class="status" id="audioStatus">
+            LOCKED
         </div>
 
     </div>
+
 
     <!-- CONTROL PANEL -->
 
     <div class="panel">
 
-        <div class="status-row">
+        <div class="row">
 
             <span>System Access Status:</span>
 
-            <div
-                id="lockStatus"
+            <span
                 class="badge locked"
+                id="lockStatus"
             >
                 LOCKED
-            </div>
+            </span>
 
         </div>
 
-        <div class="match-box">
 
-            <div class="match-header">
-                <span>Audio Authentication</span>
+        <div class="progress-box">
+
+            <div class="progress-label">
+                <span>Audio Recognition</span>
                 <span id="matchPercent">0%</span>
             </div>
 
-            <div class="bar">
+            <div class="progress">
                 <div
-                    id="matchBar"
-                    class="fill"
+                    class="progress-fill"
+                    id="progressFill"
                 ></div>
             </div>
 
         </div>
+
 
         <div class="code-box">
 
             <span>Combination Factor:</span>
 
             <span
+                class="code"
                 id="codeDisplay"
-                class="code-value"
             >
                 -----
             </span>
 
         </div>
 
-        <div
-            id="recognitionBox"
-            class="recognition-box"
-        >
-
-            <div class="recognition-title">
-                AUDIO RECOGNITION
-            </div>
-
-            <div
-                id="recognitionSong"
-                class="recognition-song"
-            >
-                Waiting...
-            </div>
-
-        </div>
 
         <div class="buttons">
 
             <button
+                class="primary wide"
                 id="listenButton"
-                class="primary"
             >
-                🔐 Listen for Audio
+                🔒 Listen for Acoustic Handshake
             </button>
 
             <button
-                id="rotateLeft"
                 class="secondary"
+                id="leftButton"
             >
                 ↺ Rotate Left
             </button>
 
             <button
-                id="rotateRight"
                 class="secondary"
+                id="rightButton"
             >
                 ↻ Rotate Right
             </button>
 
             <button
-                id="selectPointer"
-                class="secondary"
+                class="secondary wide"
+                id="selectButton"
             >
                 Select Pointer Letter
             </button>
 
             <button
+                class="secondary wide"
                 id="resetButton"
-                class="secondary"
             >
                 Reset All
             </button>
@@ -901,73 +943,68 @@ button:hover {
 
 </div>
 
-<!-- VAULT -->
 
-<div
-    id="vault"
-    class="vault"
->
+<!-- MEDICAL PORTAL -->
 
-    <div class="vault-header">
+<div class="portal" id="portal">
 
-        <div class="vault-title">
+    <div class="portal-header">
 
-            <span style="font-size:28px;color:#00ff88;">
-                ✚
-            </span>
+        <div class="portal-title">
+            <span style="font-size:25px;color:#00ff88">✚</span>
 
-            <h1>
-                EYEOTA Secure Vault Portal
-            </h1>
-
+            <h2>EYEOTA Secure Vault Portal</h2>
         </div>
 
-        <div class="verified">
+        <div class="granted">
             MFA VERIFIED
         </div>
 
     </div>
 
+
     <div class="records">
 
         <div class="record">
             <label>Encrypted File ID</label>
-            <div>REC-88492-X</div>
+            <strong>REC-88492-X</strong>
         </div>
 
         <div class="record">
             <label>Security Level</label>
-            <div>Class 4 Restricted</div>
+            <strong>Class 4 Restricted</strong>
         </div>
 
         <div class="record">
             <label>Session Identity</label>
-            <div>Audio + Combination Confirmed</div>
+            <strong>Acoustic + Combination Confirmed</strong>
         </div>
 
         <div class="record">
             <label>Portal Status</label>
-            <div style="color:#00ff88;">
+            <strong style="color:#00ff88">
                 Authenticated
-            </div>
+            </strong>
         </div>
 
     </div>
 
-    <p class="vault-description">
-        The acoustic authentication factor and mechanical
-        combination factor have both been successfully verified.
-        Document vault access has been granted.
-    </p>
+
+    <div class="portal-text">
+
+        Target acoustic recording and mechanical
+        combination sequence verified.
+        Document vault unlocked.
+
+    </div>
+
 
     <button
-        id="relockButton"
         class="relock"
+        id="relockButton"
     >
         🔒 Lock System & Return to Security Dial
     </button>
-
-</div>
 
 </div>
 
@@ -975,8 +1012,8 @@ button:hover {
 <!-- PIN MODAL -->
 
 <div
-    id="pinOverlay"
     class="modal-overlay"
+    id="pinOverlay"
 >
 
     <div class="pin-modal">
@@ -984,40 +1021,40 @@ button:hover {
         <h2>🔐 Test Access</h2>
 
         <p>
-            Enter the 4-digit authorization code
-            to activate the audio authentication test.
+            Enter your 4-digit authorization PIN
+            to activate the microphone.
         </p>
 
         <div
-            id="pinDisplay"
             class="pin-display"
+            id="pinDisplay"
         >
             ••••
         </div>
 
-        <div class="keypad">
+        <div class="pin-keypad">
 
-            <button data-key="1">1</button>
-            <button data-key="2">2</button>
-            <button data-key="3">3</button>
+            <button data-pin="1">1</button>
+            <button data-pin="2">2</button>
+            <button data-pin="3">3</button>
 
-            <button data-key="4">4</button>
-            <button data-key="5">5</button>
-            <button data-key="6">6</button>
+            <button data-pin="4">4</button>
+            <button data-pin="5">5</button>
+            <button data-pin="6">6</button>
 
-            <button data-key="7">7</button>
-            <button data-key="8">8</button>
-            <button data-key="9">9</button>
+            <button data-pin="7">7</button>
+            <button data-pin="8">8</button>
+            <button data-pin="9">9</button>
 
-            <button class="clear" id="clearPin">CLEAR</button>
-            <button data-key="0">0</button>
-            <button class="enter" id="enterPin">ENTER</button>
+            <button id="pinClear">C</button>
+            <button data-pin="0">0</button>
+            <button id="pinEnter">✓</button>
 
         </div>
 
         <div
-            id="pinError"
             class="pin-error"
+            id="pinError"
         ></div>
 
     </div>
@@ -1028,72 +1065,54 @@ button:hover {
 <script>
 
 /* ==========================================================
-   EYEOTA MULTI-AUTHENTICATION DEMO
-   ========================================================== */
+   CONFIGURATION
+========================================================== */
 
+/*
+   IMPORTANT:
 
-/* ==========================================================
-   AUDD API TOKEN
-   ========================================================== */
+   Replace the text below with your NEW AudD API token.
+
+   Do not use the old token that was previously exposed.
+*/
 
 const AUDD_API_TOKEN =
-    "b1cb1340f39c40d0bccc553d58b2ea23";
+    "PASTE_YOUR_NEW_AUDD_TOKEN_HERE";
 
 
-/* ==========================================================
-   SECURITY SETTINGS
-   ========================================================== */
+/*
+   The song we are looking for.
+*/
 
-const TEST_PIN = "0411";
+const TARGET_SONG = "Souls Anchored";
 
-const TARGET_SONG = "souls anchored";
+
+/*
+   Combination lock.
+*/
 
 const TARGET_COMBINATION = "SWAGG";
 
 
-/* ==========================================================
-   DIAL DATA
-   ========================================================== */
+/*
+   PIN required before microphone access.
+*/
 
-const outerSymbols = [
-    "♩","♪","♫","♬","♭","♯","𝄞","𝄢",
-    "♩","♪","♫","♬","♭","♯","𝄞","𝄢",
-    "♩","♪","♫","♬","♭","♯","𝄞","𝄢"
-];
-
-const alphabet = [
-    "A","B","C","D","E","F","G","H","I","J","K","L","M",
-    "N","O","P","Q","R","S","T","U","V","W","X","Y","Z"
-];
+const TEST_PIN = "0411";
 
 
 /* ==========================================================
-   DOM
-   ========================================================== */
+   ELEMENTS
+========================================================== */
 
 const outerRing =
-    document.getElementById("outerRingContainer");
+    document.getElementById("outerRing");
 
 const innerRing =
-    document.getElementById("innerRingContainer");
+    document.getElementById("innerRing");
 
-const lockInterface =
-    document.getElementById("lockInterface");
-
-const eyelid =
-    document.getElementById("eyelid");
-
-const listenButton =
-    document.getElementById("listenButton");
-
-const audioStatus =
-    document.getElementById("audioStatus");
-
-const matchBar =
-    document.getElementById("matchBar");
-
-const matchPercent =
-    document.getElementById("matchPercent");
+const dial =
+    document.getElementById("dial");
 
 const codeDisplay =
     document.getElementById("codeDisplay");
@@ -1101,17 +1120,23 @@ const codeDisplay =
 const lockStatus =
     document.getElementById("lockStatus");
 
-const recognitionBox =
-    document.getElementById("recognitionBox");
+const listenButton =
+    document.getElementById("listenButton");
 
-const recognitionSong =
-    document.getElementById("recognitionSong");
+const audioStatus =
+    document.getElementById("audioStatus");
+
+const progressFill =
+    document.getElementById("progressFill");
+
+const matchPercent =
+    document.getElementById("matchPercent");
+
+const portal =
+    document.getElementById("portal");
 
 const mainLayout =
     document.getElementById("mainLayout");
-
-const vault =
-    document.getElementById("vault");
 
 const pinOverlay =
     document.getElementById("pinOverlay");
@@ -1124,35 +1149,36 @@ const pinError =
 
 
 /* ==========================================================
-   STATE
-   ========================================================== */
+   DIAL
+========================================================== */
 
-let enteredCombination = "";
+const alphabet =
+[
+    "A","B","C","D","E","F","G","H","I","J","K","L","M",
+    "N","O","P","Q","R","S","T","U","V","W","X","Y","Z"
+];
 
-let audioVerified = false;
+const notes =
+[
+    "♩","♪","♫","♬","♭","♯","𝄞","𝄢",
+    "♩","♪","♫","♬","♭","♯","𝄞","𝄢",
+    "♩","♪","♫","♬","♭","♯","𝄞","𝄢"
+];
 
-let listening = false;
+let rotation = 0;
 
-let mediaRecorder = null;
-
-let microphoneStream = null;
-
-let recordedChunks = [];
-
-let pinEntry = "";
-
-let outerRotation = 0;
-
-let innerRotation = 0;
-
-const stepAngle = 360 / alphabet.length;
+const STEP =
+    360 / alphabet.length;
 
 
-/* ==========================================================
-   CREATE DIALS
-   ========================================================== */
+/*
+   The dial uses a 480x480 coordinate system.
 
-function createDials() {
+   CSS scales the entire dial on mobile,
+   so these coordinates remain proportional.
+*/
+
+function renderDial() {
 
     outerRing.innerHTML = "";
     innerRing.innerHTML = "";
@@ -1164,12 +1190,10 @@ function createDials() {
     const innerRadius = 162;
 
 
-    /* OUTER RING */
-
-    outerSymbols.forEach((symbol,index) => {
+    notes.forEach((symbol,index) => {
 
         const angle =
-            (index * (360 / outerSymbols.length) - 90)
+            (index * (360 / notes.length) - 90)
             * Math.PI / 180;
 
         const x =
@@ -1181,29 +1205,25 @@ function createDials() {
         const node =
             document.createElement("div");
 
-        node.className =
-            "dial-node outer-symbol";
+        node.className = "note";
 
-        node.textContent =
-            symbol;
+        node.textContent = symbol;
 
         node.style.left =
-            x + "px";
+            `${x}px`;
 
         node.style.top =
-            y + "px";
+            `${y}px`;
 
         outerRing.appendChild(node);
 
     });
 
 
-    /* INNER ALPHABET */
-
     alphabet.forEach((letter,index) => {
 
         const angle =
-            (index * (360 / alphabet.length) - 90)
+            (index * STEP - 90)
             * Math.PI / 180;
 
         const x =
@@ -1215,29 +1235,17 @@ function createDials() {
         const node =
             document.createElement("div");
 
-        node.className =
-            "dial-node inner-letter";
+        node.className = "letter";
+
+        node.textContent = letter;
 
         node.style.left =
-            x + "px";
+            `${x}px`;
 
         node.style.top =
-            y + "px";
+            `${y}px`;
 
-        const span =
-            document.createElement("span");
-
-        span.className =
-            "char";
-
-        span.textContent =
-            letter;
-
-        node.appendChild(span);
-
-        node.addEventListener("click", function(event) {
-
-            event.stopPropagation();
+        node.addEventListener("click",function() {
 
             addLetter(letter);
 
@@ -1249,24 +1257,29 @@ function createDials() {
 
 }
 
-
-createDials();
+renderDial();
 
 
 /* ==========================================================
-   DIAL ROTATION
-   ========================================================== */
+   ROTATION
+========================================================== */
 
-function updateInnerDial() {
+function applyRotation() {
 
     innerRing.style.transform =
-        `rotate(${innerRotation}deg)`;
+        `rotate(${rotation}deg)`;
 
-    document.querySelectorAll(".char")
-        .forEach(char => {
+    /*
+       Keep the letters upright while the
+       ring rotates.
+    */
 
-            char.style.transform =
-                `rotate(${-innerRotation}deg)`;
+    document
+        .querySelectorAll(".letter")
+        .forEach(letter => {
+
+            letter.style.transform =
+                `rotate(${-rotation}deg)`;
 
         });
 
@@ -1274,53 +1287,40 @@ function updateInnerDial() {
 
 
 document
-    .getElementById("rotateLeft")
-    .addEventListener("click", () => {
+    .getElementById("leftButton")
+    .addEventListener("click",() => {
 
-        innerRotation -= stepAngle;
+        rotation -= STEP;
 
-        updateInnerDial();
-
-    });
-
-
-document
-    .getElementById("rotateRight")
-    .addEventListener("click", () => {
-
-        innerRotation += stepAngle;
-
-        updateInnerDial();
+        applyRotation();
 
     });
 
 
 document
-    .getElementById("selectPointer")
-    .addEventListener("click", () => {
+    .getElementById("rightButton")
+    .addEventListener("click",() => {
 
-        let normalized =
-            (-innerRotation) % 360;
+        rotation += STEP;
 
-        if (normalized < 0)
-            normalized += 360;
-
-        const index =
-            Math.round(normalized / stepAngle)
-            % alphabet.length;
-
-        addLetter(alphabet[index]);
+        applyRotation();
 
     });
 
 
 /* ==========================================================
-   ADD COMBINATION LETTER
-   ========================================================== */
+   COMBINATION
+========================================================== */
+
+let enteredCombination = "";
+
 
 function addLetter(letter) {
 
-    if (enteredCombination.length >= TARGET_COMBINATION.length) {
+    if (
+        enteredCombination.length >=
+        TARGET_COMBINATION.length
+    ) {
 
         enteredCombination = "";
 
@@ -1329,45 +1329,72 @@ function addLetter(letter) {
     enteredCombination += letter;
 
     codeDisplay.textContent =
-        enteredCombination.padEnd(5,"-");
+        enteredCombination.padEnd(
+            TARGET_COMBINATION.length,
+            "-"
+        );
 
-    checkAuthentication();
+    checkUnlock();
 
 }
 
 
+document
+    .getElementById("selectButton")
+    .addEventListener("click",() => {
+
+        let normalized =
+            (-rotation) % 360;
+
+        if(normalized < 0)
+            normalized += 360;
+
+        const index =
+            Math.round(normalized / STEP)
+            % alphabet.length;
+
+        addLetter(alphabet[index]);
+
+    });
+
+
 /* ==========================================================
    PIN SYSTEM
-   ========================================================== */
+========================================================== */
 
-listenButton.addEventListener("click", () => {
+let enteredPin = "";
 
-    if (audioVerified) {
+
+listenButton.addEventListener("click",() => {
+
+    if(audioVerified) {
+
         return;
+
     }
 
-    pinEntry = "";
+    enteredPin = "";
 
     updatePinDisplay();
 
     pinError.textContent = "";
 
-    pinOverlay.classList.add("active");
+    pinOverlay.classList.add("show");
 
 });
 
 
 document
-    .querySelectorAll("[data-key]")
+    .querySelectorAll("[data-pin]")
     .forEach(button => {
 
-        button.addEventListener("click", () => {
+        button.addEventListener("click",() => {
 
-            if (pinEntry.length >= 4)
+            if(enteredPin.length >= 4)
                 return;
 
-            pinEntry +=
-                button.dataset.key;
+            enteredPin +=
+                button.dataset.pin;
 
             updatePinDisplay();
 
@@ -1376,11 +1403,21 @@ document
     });
 
 
-document
-    .getElementById("clearPin")
-    .addEventListener("click", () => {
+function updatePinDisplay() {
 
-        pinEntry = "";
+    pinDisplay.textContent =
+        enteredPin.length
+            ? "•".repeat(enteredPin.length)
+            : "••••";
+
+}
+
+
+document
+    .getElementById("pinClear")
+    .addEventListener("click",() => {
+
+        enteredPin = "";
 
         updatePinDisplay();
 
@@ -1390,21 +1427,21 @@ document
 
 
 document
-    .getElementById("enterPin")
-    .addEventListener("click", () => {
+    .getElementById("pinEnter")
+    .addEventListener("click",() => {
 
-        if (pinEntry === TEST_PIN) {
+        if(enteredPin === TEST_PIN) {
 
-            pinOverlay.classList.remove("active");
+            pinOverlay.classList.remove("show");
 
             startAudioRecognition();
 
         } else {
 
             pinError.textContent =
-                "Incorrect authorization code.";
+                "Incorrect PIN.";
 
-            pinEntry = "";
+            enteredPin = "";
 
             updatePinDisplay();
 
@@ -1413,103 +1450,117 @@ document
     });
 
 
-function updatePinDisplay() {
+/* ==========================================================
+   AUDIO RECOGNITION
+========================================================== */
 
-    if (!pinEntry.length) {
+let audioVerified = false;
+let recording = false;
 
-        pinDisplay.textContent = "••••";
+
+/*
+   This is intentionally NOT a fake acoustic
+   progress detector.
+
+   The site records a short microphone sample
+   and sends that recording to AudD.
+
+   AudD must return the actual song identification.
+*/
+
+async function startAudioRecognition() {
+
+    if(
+        !AUDD_API_TOKEN ||
+        AUDD_API_TOKEN.includes("PASTE_")
+    ) {
+
+        alert(
+            "Please add your new AudD API token first."
+        );
 
         return;
 
     }
 
-    pinDisplay.textContent =
-        "•".repeat(pinEntry.length);
-
-}
-
-
-/* ==========================================================
-   AUDIO RECOGNITION
-   ========================================================== */
-
-async function startAudioRecognition() {
-
-    if (listening)
-        return;
 
     try {
 
-        listening = true;
-
-        recordedChunks = [];
-
-        recognitionBox.classList.add("active");
-
-        recognitionSong.textContent =
-            "Listening... play Souls Anchored now.";
-
-        setAudioStatus(
-            "listening",
-            "Listening"
-        );
-
-        matchBar.style.width = "0%";
-
-        matchPercent.textContent = "0%";
+        audioStatus.textContent =
+            "LISTENING";
 
         listenButton.textContent =
             "🎤 Listening...";
 
-        listenButton.style.background =
-            "#b45309";
+        listenButton.disabled = true;
 
 
-        microphoneStream =
+        const stream =
             await navigator.mediaDevices.getUserMedia({
                 audio: true
             });
 
 
-        mediaRecorder =
-            new MediaRecorder(microphoneStream);
+        const recorder =
+            new MediaRecorder(stream);
 
 
-        mediaRecorder.ondataavailable =
+        const chunks = [];
+
+
+        recorder.ondataavailable =
             event => {
 
-                if (event.data.size > 0) {
+                if(event.data.size > 0) {
 
-                    recordedChunks.push(
-                        event.data
-                    );
+                    chunks.push(event.data);
 
                 }
 
             };
 
 
-        mediaRecorder.onstop =
-            processRecording;
+        recorder.onstop =
+            async () => {
+
+                stream
+                    .getTracks()
+                    .forEach(track =>
+                        track.stop()
+                    );
 
 
-        mediaRecorder.start();
+                audioStatus.textContent =
+                    "IDENTIFYING";
+
+                listenButton.textContent =
+                    "🔎 Identifying Souls Anchored...";
+
+
+                const blob =
+                    new Blob(chunks,{
+                        type: recorder.mimeType
+                    });
+
+
+                await identifySong(blob);
+
+            };
+
+
+        recorder.start();
 
 
         /*
-         * Record for 10 seconds.
-         * This is the same basic approach
-         * used by your working test.
-         */
+           Ten seconds gives AudD a useful
+           sample to identify.
+        */
 
         setTimeout(() => {
 
-            if (
-                mediaRecorder &&
-                mediaRecorder.state !== "inactive"
-            ) {
+            if(recorder.state !== "inactive") {
 
-                mediaRecorder.stop();
+                recorder.stop();
 
             }
 
@@ -1520,23 +1571,17 @@ async function startAudioRecognition() {
 
         console.error(error);
 
-        listening = false;
-
-        stopMicrophone();
-
-        setAudioStatus(
-            "error",
-            "Microphone Error"
-        );
-
-        recognitionSong.textContent =
-            "Microphone permission was denied or unavailable.";
+        audioStatus.textContent =
+            "ERROR";
 
         listenButton.textContent =
-            "🔐 Listen for Audio";
+            "🔒 Listen for Acoustic Handshake";
 
-        listenButton.style.background =
-            "";
+        listenButton.disabled = false;
+
+        alert(
+            "Microphone access is required."
+        );
 
     }
 
@@ -1544,51 +1589,33 @@ async function startAudioRecognition() {
 
 
 /* ==========================================================
-   PROCESS RECORDING
-   ========================================================== */
+   SEND RECORDING TO AUDD
+========================================================== */
 
-async function processRecording() {
+async function identifySong(blob) {
 
-    stopMicrophone();
+    try {
 
-    setAudioStatus(
-        "listening",
-        "Identifying"
-    );
-
-    listenButton.textContent =
-        "🔎 Identifying Audio...";
+        progressFill.style.width = "20%";
+        matchPercent.textContent = "20%";
 
 
-    const blob =
-        new Blob(
-            recordedChunks,
-            {
-                type:
-                    mediaRecorder.mimeType ||
-                    "audio/webm"
-            }
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "api_token",
+            AUDD_API_TOKEN
         );
 
 
-    const formData =
-        new FormData();
+        formData.append(
+            "file",
+            blob,
+            "recording.webm"
+        );
 
-
-    formData.append(
-        "api_token",
-        AUDD_API_TOKEN
-    );
-
-
-    formData.append(
-        "file",
-        blob,
-        "eyeota-recording.webm"
-    );
-
-
-    try {
 
         const response =
             await fetch(
@@ -1598,6 +1625,16 @@ async function processRecording() {
                     body: formData
                 }
             );
+
+
+        if(!response.ok) {
+
+            throw new Error(
+                "AudD request failed: " +
+                response.status
+            );
+
+        }
 
 
         const data =
@@ -1610,92 +1647,80 @@ async function processRecording() {
         );
 
 
-        if (data.result) {
+        if(data.result) {
 
             const title =
-                data.result.title || "";
+                String(
+                    data.result.title || ""
+                ).toLowerCase();
+
 
             const artist =
-                data.result.artist || "";
-
-
-            recognitionSong.textContent =
-                artist +
-                " — " +
-                title;
+                String(
+                    data.result.artist || ""
+                ).toLowerCase();
 
 
             /*
-             * Case-insensitive song check.
-             */
+               We require the returned title
+               to actually contain "Souls Anchored".
+            */
 
-            const normalizedTitle =
-                title.toLowerCase().trim();
-
-
-            if (
-                normalizedTitle.includes(
-                    TARGET_SONG
+            if(
+                title.includes(
+                    TARGET_SONG.toLowerCase()
                 )
             ) {
 
                 audioVerified = true;
 
-                setAudioStatus(
-                    "success",
-                    "Verified"
-                );
-
-                recognitionSong.textContent =
-                    "✓ Souls Anchored recognized — audio factor verified.";
-
-                matchBar.style.width =
+                progressFill.style.width =
                     "100%";
 
                 matchPercent.textContent =
                     "100%";
 
+                audioStatus.textContent =
+                    "VERIFIED ✔";
+
                 listenButton.textContent =
-                    "✓ Audio Verified";
+                    "✓ Souls Anchored Verified";
 
                 listenButton.style.background =
                     "#14532d";
 
-                eyelid.classList.remove(
-                    "eye-closed"
-                );
 
-                eyelid.classList.add(
-                    "eye-open"
-                );
+                checkUnlock();
+
 
             } else {
 
                 audioVerified = false;
 
-                setAudioStatus(
-                    "error",
-                    "Not Verified"
-                );
-
-                recognitionSong.textContent =
-                    "Recognized: " +
-                    artist +
-                    " — " +
-                    title +
-                    ". This is not the required audio.";
-
-                matchBar.style.width =
+                progressFill.style.width =
                     "0%";
 
                 matchPercent.textContent =
                     "0%";
 
-                listenButton.textContent =
-                    "🔐 Listen for Audio";
+                audioStatus.textContent =
+                    "WRONG AUDIO";
 
-                listenButton.style.background =
-                    "";
+                listenButton.textContent =
+                    "🔒 Try Again";
+
+                listenButton.disabled =
+                    false;
+
+
+                alert(
+                    "AudD identified:\n\n" +
+                    data.result.artist +
+                    " — " +
+                    data.result.title +
+                    "\n\n" +
+                    "The required recording is Souls Anchored."
+                );
 
             }
 
@@ -1703,77 +1728,52 @@ async function processRecording() {
 
             audioVerified = false;
 
-            setAudioStatus(
-                "error",
-                "No Match"
-            );
-
-            recognitionSong.textContent =
-                "No song match found.";
-
-            matchBar.style.width =
+            progressFill.style.width =
                 "0%";
 
             matchPercent.textContent =
                 "0%";
 
-            listenButton.textContent =
-                "🔐 Listen for Audio";
+            audioStatus.textContent =
+                "NOT FOUND";
 
-            listenButton.style.background =
-                "";
+            listenButton.textContent =
+                "🔒 Try Again";
+
+            listenButton.disabled =
+                false;
+
+
+            alert(
+                "AudD could not identify the recording. Try playing Souls Anchored closer to the microphone."
+            );
 
         }
 
 
-        listening = false;
-
-        checkAuthentication();
-
-
     } catch(error) {
 
-        console.error(
-            "Recognition error:",
-            error
-        );
+        console.error(error);
 
-        audioVerified = false;
-
-        listening = false;
-
-        setAudioStatus(
-            "error",
-            "Recognition Error"
-        );
-
-        recognitionSong.textContent =
-            "Unable to contact the audio recognition service.";
+        audioStatus.textContent =
+            "ERROR";
 
         listenButton.textContent =
-            "🔐 Listen for Audio";
+            "🔒 Try Again";
 
-        listenButton.style.background =
-            "";
+        listenButton.disabled =
+            false;
 
-    }
+        progressFill.style.width =
+            "0%";
 
-}
+        matchPercent.textContent =
+            "0%";
 
-
-/* ==========================================================
-   MICROPHONE CLEANUP
-   ========================================================== */
-
-function stopMicrophone() {
-
-    if (microphoneStream) {
-
-        microphoneStream
-            .getTracks()
-            .forEach(track => track.stop());
-
-        microphoneStream = null;
+        alert(
+            "Audio recognition error.\n\n" +
+            error.message
+        );
 
     }
 
@@ -1781,34 +1781,22 @@ function stopMicrophone() {
 
 
 /* ==========================================================
-   AUDIO STATUS
-   ========================================================== */
+   FINAL AUTHENTICATION
+========================================================== */
 
-function setAudioStatus(type,text) {
-
-    audioStatus.className =
-        "status " + type;
-
-    audioStatus.textContent =
-        text;
-
-}
+let transitionStarted = false;
 
 
-/* ==========================================================
-   AUTHENTICATION CHECK
-   ========================================================== */
+function checkUnlock() {
 
-function checkAuthentication() {
-
-    const codeVerified =
+    const combinationVerified =
         enteredCombination ===
         TARGET_COMBINATION;
 
 
-    if (
+    if(
         audioVerified &&
-        codeVerified
+        combinationVerified
     ) {
 
         lockStatus.textContent =
@@ -1818,20 +1806,16 @@ function checkAuthentication() {
             "badge unlocked";
 
 
-        eyelid.classList.remove(
-            "eye-closed"
-        );
+        if(!transitionStarted) {
 
-        eyelid.classList.add(
-            "eye-open"
-        );
+            transitionStarted = true;
 
+            setTimeout(
+                openPortal,
+                700
+            );
 
-        setTimeout(
-            unlockVault,
-            700
-        );
-
+        }
 
     } else {
 
@@ -1847,30 +1831,18 @@ function checkAuthentication() {
 
 
 /* ==========================================================
-   VAULT UNLOCK
+   PORTAL
 ========================================================== */
 
-let vaultUnlocked = false;
+function openPortal() {
 
-
-function unlockVault() {
-
-    if (vaultUnlocked)
-        return;
-
-    vaultUnlocked = true;
-
-    mainLayout.classList.add(
-        "fade"
-    );
+    mainLayout.classList.add("fade");
 
     setTimeout(() => {
 
-        vault.classList.add(
-            "active"
-        );
+        portal.classList.add("active");
 
-    },500);
+    },400);
 
 }
 
@@ -1881,66 +1853,52 @@ function unlockVault() {
 
 function resetSystem() {
 
-    stopMicrophone();
-
     enteredCombination = "";
-
-    audioVerified = false;
-
-    listening = false;
-
-    vaultUnlocked = false;
-
-    pinEntry = "";
 
     codeDisplay.textContent =
         "-----";
 
-    matchBar.style.width =
+
+    audioVerified = false;
+
+    transitionStarted = false;
+
+
+    progressFill.style.width =
         "0%";
 
     matchPercent.textContent =
         "0%";
 
-    recognitionBox.classList.remove(
-        "active"
-    );
 
-    recognitionSong.textContent =
-        "Waiting...";
-
-    setAudioStatus(
-        "standby",
-        "Standby"
-    );
-
-    lockStatus.textContent =
+    audioStatus.textContent =
         "LOCKED";
 
-    lockStatus.className =
-        "badge locked";
 
     listenButton.textContent =
-        "🔐 Listen for Audio";
+        "🔒 Listen for Acoustic Handshake";
 
     listenButton.style.background =
-        "";
+        "#0284c7";
 
-    eyelid.classList.remove(
-        "eye-open"
-    );
+    listenButton.disabled =
+        false;
 
-    eyelid.classList.add(
-        "eye-closed"
-    );
 
-    vault.classList.remove(
+    portal.classList.remove(
         "active"
     );
 
     mainLayout.classList.remove(
         "fade"
     );
+
+
+    rotation = 0;
+
+    applyRotation();
+
+    checkUnlock();
 
 }
 
@@ -1962,10 +1920,23 @@ document
 
 
 /* ==========================================================
-   INITIALIZE
-   ========================================================== */
+   CLOSE PIN MODAL WHEN CLICKING OUTSIDE
+========================================================== */
 
-resetSystem();
+pinOverlay.addEventListener(
+    "click",
+    event => {
+
+        if(event.target === pinOverlay) {
+
+            pinOverlay.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
 
 </script>
 
