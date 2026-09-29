@@ -564,7 +564,9 @@ button {
 }
 
 .outer-ring {
-    z-index: 30;
+    z-index: 45;
+    /* The ring itself must not block the letters underneath.
+       Only the individual music-note controls receive pointer events. */
     pointer-events: none;
 }
 
@@ -631,6 +633,7 @@ button {
     -webkit-tap-highlight-color: transparent;
 
     touch-action: manipulation;
+
 }
 
 .letter.selected {
@@ -687,9 +690,29 @@ button {
         0 0 10px rgba(0,242,255,.16),
         0 3px 9px rgba(0,0,0,.55);
 
-    pointer-events: none;
+    cursor: pointer;
 
     user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.note:hover {
+    filter: brightness(1.25);
+    box-shadow:
+        0 0 0 2px rgba(0,242,255,.35),
+        0 0 16px rgba(0,242,255,.42),
+        0 3px 9px rgba(0,0,0,.55);
+}
+
+.note.eyeota-note-hit {
+    filter: brightness(1.35);
+    box-shadow:
+        0 0 0 3px rgba(255,255,255,.82),
+        0 0 18px rgba(0,242,255,.95),
+        0 3px 9px rgba(0,0,0,.55);
+    transform: scale(1.12);
 }
 
 /* ==========================================================
@@ -1314,6 +1337,9 @@ button {
 .code-letter.active {
     transform: scale(1.08);
 }
+/* MUSIC SYMBOL LOCK FACTOR */
+.music-code-box{margin-top:9px;padding:10px 14px;background:var(--dark);border-radius:8px}.music-code-label{display:flex;justify-content:space-between;align-items:center;color:#94a3b8;font-size:11px;margin-bottom:7px}.music-code{display:flex;align-items:center;gap:5px;min-height:30px}.music-code-symbol{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;background:#334155;color:#fff;font-size:18px;text-shadow:0 0 7px rgba(0,242,255,.5);transition:transform .2s ease,background .2s ease}.music-code-symbol.active{background:#075985;transform:scale(1.08)}.note{cursor:pointer;pointer-events:auto;user-select:none;touch-action:manipulation}.note:hover{transform:scale(1.15)}.note.music-selected{border-color:#00f2ff;box-shadow:0 0 0 3px rgba(0,242,255,.22),0 0 18px rgba(0,242,255,.65);color:#00f2ff}
+
 
 /* ==========================================================
    BUTTONS
@@ -2666,6 +2692,14 @@ body::before, body::after {
 
             </div>
 
+            <div class="music-code-box">
+                <div class="music-code-label">
+                    <span>Music Symbol Key:</span>
+                    <span id="musicCodeStatus">0 / 4</span>
+                </div>
+                <div class="music-code" id="musicCodeDisplay"></div>
+            </div>
+
             <div class="buttons">
 
                 <button
@@ -2833,7 +2867,7 @@ body::before, body::after {
         <div class="pin-modal">
 
             <h2>
-                🔐 
+                🔐 Test Access
             </h2>
 
             <p>
@@ -2959,6 +2993,14 @@ const CORRECT_COLOR =
 const TEST_PIN =
     "0411";
 
+/*
+   Three fixed music-note positions form the music key for this
+   prototype. The user may toggle any note on/off in any order.
+*/
+const MUSIC_KEY_SIZE = 3;
+let TARGET_MUSIC_POSITIONS;
+const TARGET_MUSIC_CREDENTIAL = "3-7-11";
+
 /* ==========================================================
    ELEMENT REFERENCES
 ========================================================== */
@@ -2974,6 +3016,9 @@ const dial =
 
 const codeDisplay =
     document.getElementById("codeDisplay");
+
+const musicCodeDisplay = document.getElementById("musicCodeDisplay");
+const musicCodeStatus = document.getElementById("musicCodeStatus");
 
 const lockStatus =
     document.getElementById("lockStatus");
@@ -3030,10 +3075,18 @@ const alphabet = [
 ];
 
 const notes = [
-    "♩","♪","♫","♬","♭","♯","𝄞","𝄢",
-    "♩","♪","♫","♬","♭","♯","𝄞","𝄢",
-    "♩","♪","♫","♬","♭","♯","𝄞","𝄢"
+    // Only distinct, legitimate music-notation symbols.
+    // No duplicate symbols and no unrelated decorative characters.
+    "♩","♪","♫","♬","♭","♮","♯",
+    "𝄞","𝄢","𝄡","𝄪","𝄫","𝄐","𝄑","𝄒","𝄓"
 ];
+
+/*
+   Fixed three-note music key for this prototype.
+   The key is position-based and the three selected symbols are different.
+   Key positions: 3 = ♬, 7 = 𝄞, 11 = 𝄫.
+*/
+TARGET_MUSIC_POSITIONS = new Set([3, 7, 11]);
 
 /* ==========================================================
    EXACTLY 26 PREDEFINED COLORS
@@ -3115,6 +3168,7 @@ let letterColors = {};
 let enteredCombination = "";
 
 let combinationColors = [];
+let selectedMusicPositions = new Set();
 
 let animationFrame = null;
 
@@ -3439,6 +3493,18 @@ function renderDial() {
 
             node.textContent =
                 symbol;
+            node.dataset.symbol = symbol;
+            node.dataset.noteIndex = index;
+            node.setAttribute("role", "button");
+            node.setAttribute("tabindex", "0");
+            node.setAttribute("aria-pressed", "false");
+            node.title = `Toggle music symbol ${symbol}`;
+            node.addEventListener("click", event => {
+                event.stopPropagation();
+                stopDialInteraction();
+                addMusicSymbol(symbol, node);
+                node.setAttribute("aria-pressed", selectedMusicPositions.has(index) ? "true" : "false");
+            });
 
             node.style.left =
                 `${(x / 480) * 100}%`;
@@ -3483,8 +3549,7 @@ function renderDial() {
             node.className =
                 "letter";
 
-            node.textContent =
-                letter;
+            node.textContent = letter;
 
             node.dataset.letter =
                 letter;
@@ -3527,6 +3592,201 @@ function renderDial() {
     applyRotation();
 
 }
+
+/* MUSIC SYMBOL COMBINATION FACTOR */
+function addMusicSymbol(symbol, element) {
+    const position = Number(element.dataset.noteIndex);
+
+    if (selectedMusicPositions.has(position)) {
+        selectedMusicPositions.delete(position);
+        element.classList.remove("music-selected");
+    } else {
+        selectedMusicPositions.add(position);
+        element.classList.add("music-selected");
+        playMusicSymbolSound(symbol);
+    }
+
+    renderMusicCombination();
+    checkUnlock();
+}
+
+/*
+   MUSIC SYMBOL VOICES
+   These are deliberately separate from the A–Z letter voices.
+   Clicking a symbol does NOT call playGeneric(), triggerVisual(), or
+   flashWaveForLetter(), so it cannot light the electrical wave network.
+   The symbols are their own musical key layer.
+*/
+let musicAudioCtx = null;
+
+function getMusicAudioContext() {
+    if (!musicAudioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return null;
+        musicAudioCtx = new Ctx();
+    }
+    if (musicAudioCtx.state === 'suspended') {
+        musicAudioCtx.resume().catch(() => {});
+    }
+    return musicAudioCtx;
+}
+
+function playMusicSymbolSound(symbol) {
+    const ctx = getMusicAudioContext();
+    if (!ctx) return;
+
+    /*
+       MUSIC-SYMBOL VIBRATION VOICES
+       These are deliberately NOT drums, snares, kicks, booms, or baps.
+       Each symbol gets a long, low, resonant vibration with its own
+       harmonic character. Think sustained sub-bass / 808-like depth,
+       but musical and continuous rather than percussive.
+    */
+    const index = Math.max(0, notes.indexOf(symbol));
+    const roots = [
+        55.00, 58.27, 61.74, 65.41,
+        69.30, 73.42, 77.78, 82.41,
+        87.31, 92.50, 98.00, 103.83,
+        110.00, 116.54, 123.47, 130.81
+    ];
+    const root = roots[index % roots.length];
+    const now = ctx.currentTime;
+    const duration = 2.15;
+
+    const makeVoice = (frequency, type, gain, detune = 0, vibrato = 0) => {
+        const osc = ctx.createOscillator();
+        const amp = ctx.createGain();
+        const lfo = ctx.createOscillator();
+        const lfoGain = ctx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(frequency, now);
+        osc.detune.setValueAtTime(detune, now);
+
+        amp.gain.setValueAtTime(0.0001, now);
+        amp.gain.exponentialRampToValueAtTime(gain, now + 0.16);
+        amp.gain.exponentialRampToValueAtTime(gain * 0.72, now + 1.15);
+        amp.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+        if (vibrato) {
+            lfo.type = 'sine';
+            lfo.frequency.setValueAtTime(4.2, now);
+            lfoGain.gain.setValueAtTime(vibrato, now);
+            lfo.connect(lfoGain).connect(osc.detune);
+            lfo.start(now);
+            lfo.stop(now + duration + 0.05);
+        }
+
+        osc.connect(amp).connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + duration + 0.05);
+    };
+
+    /* Different musical vibration characters, all long and low. */
+    const voices = [
+        () => { // deep rounded resonance
+            makeVoice(root, 'sine', .105, 0, 7);
+            makeVoice(root * 2, 'triangle', .018, 0, 3);
+        },
+        () => { // warm bowed vibration
+            makeVoice(root, 'triangle', .085, -4, 11);
+            makeVoice(root * 1.5, 'sine', .018, 5, 6);
+        },
+        () => { // wide sub vibration
+            makeVoice(root, 'sine', .11, -7, 5);
+            makeVoice(root * 2.01, 'sine', .014, 7, 2);
+        },
+        () => { // dark resonant vibration
+            makeVoice(root, 'triangle', .095, 3, 8);
+            makeVoice(root * 2, 'triangle', .015, -5, 4);
+        },
+        () => { // glassy low resonance
+            makeVoice(root, 'sine', .10, 0, 13);
+            makeVoice(root * 2.76, 'sine', .009, 4, 5);
+        },
+        () => { // soft cello-like low sustain
+            makeVoice(root, 'triangle', .09, -8, 14);
+            makeVoice(root * 1.5, 'triangle', .016, 6, 7);
+        },
+        () => { // deep hollow resonance
+            makeVoice(root, 'sine', .108, 5, 4);
+            makeVoice(root * 1.25, 'sine', .014, -6, 3);
+        },
+        () => { // slow vibrating pad
+            makeVoice(root, 'sine', .092, -10, 16);
+            makeVoice(root * 2, 'sine', .012, 10, 8);
+        },
+        () => { // rounded wooden resonance
+            makeVoice(root, 'triangle', .10, 2, 6);
+            makeVoice(root * 2.5, 'sine', .012, -3, 3);
+        },
+        () => { // low singing resonance
+            makeVoice(root, 'sine', .098, -3, 18);
+            makeVoice(root * 1.5, 'triangle', .014, 8, 9);
+        },
+        () => { // thick sustained vibration
+            makeVoice(root, 'triangle', .105, 0, 9);
+            makeVoice(root * 2, 'sine', .017, -9, 5);
+        },
+        () => { // dark sub tone
+            makeVoice(root, 'sine', .112, 6, 4);
+            makeVoice(root * 2, 'triangle', .012, -6, 2);
+        },
+        () => { // smooth floating vibration
+            makeVoice(root, 'sine', .095, -5, 21);
+            makeVoice(root * 2.01, 'sine', .01, 5, 7);
+        },
+        () => { // bowed low resonance
+            makeVoice(root, 'triangle', .088, 4, 19);
+            makeVoice(root * 1.5, 'sine', .016, -4, 10);
+        },
+        () => { // deep bell-like sustain
+            makeVoice(root, 'sine', .10, 0, 10);
+            makeVoice(root * 2.76, 'sine', .008, 7, 4);
+        },
+        () => { // warm final resonance
+            makeVoice(root, 'triangle', .10, -2, 12);
+            makeVoice(root * 2, 'sine', .015, 3, 5);
+        }
+    ];
+
+    voices[index % voices.length]();
+}
+function getMusicCredential() {
+    return [...selectedMusicPositions]
+        .sort((a, b) => a - b)
+        .join("-");
+}
+
+function renderMusicCombination() {
+    if (!musicCodeDisplay) return;
+
+    musicCodeDisplay.innerHTML = "";
+
+    const selectedPositions = [...selectedMusicPositions]
+        .sort((a, b) => a - b);
+
+    for (let i = 0; i < MUSIC_KEY_SIZE; i++) {
+        const span = document.createElement("span");
+        span.className = "music-code-symbol";
+
+        if (i < selectedPositions.length) {
+            const position = selectedPositions[i];
+            span.textContent = notes[position - 1] || "•";
+            span.classList.add("active");
+            span.title = `Music credential position ${position}`;
+        } else {
+            span.textContent = "-";
+        }
+
+        musicCodeDisplay.appendChild(span);
+    }
+
+    if (musicCodeStatus) {
+        musicCodeStatus.textContent = `${selectedPositions.length} / ${MUSIC_KEY_SIZE}`;
+    }
+}
+
 
 /* ==========================================================
    SELECT LETTER
@@ -3818,6 +4078,7 @@ function applyRotation() {
 
                 letter.style.transform =
                     `rotate(${-rotation}deg)`;
+
 
             }
         );
@@ -4631,10 +4892,18 @@ function checkUnlock() {
                 CORRECT_COLOR.toLowerCase()
         );
 
+    // Every selected music note contributes to one complete credential.
+    // The selected positions are normalized into a single deterministic key,
+    // so adding, removing, or changing even one note changes the credential.
+    const musicCredential = getMusicCredential();
+    const musicSequenceVerified =
+        musicCredential === TARGET_MUSIC_CREDENTIAL;
+
     if (
         audioVerified &&
         combinationVerified &&
-        colorsVerified
+        colorsVerified &&
+        musicSequenceVerified
     ) {
 
         lockStatus.textContent =
@@ -4713,7 +4982,12 @@ function resetSywave() {
 
     combinationColors =
         [];
-
+    selectedMusicPositions.clear();
+    document.querySelectorAll(".note").forEach(n => {
+        n.classList.remove("music-selected");
+        n.setAttribute("aria-pressed", "false");
+    });
+    renderMusicCombination();
     renderCombination();
 
     audioVerified =
@@ -4802,7 +5076,9 @@ function resetSywave() {
 
     applyRotation();
 
-    startColorShuffling();
+    renderMusicCombination();
+
+startColorShuffling();
 
     startDialRotation();
 
@@ -5327,7 +5603,9 @@ checkUnlock();
         el.classList.remove('eyeota-pointer-letter');
         void el.offsetWidth;
         el.classList.add('eyeota-pointer-letter');
-        setTimeout(() => el.classList.remove('eyeota-pointer-letter'), 190);
+        setTimeout(() => {
+            el.classList.remove('eyeota-pointer-letter');
+        }, 190);
     }
 
     function flashWaveForLetter(letter) {
@@ -5386,11 +5664,15 @@ checkUnlock();
         });
     });
 
+    /* Music symbols are handled by renderDial(); they are independent
+       controls and do not trigger letter sounds or letter wave effects. */
+
     /* Don't double-fire a sound from the pointer event when the user clicks a letter. */
     dialEl.addEventListener('pointerdown', (event) => {
         const letter = event.target.closest?.('.letter');
+        const note = event.target.closest?.('.note');
         getAudioContext();
-        if (letter) return;
+        if (letter || note) return;
         const now = performance.now();
         if (now - lastPointerTime < 35) return;
         lastPointerTime = now;
