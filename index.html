@@ -67,7 +67,7 @@ body {
 
     color: var(--light);
 
-    padding: 20px 12px 30px;
+    padding: 20px 12px 40px;
 
     overflow-x: hidden;
     overflow-y: auto;
@@ -1341,7 +1341,7 @@ button:active {
 
     body {
         padding-top: 14px;
-        padding-bottom: 24px;
+        padding-bottom: 34px;
     }
 
     .main-layout {
@@ -1726,6 +1726,70 @@ button:active {
         box-shadow: none;
     }
 
+}
+
+
+/* ==========================================================
+   BOTTOM JAY-Z MUSIC PLAYER
+========================================================== */
+
+.music-dock {
+    width: 100%;
+    margin-top: 18px;
+    padding: 12px;
+    background: rgba(15,23,42,.94);
+    border: 1px solid rgba(0,242,255,.28);
+    border-radius: 14px;
+    box-shadow: 0 0 20px rgba(0,242,255,.07);
+}
+
+.music-dock-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 9px;
+}
+
+.music-dock-title {
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.music-dock-subtitle {
+    color: #94a3b8;
+    font-size: 10px;
+    margin-top: 3px;
+}
+
+.music-dock iframe {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 180px;
+    border: 0;
+    border-radius: 9px;
+    background: #000000;
+}
+
+@media (max-width: 520px) {
+    .music-dock {
+        margin-top: 13px;
+        padding: 9px;
+    }
+
+    .music-dock iframe {
+        min-height: 160px;
+    }
+}
+
+@media (max-width: 390px) {
+    .music-dock iframe {
+        min-height: 145px;
+    }
 }
 
 </style>
@@ -2295,6 +2359,42 @@ button:active {
         </div>
 
     </div>
+
+
+    <!-- ======================================================
+         JAY-Z FREESTYLE MUSIC PLAYER
+    ======================================================= -->
+
+    <section
+        class="music-dock"
+        aria-label="Jay-Z freestyle music player"
+    >
+
+        <div class="music-dock-header">
+
+            <div>
+                <div class="music-dock-title">
+                    🎵 Jay-Z Freestyle
+                </div>
+
+                <div class="music-dock-subtitle">
+                    Jay-Z Roots Picnic Freestyle
+                </div>
+            </div>
+
+        </div>
+
+        <iframe
+            src="https://www.youtube-nocookie.com/embed/dVVpLg7pnME?rel=0&modestbranding=1&playsinline=1"
+            title="Jay-Z Roots Picnic Freestyle"
+            loading="lazy"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+        ></iframe>
+
+    </section>
+
 
 </div>
 
