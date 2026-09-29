@@ -2375,31 +2375,34 @@ body.eye-test-mode .eyeota-wip-disclaimer{display:block!important}
 
 <style id="eyeota-mobile-arrow-fix">
 @media(max-width:700px){
-  /* Make room beside the dial so arrows can stay OUTSIDE it like desktop. */
+  /* Keep the circular dial centered at its normal mobile size. */
   #dialStage{
-    width:calc(100% - 88px)!important;
+    width:100%!important;
     max-width:520px!important;
     margin-left:auto!important;
     margin-right:auto!important;
     overflow:visible!important;
+    padding-bottom:64px!important;
+  }
+
+  /* Mobile navigation: both arrows in one clean row BELOW the dial. */
+  #eyeModeArrow.eye-mode-arrow,
+  #dialModeArrow{
+    top:auto!important;
+    bottom:6px!important;
+    transform:none!important;
+    z-index:100000!important;
+    display:flex!important;
+    visibility:visible!important;
+    opacity:1!important;
   }
   #eyeModeArrow.eye-mode-arrow{
-    left:-42px!important;
+    left:calc(50% - 58px)!important;
     right:auto!important;
-    transform:translateY(-50%)!important;
-    z-index:100000!important;
-    display:flex!important;
-    visibility:visible!important;
-    opacity:1!important;
   }
   #dialModeArrow{
-    right:-42px!important;
+    right:calc(50% - 58px)!important;
     left:auto!important;
-    transform:translateY(-50%)!important;
-    z-index:100000!important;
-    display:flex!important;
-    visibility:visible!important;
-    opacity:1!important;
   }
 }
 </style>
