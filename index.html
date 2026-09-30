@@ -6847,27 +6847,8 @@ document.addEventListener('DOMContentLoaded',function(){
   function browserLetters(){
     if(!document.body.classList.contains('eb-browser-mode')) return;
     restoreLetters();
-    letters.slice(0,desktopApps.length).forEach((el,i)=>{
-      const [name,icon]=desktopApps[i];
-      el.innerHTML=icon;
-      el.setAttribute('title',name+' — desktop concept');
-      el.setAttribute('aria-label',name+' — desktop concept');
-      const fn=function(e){
-        e.preventDefault(); e.stopImmediatePropagation();
-        const panel=document.getElementById('eyeotaDesktopConcept');
-        if(panel){
-          const old=panel.querySelector('.desktop-selection');
-          if(old) old.remove();
-          const msg=document.createElement('div');
-          msg.className='desktop-selection';
-          msg.style.cssText='margin-top:10px;font-size:12px;font-weight:800;color:#00f2ff';
-          msg.textContent=name+' selected • concept launcher';
-          panel.appendChild(msg);
-        }
-      };
-      el.addEventListener('click',fn,true);
-      socialHandlers.push({el,fn});
-    });
+    // Browser has a website address arc rather than desktop app launchers.
+    letters.forEach(el=>el.replaceChildren());
   }
 
   function desktopLetters(){
@@ -10182,7 +10163,7 @@ body.eb-browser-mode.ebRect #dial .letter{left:calc(30px + var(--eb-col)*56px)!i
 document.addEventListener('DOMContentLoaded',()=>{
 const body=document.body,dial=document.getElementById('dial');const layer=document.createElement('div');layer.id='ebControls';layer.innerHTML='<button id="ebMin" type="button" aria-label="Minimize EYEOTA Browser" title="Minimize" style="--eb-index:2">−</button><button id="ebMax" type="button" aria-label="Maximize EYEOTA Browser" title="Maximize or return to circle" style="--eb-index:1">□</button><button id="ebClose" type="button" aria-label="Close EYEOTA Browser" title="Close browser" style="--eb-index:0">×</button>';dial.append(layer);const restore=document.createElement('button');restore.id='ebRestore';restore.type='button';restore.textContent='';restore.setAttribute('aria-label','Restore EYEOTA Browser dial');restore.title='Click the sun to restore your browser dial';document.getElementById('dialStage').append(restore);const title=document.createElement('strong');title.id='ebBrowserTitle';title.textContent='EYEOTA Browser';dial.append(title);const form=document.createElement('form');form.id='ebAddressBar';form.innerHTML='<input aria-label="Website address" placeholder="Enter website address"><button type="submit">Open ↗</button><span id="ebStatus" role="status"></span>';dial.append(form);
 let raf=0,last=0,phase=-Math.PI/4;const controls=[...layer.children];const max=document.getElementById('ebMax');
-function frame(now){raf=0;if(!body.classList.contains('eb-browser-mode'))return;let dt=last?Math.min(50,now-last):0;last=now;if(!body.classList.contains('ebRect')&&!body.classList.contains('ebMinimized')){phase+=dt*.000010;const size=dial.clientWidth,controlSize=innerWidth<600?18:22,radius=size/2-controlSize/2-8;controls.forEach((b,i)=>{let a=phase+(i-1)*((controlSize+8)/radius);b.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*radius}px,${Math.sin(a)*radius}px)`});const apps=[...dial.querySelectorAll('.letter')],appRadius=size*(innerWidth<600?.35:.405);apps.forEach((el,i)=>{const a=phase-Math.PI/4+i*Math.PI*2/apps.length;el.style.left='50%';el.style.top='50%';el.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*appRadius}px,${Math.sin(a)*appRadius}px)`});const info=[...dial.querySelectorAll('#eyeotaInnerSystemRing .eyeota-inner-system')];info.forEach((el,i)=>{const a=-phase+i*Math.PI*2/info.length;el.style.left='50%';el.style.top='50%';el.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*size*.292}px,${Math.sin(a)*size*.292}px)`})}raf=requestAnimationFrame(frame)}
+function frame(now){raf=0;if(!body.classList.contains('eb-browser-mode'))return;let dt=last?Math.min(50,now-last):0;last=now;if(!body.classList.contains('ebRect')&&!body.classList.contains('ebMinimized')){phase+=dt*.000010;const size=dial.clientWidth,controlSize=innerWidth<600?18:22,radius=size/2-controlSize/2-8;controls.forEach((b,i)=>{let a=phase+(i-1)*((controlSize+8)/radius);b.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*radius}px,${Math.sin(a)*radius}px)`});const info=[...dial.querySelectorAll('#eyeotaInnerSystemRing .eyeota-inner-system')];info.forEach((el,i)=>{const a=-phase+i*Math.PI*2/info.length;el.style.left='50%';el.style.top='50%';el.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*size*.292}px,${Math.sin(a)*size*.292}px)`})}raf=requestAnimationFrame(frame)}
 function sync(){if(body.classList.contains('eb-browser-mode')){const cols=innerWidth<600?6:10;dial.querySelectorAll('.letter').forEach((b,i)=>{b.style.setProperty('--eb-col',i%cols);b.style.setProperty('--eb-row',Math.floor(i/cols))});if(!raf)raf=requestAnimationFrame(frame)}else{if(raf)cancelAnimationFrame(raf);raf=0;last=0;if(body.classList.contains('ebRect'))body.classList.remove('ebRect');if(body.classList.contains('ebMinimized'))body.classList.remove('ebMinimized');max.textContent='□';dial.querySelectorAll('.letter').forEach(b=>{b.style.removeProperty('--eb-col');b.style.removeProperty('--eb-row')})}}body.addEventListener('eyeota-mode-change',sync);window.addEventListener('resize',sync);
 max.onclick=()=>{const rect=body.classList.toggle('ebRect');max.textContent=rect?'◯':'□';max.setAttribute('aria-label',rect?'Return to circular EYEOTA Browser':'Maximize EYEOTA Browser')};document.getElementById('ebMin').onclick=()=>{body.classList.remove('ebRect');body.classList.add('ebMinimized');max.textContent='□';max.setAttribute('aria-label','Maximize EYEOTA Browser');restore.focus()};restore.onclick=()=>{body.classList.remove('ebMinimized');max.textContent='□';max.setAttribute('aria-label','Maximize EYEOTA Browser');max.focus()};document.getElementById('ebClose').onclick=()=>document.getElementById('eyeModeArrow').click();form.onsubmit=e=>{e.preventDefault();try{const value=form.querySelector('input').value.trim(),url=new URL(value.includes('://')?value:'https://'+value);if(!['http:','https:'].includes(url.protocol))throw Error();window.open(url.href,'_blank','noopener,noreferrer');document.getElementById('ebStatus').textContent='Opened '+url.hostname+' in a new tab'}catch{document.getElementById('ebStatus').textContent='Enter a valid website address'}};sync();
 });
@@ -10210,16 +10191,19 @@ body.eb-browser-mode.ebMinimized #ebRestore:hover{filter:brightness(1.15)}body.e
 </style>
 <script id="eb-edge-browser-behavior">
 document.addEventListener('DOMContentLoaded',()=>{
-const dial=document.getElementById('dial'),edge=document.createElement('div');edge.id='ebEdge';edge.innerHTML=`<div id="ebTabs" role="tablist" aria-label="Browser tabs"></div><div id="ebToolbar"><button id="ebBack" title="Back" aria-label="Go back">←</button><button id="ebForward" title="Forward" aria-label="Go forward">→</button><button id="ebReload" title="Reload" aria-label="Reload page">↻</button><button id="ebHomeButton" title="Home" aria-label="Browser home">⌂</button><form id="ebNavigationForm"><span aria-hidden="true">⌕</span><input id="ebNavigationAddress" aria-label="Browser address bar" placeholder="Search or enter web address"><button type="submit" aria-label="Navigate">→</button></form><button id="ebOpenExternal" title="Open current site in a regular browser tab" aria-label="Open in regular browser tab">↗</button></div><nav id="ebFavorites" aria-label="Favorites"><a href="https://www.google.com/" target="_blank" rel="noopener noreferrer">Google</a><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube</a><a href="https://github.com/" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer">Spotify</a></nav><div id="ebExternalNotice">Some sites can display here. For sites that cannot, use this link:<a id="ebExternalLink" target="_blank" rel="noopener noreferrer">Open website in a regular tab ↗</a></div><main id="ebContentArea"><div id="ebHome"><h1>EYEOTA</h1><p>Try the in-window demos below. Other sites open in a regular tab.</p><div id="ebDemoButtons"><button type="button" id="ebDemoMap">Explore map inside EYEOTA</button><button type="button" id="ebDemoPage">Open test page inside EYEOTA</button></div><form id="ebHomeSearch"><input aria-label="Search the web" placeholder="Search the web or enter a website"><button type="submit">Search</button></form><div id="ebQuickLinks"></div></div><iframe id="ebPage" title="EYEOTA embedded demonstration" sandbox="allow-scripts allow-forms allow-popups" referrerpolicy="strict-origin-when-cross-origin"></iframe></main><footer id="ebFooter">EYEOTA Browser · Experimental web browser interface</footer>`;dial.append(edge);
-const $=id=>document.getElementById(id);let tabs=[{history:[''],index:0}],active=0;
-const current=()=>tabs[active],url=()=>current().history[current().index];
-window.ebBrowserSession={currentURL:url,returnToDial(){tabs=[{history:[''],index:0}];active=0;render();document.body.classList.remove('ebRect','ebMinimized','ebClosedSun');$('ebMax').textContent='□';$('ebMax').setAttribute('aria-label','Maximize EYEOTA Browser');$('ebMax').focus()},restoreSite(){document.body.classList.remove('ebMinimized','ebClosedSun');if(!document.body.classList.contains('ebRect'))$('ebMax').click();render();$('ebNavigationAddress').focus()}};
-function embeddedURL(value){try{const parsed=new URL(value),host=parsed.hostname.replace(/^www\./,'');if(host==='example.com'&&parsed.protocol==='https:')return parsed.href;if(host==='openstreetmap.org'&&parsed.protocol==='https:'){if(parsed.pathname==='/export/embed.html')return parsed.href;return 'https://www.openstreetmap.org/export/embed.html?bbox=-74.05%2C40.65%2C-73.85%2C40.8&layer=mapnik';}}catch{}return '';}
-
-function render(){const strip=$('ebTabs');strip.replaceChildren();tabs.forEach((t,i)=>{const b=document.createElement('div');b.className='ebTab'+(i===active?' ebActive':'');b.setAttribute('role','tab');b.setAttribute('aria-selected',i===active?'true':'false');b.tabIndex=0;const label=document.createElement('span');let value=t.history[t.index];label.textContent=value?new URL(value).hostname:'New tab';b.append(label);b.onclick=()=>{active=i;render()};b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();active=i;render()}};const close=document.createElement('button');close.textContent='×';close.setAttribute('aria-label','Close '+label.textContent+' tab');close.onclick=e=>{e.stopPropagation();tabs.splice(i,1);if(!tabs.length)tabs.push({history:[''],index:0});active=Math.min(active,tabs.length-1);render()};b.append(close);strip.append(b)});const add=document.createElement('button');add.id='ebNewTab';add.textContent='+';add.setAttribute('aria-label','New browser tab');add.onclick=()=>{tabs.push({history:[''],index:0});active=tabs.length-1;render()};strip.append(add);const value=url();$('ebNavigationAddress').value=value;$('ebBack').disabled=current().index===0;$('ebForward').disabled=current().index===current().history.length-1;const embedded=embeddedURL(value);$('ebHome').style.display=embedded?'none':'block';$('ebPage').style.display=embedded?'block':'none';$('ebExternalNotice').style.display=value?'block':'none';$('ebExternalLink').href=value||'https://www.google.com/';if(embedded){if($('ebPage').getAttribute('src')!==embedded)$('ebPage').src=embedded;}else $('ebPage').removeAttribute('src');window.dispatchEvent(new CustomEvent('eb-current-site',{detail:{url:value}}))}
-function navigate(value){value=value.trim();if(!value)return;let target;try{if(value.includes(' ')||(!value.includes('.')&&!value.includes('://')))target='https://www.google.com/search?q='+encodeURIComponent(value);else{const parsed=new URL(value.includes('://')?value:'https://'+value);if(!['http:','https:'].includes(parsed.protocol))throw Error();target=parsed.href}}catch{$('ebFooter').textContent='Enter a valid website address.';return}const t=current();t.history=t.history.slice(0,t.index+1);t.history.push(target);t.index++;render();if(!embeddedURL(target))window.open(target,'_blank','noopener,noreferrer');$('ebFooter').textContent=embeddedURL(target)?'In-window demonstration · Other websites may require a regular browser tab.':'This website or search opens in a regular browser tab.'}
-$('ebDemoMap').onclick=()=>navigate('https://www.openstreetmap.org/');$('ebDemoPage').onclick=()=>navigate('https://example.com/');$('ebNavigationForm').onsubmit=e=>{e.preventDefault();navigate($('ebNavigationAddress').value)};$('ebHomeSearch').onsubmit=e=>{e.preventDefault();navigate($('ebHomeSearch').querySelector('input').value)};$('ebBack').onclick=()=>{if(current().index>0){current().index--;render()}};$('ebForward').onclick=()=>{if(current().index<current().history.length-1){current().index++;render()}};$('ebReload').onclick=()=>{const embedded=embeddedURL(url());if(embedded)$('ebPage').src=embedded;else if(url())window.open(url(),'_blank','noopener,noreferrer');else render()};$('ebHomeButton').onclick=()=>{const t=current();t.history=t.history.slice(0,t.index+1);t.history.push('');t.index++;render()};$('ebOpenExternal').onclick=()=>{if(url())window.open(url(),'_blank','noopener,noreferrer')};
-const destinations={'Steam':'https://store.steampowered.com/','Microsoft Edge':'https://www.microsoft.com/edge','Discord':'https://discord.com/app','Spotify':'https://open.spotify.com/','GitHub':'https://github.com/','Twitch':'https://www.twitch.tv/','Chrome':'https://www.google.com/chrome/','EYEOTA Browser':''};function buildLinks(){const links=$('ebQuickLinks');links.replaceChildren();dial.querySelectorAll('.letter').forEach(el=>{const name=(el.getAttribute('aria-label')||'').split(' — ')[0];if(!(name in destinations))return;const icon=el.querySelector('.desktop-app-icon');if(!icon)return;const b=document.createElement('button');b.type='button';b.append(icon.cloneNode(true));const text=document.createElement('span');text.textContent=name;b.append(text);b.onclick=()=>{if(destinations[name])navigate(destinations[name]);else $('ebHomeButton').click()};links.append(b)})}document.body.addEventListener('eyeota-mode-change',e=>{if(e.detail.mode==='browser')buildLinks()});$('ebMax').addEventListener('click',()=>{if(document.body.classList.contains('ebRect'))buildLinks()});render();
+const body=document.body,dial=document.getElementById('dial'),edge=document.createElement('section');edge.id='ebEdge';edge.setAttribute('aria-label','Circular browser page');
+edge.innerHTML=`<nav id="ebCircleNav" aria-label="Website navigation"><button id="ebBack" aria-label="Back">←</button><button id="ebForward" aria-label="Forward">→</button><button id="ebReload" aria-label="Reload">↻</button><button id="ebHomeButton" aria-label="Return to dial">⌂</button></nav><main id="ebContentArea"><iframe id="ebPage" title="Website inside EYEOTA dial" sandbox="allow-scripts allow-forms allow-popups allow-same-origin" referrerpolicy="strict-origin-when-cross-origin"></iframe><div id="ebPageFallback" hidden><span aria-hidden="true">☁</span><h2>Website preview unavailable</h2><p id="ebFallbackAddress"></p><p>This website may not allow viewing inside the dial. Your deep-space design stays here.</p><button id="ebTryAgain">Try viewing in dial</button><a id="ebExternalLink" target="_blank" rel="noopener noreferrer">Open website ↗</a></div></main><footer id="ebFooter" role="status"><button id="ebPageHelp">Page not loading?</button></footer>`;dial.append(edge);
+const $=id=>document.getElementById(id);let history=[''],index=0;const currentURL=()=>history[index];
+function embeddedURL(value){try{const u=new URL(value);if(u.hostname.replace(/^www\./,'')==='openstreetmap.org'&&u.pathname==='/')return 'https://www.openstreetmap.org/export/embed.html?bbox=-74.05%2C40.65%2C-73.85%2C40.8&layer=mapnik';return u.href}catch{return ''}}
+function render(force=false){const value=currentURL();body.classList.toggle('ebHasPage',!!value);$('ebBack').disabled=index===0;$('ebForward').disabled=index===history.length-1;const supported=value&&(()=>{try{const u=new URL(value);return u.protocol==='https:'&&['example.com','www.example.com','openstreetmap.org','www.openstreetmap.org'].includes(u.hostname)}catch{return false}})();const showPage=!!value&&(supported||force);$('ebPageFallback').hidden=!value||showPage;$('ebPage').style.display=showPage?'block':'none';body.classList.toggle('ebSpaceNotice',!!value&&!showPage);$('ebExternalLink').href=value||'#';$('ebFallbackAddress').textContent=value;const target=embeddedURL(value);if(showPage&&target&&(force||$('ebPage').getAttribute('src')!==target))$('ebPage').src=target;else if(!showPage||!target)$('ebPage').removeAttribute('src');window.dispatchEvent(new CustomEvent('eb-current-site',{detail:{url:value}}))}
+function navigate(value){value=value.trim();if(!value)return;let target;try{if(value.includes(' ')||(!value.includes('.')&&!value.includes('://')))target='https://www.google.com/search?q='+encodeURIComponent(value);else{const parsed=new URL(value.includes('://')?value:'https://'+value);if(!['https:','http:'].includes(parsed.protocol))throw Error();target=parsed.href}}catch{return}history=history.slice(0,index+1);history.push(target);index++;body.classList.remove('ebRect');render()}
+function home(){history=history.slice(0,index+1);history.push('');index++;body.classList.remove('ebRect','ebMinimized','ebClosedSun');render()}
+window.ebBrowserSession={navigate,currentURL,returnToDial:home,restoreSite(){body.classList.remove('ebRect','ebMinimized','ebClosedSun');render()}};
+$('ebBack').onclick=()=>{if(index>0){index--;render()}};$('ebForward').onclick=()=>{if(index<history.length-1){index++;render()}};$('ebReload').onclick=()=>render(true);$('ebHomeButton').onclick=home;$('ebTryAgain').onclick=()=>render(true);$('ebPageHelp').onclick=()=>{$('ebPage').style.display='none';$('ebPage').removeAttribute('src');$('ebPageFallback').hidden=false;body.classList.add('ebSpaceNotice')};
+$('ebPage').addEventListener('error',()=>{$('ebPageHelp').click()});
+// Maximize the circle itself; never substitute a rectangular browser.
+$('ebMax').onclick=()=>{body.classList.remove('ebRect');const large=body.classList.toggle('ebCircleLarge');$('ebMax').textContent=large?'◯':'□';$('ebMax').setAttribute('aria-label',large?'Restore dial size':'Enlarge circular browser')};
+body.addEventListener('eyeota-mode-change',()=>{if(!body.classList.contains('eb-browser-mode'))body.classList.remove('ebCircleLarge')});render();
 });
 </script>
 
@@ -10257,7 +10241,7 @@ function cyclePlanetLetters(){document.querySelectorAll('#ebPlanetName tspan').f
 function paintPlanetName(name){const path=document.querySelector('#ebPlanetName textPath');path.replaceChildren();for(const char of name){const letter=document.createElementNS('http://www.w3.org/2000/svg','tspan');letter.textContent=char;path.append(letter)}cyclePlanetLetters()}
 setInterval(()=>{if(document.body.classList.contains('ebMinimized')&&system.dataset.hasSite==='true')cyclePlanetLetters()},2400);
 function setSite(value){site=value||'';logo.replaceChildren();if(!site){system.dataset.hasSite='false';return}let parsed;try{parsed=new URL(site)}catch{system.dataset.hasSite='false';return}const host=parsed.hostname.replace(/^www\./,'');const refs=window.EYEOTA_SITE_ICON_REFERENCES||[];let match=refs.find(entry=>{try{const h=new URL(entry[2]).hostname.replace(/^www\./,'');return host===h||host.endsWith('.'+h)}catch{return false}});if(host==='youtu.be')match=refs.find(entry=>entry[0]==='YouTube');const name=match?match[0]:host;planet.setAttribute('aria-label','Restore '+name+' in EYEOTA Browser');planet.title=name+' · Click to restore website';paintPlanetName(name.length>30?name.slice(0,29)+'…':name);if(match){logo.innerHTML=match[1];logo.style.setProperty('--eb-planet-color',match[3])}else{const initial=document.createElement('span');initial.textContent=host.charAt(0).toUpperCase();logo.append(initial);const img=document.createElement('img');img.alt='';img.src=parsed.origin+'/favicon.ico';img.onload=()=>{if(site===value)logo.replaceChildren(img)};img.onerror=()=>{};}system.dataset.hasSite='true'}
-window.addEventListener('eb-current-site',e=>setSite(e.detail.url));document.getElementById('ebFavorites').addEventListener('click',e=>{const a=e.target.closest('a');if(a)setSite(a.href)});planet.onclick=e=>{e.stopPropagation();if(site)window.ebBrowserSession.restoreSite()};
+window.addEventListener('eb-current-site',e=>setSite(e.detail.url));document.getElementById('ebFavorites')?.addEventListener('click',e=>{const a=e.target.closest('a');if(a)setSite(a.href)});planet.onclick=e=>{e.stopPropagation();if(site)window.ebBrowserSession.restoreSite()};
 function orbitState(){system.dataset.hasSite=site&&document.body.classList.contains('ebMinimized')&&!document.body.classList.contains('ebClosedSun')?'true':'false'}new MutationObserver(orbitState).observe(document.body,{attributes:true,attributeFilter:['class']});document.getElementById('ebMin').addEventListener('click',orbitState);window.addEventListener('eb-current-site',orbitState);
 });
 </script>
@@ -10304,6 +10288,105 @@ const sun=document.getElementById('ebRestore');document.getElementById('ebClose'
 #ebPlanetName tspan{transition:fill 1100ms ease;filter:drop-shadow(0 0 2px var(--planet-letter-glow,#fff)) drop-shadow(0 0 4px var(--planet-letter-glow,#fff));paint-order:stroke fill;stroke:#061321;stroke-width:.6px;stroke-linejoin:round}
 @keyframes ebPlanetLetterSpin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){#ebPlanetName{animation:none!important}#ebPlanetName tspan{transition:none}}
+</style>
+<style id="eb-fixed-curved-search-design">
+#ebOrbitSearch{display:none}
+body.eb-browser-mode #dial .letter,body.eb-browser-mode #dial .desktop-app-icon,body.eb-browser-mode #eyeotaInnerSystemRing,body.eb-browser-mode #eyeotaDialDesktopUI,body.eb-browser-mode #eyeotaPresentationMusicLink,body.eb-browser-mode #eyeotaCenterMenuPanel,body.eb-browser-mode #eyeotaDialPanel,body.eb-browser-mode #ebQuickLinks,body.eb-browser-mode #ebFavorites,body.eb-browser-mode .eyeota-live-weather,body.eb-browser-mode .eyeota-weather-info,body.eb-browser-mode #v61Time,body.eb-browser-mode #v61Weather{display:none!important;pointer-events:none!important}
+body.eb-browser-mode #eyeotaCenterMenu{pointer-events:none!important;cursor:default!important}
+body.eb-browser-mode:not(.ebRect):not(.ebMinimized) #ebOrbitSearch{display:block;position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;z-index:390;pointer-events:none;background:none;border:0;transform:none!important}
+#ebOrbitSearch svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+#ebCurveBorder{fill:none;stroke:#8ab1c7;stroke-width:40;stroke-linecap:round;filter:drop-shadow(0 3px 5px #0008)}
+#ebCurveSurface{fill:none;stroke:#f2f7fb;stroke-width:37;stroke-linecap:round;pointer-events:stroke;cursor:text}
+#ebCurveText{fill:#243e50;font:17px Arial,sans-serif;letter-spacing:.1px}
+#ebOrbitSearch:focus-within #ebCurveBorder{stroke:#46c7ff;stroke-width:43}
+#ebCurveCaret{stroke:#155274;stroke-width:1.6;display:none}
+#ebOrbitSearch:focus-within #ebCurveCaret{display:block;animation:ebCaretBlink 1s step-end infinite}
+@keyframes ebCaretBlink{50%{opacity:0}}
+#ebOrbitSearch input{position:absolute;left:12%;top:0;width:76%;height:28%;opacity:0;pointer-events:auto;cursor:text;font-size:16px;border:0;padding:0}
+#ebOrbitSearch button{position:absolute;left:83.3%;top:21.4%;width:5.8%;aspect-ratio:1;padding:0;min-width:0!important;min-height:0!important;display:grid;place-items:center;pointer-events:auto;border:0;border-radius:50%;background:#176a9a;color:white;font:700 clamp(12px,2.7vw,20px) Arial;cursor:pointer}
+#ebOrbitSearch button:focus-visible{outline:3px solid #44cfff;outline-offset:3px}
+#ebOrbitSearch .ebCurveHint{fill:#6d899a;font:15px Arial}
+@media(prefers-reduced-motion:reduce){#ebCurveCaret{animation:none!important}}
+</style>
+<script id="eb-fixed-curved-search-code">
+document.addEventListener('DOMContentLoaded',()=>{
+const body=document.body,dial=document.getElementById('dial'),form=document.createElement('form');
+form.id='ebOrbitSearch';form.setAttribute('role','search');form.setAttribute('aria-label','EYEOTA Browser website search');
+form.innerHTML=`<svg viewBox="0 0 600 600" aria-hidden="true"><defs><path id="ebAddressCurve" d="M 80 146 A 268 268 0 0 1 520 146"/></defs><use href="#ebAddressCurve" id="ebCurveBorder"/><use href="#ebAddressCurve" id="ebCurveSurface"/><text class="ebCurveHint"><textPath href="#ebAddressCurve" startOffset="1%">⌕</textPath></text><text id="ebCurveText"><textPath id="ebAddressText" href="#ebAddressCurve" startOffset="7%">Search or enter website address</textPath></text><line id="ebCurveCaret"/></svg><input type="text" aria-label="Search or enter website address" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="url"><button type="submit" aria-label="Open website or search" title="Open website or search">→</button>`;
+dial.append(form);
+const input=form.querySelector('input'),path=form.querySelector('#ebAddressCurve'),text=form.querySelector('#ebAddressText'),caret=form.querySelector('#ebCurveCaret');
+const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');ctx.font='17px Arial';
+function width(value){return ctx.measureText(value).width+value.length*.1}
+function render(){const length=path.getTotalLength(),limit=length*.81,value=input.value,pos=input.selectionStart??value.length;let start=0,end=value.length;
+while(start<pos&&width(value.slice(start,pos))>limit-12)start++;
+while(end>pos&&width(value.slice(start,end))>limit)end--;
+const displayed=value.slice(start,end);text.textContent=value?displayed:'Search or enter website address';form.querySelector('#ebCurveText').style.fill=value?'#243e50':'#627b8d';
+const distance=length*.07+width(value.slice(start,pos)),point=path.getPointAtLength(distance),before=path.getPointAtLength(Math.max(0,distance-1)),after=path.getPointAtLength(Math.min(length,distance+1));const angle=Math.atan2(after.y-before.y,after.x-before.x),nx=-Math.sin(angle),ny=Math.cos(angle);
+caret.setAttribute('x1',point.x-nx*15);caret.setAttribute('y1',point.y-ny*15);caret.setAttribute('x2',point.x+nx*4);caret.setAttribute('y2',point.y+ny*4);
+}
+['input','focus','click','keyup','select','compositionend'].forEach(type=>input.addEventListener(type,render));
+form.querySelector('#ebCurveSurface').addEventListener('click',()=>input.focus());
+form.onsubmit=e=>{e.preventDefault();const value=input.value.trim();if(!value)return;window.ebBrowserSession.navigate(value)};
+function clean(){if(body.classList.contains('eb-browser-mode'))body.classList.remove('eyeota-center-menu-open','eyeota-dial-panel-open')}
+body.addEventListener('eyeota-mode-change',clean);
+// Keep center clicks inert in Browser mode, while retaining the EYEOTA mark.
+document.addEventListener('click',e=>{if(body.classList.contains('eb-browser-mode')&&e.target.closest('#eyeotaCenterMenu,#eyeotaCenterMenuPanel,#eyeotaDialDesktopUI,#eyeotaInnerSystemRing,.center-artwork')){e.preventDefault();e.stopImmediatePropagation()}},true);
+window.addEventListener('eb-current-site',e=>{if(e.detail.url){input.value=e.detail.url;render()}});clean();render();
+});
+</script>
+<style id="eb-circular-webpage">
+body.eb-browser-mode.ebHasPage #ebEdge{display:block!important;position:absolute;inset:0;border-radius:50%;clip-path:circle(50% at 50% 50%);overflow:hidden;background:#f7f9fc;color:#263746;font:14px Arial,sans-serif;z-index:280;text-align:left}
+body.eb-browser-mode #ebOrbitSearch{z-index:390!important}
+body.eb-browser-mode.ebHasPage #eyeotaCenterMenu,body.eb-browser-mode.ebHasPage .center-artwork{display:none!important}
+#ebCircleNav{position:absolute;top:19%;left:25%;width:50%;display:flex;justify-content:center;gap:8px}
+#ebCircleNav button{border:0;background:#e4edf3;border-radius:50%;width:30px;height:30px;padding:0;font-size:18px;color:#26475e;cursor:pointer}
+#ebCircleNav button:disabled{opacity:.35;cursor:default}
+body.eb-browser-mode #ebContentArea{position:absolute;inset:26% 10% 13%;overflow:hidden;background:white;border:1px solid #e1e8ef;border-radius:8px}
+body.eb-browser-mode #ebPage{position:absolute;inset:0;width:100%;height:100%;border:0;background:white}
+#ebPageFallback{position:absolute;inset:0;overflow:auto;padding:8% 7%;box-sizing:border-box;background:#fff;text-align:left;font:clamp(11px,2vw,14px) Arial;color:#526373}
+#ebPageFallback[hidden]{display:none!important}#ebPageFallback>span{font-size:30px;color:#74899b}#ebPageFallback h2{font-size:clamp(16px,3vw,23px);color:#253c50;margin:8px 0}#ebFallbackAddress{overflow-wrap:anywhere;font-size:11px}#ebPageFallback button,#ebPageFallback a{display:inline-block;border:0;background:#176a9a;color:white;border-radius:5px;padding:8px 10px;margin:3px;text-decoration:none;font-size:12px;cursor:pointer}
+body.eb-browser-mode #ebFooter{position:absolute;bottom:6%;left:25%;width:50%;text-align:center;background:none;border:0;padding:0}
+#ebPageHelp{border:0;background:none;color:#526b81;text-decoration:underline;cursor:pointer;font-size:11px;padding:6px}
+body.eb-browser-mode.ebCircleLarge #dial{width:min(86vmin,900px)!important;height:min(86vmin,900px)!important;max-width:none!important;max-height:none!important}
+body.eb-browser-mode.ebCircleLarge #dialStage{width:min(86vmin,900px)!important}
+@media(max-width:600px){#ebCircleNav{gap:6px}#ebCircleNav button{width:23px;height:23px;font-size:15px}#ebPageHelp{font-size:10px}body.eb-browser-mode #ebContentArea{inset:27% 9% 13%}}
+</style>
+<style id="eb-full-circle-page-surface">
+/* The website fills the dial; its rectangular rendering surface is clipped
+   at the dial circumference, including blank and browser error pages. */
+body.eb-browser-mode.ebHasPage #ebContentArea{inset:0!important;width:100%!important;height:100%!important;border:0!important;border-radius:50%!important;clip-path:circle(50% at 50% 50%)!important;overflow:hidden!important;background:white!important}
+body.eb-browser-mode.ebHasPage #ebPage{inset:0!important;width:100%!important;height:100%!important;border:0!important;border-radius:50%!important;clip-path:circle(50% at 50% 50%)!important;background:white!important}
+body.eb-browser-mode.ebHasPage #ebCircleNav{z-index:3;top:19%;background:#f4f8fbe8;border-radius:99px;padding:3px;box-sizing:border-box}
+body.eb-browser-mode.ebHasPage #ebFooter{z-index:3;background:#f4f8fbe8;border-radius:99px;width:40%;left:30%;padding:2px}
+body.eb-browser-mode.ebHasPage #ebPageFallback{inset:0!important;border-radius:50%!important;clip-path:circle(50% at 50% 50%);padding:29% 18% 16%!important;background:white!important;overflow:auto!important}
+#ebPageFallback h2{font-size:clamp(15px,3vw,23px)}
+</style>
+<style id="eb-deep-space-background">
+body.eb-browser-mode{background:#02040e!important;isolation:isolate}
+body.eb-browser-mode:before{content:''!important;position:fixed!important;inset:0!important;z-index:-4!important;pointer-events:none!important;background-image:radial-gradient(ellipse at 18% 32%,#30216b66 0,transparent 46%),radial-gradient(ellipse at 82% 64%,#124c6660 0,transparent 42%),radial-gradient(ellipse at 58% 13%,#51284940 0,transparent 38%),radial-gradient(1px 1px at 17px 29px,#ffffffc9 90%,transparent),radial-gradient(1px 1px at 83px 113px,#b6d9ffbd 90%,transparent),radial-gradient(1.5px 1.5px at 139px 51px,#fff6d5dd 90%,transparent),radial-gradient(.8px .8px at 53px 159px,#ffffff80 90%,transparent),linear-gradient(145deg,#02040e,#080d24 55%,#02040d)!important;background-size:100% 100%,100% 100%,100% 100%,181px 197px,263px 281px,347px 331px,137px 163px,100% 100%!important;background-position:center!important;background-repeat:no-repeat,no-repeat,no-repeat,repeat,repeat,repeat,repeat,no-repeat!important}
+body.eb-browser-mode #eyeotaPubgBackground{opacity:0!important;visibility:hidden!important}
+body.eb-browser-mode #eyeotaPubgShade{background:transparent!important}
+body.eb-browser-mode #dial .space-bg{background:radial-gradient(ellipse at 25% 38%,#45337870,transparent 49%),radial-gradient(ellipse at 77% 68%,#13536c65,transparent 45%),radial-gradient(1px 1px at 23px 41px,#fff 90%,transparent),radial-gradient(1px 1px at 89px 107px,#c1dfff 90%,transparent),radial-gradient(1.5px 1.5px at 151px 63px,#fff5dd 90%,transparent),linear-gradient(155deg,#02040d,#0b1029 55%,#02050e)!important;background-size:100% 100%,100% 100%,173px 191px,239px 227px,307px 283px,100% 100%!important}
+body.eb-browser-mode #dial .space-bg:before,body.eb-browser-mode #dial .space-bg>.eyeota-sun-clouds,body.eb-browser-mode #dial .space-bg>.eyeota-space-orbits{display:none!important}
+</style>
+<style id="eb-space-unavailable-page">
+body.eb-browser-mode.ebHasPage #ebEdge,body.eb-browser-mode.ebHasPage #ebContentArea,body.eb-browser-mode.ebHasPage #ebPageFallback{background:radial-gradient(ellipse at 25% 38%,#45337870,transparent 49%),radial-gradient(ellipse at 77% 68%,#13536c65,transparent 45%),radial-gradient(1px 1px at 23px 41px,#fff 90%,transparent),radial-gradient(1px 1px at 89px 107px,#c1dfff 90%,transparent),radial-gradient(1.5px 1.5px at 151px 63px,#fff5dd 90%,transparent),linear-gradient(155deg,#02040d,#0b1029 55%,#02050e)!important;background-size:100% 100%,100% 100%,173px 191px,239px 227px,307px 283px,100% 100%!important;color:#d8e8fb!important}
+body.eb-browser-mode.ebHasPage #ebPage{background:transparent!important}
+body.eb-browser-mode #ebPageFallback h2{color:#f1f6ff!important}
+body.eb-browser-mode #ebPageFallback>span{color:#a7caff!important}
+body.eb-browser-mode #ebFallbackAddress{color:#b6c9e6!important}
+body.eb-browser-mode.ebHasPage #ebCircleNav,body.eb-browser-mode.ebHasPage #ebFooter{background:#091329dc!important;color:#d8e8fb!important}
+body.eb-browser-mode #ebCircleNav button{background:#182c48!important;color:#e0f0ff!important}
+body.eb-browser-mode #ebPageHelp{color:#bdd8f4!important}
+</style>
+<style id="eb-preserve-design-notification">
+body.eb-browser-mode.ebSpaceNotice #ebEdge,body.eb-browser-mode.ebSpaceNotice #ebContentArea{background:transparent!important}
+body.eb-browser-mode.ebSpaceNotice #ebPageFallback{background:transparent!important;background-image:none!important;padding:0!important;position:absolute;inset:32% 18% 22%!important;border-radius:0!important;clip-path:none!important;overflow:auto!important;text-align:center;color:#dbeaff!important}
+body.eb-browser-mode.ebSpaceNotice #ebPageFallback>span{display:none}
+body.eb-browser-mode.ebSpaceNotice #ebPageFallback h2{font-size:clamp(16px,3vw,22px);margin:0 0 10px;text-shadow:0 2px 8px #000}
+body.eb-browser-mode.ebSpaceNotice #ebPageFallback p{font-size:clamp(11px,2vw,14px);line-height:1.45;text-shadow:0 2px 8px #000}
+body.eb-browser-mode.ebSpaceNotice #ebFallbackAddress{font-size:11px;overflow-wrap:anywhere}
+body.eb-browser-mode.ebSpaceNotice #ebPageFallback button,body.eb-browser-mode.ebSpaceNotice #ebPageFallback a{font-size:11px;background:#142943cc;border:1px solid #72bce870;padding:8px;border-radius:99px}
 </style>
 </body>
 </html>
