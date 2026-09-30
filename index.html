@@ -9264,5 +9264,100 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
+
+<!-- V66: mobile Desktop label clearance + continuous orbit after center-menu interaction -->
+<style id="eyeota-v66-mobile-label">
+@media(max-width:700px){
+  /* Keep the Desktop mode label above and clear of the app circumference. */
+  body.desktop-mode #dialLabel,
+  body.desktop-mode #modeLabel,
+  body.desktop-mode .dial-label,
+  body.desktop-mode .mode-label,
+  body.desktop-mode .desktop-label,
+  body.desktop-mode [data-mode-label]{
+    position:absolute!important;
+    top:-34px!important;
+    left:50%!important;
+    right:auto!important;
+    bottom:auto!important;
+    width:max-content!important;
+    max-width:82vw!important;
+    transform:translateX(-50%)!important;
+    font-size:10px!important;
+    line-height:1!important;
+    letter-spacing:.12em!important;
+    white-space:nowrap!important;
+    z-index:240!important;
+    pointer-events:none!important;
+  }
+}
+</style>
+
+<script id="eyeota-v66-continuous-orbits">
+document.addEventListener('DOMContentLoaded',()=>{
+ const body=document.body,dial=document.getElementById('dial');
+ if(!dial)return;
+
+ let appPhase=-Math.PI/2;
+ let infoPhase=-Math.PI/2+Math.PI/5;
+ let last=performance.now();
+ let appHover=false;
+
+ /* Pause only while the pointer is actually over an outer app.
+    Center EYEOTA/menu interaction never changes the running state. */
+ dial.addEventListener('pointerover',e=>{
+   if(body.classList.contains('desktop-mode') && e.target.closest('.letter')) appHover=true;
+ });
+ dial.addEventListener('pointerout',e=>{
+   if(!e.target.closest('.letter'))return;
+   const next=e.relatedTarget;
+   if(!next || !next.closest || !next.closest('.letter')) appHover=false;
+ });
+ dial.addEventListener('pointercancel',()=>appHover=false);
+ dial.addEventListener('click',e=>{
+   if(!e.target.closest('.letter')) appHover=false;
+ });
+
+ function frame(now){
+   const dt=Math.min(50,Math.max(0,now-last));
+   last=now;
+
+   if(body.classList.contains('desktop-mode')){
+     const box=dial.getBoundingClientRect();
+     const size=Math.min(box.width,box.height);
+     const appRadius=size*.405;
+     const infoRadius=size*.292;
+
+     if(!appHover) appPhase+=dt*.000010;
+     infoPhase-=dt*.000006;
+
+     const apps=[...dial.querySelectorAll('.letter')].filter(el=>el.offsetParent!==null);
+     apps.forEach((el,i)=>{
+       const a=appPhase+i*Math.PI*2/apps.length;
+       el.style.left='50%';
+       el.style.top='50%';
+       el.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*appRadius}px,${Math.sin(a)*appRadius}px)`;
+     });
+
+     const info=[...dial.querySelectorAll('#eyeotaInnerSystemRing .eyeota-inner-system')];
+     info.forEach((el,i)=>{
+       const a=infoPhase+i*Math.PI*2/info.length;
+       let rot=a*180/Math.PI+90;
+       const n=((a%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+       if(n>Math.PI/2 && n<Math.PI*3/2)rot+=180;
+       rot=((rot+180)%360+360)%360-180;
+       el.style.left='50%';
+       el.style.top='50%';
+       el.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*infoRadius}px,${Math.sin(a)*infoRadius}px) rotate(${rot}deg)`;
+     });
+   } else {
+     appHover=false;
+   }
+   requestAnimationFrame(frame);
+ }
+ requestAnimationFrame(frame);
+});
+</script>
+
 </body>
 </html>
