@@ -6866,20 +6866,26 @@ document.addEventListener('DOMContentLoaded', function(){
     {c:'C',sz:29,a:30,d:5300,n:2,ds:['O']},{c:'D',sz:27,a:210,d:5300,n:3,ds:['C','V']}
   ];
 
-  let active=false,index=0,frame=0,startTime=0,trialStarted=0,locked=false,pos={x:0,y:0};
+  let active=false,index=0,frame=0,startTime=0,trialStarted=0,locked=false,pos={x:0,y:0},generation=0;
   const trialEl=document.getElementById('eyeTrial'), instruction=document.getElementById('eyeInstruction'),
         feedback=document.getElementById('eyeFeedback'), field=document.getElementById('eyeField'),
         count=document.getElementById('eyeCount'), tbody=document.querySelector('#eyeResults tbody');
 
   function enter(){
-    active=true; index=0; cancelAnimationFrame(frame);
+    active=true; const session=++generation; index=0; cancelAnimationFrame(frame);
     document.body.classList.remove('rhyme-mode'); document.body.classList.add('eye-test-mode');
     tbody.innerHTML=''; field.querySelectorAll('.field-mark').forEach(e=>e.remove()); count.textContent='0 of 10 trials complete';
     panel.style.display='block'; overlay.style.display='block';
-    requestAnimationFrame(function(){ setupTrial(); setTimeout(function(){ dial.scrollIntoView({behavior:'smooth',block:'center'}); },50); });
+    requestAnimationFrame(function(){
+      if(!active || session!==generation)return;
+      setupTrial();
+      setTimeout(function(){
+        if(active && session===generation)dial.scrollIntoView({behavior:'smooth',block:'center'});
+      },50);
+    });
   }
   function leave(){
-    active=false; cancelAnimationFrame(frame); document.body.classList.remove('eye-test-mode');
+    active=false; generation++; cancelAnimationFrame(frame); document.body.classList.remove('eye-test-mode');
     panel.style.display=''; overlay.style.display='none'; stims.forEach(e=>e.style.display='none');
   }
 
@@ -6937,8 +6943,9 @@ document.addEventListener('DOMContentLoaded', function(){
     const row=document.createElement('tr');
     row.innerHTML='<td>'+(index+1)+'</td><td>'+t.c+'</td><td>'+t.a+'°</td><td>'+t.sz+' px</td><td>'+t.d+' ms</td><td>'+(success?'In target':'Outside / missed')+'</td><td>'+response+' ms</td>';
     tbody.appendChild(row); count.textContent=(index+1)+' of 10 trials complete';
+    const session=generation;
     setTimeout(function(){
-      if(!active)return;
+      if(!active || session!==generation)return;
       if(index<9){ index++; setupTrial(); }
       else { trialEl.textContent='TEST COMPLETE'; instruction.textContent='10 trials recorded.'; press.style.display='none'; stims.forEach(e=>e.style.display='none'); feedback.textContent=''; }
     },800);
@@ -8072,14 +8079,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   sync();
   new MutationObserver(sync).observe(body,{attributes:true,attributeFilter:['class']});
 
-  /* Preserve the V40 Eye Test restart fix, without any Desktop autoplay/player. */
-  body.addEventListener('eyeota-mode-change',ev=>{
-    const mode=ev.detail&&ev.detail.mode;
-    if(mode==='eye' && window.EYEOTA_EYE_TEST){
-      window.EYEOTA_EYE_TEST.leave();
-      requestAnimationFrame(()=>window.EYEOTA_EYE_TEST.enter());
-    }
-  });
+  /* V75: the main navigator exclusively owns Eye Test entry and exit. */
 });
 </script>
 
@@ -9618,81 +9618,7 @@ body.social-mode #dial .letter{
 }
 </style>
 
-<script id="eyeota-v70-smdial-mode-repair">
-document.addEventListener('DOMContentLoaded',()=>{
-  const body=document.body;
-  const dial=document.getElementById('dial');
-  if(!dial)return;
-
-  function isSM(){
-    return body.classList.contains('smdial-mode') ||
-           body.classList.contains('social-mode');
-  }
-
-  function clearDesktopGeometryForSM(){
-    if(!isSM())return;
-
-    /* Desktop may leave inline orbital coordinates on the same 26 nodes.
-       SMDial's own controller must be free to position/render them. */
-    dial.querySelectorAll('.letter').forEach(el=>{
-      el.style.removeProperty('left');
-      el.style.removeProperty('top');
-      el.style.removeProperty('transform');
-      el.style.removeProperty('width');
-      el.style.removeProperty('height');
-      el.style.removeProperty('display');
-      el.style.removeProperty('visibility');
-      el.style.removeProperty('opacity');
-      el.style.removeProperty('filter');
-      el.style.removeProperty('box-shadow');
-    });
-
-    /* Ask the existing SMDial implementation to re-enter/re-render if it
-       exposes any of its established bridges. No second SMDial is created. */
-    const bridges=[
-      window.EYEOTA_SMDIAL,
-      window.EYEOTA_SM_DIAL,
-      window.SMDial,
-      window.SM_DIAL
-    ].filter(Boolean);
-
-    bridges.forEach(api=>{
-      try{
-        if(typeof api.enter==='function')api.enter();
-        else if(typeof api.render==='function')api.render();
-        else if(typeof api.refresh==='function')api.refresh();
-        else if(typeof api.init==='function')api.init();
-      }catch(e){}
-    });
-
-    /* Re-fire the site's mode event after cleanup so existing listeners
-       see a clean SMDial rather than Desktop-mutated nodes. */
-    requestAnimationFrame(()=>{
-      body.dispatchEvent(new CustomEvent('eyeota-smdial-refresh',{
-        detail:{mode:'smdial'}
-      }));
-      window.dispatchEvent(new Event('resize'));
-    });
-  }
-
-  body.addEventListener('eyeota-mode-change',ev=>{
-    const mode=((ev.detail&&ev.detail.mode)||'').toLowerCase();
-    if(mode==='smdial' || mode==='social'){
-      requestAnimationFrame(clearDesktopGeometryForSM);
-      setTimeout(clearDesktopGeometryForSM,60);
-    }
-  });
-
-  const mo=new MutationObserver(()=>{
-    if(isSM()){
-      requestAnimationFrame(clearDesktopGeometryForSM);
-    }
-  });
-  mo.observe(body,{attributes:true,attributeFilter:['class']});
-
-  if(isSM())clearDesktopGeometryForSM();
-});
-</script>
+<!-- V75: keep original SMDial inline coordinates restored by the navigator. -->
 
 
 <!-- V71: exactly one mobile EYEOTA DESKTOP label -->
