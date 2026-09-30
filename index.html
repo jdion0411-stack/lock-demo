@@ -9578,16 +9578,6 @@ body.note-cipher-mode #noteCipherWorkspace{display:block}
  </div>
  </details>
 
- <section id="noteCipherPresentation" aria-label="YouTube video">
-  <div class="note-cipher-video-frame">
-   <iframe id="noteCipherGinoVideo" title="Gino Jennings video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
-  </div>
-  <a href="https://www.youtube.com/watch?v=NtLiiZEPTfE" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
-  <div class="note-cipher-video-frame" style="margin-top:20px">
-   <iframe id="noteCipherVideo" title="YouTube video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
-  </div>
-  <a href="https://www.youtube.com/watch?v=n5NiG3i_I8U" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
- </section>
 </section>
 <script id="eyeota-v76-musical-cipher-controller">
 /* Password encryption and musical serialization; no network or persistent storage. */
@@ -9828,33 +9818,6 @@ body.note-cipher-mode #dial .center-artwork{display:flex!important;visibility:vi
 @media(max-width:700px){.note-character{width:36px;height:66px}}
 </style>
 
-<style id="eyeota-v79-cipher-presentation">
-#noteCipherPresentation{margin-top:26px;padding-top:20px;border-top:1px solid rgba(0,242,255,.24)}
-#noteCipherPresentation h3{font-size:13px;letter-spacing:.12em;color:#d8f6ff}
-#noteCipherPresentation p{color:#c5d7e0}
-.note-cipher-video-frame{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border:1px solid rgba(0,242,255,.3);border-radius:12px;background:radial-gradient(ellipse at center,#143747,#030911)}
-#noteCipherWorkspace #noteCipherVideoPlay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:max-content;max-width:90%;min-height:48px;background:#0b2837;border-color:#76d9ef;color:#e7fbff}
-#noteCipherVideoPlay span{margin-right:9px;color:#ffe5a0}
-#noteCipherVideo,#noteCipherGinoVideo{position:absolute;inset:0;width:100%;height:100%;border:0}
-#noteCipherVideo[hidden],#noteCipherVideoPlay[hidden]{display:none!important}
-#noteCipherPresentation a{display:inline-block;margin-top:12px;font-size:13px;color:#9aeaff}
-</style>
-<script id="eyeota-v79-cipher-video-controller">
-document.addEventListener('DOMContentLoaded',()=>{
- const videos=[['noteCipherGinoVideo','NtLiiZEPTfE'],['noteCipherVideo','n5NiG3i_I8U']];
- const sync=()=>{
-  const active=document.body.classList.contains('note-cipher-mode');
-  videos.forEach(([id,video])=>{
-   const frame=document.getElementById(id);
-   if(active){
-    if(!frame.getAttribute('src'))frame.src='https://www.youtube-nocookie.com/embed/'+video+'?playsinline=1&rel=0';
-   }else frame.removeAttribute('src');
-  });
- };
- document.body.addEventListener('eyeota-mode-change',sync);
- sync();
-});
-</script>
 
 <div id="eyeotaVerificationGate" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="eyeotaVerificationTitle">
  <form id="eyeotaVerificationForm" class="pin-modal">
