@@ -2881,6 +2881,19 @@ body.smdial-mode #smdialVoiceDiagnostic .diag-detail{
 }
 </style>
 
+
+<style id="eyeota-v33-eye-test-isolation">
+body:not(.smdial-mode) #smdialVoiceDiagnostic,
+body:not(.smdial-mode) #smdialVoiceStatus,
+body:not(.smdial-mode) .smdial-native-mic,
+body:not(.smdial-mode) #smdialVoiceCenter{
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+body.eye-test-mode .letter .social-logo-svg{display:none!important;}
+</style>
+
 </head>
 
 <body>
@@ -6840,6 +6853,9 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 </script>
 
+
+
+
 </body></html>';
    const blob=new Blob([doc],{type:'text/html;charset=utf-8'}), url=URL.createObjectURL(blob), a=document.createElement('a');
    a.href=url;a.download='EYEOTA-Rhyme-Dial-Writing.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);if(status)status.textContent='Document saved';
@@ -7008,6 +7024,14 @@ document.addEventListener('DOMContentLoaded', function(){
     panel.style.display=''; overlay.style.display='none'; stims.forEach(e=>e.style.display='none');
   }
 
+  /* Bridge for the newer four-mode navigator. The original Eye Test controller
+     still owns initialization, animation, trials and cleanup. */
+  window.EYEOTA_EYE_TEST={
+    enter:function(){ if(!active) enter(); },
+    leave:function(){ if(active) leave(); },
+    isActive:function(){ return active; }
+  };
+
   eyeBtn.onclick=function(ev){ ev.preventDefault(); ev.stopPropagation(); if(active) leave(); else enter(); };
   const rightArrow=document.getElementById('dialModeArrow');
   if(rightArrow){
@@ -7175,6 +7199,7 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 
   function socialLetters(){
+    if(!document.body.classList.contains('smdial-mode')) return;
     restoreLetters();
     letters.slice(0,platforms.length).forEach((el,i)=>{
       const [name,svg,url,color]=platforms[i];
@@ -7193,13 +7218,34 @@ document.addEventListener('DOMContentLoaded',function(){
 
   function setMode(mode){
     current=mode;
+
+    /* Leave Eye Test through its original controller so animation/state are cleaned up. */
+    if(mode!=='eye' && window.EYEOTA_EYE_TEST && window.EYEOTA_EYE_TEST.isActive()){
+      window.EYEOTA_EYE_TEST.leave();
+    }
+
+    if(mode!=='smdial') restoreLetters();
+
     body.classList.remove('rhyme-mode','eye-test-mode','smdial-mode','social-link-concept');
 
     if(mode==='rhyme') body.classList.add('rhyme-mode');
-    if(mode==='eye') body.classList.add('eye-test-mode');
     if(mode==='smdial') body.classList.add('smdial-mode');
 
-    if(mode==='smdial') socialLetters(); else restoreLetters();
+    if(mode==='smdial'){
+      socialLetters();
+    }else{
+      restoreLetters();
+    }
+
+    /* IMPORTANT: do not merely add eye-test-mode. The original Eye Test enter()
+       creates/shows the overlay, resets trials, and starts setupTrial()/animation. */
+    if(mode==='eye'){
+      if(window.EYEOTA_EYE_TEST){
+        window.EYEOTA_EYE_TEST.enter();
+      }else{
+        body.classList.add('eye-test-mode');
+      }
+    }
 
     if(chip){
       chip.textContent=
@@ -7208,7 +7254,6 @@ document.addEventListener('DOMContentLoaded',function(){
         mode==='smdial'?'SMDial':'Music Lock';
     }
 
-    /* Tell the site's existing mode-specific UI to refresh from body classes. */
     body.dispatchEvent(new CustomEvent('eyeota-mode-change',{detail:{mode}}));
   }
 
