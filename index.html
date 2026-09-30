@@ -9677,5 +9677,93 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
+
+<!-- V70: repair SMDial after Desktop mode -->
+<style id="eyeota-v70-smdial-visibility">
+/* SMDial owns the shared letter positions while its mode is active. */
+body.smdial-mode #dial .letter,
+body.social-mode #dial .letter{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+</style>
+
+<script id="eyeota-v70-smdial-mode-repair">
+document.addEventListener('DOMContentLoaded',()=>{
+  const body=document.body;
+  const dial=document.getElementById('dial');
+  if(!dial)return;
+
+  function isSM(){
+    return body.classList.contains('smdial-mode') ||
+           body.classList.contains('social-mode');
+  }
+
+  function clearDesktopGeometryForSM(){
+    if(!isSM())return;
+
+    /* Desktop may leave inline orbital coordinates on the same 26 nodes.
+       SMDial's own controller must be free to position/render them. */
+    dial.querySelectorAll('.letter').forEach(el=>{
+      el.style.removeProperty('left');
+      el.style.removeProperty('top');
+      el.style.removeProperty('transform');
+      el.style.removeProperty('width');
+      el.style.removeProperty('height');
+      el.style.removeProperty('display');
+      el.style.removeProperty('visibility');
+      el.style.removeProperty('opacity');
+      el.style.removeProperty('filter');
+      el.style.removeProperty('box-shadow');
+    });
+
+    /* Ask the existing SMDial implementation to re-enter/re-render if it
+       exposes any of its established bridges. No second SMDial is created. */
+    const bridges=[
+      window.EYEOTA_SMDIAL,
+      window.EYEOTA_SM_DIAL,
+      window.SMDial,
+      window.SM_DIAL
+    ].filter(Boolean);
+
+    bridges.forEach(api=>{
+      try{
+        if(typeof api.enter==='function')api.enter();
+        else if(typeof api.render==='function')api.render();
+        else if(typeof api.refresh==='function')api.refresh();
+        else if(typeof api.init==='function')api.init();
+      }catch(e){}
+    });
+
+    /* Re-fire the site's mode event after cleanup so existing listeners
+       see a clean SMDial rather than Desktop-mutated nodes. */
+    requestAnimationFrame(()=>{
+      body.dispatchEvent(new CustomEvent('eyeota-smdial-refresh',{
+        detail:{mode:'smdial'}
+      }));
+      window.dispatchEvent(new Event('resize'));
+    });
+  }
+
+  body.addEventListener('eyeota-mode-change',ev=>{
+    const mode=((ev.detail&&ev.detail.mode)||'').toLowerCase();
+    if(mode==='smdial' || mode==='social'){
+      requestAnimationFrame(clearDesktopGeometryForSM);
+      setTimeout(clearDesktopGeometryForSM,60);
+    }
+  });
+
+  const mo=new MutationObserver(()=>{
+    if(isSM()){
+      requestAnimationFrame(clearDesktopGeometryForSM);
+    }
+  });
+  mo.observe(body,{attributes:true,attributeFilter:['class']});
+
+  if(isSM())clearDesktopGeometryForSM();
+});
+</script>
+
 </body>
 </html>
