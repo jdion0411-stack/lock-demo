@@ -2964,6 +2964,12 @@ body.desktop-mode.eyeota-custom-wallpaper #eyeotaPubgBackground{opacity:0!import
 body.desktop-mode.eyeota-custom-wallpaper #eyeotaPubgShade{background:rgba(0,0,0,.34)!important}
 </style>
 
+<style id="eyeota-logo-color-style">
+#eyeotaColorLogo [data-logo-letter] { transition: color 1100ms ease-in-out; }
+@media (prefers-reduced-motion: reduce) {
+  #eyeotaColorLogo [data-logo-letter] { transition: none; }
+}
+</style>
 </head>
 
 <body>
@@ -3221,8 +3227,8 @@ body.desktop-mode.eyeota-custom-wallpaper #eyeotaPubgShade{background:rgba(0,0,0
 
         <div class="brand">
 
-            <h1>
-                <span style="color:#0066FF">E</span><span style="color:#FFD700">YE</span><span style="color:#28A745">OTA</span>
+            <h1 id="eyeotaColorLogo" aria-label="EYEOTA">
+                <span data-logo-letter aria-hidden="true" style="color:#0066FF">E</span><span data-logo-letter aria-hidden="true" style="color:#FFD700">Y</span><span data-logo-letter aria-hidden="true" style="color:#FFD700">E</span><span data-logo-letter aria-hidden="true" style="color:#28A745">O</span><span data-logo-letter aria-hidden="true" style="color:#28A745">T</span><span data-logo-letter aria-hidden="true" style="color:#28A745">A</span>
             </h1>
 
             <p>DOCUMENT SOLUTIONS</p>
@@ -9932,6 +9938,38 @@ document.addEventListener('DOMContentLoaded',()=>{
  fetch('/api/access-status',{credentials:'same-origin'}).then(r=>r.ok?r.json():null).then(data=>{if(data?.cipher){cipherVerified=true;controls.hidden=false;}}).catch(()=>{});
 });
 
+</script>
+<script id="eyeota-logo-color-controller">
+(() => {
+  const logo = document.getElementById('eyeotaColorLogo');
+  if (!logo) return;
+  const letters = Array.from(logo.querySelectorAll('[data-logo-letter]'));
+  const palette = ['#4C8DFF','#FFD700','#46D879','#FF74B8','#C38BFF','#50DFFF','#FF9966','#F5F7FF'];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let timer = null;
+  function cycle() {
+    timer = null;
+    if (document.hidden || reducedMotion.matches) return;
+    const colors = letters.map(() => palette[Math.floor(Math.random() * palette.length)]);
+    // Occasionally Y and E share a color; other random pairs also share.
+    if (Math.random() < .55) colors[2] = colors[1];
+    if (Math.random() < .7) {
+      const first = Math.floor(Math.random() * letters.length);
+      const second = (first + 1 + Math.floor(Math.random() * (letters.length - 1))) % letters.length;
+      colors[second] = colors[first];
+    }
+    letters.forEach((letter, index) => { letter.style.color = colors[index]; });
+    timer = window.setTimeout(cycle, 2800 + Math.floor(Math.random() * 1800));
+  }
+  function resume() {
+    window.clearTimeout(timer);
+    timer = null;
+    if (!document.hidden && !reducedMotion.matches) timer = window.setTimeout(cycle, 900);
+  }
+  document.addEventListener('visibilitychange', resume);
+  reducedMotion.addEventListener('change', resume);
+  resume();
+})();
 </script>
 </body>
 </html>
