@@ -8823,128 +8823,328 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 
-<!-- V56: Desktop dial true-axis centering -->
-<style id="eyeota-v56-axis-center">
+<!-- V59: center the visible Desktop ring, leave app/logo positions untouched -->
+<style id="eyeota-v59-ring-center">
 /*
-  Desktop-only axis correction:
-  center the dial itself in its available row and make every absolute
-  orbital layer use that dial box as its coordinate system.
+  IMPORTANT:
+  Do not reposition #dial or the Desktop app/logo orbit here.
+  The logos remain exactly on the V55 layout.
+
+  Center the visible circular line layers themselves on the dial's true center.
 */
-body.desktop-mode #dial{
-  position:relative!important;
-  left:auto!important;
-  right:auto!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-  transform-origin:50% 50%!important;
-}
-body.desktop-mode #dialWrap,
-body.desktop-mode .dial-wrap,
-body.desktop-mode .dial-stage{
-  justify-content:center!important;
-  align-items:center!important;
-}
-body.desktop-mode #eyeotaSystemOrbit,
-body.desktop-mode #eyeotaSharedSystemRing{
-  left:0!important;
-  top:0!important;
-  right:0!important;
-  bottom:0!important;
-  width:100%!important;
-  height:100%!important;
-  transform:none!important;
-  transform-origin:50% 50%!important;
-}
-body.desktop-mode #eyeotaCenterMenu,
-body.desktop-mode .eyeota-center-menu,
-body.desktop-mode .eyeota-desktop-center{
+body.desktop-mode #outerRing,
+body.desktop-mode .outer-ring,
+body.desktop-mode .dial-ring,
+body.desktop-mode .ring-line{
   left:50%!important;
   top:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  margin:0!important;
   transform:translate(-50%,-50%)!important;
+  transform-origin:50% 50%!important;
+  box-sizing:border-box!important;
+}
+</style>
+
+
+<!-- V60: evenly distribute Desktop app logos on the centered circumference -->
+<style id="eyeota-v60-even-logo-ring">
+body.desktop-mode #dial .letter{
+  margin:0!important;
   transform-origin:50% 50%!important;
 }
 </style>
 
-<script id="eyeota-v56-axis-controller">
+<script id="eyeota-v60-even-logo-controller">
 document.addEventListener('DOMContentLoaded',()=>{
+  const body=document.body;
   const dial=document.getElementById('dial');
   if(!dial)return;
 
-  function centerDesktopDial(){
-    if(!document.body.classList.contains('desktop-mode'))return;
-    /* Clear any inherited inline offsets that can move the physical dial
-       away from the coordinate center used by the orbit calculations. */
-    dial.style.left='';
-    dial.style.right='';
-    dial.style.marginLeft='auto';
-    dial.style.marginRight='auto';
-    dial.style.transformOrigin='50% 50%';
+  let phase=-Math.PI/2;
+  let last=performance.now();
+
+  function placeDesktopLogos(now){
+    if(body.classList.contains('desktop-mode')){
+      const logos=[...dial.querySelectorAll('.letter')].filter(el=>el.offsetParent!==null);
+      if(logos.length){
+        const box=dial.getBoundingClientRect();
+
+        /* Use the same centered circumference for every logo.
+           Equal angular spacing removes visual weighting/gaps. */
+        const radius=Math.min(box.width,box.height)*0.405;
+        phase+=Math.min(50,now-last)*0.000018;
+
+        logos.forEach((el,i)=>{
+          const a=phase+(i*Math.PI*2/logos.length);
+          const x=Math.cos(a)*radius;
+          const y=Math.sin(a)*radius;
+          el.style.left='50%';
+          el.style.top='50%';
+          el.style.transform=`translate(-50%,-50%) translate(${x}px,${y}px)`;
+        });
+      }
+    }
+    last=now;
+    requestAnimationFrame(placeDesktopLogos);
+  }
+  requestAnimationFrame(placeDesktopLogos);
+});
+</script>
+
+
+<!-- V61: outer app ring + inner system-information ring -->
+<style id="eyeota-v61-inner-system-ring">
+/* Hide the older separate system renderers in Desktop mode. */
+body.desktop-mode #eyeotaSystemOrbit,
+body.desktop-mode #eyeotaSharedSystemRing,
+body.desktop-mode #eyeotaCurveInfo,
+body.desktop-mode #eyeotaCurvedInfo,
+body.desktop-mode .eyeota-curve-info,
+body.desktop-mode .eyeota-curved-info{
+  display:none!important;
+}
+#eyeotaInnerSystemRing{display:none}
+body.desktop-mode #eyeotaInnerSystemRing{
+  display:block;
+  position:absolute;
+  inset:0;
+  z-index:174;
+  pointer-events:none;
+}
+.eyeota-inner-system{
+  position:absolute;
+  left:50%;
+  top:50%;
+  color:#fff;
+  font:900 8px/1 Arial,sans-serif;
+  letter-spacing:.04em;
+  white-space:nowrap;
+  text-shadow:0 2px 5px #000,0 0 7px rgba(0,0,0,.9);
+  transform-origin:50% 50%;
+}
+.eyeota-inner-system .ico{font-size:9px;margin-right:2px}
+@media(max-width:700px){
+  .eyeota-inner-system{font-size:6.5px}
+  .eyeota-inner-system .ico{font-size:7.5px}
+}
+</style>
+
+<script id="eyeota-v61-inner-system-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+  const body=document.body,dial=document.getElementById('dial');
+  if(!dial)return;
+
+  const root=document.createElement('div');
+  root.id='eyeotaInnerSystemRing';
+  root.innerHTML=`
+    <div class="eyeota-inner-system" id="v61Time">TIME</div>
+    <div class="eyeota-inner-system" id="v61Weather">WEATHER —</div>
+    <div class="eyeota-inner-system" id="v61Volume"><span class="ico">🔊</span> VOL</div>
+    <div class="eyeota-inner-system" id="v61Network"><span class="ico">◉</span> <span id="v61NetText">ONLINE</span></div>
+    <div class="eyeota-inner-system" id="v61Battery"><span class="ico">▰</span> <span id="v61BatText">POWER</span></div>`;
+  dial.appendChild(root);
+
+  const items=[
+    document.getElementById('v61Time'),
+    document.getElementById('v61Weather'),
+    document.getElementById('v61Volume'),
+    document.getElementById('v61Network'),
+    document.getElementById('v61Battery')
+  ];
+  const time=items[0],weather=items[1];
+  const netText=document.getElementById('v61NetText');
+  const batText=document.getElementById('v61BatText');
+
+  function updateTime(){
+    const d=new Date();
+    time.textContent=d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+
+      ' • '+d.toLocaleDateString([], {month:'short',day:'numeric'});
+  }
+  updateTime();setInterval(updateTime,1000);
+
+  function updateNet(){netText.textContent=navigator.onLine?'ONLINE':'OFFLINE'}
+  updateNet();addEventListener('online',updateNet);addEventListener('offline',updateNet);
+
+  if(navigator.getBattery){
+    navigator.getBattery().then(b=>{
+      const u=()=>batText.textContent=Math.round(b.level*100)+'%'+(b.charging?' ⚡':'');
+      u();b.addEventListener('levelchange',u);b.addEventListener('chargingchange',u);
+    }).catch(()=>batText.textContent='POWER');
   }
 
-  centerDesktopDial();
-  window.addEventListener('resize',centerDesktopDial);
-  document.body.addEventListener('eyeota-mode-change',()=>{
-    requestAnimationFrame(centerDesktopDial);
+  /* Weather: request only through the existing user-permission model. */
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(async p=>{
+      try{
+        const lat=p.coords.latitude,lon=p.coords.longitude;
+        const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m&temperature_unit=fahrenheit`);
+        const j=await r.json();
+        if(j.current && Number.isFinite(j.current.temperature_2m))
+          weather.textContent='WEATHER '+Math.round(j.current.temperature_2m)+'°';
+      }catch(e){ weather.textContent='WEATHER —'; }
+    },()=>weather.textContent='WEATHER —',{timeout:5000,maximumAge:600000});
+  }
+
+  let phase=-Math.PI/2,last=performance.now();
+  function frame(now){
+    if(body.classList.contains('desktop-mode')){
+      const box=dial.getBoundingClientRect();
+      /* Clearly inside V60's .405 app/logo circumference. */
+      const radius=Math.min(box.width,box.height)*0.305;
+      phase+=Math.min(50,now-last)*0.000018;
+
+      items.forEach((el,i)=>{
+        const a=phase+i*(Math.PI*2/items.length);
+        const x=Math.cos(a)*radius,y=Math.sin(a)*radius;
+        let tangent=a*180/Math.PI+90;
+
+        /* Keep labels upright/readable while still following the circle. */
+        const norm=((a%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+        if(norm>Math.PI/2 && norm<Math.PI*3/2)tangent+=180;
+        tangent=((tangent+180)%360+360)%360-180;
+
+        el.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%) rotate(${tangent}deg)`;
+      });
+    }
+    last=now;requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+});
+</script>
+
+
+<!-- V62: remove legacy Desktop time/date duplicate -->
+<style id="eyeota-v62-single-time">
+body.desktop-mode #eyeotaTimeInfo,
+body.desktop-mode #eyeotaTimeDate,
+body.desktop-mode #eyeotaLiveTime,
+body.desktop-mode .eyeota-time-info,
+body.desktop-mode .eyeota-time-date,
+body.desktop-mode .eyeota-live-time{
+  display:none!important;
+}
+body.desktop-mode #v61Time{
+  display:block!important;
+}
+</style>
+
+<script id="eyeota-v62-legacy-time-cleanup">
+document.addEventListener('DOMContentLoaded',()=>{
+  const inner=document.getElementById('v61Time');
+  if(!inner)return;
+
+  /* Hide older Desktop time/date nodes while preserving V61's inner-ring clock. */
+  document.querySelectorAll('[id*="Time"],[id*="time"],[class*="time"],[class*="Time"]').forEach(el=>{
+    if(el===inner || inner.contains(el) || el.closest('#eyeotaInnerSystemRing'))return;
+    const text=(el.textContent||'').trim();
+    if(document.body.classList.contains('desktop-mode') &&
+       (/\bAM\b|\bPM\b/i.test(text) || /\bTIME\b/i.test(text)) &&
+       el.closest('#dial')){
+      el.style.display='none';
+    }
   });
 });
 </script>
 
 
-<!-- V57: small optical-center correction for Desktop dial -->
-<style id="eyeota-v57-optical-center">
-/*
-  The Desktop dial was geometrically centered but visually weighted toward
-  the lower-right. Move the ENTIRE dial assembly together by a few pixels,
-  preserving one common axis for every ring and orbital element.
-*/
-body.desktop-mode #dial{
-  translate:-5px -5px!important;
+<!-- V64: definitive removal of all pre-V61 Desktop time/weather displays -->
+<style id="eyeota-v64-only-inner-system">
+body.desktop-mode #eyeotaDesktopInfoOrbit,
+body.desktop-mode #eyeotaDesktopInfoRotor,
+body.desktop-mode #eyeotaDesktopInfo,
+body.desktop-mode #eyeotaLiveInfo,
+body.desktop-mode #eyeotaLiveTime,
+body.desktop-mode #eyeotaLiveWeather,
+body.desktop-mode #eyeotaCurveInfo,
+body.desktop-mode #eyeotaCurvedInfo,
+body.desktop-mode #eyeotaCurveLayer,
+body.desktop-mode #eyeotaTimeInfo,
+body.desktop-mode #eyeotaWeatherInfo,
+body.desktop-mode #eyeotaTimeDate,
+body.desktop-mode .eyeota-desktop-info-orbit,
+body.desktop-mode .eyeota-desktop-info-rotor,
+body.desktop-mode .eyeota-live-info,
+body.desktop-mode .eyeota-live-time,
+body.desktop-mode .eyeota-live-weather,
+body.desktop-mode .eyeota-curve-info,
+body.desktop-mode .eyeota-curved-info,
+body.desktop-mode .eyeota-curve-layer,
+body.desktop-mode .eyeota-time-info,
+body.desktop-mode .eyeota-weather-info,
+body.desktop-mode .eyeota-time-date,
+body.desktop-mode .eye-info-card,
+body.desktop-mode .eye-info-grid,
+body.desktop-mode .eyeota-mini-time,
+body.desktop-mode .eyeota-orbit-readout,
+body.desktop-mode .eyeota-upright-orbit,
+body.desktop-mode #eyeotaAdaptiveRingInfo,
+body.desktop-mode #eyeotaAdaptiveWeather,
+body.desktop-mode #eyeotaDialTimeBtn,
+body.desktop-mode #eyeotaDialWeatherBtn,
+body.desktop-mode #eyeotaOrbitInfo,
+body.desktop-mode #eyeotaSystemOrbit,
+body.desktop-mode #eyeotaTimeArc,
+body.desktop-mode #eyeotaUprightOrbitInfo,
+body.desktop-mode #eyeotaUprightWeather,
+body.desktop-mode #eyeotaWeatherArc,
+body.desktop-mode .selected-color-info{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
 }
-@media(max-width:700px){
-  body.desktop-mode #dial{
-    translate:-3px -3px!important;
-  }
+body.desktop-mode #eyeotaInnerSystemRing,
+body.desktop-mode #eyeotaInnerSystemRing *{
+  visibility:visible!important;
+  opacity:1!important;
+}
+body.desktop-mode #v61Time,
+body.desktop-mode #v61Weather{
+  display:block!important;
 }
 </style>
 
+<script id="eyeota-v64-remove-old-time-weather">
+document.addEventListener('DOMContentLoaded',()=>{
+ const dial=document.getElementById('dial');
+ if(!dial)return;
 
-<!-- V58: true Desktop dial geometry fix -->
-<style id="eyeota-v58-true-geometry">
-/*
-  Root cause: Desktop gave #dial a 620px width/height while its 7px border
-  was added OUTSIDE that size (content-box). Orbit JS measures the outer
-  border box, while absolute 50% positioning is based on the inner
-  containing box. That creates a subtle lower-right center mismatch.
+ function killOldInfo(){
+   if(!document.body.classList.contains('desktop-mode'))return;
 
-  Make the declared dial size the complete border box. No visual nudge.
-*/
-body.desktop-mode #dial{
-  box-sizing:border-box!important;
-  translate:none!important;
-  left:auto!important;
-  right:auto!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-  transform-origin:50% 50%!important;
-}
-body.desktop-mode #dialStage{
-  box-sizing:border-box!important;
-  width:min(620px,calc(100vw - 32px))!important;
-  max-width:620px!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-@media(max-width:700px){
-  body.desktop-mode #dialStage{
-    width:calc(100vw - 20px)!important;
-    max-width:none!important;
-  }
-  body.desktop-mode #dial{
-    width:calc(100vw - 20px)!important;
-    height:calc(100vw - 20px)!important;
-  }
-}
-</style>
+   /* The V61 inner ring is the sole allowed system-information renderer. */
+   [...dial.children].forEach(layer=>{
+     if(layer.id==='eyeotaInnerSystemRing')return;
+     const signature=((layer.id||'')+' '+(typeof layer.className==='string'?layer.className:'')).toLowerCase();
+     const text=(layer.textContent||'').toLowerCase();
+
+     /* Remove only legacy information layers, never letters/app-logo containers. */
+     if(!signature.includes('letter') &&
+        (/(time|weather|curve|curved|readout|info|rotor|orbit)/.test(signature)) &&
+        (/(time|weather|cloud|sunny|rain|snow|am|pm)/.test(text) ||
+         /(time|weather|curve|curved|readout|info)/.test(signature))){
+       layer.style.setProperty('display','none','important');
+       layer.style.setProperty('visibility','hidden','important');
+     }
+   });
+
+   /* Catch legacy descendants such as individual curved characters. */
+   [...dial.querySelectorAll('*')].forEach(el=>{
+     if(el.closest('#eyeotaInnerSystemRing'))return;
+     const signature=((el.id||'')+' '+(typeof el.className==='string'?el.className:'')).toLowerCase();
+     if(/(time|weather|curve|curved|readout)/.test(signature) &&
+        !signature.includes('letter')){
+       el.style.setProperty('display','none','important');
+       el.style.setProperty('visibility','hidden','important');
+     }
+   });
+ }
+ killOldInfo();
+ document.body.addEventListener('eyeota-mode-change',()=>requestAnimationFrame(killOldInfo));
+ setInterval(killOldInfo,500);
+});
+</script>
 
 </body>
 </html>
