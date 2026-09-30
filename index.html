@@ -9765,5 +9765,40 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
+
+<!-- V71: exactly one mobile EYEOTA DESKTOP label -->
+<style id="eyeota-v71-single-mobile-label">
+@media(max-width:700px){
+  /* V69's added duplicate is gone. */
+  #eyeotaDesktopMobileLabel{
+    display:none!important;
+  }
+
+  /* Keep the site's original mode chip/label and move it clear of the dial. */
+  body.desktop-mode #modeChip{
+    display:block!important;
+    position:relative!important;
+    inset:auto!important;
+    transform:none!important;
+    width:max-content!important;
+    max-width:82vw!important;
+    margin:0 auto 18px!important;
+    padding:5px 10px!important;
+    text-align:center!important;
+    white-space:nowrap!important;
+    z-index:20!important;
+    pointer-events:none!important;
+  }
+}
+</style>
+
+<script id="eyeota-v71-remove-added-mobile-label">
+document.addEventListener('DOMContentLoaded',()=>{
+  /* Remove the duplicate node V69 created rather than merely hiding it. */
+  const duplicate=document.getElementById('eyeotaDesktopMobileLabel');
+  if(duplicate)duplicate.remove();
+});
+</script>
+
 </body>
 </html>
