@@ -3232,7 +3232,7 @@ body.desktop-mode.eyeota-custom-wallpaper #eyeotaPubgShade{background:rgba(0,0,0
             </h1>
 
             <p>DOCUMENT SOLUTIONS</p>
-            <div class="eyeota-feature-line" aria-label="EYEOTA features">EYEOTA LOCK <span>•</span> RHYME DIAL <span>•</span> EYE TEST <span>•</span> SMDIAL <span>•</span> DESKTOP <span>•</span> MUSICAL CIPHER</div>
+            <div class="eyeota-feature-line" aria-label="EYEOTA features">EYEOTA LOCK <span>•</span> RHYME DIAL <span>•</span> EYE TEST <span>•</span> SMDIAL <span>•</span> DESKTOP <span>•</span> EYEOTA BROWSER <span>•</span> MUSICAL CIPHER</div>
 <div class="eyeota-wip-disclaimer">
   <strong>EYEOTA MOVING-LETTER EYE TEST — WORK IN PROGRESS</strong><br>
   This research/development project explores whether a circular moving-letter interface may be useful for vision testing. It is not a medical device, clinic, diagnosis, prescription, or substitute for an examination by a licensed eye-care professional. The creator is not a doctor or clinic. Prototype results must not be interpreted as a medical diagnosis.
@@ -6708,7 +6708,8 @@ document.addEventListener('DOMContentLoaded',function(){
   const chip=document.getElementById('modeChip');
   if(!chip)return;
   function syncModeChip(){
-    if(document.body.classList.contains('note-cipher-mode')){
+    if(document.body.classList.contains('eb-browser-mode')){chip.textContent='EYEOTA Browser';
+    }else if(document.body.classList.contains('note-cipher-mode')){
       chip.textContent='Musical Cipher';
     }else if(document.body.classList.contains('desktop-mode')){
       chip.textContent='EYEOTA Desktop';
@@ -6763,6 +6764,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
   ];
 
+  window.EYEOTA_SITE_ICON_REFERENCES=platforms;
   const desktopApps=[
     ["PUBG",`<span class="desktop-app-icon" style="--app-bg:#d89b16;--app-color:#111"><span class="app-word">PUBG</span></span>`],
     ["Steam",`<span class="desktop-app-icon" style="--app-bg:#10243b;--app-color:#fff"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 496 512\"><path d=\"M496 256c0 137-111.2 248-248.4 248-113.8 0-209.6-76.3-239-180.4l95.2 39.3c6.4 32.1 34.9 56.4 68.9 56.4 39.2 0 71.9-32.4 70.2-73.5l84.5-60.2c52.1 1.3 95.8-40.9 95.8-93.5 0-51.6-42-93.5-93.7-93.5s-93.7 42-93.7 93.5v1.2L176.6 279c-15.5-.9-30.7 3.4-43.5 12.1L0 236.1C10.2 108.4 117.1 8 247.6 8 384.8 8 496 119 496 256zM155.7 384.3l-30.5-12.6a52.79 52.79 0 0 0 27.2 25.8c26.9 11.2 57.8-1.6 69-28.4 5.4-13 5.5-27.3.1-40.3-5.4-13-15.5-23.2-28.5-28.6-12.9-5.4-26.7-5.2-38.9-.6l31.5 13c19.8 8.2 29.2 30.9 20.9 50.7-8.3 19.9-31 29.2-50.8 21zm173.8-129.9c-34.4 0-62.4-28-62.4-62.3s28-62.3 62.4-62.3 62.4 28 62.4 62.3-27.9 62.3-62.4 62.3zm.1-15.6c25.9 0 46.9-21 46.9-46.8 0-25.9-21-46.8-46.9-46.8s-46.9 21-46.9 46.8c.1 25.8 21.1 46.8 46.9 46.8z\"/></svg></span>`],
@@ -6800,7 +6802,7 @@ document.addEventListener('DOMContentLoaded',function(){
   const chip=document.getElementById('modeChip');
   if(!dial || !leftArrow || !rightArrow) return;
 
-  const order=['lock','rhyme','eye','smdial','desktop','notes'];
+  const order=['lock','rhyme','eye','smdial','desktop','browser','notes'];
   let current='lock';
   const letters=Array.from(dial.querySelectorAll('.letter'));
   const originals=letters.map(el=>({
@@ -6842,6 +6844,32 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 
 
+  function browserLetters(){
+    if(!document.body.classList.contains('eb-browser-mode')) return;
+    restoreLetters();
+    letters.slice(0,desktopApps.length).forEach((el,i)=>{
+      const [name,icon]=desktopApps[i];
+      el.innerHTML=icon;
+      el.setAttribute('title',name+' — desktop concept');
+      el.setAttribute('aria-label',name+' — desktop concept');
+      const fn=function(e){
+        e.preventDefault(); e.stopImmediatePropagation();
+        const panel=document.getElementById('eyeotaDesktopConcept');
+        if(panel){
+          const old=panel.querySelector('.desktop-selection');
+          if(old) old.remove();
+          const msg=document.createElement('div');
+          msg.className='desktop-selection';
+          msg.style.cssText='margin-top:10px;font-size:12px;font-weight:800;color:#00f2ff';
+          msg.textContent=name+' selected • concept launcher';
+          panel.appendChild(msg);
+        }
+      };
+      el.addEventListener('click',fn,true);
+      socialHandlers.push({el,fn});
+    });
+  }
+
   function desktopLetters(){
     if(!document.body.classList.contains('desktop-mode')) return;
     restoreLetters();
@@ -6878,15 +6906,18 @@ document.addEventListener('DOMContentLoaded',function(){
 
     if(mode!=='smdial' && mode!=='desktop') restoreLetters();
 
-    body.classList.remove('rhyme-mode','eye-test-mode','smdial-mode','desktop-mode','note-cipher-mode','social-link-concept');
+    body.classList.remove('rhyme-mode','eye-test-mode','smdial-mode','desktop-mode','note-cipher-mode','social-link-concept','eb-browser-mode');
 
     if(mode==='rhyme') body.classList.add('rhyme-mode');
     if(mode==='smdial') body.classList.add('smdial-mode');
     if(mode==='desktop') body.classList.add('desktop-mode');
+    if(mode==='browser') body.classList.add('eb-browser-mode');
     if(mode==='notes') body.classList.add('note-cipher-mode');
 
     if(mode==='smdial'){
       socialLetters();
+    }else if(mode==='browser'){
+      browserLetters();
     }else if(mode==='desktop'){
       desktopLetters();
     }else{
@@ -6909,10 +6940,11 @@ document.addEventListener('DOMContentLoaded',function(){
         mode==='eye'?'Eye Test':
         mode==='smdial'?'SMDial':
         mode==='desktop'?'EYEOTA Desktop':
+        mode==='browser'?'EYEOTA Browser':
         mode==='notes'?'Musical Cipher':'Music Lock';
     }
 
-    const names={lock:'Music Lock',rhyme:'Rhyme Dial',eye:'Eye Test',smdial:'SMDial',desktop:'EYEOTA Desktop',notes:'Musical Cipher'};
+    const names={lock:'Music Lock',rhyme:'Rhyme Dial',eye:'Eye Test',smdial:'SMDial',desktop:'EYEOTA Desktop',browser:'EYEOTA Browser',notes:'Musical Cipher'};
     const position=order.indexOf(mode);
     [[leftArrow,-1],[rightArrow,1]].forEach(([button,direction])=>{
       const destination=order[(position+direction+order.length)%order.length];
@@ -6932,6 +6964,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
   /* One document-level controller runs before legacy target handlers. */
   function visibleMode(){
+    if(body.classList.contains('eb-browser-mode'))return 'browser';
     if(body.classList.contains('note-cipher-mode'))return 'notes';
     if(body.classList.contains('desktop-mode'))return 'desktop';
     if(body.classList.contains('smdial-mode'))return 'smdial';
@@ -9897,5 +9930,352 @@ document.addEventListener('DOMContentLoaded',()=>{
   resume();
 })();
 </script>
+<style id="eb-desktop-copied-design">body.eb-browser-mode .letter{cursor: pointer !important; font-size: 0px !important; display: flex !important; align-items: center !important; justify-content: center !important; overflow: visible !important;}
+body.eb-browser-mode #dialStage{width: min(620px, -32px + 100vw) !important;}
+body.eb-browser-mode #dial{width: min(620px, -32px + 100vw) !important; height: min(620px, -32px + 100vw) !important; max-width: 620px !important; max-height: 620px !important;}
+body.eb-browser-mode .letter{width: 46px !important; height: 46px !important; margin-left: -23px !important; margin-top: -23px !important;}
+body.eb-browser-mode .letter .desktop-app-icon{width: 88%; height: 88%; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: var(--app-bg,rgba(10,18,32,.92)); color: var(--app-color,#fff); border: 1px solid rgba(255, 255, 255, 0.32); overflow: hidden; pointer-events: none; transition: transform .15s ease,filter .15s ease,box-shadow .15s ease;}
+body.eb-browser-mode .letter:hover .desktop-app-icon{transform: scale(1.14); filter: brightness(1.15); box-shadow: 0 3px 9px #000,0 0 13px var(--app-color,#fff);}
+body.eb-browser-mode .desktop-app-icon svg{width: 72%; height: 72%; fill: currentcolor; display: block;}
+body.eb-browser-mode .desktop-app-icon .app-word{font: 900 10px / 1 Arial, sans-serif; letter-spacing: -0.02em; text-align: center; padding: 2px; color: inherit;}
+body.eb-browser-mode .desktop-app-icon .app-glyph{font: 900 24px / 1 Arial, sans-serif;}
+body.eb-browser-mode .desktop-app-icon.eyeota-app{background: radial-gradient(circle at 35% 25%, rgb(22, 78, 99), rgb(6, 17, 29) 70%); border-color: rgb(0, 242, 255); box-shadow: 0 0 14px rgba(0,242,255,.55);}
+body.eb-browser-mode .desktop-app-icon.eyeota-app .app-word{font-size: 9px; letter-spacing: 0.08em; color: rgb(230, 251, 255);}
+body.eb-browser-mode .personal-gateway,
+body.eb-browser-mode .main-layout > .banner,
+body.eb-browser-mode .main-layout > .color-panel,
+body.eb-browser-mode .main-layout > .panel,
+body.eb-browser-mode #rhymeWorkspace,
+body.eb-browser-mode #eyeTestPanel,
+body.eb-browser-mode #musicLockDisclosure,
+body.eb-browser-mode .music-dock,
+body.eb-browser-mode #smdialVoiceDiagnostic,
+body.eb-browser-mode #smdialVoiceStatus{display: none !important;}
+body.eb-browser-mode .note-track,body.eb-browser-mode .note,body.eb-browser-mode #outerRing{display: none !important; visibility: hidden !important; pointer-events: none !important;}
+body.eb-browser-mode .main-layout{padding-top: 52px !important;}
+body.eb-browser-mode #modeChip{position: absolute !important; left: 50% !important; right: auto !important; transform: translateX(-50%) !important; width: max-content !important; min-width: 170px !important; text-align: center !important; justify-content: center !important;}
+body.eb-browser-mode .center-artwork{visibility: visible !important; display: flex !important; pointer-events: none !important; animation: none !important;}
+body.eb-browser-mode .center-artwork > *{display: none !important;}
+body.eb-browser-mode .center-artwork:before{content: "EYEOTA\\A DESKTOP"; white-space: pre; text-align: center; color: rgb(255, 255, 255); font: 900 15px / 1.12 Arial, sans-serif; letter-spacing: 0.12em; width: 112px; height: 112px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 40% 30%, rgba(0, 242, 255, 0.25), rgba(3, 10, 20, 0.96) 68%); border: 2px solid rgba(0, 242, 255, 0.8); box-shadow: 0 0 0 6px rgba(0,0,0,.35),0 0 24px rgba(0,242,255,.38); animation: eyeotaDesktopPulse 1.8s ease-in-out infinite alternate;}
+body.eb-browser-mode #eyeotaDesktopConcept{display: block !important; width: min(720px, 100% - 28px); margin: 12px auto 26px; padding: 18px; border-radius: 16px; background: rgba(3, 9, 18, 0.9); border: 1px solid rgba(0, 242, 255, 0.35); box-shadow: 0 12px 34px rgba(0,0,0,.38); color: rgb(234, 252, 255); text-align: left;}
+@media (max-width:700px){body.eb-browser-mode .main-layout{padding-top: 34px !important;}
+body.eb-browser-mode #modeChip{top: 8px !important;}
+body.eb-browser-mode #dialStage{width: calc(100vw - 20px) !important;}
+body.eb-browser-mode #dial{width: calc(100vw - 20px) !important; height: calc(100vw - 20px) !important;}
+body.eb-browser-mode .letter{width: 36px !important; height: 36px !important; margin-left: -18px !important; margin-top: -18px !important;}
+body.eb-browser-mode .desktop-app-icon .app-word{font-size: 7px;}
+body.eb-browser-mode .desktop-app-icon .app-glyph{font-size: 18px;}
+body.eb-browser-mode .center-artwork:before{width: 94px; height: 94px; font-size: 12px;}
+}
+body.eb-browser-mode.eyeota-custom-wallpaper:before{content: ""; position: fixed; inset: 0px; z-index: -5; background-image: var(--eyeota-user-wallpaper); background-size: cover; background-position: center center; background-repeat: no-repeat;}
+body.eb-browser-mode.eyeota-custom-wallpaper #eyeotaPubgBackground{opacity: 0 !important;}
+body.eb-browser-mode.eyeota-custom-wallpaper #eyeotaPubgShade{background: rgba(0, 0, 0, 0.34) !important;}
+body.eb-browser-mode{padding-bottom: 0px !important;}
+body.eb-browser-mode #dial{overflow: visible !important;}
+body.eb-browser-mode .letter{transition: filter .18s ease !important; will-change: left,top;}
+body.eb-browser-mode .desktop-app-icon{transform: rotate(0deg) !important;}
+body.eb-browser-mode #dial .wave-network{display: none !important; visibility: hidden !important;}
+body.eb-browser-mode #dial .space-bg{display: block !important; visibility: visible !important; opacity: 1 !important; background: radial-gradient(circle at 50% 50%, rgb(255, 253, 232) 0 5%, rgb(255, 245, 168) 7%, rgb(255, 211, 79) 13%, rgb(255, 157, 36) 22%, rgba(255, 176, 47, 0.62) 31%, rgba(255, 154, 31, 0.22) 43%, rgba(5, 13, 27, 0.2) 58%, rgba(3, 9, 18, 0.58) 76%, rgba(3, 9, 18, 0.88) 100%) !important;}
+body.eb-browser-mode #dial .space-bg > *{display: none !important;}
+body.eb-browser-mode #dial .space-bg:before{content: ""; position: absolute; inset: 13%; border-radius: 50%; pointer-events: none; background: repeating-conic-gradient(from 0deg, rgba(255, 221, 93, 0) 0deg 7deg, rgba(255, 221, 93, 0.18) 8deg 9deg, rgba(255, 221, 93, 0) 10deg 17deg); -webkit-mask: radial-gradient(circle, transparent 0 24%, rgb(0, 0, 0) 40%, transparent 72%); mask: radial-gradient(circle, transparent 0 24%, rgb(0, 0, 0) 40%, transparent 72%); animation: eyeotaSunGlow 8s linear infinite;}
+body.eb-browser-mode .center-artwork{visibility: visible !important; display: flex !important; pointer-events: none !important; animation: none !important; z-index: 145 !important;}
+body.eb-browser-mode .center-artwork > *{display: none !important;}
+body.eb-browser-mode .center-artwork:before{content: ""; width: 84px; height: 84px; border-radius: 50%; background: radial-gradient(circle at 42% 38%, rgb(255, 255, 255) 0 8%, rgb(255, 246, 183) 13%, rgb(255, 216, 79) 31%, rgb(255, 158, 36) 58%, rgba(255, 136, 19, 0.78) 72%, rgba(255, 159, 33, 0.18) 100%); border: 1px solid rgba(255, 232, 145, 0.9); box-shadow: 0 0 18px #ffd84f,0 0 44px rgba(255,177,45,.85),0 0 85px rgba(255,141,24,.46);}
+body.eb-browser-mode #eyeotaDialDesktopUI{display: block !important; position: absolute; inset: 0px; z-index: 155; pointer-events: none;}
+body.eb-browser-mode.eyeota-dial-panel-open #eyeotaDialPanel{display: block;}
+body.eb-browser-mode #eyeotaDesktopConcept{display: none !important;}
+@media (max-width:700px){body.eb-browser-mode .center-artwork:before{width: 66px; height: 66px;}
+}
+body.eb-browser-mode .letter{cursor: pointer !important; font-size: 0px !important; display: flex !important; align-items: center !important; justify-content: center !important; overflow: visible !important;}
+body.eb-browser-mode .letter .desktop-app-icon{width: 78%; height: 78%; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: var(--app-bg,rgba(10,18,32,.92)); color: var(--app-color,#fff); border: 1px solid rgba(255, 255, 255, 0.32); overflow: hidden; pointer-events: none; transition: transform .15s ease,filter .15s ease,box-shadow .15s ease;}
+body.eb-browser-mode .letter:hover .desktop-app-icon{transform: scale(1.14); filter: brightness(1.15); box-shadow: 0 3px 9px #000,0 0 13px var(--app-color,#fff);}
+body.eb-browser-mode .desktop-app-icon svg{width: 72%; height: 72%; fill: currentcolor; display: block;}
+body.eb-browser-mode .desktop-app-icon .app-word{font: 900 8px / 1 Arial, sans-serif; letter-spacing: -0.02em; text-align: center; padding: 2px; color: inherit;}
+body.eb-browser-mode .desktop-app-icon .app-glyph{font: 900 18px / 1 Arial, sans-serif;}
+body.eb-browser-mode .desktop-app-icon.eyeota-app{background: radial-gradient(circle at 35% 25%, rgb(22, 78, 99), rgb(6, 17, 29) 70%); border-color: rgb(0, 242, 255); box-shadow: 0 0 14px rgba(0,242,255,.55);}
+body.eb-browser-mode .desktop-app-icon.eyeota-app .app-word{font-size: 7px; letter-spacing: 0.08em; color: rgb(230, 251, 255);}
+body.eb-browser-mode .personal-gateway,
+body.eb-browser-mode .main-layout > .banner,
+body.eb-browser-mode .main-layout > .color-panel,
+body.eb-browser-mode .main-layout > .panel,
+body.eb-browser-mode #rhymeWorkspace,
+body.eb-browser-mode #eyeTestPanel,
+body.eb-browser-mode #musicLockDisclosure,
+body.eb-browser-mode .music-dock,
+body.eb-browser-mode #smdialVoiceDiagnostic,
+body.eb-browser-mode #smdialVoiceStatus{display: none !important;}
+body.eb-browser-mode .note-track,body.eb-browser-mode .note,body.eb-browser-mode #outerRing{display: none !important; visibility: hidden !important; pointer-events: none !important;}
+body.eb-browser-mode .main-layout{padding-top: 52px !important;}
+body.eb-browser-mode #modeChip{position: absolute !important; left: 50% !important; right: auto !important; transform: translateX(-50%) !important; width: max-content !important; min-width: 170px !important; text-align: center !important; justify-content: center !important;}
+body.eb-browser-mode .center-artwork{visibility: visible !important; display: flex !important; pointer-events: none !important; animation: none !important;}
+body.eb-browser-mode .center-artwork > *{display: none !important;}
+body.eb-browser-mode .center-artwork:before{content: "EYEOTA\\A DESKTOP"; white-space: pre; text-align: center; color: rgb(255, 255, 255); font: 900 15px / 1.12 Arial, sans-serif; letter-spacing: 0.12em; width: 112px; height: 112px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 40% 30%, rgba(0, 242, 255, 0.25), rgba(3, 10, 20, 0.96) 68%); border: 2px solid rgba(0, 242, 255, 0.8); box-shadow: 0 0 0 6px rgba(0,0,0,.35),0 0 24px rgba(0,242,255,.38); animation: eyeotaDesktopPulse 1.8s ease-in-out infinite alternate;}
+body.eb-browser-mode #eyeotaDesktopConcept{display: block !important; width: min(720px, 100% - 28px); margin: 12px auto 26px; padding: 18px; border-radius: 16px; background: rgba(3, 9, 18, 0.9); border: 1px solid rgba(0, 242, 255, 0.35); box-shadow: 0 12px 34px rgba(0,0,0,.38); color: rgb(234, 252, 255); text-align: left;}
+@media (max-width:700px){body.eb-browser-mode .main-layout{padding-top: 34px !important;}
+body.eb-browser-mode #modeChip{top: 8px !important;}
+body.eb-browser-mode .desktop-app-icon .app-word{font-size: 6px;}
+body.eb-browser-mode .desktop-app-icon .app-glyph{font-size: 14px;}
+body.eb-browser-mode .center-artwork:before{width: 94px; height: 94px; font-size: 12px;}
+}
+body.eb-browser-mode.eyeota-custom-wallpaper:before{content: ""; position: fixed; inset: 0px; z-index: -5; background-image: var(--eyeota-user-wallpaper); background-size: cover; background-position: center center; background-repeat: no-repeat;}
+body.eb-browser-mode.eyeota-custom-wallpaper #eyeotaPubgBackground{opacity: 0 !important;}
+body.eb-browser-mode.eyeota-custom-wallpaper #eyeotaPubgShade{background: rgba(0, 0, 0, 0.34) !important;}
+body.eb-browser-mode{padding-bottom: 0px !important;}
+body.eb-browser-mode #dial{overflow: visible !important;}
+body.eb-browser-mode .letter{transition: filter .18s ease !important; will-change: left,top;}
+body.eb-browser-mode .desktop-app-icon{transform: rotate(0deg) !important;}
+body.eb-browser-mode #dial .wave-network{display: none !important; visibility: hidden !important;}
+body.eb-browser-mode #dial .space-bg{display: block !important; visibility: visible !important; opacity: 1 !important; background: radial-gradient(circle at 50% 50%, rgb(255, 253, 232) 0 5%, rgb(255, 245, 168) 7%, rgb(255, 211, 79) 13%, rgb(255, 157, 36) 22%, rgba(255, 176, 47, 0.62) 31%, rgba(255, 154, 31, 0.22) 43%, rgba(5, 13, 27, 0.2) 58%, rgba(3, 9, 18, 0.58) 76%, rgba(3, 9, 18, 0.88) 100%) !important;}
+body.eb-browser-mode #dial .space-bg > *{display: none !important;}
+body.eb-browser-mode #dial .space-bg:before{content: ""; position: absolute; inset: 13%; border-radius: 50%; pointer-events: none; background: repeating-conic-gradient(from 0deg, rgba(255, 221, 93, 0) 0deg 7deg, rgba(255, 221, 93, 0.18) 8deg 9deg, rgba(255, 221, 93, 0) 10deg 17deg); -webkit-mask: radial-gradient(circle, transparent 0 24%, rgb(0, 0, 0) 40%, transparent 72%); mask: radial-gradient(circle, transparent 0 24%, rgb(0, 0, 0) 40%, transparent 72%); animation: eyeotaSunGlow 8s linear infinite;}
+body.eb-browser-mode .center-artwork{visibility: visible !important; display: flex !important; pointer-events: none !important; animation: none !important; z-index: 145 !important;}
+body.eb-browser-mode .center-artwork > *{display: none !important;}
+body.eb-browser-mode .center-artwork:before{content: ""; width: 84px; height: 84px; border-radius: 50%; background: radial-gradient(circle at 42% 38%, rgb(255, 255, 255) 0 8%, rgb(255, 246, 183) 13%, rgb(255, 216, 79) 31%, rgb(255, 158, 36) 58%, rgba(255, 136, 19, 0.78) 72%, rgba(255, 159, 33, 0.18) 100%); border: 1px solid rgba(255, 232, 145, 0.9); box-shadow: 0 0 18px #ffd84f,0 0 44px rgba(255,177,45,.85),0 0 85px rgba(255,141,24,.46);}
+body.eb-browser-mode #eyeotaDialDesktopUI{display: block !important; position: absolute; inset: 0px; z-index: 155; pointer-events: none;}
+body.eb-browser-mode.eyeota-dial-panel-open #eyeotaDialPanel{display: block;}
+body.eb-browser-mode #eyeotaDesktopConcept{display: none !important;}
+@media (max-width:700px){body.eb-browser-mode .center-artwork:before{width: 66px; height: 66px;}
+}
+body.eb-browser-mode #eyeotaDialWeatherBtn,
+body.eb-browser-mode #eyeotaDialTimeBtn,
+body.eb-browser-mode #eyeotaDialSoundBtn,
+body.eb-browser-mode #eyeotaDialPersonalizeBtn,
+body.eb-browser-mode #eyeotaDialMenuBtn,
+body.eb-browser-mode #eyeotaPresentationMusicLink{display: none !important;}
+body.eb-browser-mode #eyeotaOrbitInfo{display: block; position: absolute; inset: 0px; z-index: 166; pointer-events: none;}
+body.eb-browser-mode #eyeotaCenterMenu{display: block;}
+body.eb-browser-mode .center-artwork{display: none !important;}
+body.eb-browser-mode.eyeota-center-menu-open #eyeotaCenterMenuPanel{display: block;}
+body.eb-browser-mode #eyeotaOrbitInfo{display: none !important;}
+body.eb-browser-mode #eyeotaCurvedInfo{display: block; position: absolute; inset: 0px; z-index: 168; pointer-events: none; overflow: visible;}
+body.eb-browser-mode #eyeotaCurvedInfo{display: none !important;}
+body.eb-browser-mode #eyeotaUprightOrbitInfo{display: block; position: absolute; inset: 0px; z-index: 169; pointer-events: none; overflow: visible;}
+body.eb-browser-mode #eyeotaUprightOrbitInfo,
+body.eb-browser-mode #eyeotaCurvedInfo{display: none !important;}
+body.eb-browser-mode #eyeotaAdaptiveRingInfo{display: block; position: absolute; inset: 0px; z-index: 170; pointer-events: none; overflow: visible;}
+body.eb-browser-mode #eyeotaAdaptiveRingInfo{display: block !important;}
+body.eb-browser-mode #eyeotaSpotifyPresentation{display: block; position: relative; z-index: 40; width: min(92%, 520px); margin: 14px auto 6px;}
+@media (max-width:700px){body.eb-browser-mode #eyeotaSpotifyPresentation{width: 94%; margin-top: 10px;}
+}
+body.eb-browser-mode #eyeotaSystemOrbit{display: block; position: absolute; inset: 0px; z-index: 171; pointer-events: none;}
+body.eb-browser-mode #eyeotaSpotifyPresentation{display: none !important;}
+body.eb-browser-mode #eyeotaYouTubeMusic{display: block; position: relative; z-index: 40; width: min(92%, 420px); margin: 12px auto 6px;}
+@media (max-width:700px){body.eb-browser-mode #eyeotaYouTubeMusic{width: 92%; max-width: 340px;}
+}
+body.eb-browser-mode #eyeotaSystemOrbit{display: none !important;}
+body.eb-browser-mode #eyeotaSharedSystemRing{display: block; position: absolute; inset: 0px; z-index: 172; pointer-events: none;}
+body.eb-browser-mode #outerRing,
+body.eb-browser-mode .outer-ring,
+body.eb-browser-mode .dial-ring,
+body.eb-browser-mode .ring-line{left: 50% !important; top: 50% !important; right: auto !important; bottom: auto !important; margin: 0px !important; transform: translate(-50%,-50%) !important; transform-origin: 50% 50% !important; box-sizing: border-box !important;}
+body.eb-browser-mode #dial .letter{margin: 0px !important; transform-origin: 50% 50% !important;}
+body.eb-browser-mode #eyeotaSystemOrbit,
+body.eb-browser-mode #eyeotaSharedSystemRing,
+body.eb-browser-mode #eyeotaCurveInfo,
+body.eb-browser-mode #eyeotaCurvedInfo,
+body.eb-browser-mode .eyeota-curve-info,
+body.eb-browser-mode .eyeota-curved-info{display: none !important;}
+body.eb-browser-mode #eyeotaInnerSystemRing{display: block; position: absolute; inset: 0px; z-index: 174; pointer-events: none;}
+body.eb-browser-mode #eyeotaTimeInfo,
+body.eb-browser-mode #eyeotaTimeDate,
+body.eb-browser-mode #eyeotaLiveTime,
+body.eb-browser-mode .eyeota-time-info,
+body.eb-browser-mode .eyeota-time-date,
+body.eb-browser-mode .eyeota-live-time{display: none !important;}
+body.eb-browser-mode #v61Time{display: block !important;}
+body.eb-browser-mode #eyeotaDesktopInfoOrbit,
+body.eb-browser-mode #eyeotaDesktopInfoRotor,
+body.eb-browser-mode #eyeotaDesktopInfo,
+body.eb-browser-mode #eyeotaLiveInfo,
+body.eb-browser-mode #eyeotaLiveTime,
+body.eb-browser-mode #eyeotaLiveWeather,
+body.eb-browser-mode #eyeotaCurveInfo,
+body.eb-browser-mode #eyeotaCurvedInfo,
+body.eb-browser-mode #eyeotaCurveLayer,
+body.eb-browser-mode #eyeotaTimeInfo,
+body.eb-browser-mode #eyeotaWeatherInfo,
+body.eb-browser-mode #eyeotaTimeDate,
+body.eb-browser-mode .eyeota-desktop-info-orbit,
+body.eb-browser-mode .eyeota-desktop-info-rotor,
+body.eb-browser-mode .eyeota-live-info,
+body.eb-browser-mode .eyeota-live-time,
+body.eb-browser-mode .eyeota-live-weather,
+body.eb-browser-mode .eyeota-curve-info,
+body.eb-browser-mode .eyeota-curved-info,
+body.eb-browser-mode .eyeota-curve-layer,
+body.eb-browser-mode .eyeota-time-info,
+body.eb-browser-mode .eyeota-weather-info,
+body.eb-browser-mode .eyeota-time-date,
+body.eb-browser-mode .eye-info-card,
+body.eb-browser-mode .eye-info-grid,
+body.eb-browser-mode .eyeota-mini-time,
+body.eb-browser-mode .eyeota-orbit-readout,
+body.eb-browser-mode .eyeota-upright-orbit,
+body.eb-browser-mode #eyeotaAdaptiveRingInfo,
+body.eb-browser-mode #eyeotaAdaptiveWeather,
+body.eb-browser-mode #eyeotaDialTimeBtn,
+body.eb-browser-mode #eyeotaDialWeatherBtn,
+body.eb-browser-mode #eyeotaOrbitInfo,
+body.eb-browser-mode #eyeotaSystemOrbit,
+body.eb-browser-mode #eyeotaTimeArc,
+body.eb-browser-mode #eyeotaUprightOrbitInfo,
+body.eb-browser-mode #eyeotaUprightWeather,
+body.eb-browser-mode #eyeotaWeatherArc,
+body.eb-browser-mode .selected-color-info{display: none !important; visibility: hidden !important; opacity: 0 !important;}
+body.eb-browser-mode #eyeotaInnerSystemRing,
+body.eb-browser-mode #eyeotaInnerSystemRing *{visibility: visible !important; opacity: 1 !important;}
+body.eb-browser-mode #v61Time,
+body.eb-browser-mode #v61Weather{display: block !important;}
+body.eb-browser-mode #dial .letter{width: 44px !important; height: 44px !important; display: flex !important; align-items: center !important; justify-content: center !important; border-radius: 50% !important; transition: filter .22s ease, box-shadow .22s ease !important; will-change: transform;}
+body.eb-browser-mode #dial .letter img,
+body.eb-browser-mode #dial .letter svg{max-width: 30px !important; max-height: 30px !important; object-fit: contain !important;}
+body.eb-browser-mode #dial .letter:hover{filter: brightness(1.18) !important; box-shadow: 0 0 13px rgba(255,255,255,.42) !important; z-index: 190 !important;}
+body.eb-browser-mode #eyeotaInnerSystemRing .eyeota-inner-system{font-size: 7.5px !important; font-weight: 800 !important; letter-spacing: 0.055em !important; text-shadow: 0 1px 4px #000,0 0 6px rgba(0,0,0,.9) !important; opacity: 0.92;}
+body.eb-browser-mode #eyeotaInnerSystemRing .ico{font-size: 8px !important; opacity: 0.9;}
+body.eb-browser-mode #dial .center,
+body.eb-browser-mode #dial #center,
+body.eb-browser-mode #dial .dial-center{filter: drop-shadow(0 0 13px rgba(255,255,255,.16));}
+@media (max-width:700px){body.eb-browser-mode #dial .letter{width: 36px !important; height: 36px !important;}
+body.eb-browser-mode #dial .letter img,
+ body.eb-browser-mode #dial .letter svg{max-width: 25px !important; max-height: 25px !important;}
+body.eb-browser-mode #eyeotaInnerSystemRing .eyeota-inner-system{font-size: 6px !important;}
+}
+@media (max-width:700px){body.eb-browser-mode #dialLabel,
+  body.eb-browser-mode #modeLabel,
+  body.eb-browser-mode .dial-label,
+  body.eb-browser-mode .mode-label,
+  body.eb-browser-mode .desktop-label,
+  body.eb-browser-mode [data-mode-label]{position: absolute !important; top: -34px !important; left: 50% !important; right: auto !important; bottom: auto !important; width: max-content !important; max-width: 82vw !important; transform: translateX(-50%) !important; font-size: 10px !important; line-height: 1 !important; letter-spacing: 0.12em !important; white-space: nowrap !important; z-index: 240 !important; pointer-events: none !important;}
+}
+@media (max-width:700px){body.eb-browser-mode #dialLabel,
+  body.eb-browser-mode #modeLabel,
+  body.eb-browser-mode .dial-label,
+  body.eb-browser-mode .mode-label,
+  body.eb-browser-mode .desktop-label,
+  body.eb-browser-mode [data-mode-label]{top: -58px !important; left: 50% !important; bottom: auto !important; transform: translateX(-50%) !important; font-size: 9px !important; line-height: 1 !important; letter-spacing: 0.1em !important; white-space: nowrap !important; width: max-content !important; max-width: 76vw !important; z-index: 260 !important; pointer-events: none !important;}
+}
+@media (max-width:700px){body.eb-browser-mode #dialLabel,
+  body.eb-browser-mode #modeLabel,
+  body.eb-browser-mode .dial-label,
+  body.eb-browser-mode .mode-label,
+  body.eb-browser-mode .desktop-label,
+  body.eb-browser-mode [data-mode-label]{display: none !important;}
+body.eb-browser-mode #eyeotaDesktopMobileLabel{display: block !important; position: relative !important; inset: auto !important; transform: none !important; width: 100% !important; margin: 0px auto 18px !important; padding: 0px !important; text-align: center !important; color: rgb(255, 255, 255) !important; font: 800 9px / 1.15 Arial, sans-serif !important; letter-spacing: 0.12em !important; white-space: nowrap !important; pointer-events: none !important; z-index: 5 !important; text-shadow: 0 2px 5px #000 !important;}
+}
+@media (max-width:700px){body.eb-browser-mode #modeChip{display: block !important; position: relative !important; inset: auto !important; transform: none !important; width: max-content !important; max-width: 82vw !important; margin: 0px auto 18px !important; padding: 5px 10px !important; text-align: center !important; white-space: nowrap !important; z-index: 20 !important; pointer-events: none !important;}
+}
+body.eb-browser-mode #dial .space-bg > .eyeota-sun-clouds{display: block !important; position: absolute; left: 0px; width: 200%; height: 24%; pointer-events: none; animation: eyeotaCloudDrift 65s linear infinite; filter: blur(1px); will-change: transform;}
+body.eb-browser-mode #dial .space-bg > .cloud-depth-0{top: 50%; height: 20%; opacity: 0.58; animation: eyeotaCloudDrift 90s linear infinite;}
+body.eb-browser-mode #dial .space-bg > .cloud-depth-1{top: 59%; height: 25%; opacity: 0.83; animation: eyeotaCloudDrift 65s linear infinite reverse;}
+body.eb-browser-mode #dial .space-bg > .cloud-depth-2{top: 71%; height: 29%; opacity: 0.95; animation: eyeotaCloudDrift 45s linear infinite;}
+@media (prefers-reduced-motion:reduce){body.eb-browser-mode #dial .space-bg > .eyeota-sun-clouds{animation: none !important;}
+}
+body.eb-browser-mode #dial .space-bg > .eyeota-space-orbits{display: block !important; position: absolute; inset: 0px; pointer-events: none; clip-path: inset(0 0 51% 0); overflow: hidden;}
+</style>
+<style id="eb-browser-only-controls">
+#ebControls,#ebRestore,#ebAddressBar{display:none}body.eb-browser-mode #ebControls{display:block;position:absolute;inset:0;z-index:400;pointer-events:none}#ebControls button{position:absolute;left:50%;top:50%;width:22px;height:22px;padding:0;display:grid;place-items:center;background:#071624ed;color:#eefaff;border:1px solid #a5dbe4;border-radius:50%;font:700 15px Arial;cursor:pointer;pointer-events:auto;box-shadow:0 2px 8px #0008}#ebControls button:hover{background:#234c61}#ebControls button:focus-visible{outline:3px solid #8cf5ff}#ebClose:hover{background:#b02c35!important}body.eb-browser-mode #smdialVoiceCenter,body.eb-browser-mode #smdialVoiceDiagnostic,body.eb-browser-mode #smdialVoiceStatus,body.eb-browser-mode .smdial-native-mic,body.eb-browser-mode .voice-mic,body.eb-browser-mode .voice-label{display:none!important}body.eb-browser-mode .center-artwork{pointer-events:none!important}
+body.eb-browser-mode.ebMinimized #dial{display:none!important}body.eb-browser-mode.ebMinimized #ebRestore{display:block;margin:50px auto;padding:13px 22px;border:1px solid #a5dbe4;border-radius:99px;color:white;background:#071624;font:700 14px Arial;cursor:pointer}
+body.eb-browser-mode.ebRect #dial{position:fixed!important;inset:20px!important;width:auto!important;height:auto!important;max-width:none!important;max-height:none!important;border-radius:14px!important;margin:0!important;z-index:300000!important;overflow:hidden!important}
+body.eb-browser-mode.ebRect #dial .letter{left:calc(30px + var(--eb-col)*56px)!important;top:calc(145px + var(--eb-row)*56px)!important;transform:none!important;margin:0!important}body.eb-browser-mode.ebRect #dial .dial-svg,body.eb-browser-mode.ebRect #dial .center-artwork,body.eb-browser-mode.ebRect #dial .wave-network,body.eb-browser-mode.ebRect #dial .top-pointer{display:none!important}body.eb-browser-mode.ebRect #ebControls button{left:auto!important;top:12px!important;right:calc(12px + var(--eb-index)*40px)!important;transform:none!important}body.eb-browser-mode.ebRect #ebAddressBar{display:flex;position:absolute;top:62px;left:20px;right:20px;gap:8px;z-index:450}#ebAddressBar input{min-width:0;flex:1;padding:10px;border:1px solid #a5dbe4;border-radius:8px;background:#071624ed;color:white;font:14px Arial}#ebAddressBar button{padding:10px;border:1px solid #a5dbe4;border-radius:8px;background:#071624;color:white;cursor:pointer}#ebStatus{position:absolute;top:107px;left:20px;color:white;font:12px Arial}#ebBrowserTitle{display:none}body.eb-browser-mode.ebRect #ebBrowserTitle{display:block;position:absolute;top:22px;left:22px;z-index:450;font:700 14px Arial;color:white}@media(max-width:600px){#ebControls button{width:18px;height:18px;font-size:13px}body.eb-browser-mode.ebRect #dial{inset:8px!important}body.eb-browser-mode.ebRect #dial .letter{left:calc(18px + var(--eb-col)*48px)!important;top:calc(145px + var(--eb-row)*52px)!important}}
+</style>
+<script id="eb-browser-from-smdial">
+document.addEventListener('DOMContentLoaded',()=>{
+const body=document.body,dial=document.getElementById('dial');const layer=document.createElement('div');layer.id='ebControls';layer.innerHTML='<button id="ebMin" type="button" aria-label="Minimize EYEOTA Browser" title="Minimize" style="--eb-index:2">−</button><button id="ebMax" type="button" aria-label="Maximize EYEOTA Browser" title="Maximize or return to circle" style="--eb-index:1">□</button><button id="ebClose" type="button" aria-label="Close EYEOTA Browser" title="Close browser" style="--eb-index:0">×</button>';dial.append(layer);const restore=document.createElement('button');restore.id='ebRestore';restore.type='button';restore.textContent='';restore.setAttribute('aria-label','Restore EYEOTA Browser dial');restore.title='Click the sun to restore your browser dial';document.getElementById('dialStage').append(restore);const title=document.createElement('strong');title.id='ebBrowserTitle';title.textContent='EYEOTA Browser';dial.append(title);const form=document.createElement('form');form.id='ebAddressBar';form.innerHTML='<input aria-label="Website address" placeholder="Enter website address"><button type="submit">Open ↗</button><span id="ebStatus" role="status"></span>';dial.append(form);
+let raf=0,last=0,phase=-Math.PI/4;const controls=[...layer.children];const max=document.getElementById('ebMax');
+function frame(now){raf=0;if(!body.classList.contains('eb-browser-mode'))return;let dt=last?Math.min(50,now-last):0;last=now;if(!body.classList.contains('ebRect')&&!body.classList.contains('ebMinimized')){phase+=dt*.000010;const size=dial.clientWidth,controlSize=innerWidth<600?18:22,radius=size/2-controlSize/2-8;controls.forEach((b,i)=>{let a=phase+(i-1)*((controlSize+8)/radius);b.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*radius}px,${Math.sin(a)*radius}px)`});const apps=[...dial.querySelectorAll('.letter')],appRadius=size*(innerWidth<600?.35:.405);apps.forEach((el,i)=>{const a=phase-Math.PI/4+i*Math.PI*2/apps.length;el.style.left='50%';el.style.top='50%';el.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*appRadius}px,${Math.sin(a)*appRadius}px)`});const info=[...dial.querySelectorAll('#eyeotaInnerSystemRing .eyeota-inner-system')];info.forEach((el,i)=>{const a=-phase+i*Math.PI*2/info.length;el.style.left='50%';el.style.top='50%';el.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*size*.292}px,${Math.sin(a)*size*.292}px)`})}raf=requestAnimationFrame(frame)}
+function sync(){if(body.classList.contains('eb-browser-mode')){const cols=innerWidth<600?6:10;dial.querySelectorAll('.letter').forEach((b,i)=>{b.style.setProperty('--eb-col',i%cols);b.style.setProperty('--eb-row',Math.floor(i/cols))});if(!raf)raf=requestAnimationFrame(frame)}else{if(raf)cancelAnimationFrame(raf);raf=0;last=0;if(body.classList.contains('ebRect'))body.classList.remove('ebRect');if(body.classList.contains('ebMinimized'))body.classList.remove('ebMinimized');max.textContent='□';dial.querySelectorAll('.letter').forEach(b=>{b.style.removeProperty('--eb-col');b.style.removeProperty('--eb-row')})}}body.addEventListener('eyeota-mode-change',sync);window.addEventListener('resize',sync);
+max.onclick=()=>{const rect=body.classList.toggle('ebRect');max.textContent=rect?'◯':'□';max.setAttribute('aria-label',rect?'Return to circular EYEOTA Browser':'Maximize EYEOTA Browser')};document.getElementById('ebMin').onclick=()=>{body.classList.remove('ebRect');body.classList.add('ebMinimized');max.textContent='□';max.setAttribute('aria-label','Maximize EYEOTA Browser');restore.focus()};restore.onclick=()=>{body.classList.remove('ebMinimized');max.textContent='□';max.setAttribute('aria-label','Maximize EYEOTA Browser');max.focus()};document.getElementById('ebClose').onclick=()=>document.getElementById('eyeModeArrow').click();form.onsubmit=e=>{e.preventDefault();try{const value=form.querySelector('input').value.trim(),url=new URL(value.includes('://')?value:'https://'+value);if(!['http:','https:'].includes(url.protocol))throw Error();window.open(url.href,'_blank','noopener,noreferrer');document.getElementById('ebStatus').textContent='Opened '+url.hostname+' in a new tab'}catch{document.getElementById('ebStatus').textContent='Enter a valid website address'}};sync();
+});
+</script>
+
+<style>
+body.eb-browser-mode #eyeotaDesktopConcept{display:none!important}
+body.eb-browser-mode.ebRect #eyeotaInnerSystemRing,body.eb-browser-mode.ebRect #eyeotaDialDesktopUI,body.eb-browser-mode.ebRect #eyeotaPresentationMusicLink{display:none!important}
+body.eb-browser-mode #ebControls button{min-width:0!important;min-height:0!important;line-height:1!important}
+</style>
+
+<style id="eb-minimized-shining-sun">
+body.eb-browser-mode.ebMinimized #dialStage{height:220px!important;min-height:220px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+body.eb-browser-mode.ebMinimized #ebRestore{position:relative!important;display:block!important;width:84px!important;height:84px!important;min-width:84px!important;min-height:84px!important;margin:0!important;padding:0!important;border:1px solid rgba(255,232,145,.9)!important;border-radius:50%!important;background:radial-gradient(circle at 42% 38%,#fff 0 8%,#fff6b7 13%,#ffd84f 31%,#ff9e24 58%,rgba(255,136,19,.78) 72%,rgba(255,159,33,.18) 100%)!important;box-shadow:0 0 18px #ffd84f,0 0 44px rgba(255,177,45,.85),0 0 85px rgba(255,141,24,.46)!important;overflow:visible!important;isolation:isolate;cursor:pointer!important;z-index:25!important;touch-action:manipulation}
+body.eb-browser-mode.ebMinimized #ebRestore:before{content:'';position:absolute;inset:-42px;border-radius:50%;background:repeating-conic-gradient(from 0deg,transparent 0deg 10deg,rgba(255,220,120,.05) 11deg,rgba(255,225,135,.9) 13deg,rgba(255,220,120,.05) 15deg,transparent 16deg 24deg);-webkit-mask:radial-gradient(circle,transparent 0 36%,#000 42%,#000 51%,transparent 71%);mask:radial-gradient(circle,transparent 0 36%,#000 42%,#000 51%,transparent 71%);pointer-events:none;z-index:-1;animation:ebSunRaysSpin 24s linear infinite,ebSunRaysGlow 2.6s ease-in-out infinite alternate}
+body.eb-browser-mode.ebMinimized #ebRestore:after{content:'';position:absolute;inset:-17px;border-radius:50%;background:radial-gradient(circle,transparent 42%,rgba(255,210,91,.22) 60%,transparent 72%);pointer-events:none;z-index:-1;animation:ebSunHalo 2.6s ease-in-out infinite alternate}
+body.eb-browser-mode.ebMinimized #ebRestore:hover{filter:brightness(1.15)}body.eb-browser-mode.ebMinimized #ebRestore:focus-visible{outline:3px solid #fff3c6;outline-offset:9px}
+@keyframes ebSunRaysSpin{to{transform:rotate(360deg)}}@keyframes ebSunRaysGlow{from{opacity:.6}to{opacity:1}}@keyframes ebSunHalo{from{opacity:.55;transform:scale(.96)}to{opacity:1;transform:scale(1.1)}}
+@media(prefers-reduced-motion:reduce){#ebRestore:before,#ebRestore:after{animation:none!important}}
+</style>
+
+
+<style id="eb-edge-browser-frame">
+#ebEdge{display:none}body.eb-browser-mode.ebRect #ebEdge{display:flex;position:absolute;inset:0;flex-direction:column;background:#f7f8fa;color:#202124;font:13px 'Segoe UI',Arial,sans-serif;z-index:420;text-align:left}body.eb-browser-mode.ebRect #ebControls{z-index:500}body.eb-browser-mode.ebRect #ebControls button{border-radius:4px;background:transparent;color:#28333b;border:0;box-shadow:none;width:28px;height:28px;font-size:17px;right:calc(6px + var(--eb-index)*36px)!important;top:6px!important}body.eb-browser-mode.ebRect #ebControls button:hover{background:#ccd6df}body.eb-browser-mode.ebRect #dial{border:1px solid #98aabb!important;border-radius:9px!important;box-shadow:0 14px 65px #0009!important}body.eb-browser-mode.ebRect #dial>.letter,body.eb-browser-mode.ebRect #ebAddressBar,body.eb-browser-mode.ebRect #ebBrowserTitle{display:none!important}#ebEdge button{cursor:pointer;border:0;background:transparent;color:inherit;font:inherit}#ebEdge button:hover{background:#dce4eb}#ebEdge button:focus-visible,#ebEdge input:focus-visible{outline:2px solid #0078d4;outline-offset:1px}#ebTabs{height:40px;display:flex;align-items:end;gap:3px;padding:0 118px 0 10px;background:#e3ebf3;flex-shrink:0;overflow:auto}#ebTabs .ebTab{height:33px;min-width:100px;max-width:200px;display:flex;align-items:center;gap:12px;padding:0 13px;border-radius:9px 9px 0 0;background:#cfdce8;flex-shrink:0}#ebTabs .ebTab.ebActive{background:#f7f8fa}#ebTabs .ebTab span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#ebTabs .ebTab button{margin-left:auto;border-radius:50%;padding:3px}#ebTabs #ebNewTab{padding:8px;font-size:20px;height:33px}#ebToolbar{display:flex;align-items:center;gap:4px;padding:7px 9px;border-bottom:1px solid #d9dfe5;background:#f7f8fa;flex-shrink:0}#ebToolbar>button{width:30px;height:30px;border-radius:6px;font-size:19px}#ebNavigationForm{display:flex;align-items:center;gap:7px;flex:1;min-width:0;background:#e9edf1;border:1px solid #d3dce3;border-radius:99px;padding:0 12px;height:34px}#ebNavigationForm input{flex:1;min-width:0;border:0;background:transparent;padding:0;color:#27343e;font:13px 'Segoe UI',Arial;outline:0}#ebNavigationForm button{padding:4px 8px;border-radius:50%}#ebFavorites{display:flex;align-items:center;gap:15px;padding:7px 18px;border-bottom:1px solid #dde3e8;background:#f7f8fa;white-space:nowrap;overflow:auto;font-size:12px;flex-shrink:0}#ebFavorites a{color:#34414b;text-decoration:none}#ebContentArea{position:relative;flex:1;min-height:0;overflow:auto;background:linear-gradient(145deg,#e9f4ff,#f5f9fd 55%,#dcecf6)}#ebHome{max-width:780px;margin:7vh auto 0;padding:20px;text-align:center}#ebHome h1{font:600 clamp(28px,5vw,44px) 'Segoe UI',Arial;letter-spacing:.04em;color:#173e58;margin:0 0 8px}#ebHome p{color:#5e7487}#ebHomeSearch{display:flex;max-width:590px;margin:25px auto;background:white;border:1px solid #d6e2eb;border-radius:99px;box-shadow:0 8px 25px #29597510;overflow:hidden}#ebHomeSearch input{min-width:0;flex:1;padding:15px 20px;border:0;font:14px 'Segoe UI',Arial}#ebHomeSearch button{padding:0 20px;background:#0078d4;color:#fff}#ebQuickLinks{display:grid;grid-template-columns:repeat(auto-fit,minmax(84px,1fr));gap:16px;margin:30px auto;max-width:680px}#ebQuickLinks button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px;border-radius:10px;font-size:11px}#ebQuickLinks .desktop-app-icon{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;background:var(--app-bg,#133b58);color:var(--app-color,#fff);box-shadow:0 3px 10px #0002}#ebQuickLinks svg{width:30px;height:30px;fill:currentColor}#ebQuickLinks .app-word{font-size:9px;font-weight:800}#ebQuickLinks .app-glyph{font-size:24px}#ebPage{display:none;position:absolute;inset:0;width:100%;height:100%;border:0;background:white}#ebExternalNotice{display:none;padding:5px 15px;background:#eef4fa;border-bottom:1px solid #d4dfe9;font-size:11px;color:#536577}#ebExternalNotice a{color:#0067b8;margin-left:8px}#ebFooter{padding:5px 14px;font-size:10px;color:#677b8c;background:#f7f8fa;border-top:1px solid #dde3e8}@media(max-width:600px){#ebFavorites{gap:10px;padding:6px 10px}#ebToolbar{gap:1px;padding:5px}#ebToolbar>button{width:25px}#ebHome{margin:20px auto;padding:14px}#ebQuickLinks{gap:6px;grid-template-columns:repeat(4,1fr)}#ebTabs .ebTab{min-width:78px;padding:0 8px}#ebHomeSearch input{padding:12px;font-size:12px}}
+</style>
+<script id="eb-edge-browser-behavior">
+document.addEventListener('DOMContentLoaded',()=>{
+const dial=document.getElementById('dial'),edge=document.createElement('div');edge.id='ebEdge';edge.innerHTML=`<div id="ebTabs" role="tablist" aria-label="Browser tabs"></div><div id="ebToolbar"><button id="ebBack" title="Back" aria-label="Go back">←</button><button id="ebForward" title="Forward" aria-label="Go forward">→</button><button id="ebReload" title="Reload" aria-label="Reload page">↻</button><button id="ebHomeButton" title="Home" aria-label="Browser home">⌂</button><form id="ebNavigationForm"><span aria-hidden="true">⌕</span><input id="ebNavigationAddress" aria-label="Browser address bar" placeholder="Search or enter web address"><button type="submit" aria-label="Navigate">→</button></form><button id="ebOpenExternal" title="Open current site in a regular browser tab" aria-label="Open in regular browser tab">↗</button></div><nav id="ebFavorites" aria-label="Favorites"><a href="https://www.google.com/" target="_blank" rel="noopener noreferrer">Google</a><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube</a><a href="https://github.com/" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer">Spotify</a></nav><div id="ebExternalNotice">Some sites can display here. For sites that cannot, use this link:<a id="ebExternalLink" target="_blank" rel="noopener noreferrer">Open website in a regular tab ↗</a></div><main id="ebContentArea"><div id="ebHome"><h1>EYEOTA</h1><p>Try the in-window demos below. Other sites open in a regular tab.</p><div id="ebDemoButtons"><button type="button" id="ebDemoMap">Explore map inside EYEOTA</button><button type="button" id="ebDemoPage">Open test page inside EYEOTA</button></div><form id="ebHomeSearch"><input aria-label="Search the web" placeholder="Search the web or enter a website"><button type="submit">Search</button></form><div id="ebQuickLinks"></div></div><iframe id="ebPage" title="EYEOTA embedded demonstration" sandbox="allow-scripts allow-forms allow-popups" referrerpolicy="strict-origin-when-cross-origin"></iframe></main><footer id="ebFooter">EYEOTA Browser · Experimental web browser interface</footer>`;dial.append(edge);
+const $=id=>document.getElementById(id);let tabs=[{history:[''],index:0}],active=0;
+const current=()=>tabs[active],url=()=>current().history[current().index];
+function embeddedURL(value){try{const parsed=new URL(value),host=parsed.hostname.replace(/^www\./,'');if(host==='example.com'&&parsed.protocol==='https:')return parsed.href;if(host==='openstreetmap.org'&&parsed.protocol==='https:'){if(parsed.pathname==='/export/embed.html')return parsed.href;return 'https://www.openstreetmap.org/export/embed.html?bbox=-74.05%2C40.65%2C-73.85%2C40.8&layer=mapnik';}}catch{}return '';}
+
+function render(){const strip=$('ebTabs');strip.replaceChildren();tabs.forEach((t,i)=>{const b=document.createElement('div');b.className='ebTab'+(i===active?' ebActive':'');b.setAttribute('role','tab');b.setAttribute('aria-selected',i===active?'true':'false');b.tabIndex=0;const label=document.createElement('span');let value=t.history[t.index];label.textContent=value?new URL(value).hostname:'New tab';b.append(label);b.onclick=()=>{active=i;render()};b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();active=i;render()}};const close=document.createElement('button');close.textContent='×';close.setAttribute('aria-label','Close '+label.textContent+' tab');close.onclick=e=>{e.stopPropagation();tabs.splice(i,1);if(!tabs.length)tabs.push({history:[''],index:0});active=Math.min(active,tabs.length-1);render()};b.append(close);strip.append(b)});const add=document.createElement('button');add.id='ebNewTab';add.textContent='+';add.setAttribute('aria-label','New browser tab');add.onclick=()=>{tabs.push({history:[''],index:0});active=tabs.length-1;render()};strip.append(add);const value=url();$('ebNavigationAddress').value=value;$('ebBack').disabled=current().index===0;$('ebForward').disabled=current().index===current().history.length-1;const embedded=embeddedURL(value);$('ebHome').style.display=embedded?'none':'block';$('ebPage').style.display=embedded?'block':'none';$('ebExternalNotice').style.display=value?'block':'none';$('ebExternalLink').href=value||'https://www.google.com/';if(embedded){if($('ebPage').getAttribute('src')!==embedded)$('ebPage').src=embedded;}else $('ebPage').removeAttribute('src');window.dispatchEvent(new CustomEvent('eb-current-site',{detail:{url:value}}))}
+function navigate(value){value=value.trim();if(!value)return;let target;try{if(value.includes(' ')||(!value.includes('.')&&!value.includes('://')))target='https://www.google.com/search?q='+encodeURIComponent(value);else{const parsed=new URL(value.includes('://')?value:'https://'+value);if(!['http:','https:'].includes(parsed.protocol))throw Error();target=parsed.href}}catch{$('ebFooter').textContent='Enter a valid website address.';return}const t=current();t.history=t.history.slice(0,t.index+1);t.history.push(target);t.index++;render();if(!embeddedURL(target))window.open(target,'_blank','noopener,noreferrer');$('ebFooter').textContent=embeddedURL(target)?'In-window demonstration · Other websites may require a regular browser tab.':'This website or search opens in a regular browser tab.'}
+$('ebDemoMap').onclick=()=>navigate('https://www.openstreetmap.org/');$('ebDemoPage').onclick=()=>navigate('https://example.com/');$('ebNavigationForm').onsubmit=e=>{e.preventDefault();navigate($('ebNavigationAddress').value)};$('ebHomeSearch').onsubmit=e=>{e.preventDefault();navigate($('ebHomeSearch').querySelector('input').value)};$('ebBack').onclick=()=>{if(current().index>0){current().index--;render()}};$('ebForward').onclick=()=>{if(current().index<current().history.length-1){current().index++;render()}};$('ebReload').onclick=()=>{const embedded=embeddedURL(url());if(embedded)$('ebPage').src=embedded;else if(url())window.open(url(),'_blank','noopener,noreferrer');else render()};$('ebHomeButton').onclick=()=>{const t=current();t.history=t.history.slice(0,t.index+1);t.history.push('');t.index++;render()};$('ebOpenExternal').onclick=()=>{if(url())window.open(url(),'_blank','noopener,noreferrer')};
+const destinations={'Steam':'https://store.steampowered.com/','Microsoft Edge':'https://www.microsoft.com/edge','Discord':'https://discord.com/app','Spotify':'https://open.spotify.com/','GitHub':'https://github.com/','Twitch':'https://www.twitch.tv/','Chrome':'https://www.google.com/chrome/','EYEOTA Browser':''};function buildLinks(){const links=$('ebQuickLinks');links.replaceChildren();dial.querySelectorAll('.letter').forEach(el=>{const name=(el.getAttribute('aria-label')||'').split(' — ')[0];if(!(name in destinations))return;const icon=el.querySelector('.desktop-app-icon');if(!icon)return;const b=document.createElement('button');b.type='button';b.append(icon.cloneNode(true));const text=document.createElement('span');text.textContent=name;b.append(text);b.onclick=()=>{if(destinations[name])navigate(destinations[name]);else $('ebHomeButton').click()};links.append(b)})}document.body.addEventListener('eyeota-mode-change',e=>{if(e.detail.mode==='browser')buildLinks()});$('ebMax').addEventListener('click',()=>{if(document.body.classList.contains('ebRect'))buildLinks()});render();
+});
+</script>
+
+
+<style id="eb-draggable-minimized-sun">
+body.eb-browser-mode.ebMinimized #ebRestore{position:fixed!important;left:var(--eb-sun-x,50vw)!important;top:var(--eb-sun-y,45vh)!important;transform:translate(-50%,-50%)!important;margin:0!important;z-index:300010!important;touch-action:none!important;user-select:none!important;-webkit-user-select:none!important;cursor:grab!important}body.eb-browser-mode.ebMinimized #ebRestore.ebSunDragging{cursor:grabbing!important}
+</style>
+<script id="eb-draggable-sun-code">
+document.addEventListener('DOMContentLoaded',()=>{
+const sun=document.getElementById('ebRestore'),body=document.body;sun.title='Drag to move · Click to restore browser dial';let location=null,drag=null,suppressClick=false;
+function clamp(value,dimension){const margin=90;return dimension<margin*2?dimension/2:Math.max(margin,Math.min(dimension-margin,value))}
+function position(x,y){location={x:clamp(x,innerWidth),y:clamp(y,innerHeight)};sun.style.setProperty('--eb-sun-x',location.x+'px');sun.style.setProperty('--eb-sun-y',location.y+'px')}
+document.getElementById('ebMin').addEventListener('click',()=>{if(location)position(location.x,location.y);else position(innerWidth/2,innerHeight*.45);sun.classList.remove('ebSunDragging');drag=null;suppressClick=false});
+sun.addEventListener('pointerdown',e=>{if(!body.classList.contains('ebMinimized')||(e.pointerType==='mouse'&&e.button!==0))return;const rect=sun.getBoundingClientRect();const center=location||{x:rect.left+rect.width/2,y:rect.top+rect.height/2};drag={id:e.pointerId,x:e.clientX,y:e.clientY,cx:center.x,cy:center.y,moved:false};suppressClick=false;sun.setPointerCapture(e.pointerId)});
+sun.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.hypot(dx,dy)>5)drag.moved=true;if(drag.moved){sun.classList.add('ebSunDragging');position(drag.cx+dx,drag.cy+dy)}});
+sun.addEventListener('pointerup',e=>{if(!drag||e.pointerId!==drag.id)return;suppressClick=drag.moved;drag=null;sun.classList.remove('ebSunDragging');if(sun.hasPointerCapture(e.pointerId))sun.releasePointerCapture(e.pointerId)});
+sun.addEventListener('pointercancel',()=>{drag=null;suppressClick=true;sun.classList.remove('ebSunDragging')});sun.addEventListener('click',e=>{if(suppressClick&&e.detail!==0){e.preventDefault();e.stopImmediatePropagation();suppressClick=false}},true);
+sun.addEventListener('keydown',e=>{const offsets={ArrowLeft:[-12,0],ArrowRight:[12,0],ArrowUp:[0,-12],ArrowDown:[0,12]};if(!offsets[e.key])return;e.preventDefault();const p=location||{x:innerWidth/2,y:innerHeight*.45};position(p.x+offsets[e.key][0],p.y+offsets[e.key][1])});window.addEventListener('resize',()=>{if(location)position(location.x,location.y)});
+});
+</script>
+
+
+<style id="eb-minimized-logo-and-planet">
+#ebSunWordmark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:0;pointer-events:none;z-index:4;background:none!important;transform:none!important;opacity:1!important}#ebSunWordmark [data-logo-letter]{font:900 13px/1 Arial,sans-serif!important;letter-spacing:0!important;margin:0!important;padding:0!important;display:inline!important;background:none!important;text-shadow:0 1px 2px #000,0 0 2px #000!important;transform:none!important;-webkit-text-stroke:.3px #0005;transition:color 1.2s ease}
+#ebSunPlanetSystem{display:none;position:fixed;left:var(--eb-sun-x,50vw);top:var(--eb-sun-y,45vh);width:156px;height:156px;transform:translate(-50%,-50%);z-index:300011;pointer-events:none}body.eb-browser-mode.ebMinimized #ebSunPlanetSystem[data-has-site="true"]{display:block}#ebPlanetTrack{position:absolute;inset:0;border:1px solid rgba(255,225,139,.28);border-radius:50%;animation:ebPlanetOrbit 16s linear infinite;pointer-events:none}#ebSitePlanet{position:absolute;left:100%;top:50%;width:32px;height:32px;transform:translate(-50%,-50%);border:1px solid #d8e7f2;border-radius:50%;background:radial-gradient(circle at 32% 25%,#365772,#091a29 75%);box-shadow:0 0 9px #91d9ff70,0 4px 10px #0008;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;pointer-events:auto}#ebPlanetLogo{display:flex;align-items:center;justify-content:center;width:23px;height:23px;animation:ebPlanetUpright 16s linear infinite;color:var(--eb-planet-color,#fff);font:900 16px Arial;pointer-events:none}#ebPlanetLogo svg,#ebPlanetLogo img{width:23px;height:23px;fill:currentColor;object-fit:contain}#ebSitePlanet:focus-visible{outline:3px solid white;outline-offset:3px}#ebSitePlanet:hover{box-shadow:0 0 16px #9eeaff,0 4px 10px #0008}@keyframes ebPlanetOrbit{to{transform:rotate(360deg)}}@keyframes ebPlanetUpright{to{transform:rotate(-360deg)}}@media(prefers-reduced-motion:reduce){#ebPlanetTrack,#ebPlanetLogo{animation:none!important}}
+</style>
+<script id="eb-minimized-site-planet">
+document.addEventListener('DOMContentLoaded',()=>{
+const sun=document.getElementById('ebRestore'),originalLogo=document.getElementById('eyeotaColorLogo'),wordmark=document.createElement('span');wordmark.id='ebSunWordmark';wordmark.setAttribute('aria-hidden','true');
+if(originalLogo){originalLogo.querySelectorAll('[data-logo-letter]').forEach(letter=>{const copy=letter.cloneNode(true);copy.removeAttribute('id');wordmark.append(copy)});const source=[...originalLogo.querySelectorAll('[data-logo-letter]')],copies=[...wordmark.querySelectorAll('[data-logo-letter]')];function colors(){source.forEach((el,i)=>{copies[i].style.color=el.style.color||getComputedStyle(el).color})}new MutationObserver(colors).observe(originalLogo,{subtree:true,attributes:true,attributeFilter:['style']});colors()}else wordmark.textContent='EYEOTA';sun.append(wordmark);
+const system=document.createElement('div');system.id='ebSunPlanetSystem';system.dataset.hasSite='false';system.innerHTML='<div id="ebPlanetTrack"><button id="ebSitePlanet" type="button"><span id="ebPlanetLogo"></span></button></div>';document.body.append(system);const planet=document.getElementById('ebSitePlanet'),logo=document.getElementById('ebPlanetLogo');let site='';
+function followSun(){for(const prop of ['--eb-sun-x','--eb-sun-y'])system.style.setProperty(prop,sun.style.getPropertyValue(prop)|| (prop.endsWith('x')?'50vw':'45vh'))}new MutationObserver(followSun).observe(sun,{attributes:true,attributeFilter:['style']});followSun();
+function setSite(value){site=value||'';logo.replaceChildren();if(!site){system.dataset.hasSite='false';return}let parsed;try{parsed=new URL(site)}catch{system.dataset.hasSite='false';return}const host=parsed.hostname.replace(/^www\./,'');const refs=window.EYEOTA_SITE_ICON_REFERENCES||[];let match=refs.find(entry=>{try{const h=new URL(entry[2]).hostname.replace(/^www\./,'');return host===h||host.endsWith('.'+h)}catch{return false}});if(host==='youtu.be')match=refs.find(entry=>entry[0]==='YouTube');const name=match?match[0]:host;planet.setAttribute('aria-label','Open '+name+' in a regular browser tab');planet.title=name+' · Click to open website';if(match){logo.innerHTML=match[1];logo.style.setProperty('--eb-planet-color',match[3])}else{const initial=document.createElement('span');initial.textContent=host.charAt(0).toUpperCase();logo.append(initial);const img=document.createElement('img');img.alt='';img.src=parsed.origin+'/favicon.ico';img.onload=()=>{if(site===value)logo.replaceChildren(img)};img.onerror=()=>{};}system.dataset.hasSite='true'}
+window.addEventListener('eb-current-site',e=>setSite(e.detail.url));document.getElementById('ebFavorites').addEventListener('click',e=>{const a=e.target.closest('a');if(a)setSite(a.href)});planet.onclick=e=>{e.stopPropagation();if(site)window.open(site,'_blank','noopener,noreferrer')};
+});
+</script>
+
+<style>#ebDemoButtons{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:18px 0}#ebEdge #ebDemoButtons button{padding:12px 18px;border:1px solid #93b6cd;background:#e5f2fc;border-radius:10px;color:#17466b;font-weight:600}</style>
+
+<style id="eyeota-every-mode-notice">
+#eyeotaRhymeBetaNotice,#rhymeBetaToggle,body.rhyme-mode #eyeotaRhymeBetaNotice,body.rhyme-mode #rhymeBetaToggle{display:none!important}
+#eyeotaBuildNotice{position:fixed;left:14px;bottom:14px;width:min(315px,calc(100vw - 28px));z-index:500000;background:rgba(4,17,29,.96);color:#e8faff;border:1px solid #79bbcda6;border-radius:12px;padding:13px 38px 13px 14px;box-shadow:0 8px 28px #0006;font:12px/1.5 Arial,sans-serif;text-align:left}#eyeotaBuildNotice strong{display:block;color:#98eaff;font-size:12px;margin-bottom:3px}#eyeotaBuildNotice p{margin:0}#eyeotaBuildNoticeClose{position:absolute;right:6px;top:6px;width:28px;height:28px;border:1px solid #8db4c855;border-radius:50%;background:#163246;color:#fff;font:20px/1 Arial;cursor:pointer}#eyeotaBuildNoticeRestore{position:fixed;left:14px;bottom:14px;z-index:500000;border:1px solid #79bbcda6;border-radius:99px;background:#071b2bee;color:#e8faff;padding:9px 12px;font:700 11px Arial;cursor:pointer}#eyeotaBuildNotice[hidden],#eyeotaBuildNoticeRestore[hidden]{display:none!important}#eyeotaBuildNoticeClose:focus-visible,#eyeotaBuildNoticeRestore:focus-visible{outline:3px solid #8ceaff;outline-offset:3px}@media(max-width:600px){#eyeotaBuildNotice{left:8px;bottom:8px;width:min(280px,calc(100vw - 16px));padding:10px 36px 10px 12px;font-size:11px}#eyeotaBuildNoticeRestore{left:8px;bottom:8px;padding:8px 11px}}
+body.eb-browser-mode.ebMinimized.ebClosedSun #ebRestore{box-shadow:none!important;filter:none!important;background:radial-gradient(circle at 42% 38%,#fff2ac 0 8%,#ffdc64 30%,#eaa03e 65%,#ce7c22 100%)!important;border:1px solid #d9a655!important}
+body.eb-browser-mode.ebMinimized.ebClosedSun #ebRestore:before,body.eb-browser-mode.ebMinimized.ebClosedSun #ebRestore:after,body.eb-browser-mode.ebClosedSun #ebSunPlanetSystem{display:none!important;animation:none!important}
+</style>
+<aside id="eyeotaBuildNotice" role="note" aria-label="Dial development notice"><button id="eyeotaBuildNoticeClose" type="button" aria-label="Hide development notice" title="Hide notice">×</button><strong id="eyeotaBuildNoticeTitle">EYEOTA Lock · In development</strong><p>This dial is still being built and worked on. Features and design will continue to evolve.</p></aside>
+<button id="eyeotaBuildNoticeRestore" type="button" hidden aria-label="Show development notice">Development notice</button>
+<script id="eyeota-mode-notices-and-close-to-sun">
+document.addEventListener('DOMContentLoaded',()=>{
+const body=document.body,notice=document.getElementById('eyeotaBuildNotice'),restore=document.getElementById('eyeotaBuildNoticeRestore'),title=document.getElementById('eyeotaBuildNoticeTitle');const names={lock:'EYEOTA Lock',rhyme:'Rhyme Dial',eye:'Eye Test',smdial:'SMDial',desktop:'EYEOTA Desktop',browser:'EYEOTA Browser',notes:'Musical Cipher'};let mode='lock';const closed=new Set();try{const saved=JSON.parse(sessionStorage.getItem('eyeota-development-notices')||'[]');if(Array.isArray(saved))saved.forEach(x=>closed.add(x))}catch{}
+function visibleMode(){if(body.classList.contains('eb-browser-mode'))return 'browser';if(body.classList.contains('note-cipher-mode'))return 'notes';if(body.classList.contains('desktop-mode'))return 'desktop';if(body.classList.contains('smdial-mode'))return 'smdial';if(body.classList.contains('eye-test-mode'))return 'eye';if(body.classList.contains('rhyme-mode'))return 'rhyme';return 'lock'}
+function refresh(){mode=visibleMode();title.textContent=names[mode]+' · In development';notice.hidden=closed.has(mode);restore.hidden=!closed.has(mode);restore.title='Show '+names[mode]+' development notice'}
+function save(){try{sessionStorage.setItem('eyeota-development-notices',JSON.stringify([...closed]))}catch{}}
+document.getElementById('eyeotaBuildNoticeClose').onclick=()=>{closed.add(mode);save();refresh();restore.focus()};restore.onclick=()=>{closed.delete(mode);save();refresh();document.getElementById('eyeotaBuildNoticeClose').focus()};body.addEventListener('eyeota-mode-change',()=>{if(!body.classList.contains('eb-browser-mode')&&body.classList.contains('ebClosedSun'))body.classList.remove('ebClosedSun');refresh()});refresh();
+const sun=document.getElementById('ebRestore');document.getElementById('ebClose').onclick=()=>{document.getElementById('ebMin').click();body.classList.add('ebClosedSun')};document.getElementById('ebMin').addEventListener('click',()=>{if(body.classList.contains('ebClosedSun'))body.classList.remove('ebClosedSun')});sun.addEventListener('click',()=>{if(body.classList.contains('ebClosedSun'))body.classList.remove('ebClosedSun')});
+});
+</script>
+
 </body>
 </html>
