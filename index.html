@@ -9359,5 +9359,162 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
+
+<!-- V67: hard mode isolation + mobile label completely outside dial -->
+<style id="eyeota-v67-mode-isolation">
+@media(max-width:700px){
+  body.desktop-mode #dialLabel,
+  body.desktop-mode #modeLabel,
+  body.desktop-mode .dial-label,
+  body.desktop-mode .mode-label,
+  body.desktop-mode .desktop-label,
+  body.desktop-mode [data-mode-label]{
+    top:-58px!important;
+    left:50%!important;
+    bottom:auto!important;
+    transform:translateX(-50%)!important;
+    font-size:9px!important;
+    line-height:1!important;
+    letter-spacing:.10em!important;
+    white-space:nowrap!important;
+    width:max-content!important;
+    max-width:76vw!important;
+    z-index:260!important;
+    pointer-events:none!important;
+  }
+}
+</style>
+
+<script id="eyeota-v67-safe-desktop-animation">
+document.addEventListener('DOMContentLoaded',()=>{
+  const body=document.body;
+  const dial=document.getElementById('dial');
+  if(!dial)return;
+
+  /* Capture the normal non-Desktop inline geometry once.
+     Desktop may borrow the shared .letter elements, but must give them back. */
+  const normalState=new Map();
+  const rememberNormal=()=>{
+    dial.querySelectorAll('.letter').forEach(el=>{
+      if(!normalState.has(el)){
+        normalState.set(el,{
+          left:el.style.left,
+          top:el.style.top,
+          transform:el.style.transform,
+          width:el.style.width,
+          height:el.style.height,
+          display:el.style.display,
+          visibility:el.style.visibility,
+          opacity:el.style.opacity
+        });
+      }
+    });
+  };
+  rememberNormal();
+
+  function restoreSharedDial(){
+    normalState.forEach((v,el)=>{
+      el.style.left=v.left;
+      el.style.top=v.top;
+      el.style.transform=v.transform;
+      el.style.width=v.width;
+      el.style.height=v.height;
+      el.style.display=v.display;
+      el.style.visibility=v.visibility;
+      el.style.opacity=v.opacity;
+    });
+
+    /* Remove Desktop-only inline positioning that may have leaked to shared layers. */
+    dial.querySelectorAll('.letter').forEach(el=>{
+      if(!normalState.has(el)){
+        el.style.removeProperty('left');
+        el.style.removeProperty('top');
+        el.style.removeProperty('transform');
+      }
+    });
+  }
+
+  let wasDesktop=body.classList.contains('desktop-mode');
+
+  /* Observe the real body mode class. The instant Desktop is left,
+     restore shared dial geometry before another mode can use it. */
+  const observer=new MutationObserver(()=>{
+    const isDesktop=body.classList.contains('desktop-mode');
+
+    if(wasDesktop && !isDesktop){
+      restoreSharedDial();
+
+      /* Let each existing controller re-establish its own mode after cleanup. */
+      requestAnimationFrame(()=>{
+        body.dispatchEvent(new CustomEvent('eyeota-desktop-cleanup',{
+          detail:{mode:'left-desktop'}
+        }));
+      });
+    }
+
+    if(!wasDesktop && isDesktop){
+      rememberNormal();
+    }
+    wasDesktop=isDesktop;
+  });
+  observer.observe(body,{attributes:true,attributeFilter:['class']});
+
+  /* Safety net for the site's existing mode-change event. */
+  body.addEventListener('eyeota-mode-change',ev=>{
+    const mode=ev.detail&&ev.detail.mode;
+    if(mode && mode!=='desktop'){
+      restoreSharedDial();
+    }
+  });
+
+  /* Desktop animation is strictly gated. It never writes to the shared
+     dial unless Desktop is the active mode. */
+  let appPhase=-Math.PI/2;
+  let infoPhase=-Math.PI/2+Math.PI/5;
+  let last=performance.now();
+
+  function frame(now){
+    const dt=Math.min(50,Math.max(0,now-last));
+    last=now;
+
+    if(!body.classList.contains('desktop-mode')){
+      requestAnimationFrame(frame);
+      return;
+    }
+
+    const box=dial.getBoundingClientRect();
+    const size=Math.min(box.width,box.height);
+    const appRadius=size*.405;
+    const infoRadius=size*.292;
+
+    appPhase+=dt*.000010;
+    infoPhase-=dt*.000006;
+
+    const apps=[...dial.querySelectorAll('.letter')].filter(el=>el.offsetParent!==null);
+    apps.forEach((el,i)=>{
+      const a=appPhase+i*Math.PI*2/apps.length;
+      el.style.left='50%';
+      el.style.top='50%';
+      el.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*appRadius}px,${Math.sin(a)*appRadius}px)`;
+    });
+
+    const info=[...dial.querySelectorAll('#eyeotaInnerSystemRing .eyeota-inner-system')];
+    info.forEach((el,i)=>{
+      const a=infoPhase+i*Math.PI*2/info.length;
+      let rot=a*180/Math.PI+90;
+      const n=((a%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+      if(n>Math.PI/2 && n<Math.PI*3/2)rot+=180;
+      rot=((rot+180)%360+360)%360-180;
+      el.style.left='50%';
+      el.style.top='50%';
+      el.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*infoRadius}px,${Math.sin(a)*infoRadius}px) rotate(${rot}deg)`;
+    });
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+});
+</script>
+
 </body>
 </html>
