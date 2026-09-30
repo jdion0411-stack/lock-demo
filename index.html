@@ -2894,6 +2894,76 @@ body:not(.smdial-mode) #smdialVoiceCenter{
 body.eye-test-mode .letter .social-logo-svg{display:none!important;}
 </style>
 
+
+<style id="eyeota-desktop-v35-style">
+/* EYEOTA Desktop V36: larger app dial, music strip removed. */
+body.desktop-mode .letter{
+  cursor:pointer!important;font-size:0!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:visible!important;
+}
+body.desktop-mode #dialStage{width:min(620px,calc(100vw - 32px))!important;}
+body.desktop-mode #dial{width:min(620px,calc(100vw - 32px))!important;height:min(620px,calc(100vw - 32px))!important;max-width:620px!important;max-height:620px!important;}
+body.desktop-mode .letter{width:46px!important;height:46px!important;margin-left:-23px!important;margin-top:-23px!important;}
+body.desktop-mode .letter .desktop-app-icon{
+  width:88%;height:88%;display:flex;align-items:center;justify-content:center;border-radius:12px;
+  background:var(--app-bg,rgba(10,18,32,.92));color:var(--app-color,#fff);
+  border:1px solid rgba(255,255,255,.32);box-shadow:0 3px 9px rgba(0,0,0,.7),0 0 8px color-mix(in srgb,var(--app-color,#fff) 35%,transparent);
+  overflow:hidden;pointer-events:none;transition:transform .15s ease,filter .15s ease,box-shadow .15s ease;
+}
+body.desktop-mode .letter:hover .desktop-app-icon{transform:scale(1.14);filter:brightness(1.15);box-shadow:0 3px 9px #000,0 0 13px var(--app-color,#fff)}
+body.desktop-mode .desktop-app-icon svg{width:72%;height:72%;fill:currentColor;display:block}
+body.desktop-mode .desktop-app-icon .app-word{font:900 10px/1 Arial,sans-serif;letter-spacing:-.02em;text-align:center;padding:2px;color:inherit}
+body.desktop-mode .desktop-app-icon .app-glyph{font:900 24px/1 Arial,sans-serif}
+body.desktop-mode .desktop-app-icon.eyeota-app{background:radial-gradient(circle at 35% 25%,#164e63,#06111d 70%);border-color:#00f2ff;box-shadow:0 0 14px rgba(0,242,255,.55)}
+body.desktop-mode .desktop-app-icon.eyeota-app .app-word{font-size:9px;letter-spacing:.08em;color:#e6fbff}
+
+body.desktop-mode .personal-gateway,
+body.desktop-mode .main-layout > .banner,
+body.desktop-mode .main-layout > .color-panel,
+body.desktop-mode .main-layout > .panel,
+body.desktop-mode #rhymeWorkspace,
+body.desktop-mode #eyeTestPanel,
+body.desktop-mode #musicLockDisclosure,
+body.desktop-mode .music-dock,
+body.desktop-mode #smdialVoiceDiagnostic,
+body.desktop-mode #smdialVoiceStatus{display:none!important}
+body.desktop-mode .note-track,body.desktop-mode .note,body.desktop-mode #outerRing{display:none!important;visibility:hidden!important;pointer-events:none!important}
+body.desktop-mode .main-layout{padding-top:52px!important}
+body.desktop-mode #modeChip{position:absolute!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;width:max-content!important;min-width:170px!important;text-align:center!important;justify-content:center!important}
+body.desktop-mode .center-artwork{visibility:visible!important;display:flex!important;pointer-events:none!important;animation:none!important}
+body.desktop-mode .center-artwork > *{display:none!important}
+body.desktop-mode .center-artwork:before{
+  content:"EYEOTA\\A DESKTOP";white-space:pre;text-align:center;color:#fff;font:900 15px/1.12 Arial,sans-serif;letter-spacing:.12em;
+  width:112px;height:112px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 40% 30%,rgba(0,242,255,.25),rgba(3,10,20,.96) 68%);border:2px solid rgba(0,242,255,.8);
+  box-shadow:0 0 0 6px rgba(0,0,0,.35),0 0 24px rgba(0,242,255,.38);
+  animation:eyeotaDesktopPulse 1.8s ease-in-out infinite alternate;
+}
+@keyframes eyeotaDesktopPulse{from{box-shadow:0 0 0 6px rgba(0,0,0,.35),0 0 14px rgba(0,242,255,.25)}to{box-shadow:0 0 0 6px rgba(0,0,0,.35),0 0 30px rgba(0,242,255,.62)}}
+#eyeotaDesktopConcept{display:none}
+body.desktop-mode #eyeotaDesktopConcept{display:block!important;width:min(720px,calc(100% - 28px));margin:12px auto 26px;padding:18px;border-radius:16px;background:rgba(3,9,18,.9);border:1px solid rgba(0,242,255,.35);box-shadow:0 12px 34px rgba(0,0,0,.38);color:#eafcff;text-align:left}
+#eyeotaDesktopConcept h2{font-size:20px;margin:0 0 7px;color:#fff}
+#eyeotaDesktopConcept .desktop-kicker{font:800 11px/1.2 Arial,sans-serif;letter-spacing:.14em;color:#00f2ff;margin-bottom:9px}
+#eyeotaDesktopConcept p{font-size:13px;line-height:1.55;margin:0 0 12px;color:#d8e7ef}
+
+#eyeotaDesktopConcept .music-bars{display:flex;align-items:center;gap:3px;height:22px}
+#eyeotaDesktopConcept .music-bars i{width:3px;background:#00f2ff;border-radius:4px;animation:desktopBars .7s ease-in-out infinite alternate}
+#eyeotaDesktopConcept .music-bars i:nth-child(1){height:8px}#eyeotaDesktopConcept .music-bars i:nth-child(2){height:18px;animation-delay:.15s}#eyeotaDesktopConcept .music-bars i:nth-child(3){height:12px;animation-delay:.3s}#eyeotaDesktopConcept .music-bars i:nth-child(4){height:21px;animation-delay:.08s}#eyeotaDesktopConcept .music-bars i:nth-child(5){height:10px;animation-delay:.22s}
+@keyframes desktopBars{to{transform:scaleY(.45)}}
+#eyeotaDesktopConcept .music-copy{flex:1;font-size:12px;font-weight:700}
+#eyeotaDesktopMute{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;padding:7px 10px;font-weight:800;cursor:pointer}
+@media(max-width:700px){body.desktop-mode .main-layout{padding-top:34px!important}body.desktop-mode #modeChip{top:8px!important}body.desktop-mode #dialStage{width:calc(100vw - 20px)!important}body.desktop-mode #dial{width:calc(100vw - 20px)!important;height:calc(100vw - 20px)!important}body.desktop-mode .letter{width:36px!important;height:36px!important;margin-left:-18px!important;margin-top:-18px!important}body.desktop-mode .desktop-app-icon .app-word{font-size:7px}body.desktop-mode .desktop-app-icon .app-glyph{font-size:18px}body.desktop-mode .center-artwork:before{width:94px;height:94px;font-size:12px}}
+</style>
+
+
+<style id="eyeota-v38-wallpaper-support">
+body.desktop-mode.eyeota-custom-wallpaper:before{
+ content:"";position:fixed;inset:0;z-index:-5;
+ background-image:var(--eyeota-user-wallpaper);background-size:cover;background-position:center;background-repeat:no-repeat
+}
+body.desktop-mode.eyeota-custom-wallpaper #eyeotaPubgBackground{opacity:0!important}
+body.desktop-mode.eyeota-custom-wallpaper #eyeotaPubgShade{background:rgba(0,0,0,.34)!important}
+</style>
+
 </head>
 
 <body>
@@ -3142,13 +3212,22 @@ body.eye-test-mode .letter .social-logo-svg{display:none!important;}
             </h1>
 
             <p>DOCUMENT SOLUTIONS</p>
-            <div class="eyeota-feature-line" aria-label="EYEOTA features">EYEOTA LOCK <span>•</span> RHYME DIAL <span>•</span> EYE TEST <span>•</span> SMDIAL</div>
+            <div class="eyeota-feature-line" aria-label="EYEOTA features">EYEOTA LOCK <span>•</span> RHYME DIAL <span>•</span> EYE TEST <span>•</span> SMDIAL <span>•</span> DESKTOP</div>
 <div class="eyeota-wip-disclaimer">
   <strong>EYEOTA MOVING-LETTER EYE TEST — WORK IN PROGRESS</strong><br>
   This research/development project explores whether a circular moving-letter interface may be useful for vision testing. It is not a medical device, clinic, diagnosis, prescription, or substitute for an examination by a licensed eye-care professional. The creator is not a doctor or clinic. Prototype results must not be interpreted as a medical diagnosis.
 </div><div id="musicLockDisclosure" role="note" aria-label="Music Lock development and patent notice"><strong>WORK IN PROGRESS</strong> — EYEOTA Music Lock is an evolving prototype. Multi-factor authentication technology covered by the inventor’s patent.</div>
 
         </div>
+
+
+        <section id="eyeotaDesktopConcept" aria-label="EYEOTA Desktop concept in development">
+          <div class="desktop-kicker">CONCEPT • IN DEVELOPMENT</div>
+          <h2>EYEOTA Desktop</h2>
+          <p>EYEOTA Desktop is a music-driven desktop environment being developed around EYEOTA's circular interface. The rotating dial is envisioned as a launcher for applications, games, files, system tools and EYEOTA's own internet experience.</p>
+
+        <div class="eyeota-spin-note">DESKTOP PREVIEW: the application ring slowly orbits while every app remains upright.</div>
+        </section>
 
         <!-- ==================================================
              RHYME DIAL WRITING WORKSPACE
@@ -6627,236 +6706,7 @@ checkUnlock();
  document.getElementById('clearWriting')?.addEventListener('click',()=>{if(editor&&confirm('Clear the writing pad?')){editor.innerHTML='';safeStore.remove('eyeotaRhymeWriting');updateCount();}});
  document.getElementById('saveWriting')?.addEventListener('click',()=>{
    if(!editor)return;
-   const doc='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+editor.innerHTML+'</div>
-<script id="eyeota-smdial-voice-launcher">
-document.addEventListener('DOMContentLoaded',function(){
-  const body=document.body;
-  const dial=document.getElementById('dial');
-  const stage=document.getElementById('dialStage');
-  const center=dial && dial.querySelector('.center-artwork');
-  if(!dial || !stage || !center) return;
-
-  const nativeMic=document.createElement('span');
-  nativeMic.className='smdial-native-mic';
-  nativeMic.innerHTML='<span class="voice-symbol" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="mic-copy">TAP TO SPEAK</span>';
-  center.appendChild(nativeMic);
-  center.setAttribute('role','button');
-  center.setAttribute('tabindex','0');
-  center.setAttribute('aria-label','Speak a social platform name');
-
-  const status=document.createElement('div');
-  status.id='smdialVoiceStatus';
-  status.setAttribute('role','status');
-  status.setAttribute('aria-live','polite');
-  status.textContent='Tap the center and say a social platform name.';
-  stage.insertAdjacentElement('afterend',status);
-
-  const diagnostic=document.createElement('div');
-  diagnostic.id='smdialVoiceDiagnostic';
-  diagnostic.innerHTML='<strong>VOICE DIAGNOSTIC</strong><div class="diag-current">READY — tap the voice symbol.</div><div class="diag-detail"></div>';
-  status.insertAdjacentElement('afterend',diagnostic);
-
-  function diag(stageText,detail){
-    const current=diagnostic.querySelector('.diag-current');
-    const info=diagnostic.querySelector('.diag-detail');
-    if(current) current.textContent=stageText;
-    if(info) info.textContent=detail||'';
-  }
-
-  function positionVoiceCenter(){}
-
-  });
-  requestAnimationFrame(positionVoiceCenter);
-
-  const destinations={
-    instagram:'https://www.instagram.com/',
-    youtube:'https://www.youtube.com/',
-    tiktok:'https://www.tiktok.com/',
-    x:'https://x.com/',
-    facebook:'https://www.facebook.com/',
-    linkedin:'https://www.linkedin.com/',
-    snapchat:'https://www.snapchat.com/',
-    pinterest:'https://www.pinterest.com/',
-    twitch:'https://www.twitch.tv/',
-    reddit:'https://www.reddit.com/',
-    discord:'https://discord.com/',
-    threads:'https://www.threads.net/',
-    whatsapp:'https://www.whatsapp.com/',
-    messenger:'https://www.messenger.com/',
-    telegram:'https://telegram.org/',
-    tumblr:'https://www.tumblr.com/',
-    quora:'https://www.quora.com/',
-    mastodon:'https://joinmastodon.org/',
-    bluesky:'https://bsky.app/',
-    vimeo:'https://vimeo.com/',
-    flickr:'https://www.flickr.com/',
-    medium:'https://medium.com/',
-    github:'https://github.com/',
-    spotify:'https://open.spotify.com/',
-    soundcloud:'https://soundcloud.com/',
-    patreon:'https://www.patreon.com/'
-  };
-
-  const aliases=[
-    ['facebook messenger','messenger'],['linked in','linkedin'],['linkedin','linkedin'],
-    ['you tube','youtube'],['youtube','youtube'],['tik tok','tiktok'],['tiktok','tiktok'],
-    ['twitter','x'],['x dot com','x'],['instagram','instagram'],['facebook','facebook'],
-    ['snap chat','snapchat'],['snapchat','snapchat'],['pinterest','pinterest'],
-    ['twitch','twitch'],['reddit','reddit'],['discord','discord'],['threads','threads'],
-    ['whats app','whatsapp'],['whatsapp','whatsapp'],['messenger','messenger'],
-    ['telegram','telegram'],['tumblr','tumblr'],['quora','quora'],['mastodon','mastodon'],
-    ['blue sky','bluesky'],['bluesky','bluesky'],['vimeo','vimeo'],['flickr','flickr'],
-    ['medium','medium'],['git hub','github'],['github','github'],['spotify','spotify'],
-    ['sound cloud','soundcloud'],['soundcloud','soundcloud'],['patreon','patreon'],
-    ['x','x']
-  ];
-
-  function findPlatform(spoken){
-    const t=(' '+spoken.toLowerCase().replace(/[^\w\s.]/g,' ').replace(/\s+/g,' ').trim()+' ');
-    for(const [phrase,key] of aliases){
-      const p=' '+phrase+' ';
-      if(t.includes(p)) return key;
-    }
-    return null;
-  }
-
-  function logoFor(key){
-    const labels={
-      x:'X',linkedin:'LinkedIn',youtube:'YouTube',tiktok:'TikTok',instagram:'Instagram',
-      facebook:'Facebook',snapchat:'Snapchat',pinterest:'Pinterest',twitch:'Twitch',
-      reddit:'Reddit',discord:'Discord',threads:'Threads',whatsapp:'WhatsApp',
-      messenger:'Messenger',telegram:'Telegram',tumblr:'Tumblr',quora:'Quora',
-      mastodon:'Mastodon',bluesky:'Bluesky',vimeo:'Vimeo',flickr:'Flickr',
-      medium:'Medium',github:'GitHub',spotify:'Spotify',soundcloud:'SoundCloud',
-      patreon:'Patreon'
-    };
-    return Array.from(dial.querySelectorAll('.letter')).find(el=>{
-      const a=(el.getAttribute('aria-label')||'').toLowerCase();
-      return a==='open '+(labels[key]||key).toLowerCase();
-    });
-  }
-
-  function launch(key){
-    const el=logoFor(key);
-    if(el) el.classList.add('smdial-voice-match');
-    const display=(el && (el.getAttribute('aria-label')||'').replace(/^Open /,'')) || key;
-    status.textContent='Opening '+display+'…';
-    setTimeout(function(){
-      window.open(destinations[key],'_blank','noopener,noreferrer');
-      if(el) el.classList.remove('smdial-voice-match');
-      status.textContent='Tap the center and say another social platform name.';
-    },650);
-  }
-
-  function listen(e){
-    if(e){e.preventDefault();e.stopPropagation();}
-    if(!body.classList.contains('smdial-mode')) return;
-
-    diag('1/4 — CLICK DETECTED','The center voice control is receiving your click.');
-
-    if(!window.isSecureContext){
-      diag('STOPPED — NOT HTTPS','Open the deployed EYEOTA HTTPS website before testing voice.');
-      status.textContent='Voice requires the secure HTTPS website.';
-      return;
-    }
-
-    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-    if(!SR){
-      diag('STOPPED — SPEECH ENGINE UNAVAILABLE',
-        'This browser does not expose SpeechRecognition. The social logos can still be opened by clicking them.');
-      status.textContent='Speech recognition is unavailable in this browser.';
-      return;
-    }
-
-    diag('2/4 — SPEECH ENGINE FOUND','Starting browser speech recognition now…');
-
-    let recognition;
-    try{
-      recognition=new SR();
-      recognition.lang='en-US';
-      recognition.continuous=false;
-      recognition.interimResults=false;
-      recognition.maxAlternatives=5;
-    }catch(err){
-      diag('STOPPED — ENGINE CREATION FAILED',(err&&err.name?err.name+': ':'')+(err&&err.message?err.message:String(err)));
-      return;
-    }
-
-    recognition.onstart=function(){
-      body.classList.add('smdial-listening');
-      status.textContent='Listening… say a social platform name.';
-      diag('3/4 — LISTENING','Say “Facebook”, “LinkedIn”, “YouTube”, or another logo on the dial.');
-    };
-
-    recognition.onaudiostart=function(){
-      diag('3/4 — MICROPHONE ACTIVE','Audio reached the browser speech engine. Say a platform name.');
-    };
-
-    recognition.onspeechstart=function(){
-      diag('3/4 — VOICE DETECTED','Your voice was detected. Keep speaking the platform name.');
-    };
-
-    recognition.onresult=function(ev){
-      let key=null,heard='';
-      for(let r=0;r<ev.results.length && !key;r++){
-        for(let i=0;i<ev.results[r].length;i++){
-          heard=ev.results[r][i].transcript;
-          key=findPlatform(heard);
-          if(key) break;
-        }
-      }
-      body.classList.remove('smdial-listening');
-      if(key){
-        diag('4/4 — HEARD: “'+heard+'”','Platform recognized. Opening it now.');
-        launch(key);
-      }else{
-        diag('HEARD: “'+heard+'” — NO PLATFORM MATCH','Tap the center and try saying only the platform name.');
-        status.textContent='I heard “'+heard+'”, but did not recognize a platform.';
-      }
-    };
-
-    recognition.onerror=function(ev){
-      body.classList.remove('smdial-listening');
-      const code=(ev&&ev.error)||'unknown';
-      let help='Browser speech recognition returned an error.';
-      if(code==='not-allowed'||code==='service-not-allowed') help='Microphone/speech permission is blocked. Allow microphone access for this site in the browser address bar/site permissions.';
-      if(code==='audio-capture') help='The browser could not access a working microphone.';
-      if(code==='no-speech') help='The microphone opened, but no speech was detected. Tap again and speak immediately.';
-      if(code==='network') help='The browser speech-recognition service could not be reached.';
-      diag('STOPPED — '+code.toUpperCase(),help);
-      status.textContent='Voice error: '+code+'.';
-    };
-
-    recognition.onend=function(){
-      body.classList.remove('smdial-listening');
-    };
-
-    try{
-      recognition.start();
-      diag('2/4 — START REQUEST SENT','Waiting for the browser to activate speech recognition…');
-    }catch(err){
-      diag('STOPPED — START FAILED',(err&&err.name?err.name+': ':'')+(err&&err.message?err.message:String(err)));
-      status.textContent='Speech recognition could not start.';
-    }
-  }
-
-  center.addEventListener('click',function(e){
-    if(!body.classList.contains('smdial-mode')) return;
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-    listen(e);
-  },true);
-  center.addEventListener('keydown',function(e){
-    if(e.key==='Enter'||e.key===' '){listen(e);}
-  });
-});
-</script>
-
-
-
-
-</body></html>';
+   const doc='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+editor.innerHTML+'</div></body></html>';
    const blob=new Blob([doc],{type:'text/html;charset=utf-8'}), url=URL.createObjectURL(blob), a=document.createElement('a');
    a.href=url;a.download='EYEOTA-Rhyme-Dial-Writing.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);if(status)status.textContent='Document saved';
  });
@@ -7094,7 +6944,6 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
-
 <button id="rhymeBetaToggle" type="button" aria-label="Show beta notice">Beta notice</button>
 <script id="rhyme-beta-mobile-toggle-script">
 document.addEventListener('DOMContentLoaded',function(){
@@ -7111,13 +6960,14 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 </script>
 
-
 <script id="eyeota-existing-mode-chip-sync">
 document.addEventListener('DOMContentLoaded',function(){
   const chip=document.getElementById('modeChip');
   if(!chip)return;
   function syncModeChip(){
-    if(document.body.classList.contains('smdial-mode')){
+    if(document.body.classList.contains('desktop-mode')){
+      chip.textContent='EYEOTA Desktop';
+    }else if(document.body.classList.contains('smdial-mode')){
       chip.textContent='SMDial';
     }else if(document.body.classList.contains('eye-test-mode')){
       chip.textContent='Eye Test';
@@ -7168,6 +7018,36 @@ document.addEventListener('DOMContentLoaded',function(){
 
   ];
 
+  const desktopApps=[
+    ["PUBG",`<span class="desktop-app-icon" style="--app-bg:#d89b16;--app-color:#111"><span class="app-word">PUBG</span></span>`],
+    ["Steam",`<span class="desktop-app-icon" style="--app-bg:#10243b;--app-color:#fff"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 496 512\"><path d=\"M496 256c0 137-111.2 248-248.4 248-113.8 0-209.6-76.3-239-180.4l95.2 39.3c6.4 32.1 34.9 56.4 68.9 56.4 39.2 0 71.9-32.4 70.2-73.5l84.5-60.2c52.1 1.3 95.8-40.9 95.8-93.5 0-51.6-42-93.5-93.7-93.5s-93.7 42-93.7 93.5v1.2L176.6 279c-15.5-.9-30.7 3.4-43.5 12.1L0 236.1C10.2 108.4 117.1 8 247.6 8 384.8 8 496 119 496 256zM155.7 384.3l-30.5-12.6a52.79 52.79 0 0 0 27.2 25.8c26.9 11.2 57.8-1.6 69-28.4 5.4-13 5.5-27.3.1-40.3-5.4-13-15.5-23.2-28.5-28.6-12.9-5.4-26.7-5.2-38.9-.6l31.5 13c19.8 8.2 29.2 30.9 20.9 50.7-8.3 19.9-31 29.2-50.8 21zm173.8-129.9c-34.4 0-62.4-28-62.4-62.3s28-62.3 62.4-62.3 62.4 28 62.4 62.3-27.9 62.3-62.4 62.3zm.1-15.6c25.9 0 46.9-21 46.9-46.8 0-25.9-21-46.8-46.9-46.8s-46.9 21-46.9 46.8c.1 25.8 21.1 46.8 46.9 46.8z\"/></svg></span>`],
+    ["Microsoft Edge",`<span class="desktop-app-icon" style="--app-bg:#082f49;--app-color:#39d9c7"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path d=\"M120.1 37.44C161.1 12.23 207.7-.7753 255 .0016C423 .0016 512 123.8 512 219.5C511.9 252.2 499 283.4 476.1 306.7C453.2 329.9 422.1 343.2 389.4 343.7C314.2 343.7 297.9 320.6 297.9 311.7C297.9 307.9 299.1 305.5 302.7 302.3L303.7 301.1L304.1 299.5C314.6 288 320 273.3 320 257.9C320 179.2 237.8 115.2 136 115.2C98.46 114.9 61.46 124.1 28.48 142.1C55.48 84.58 111.2 44.5 119.8 38.28C120.6 37.73 120.1 37.44 120.1 37.44V37.44zM135.7 355.5C134.3 385.5 140.3 415.5 152.1 442.7C165.7 469.1 184.8 493.7 208.6 512C149.1 500.5 97.11 468.1 59.2 422.7C21.12 376.3 0 318.4 0 257.9C0 206.7 62.4 163.5 136 163.5C172.6 162.9 208.4 174.4 237.8 196.2L234.2 197.4C182.7 215 135.7 288.1 135.7 355.5V355.5zM469.8 400L469.1 400.1C457.3 418.9 443.2 435.2 426.9 449.6C396.1 477.6 358.8 495.1 318.1 499.5C299.5 499.8 281.3 496.3 264.3 488.1C238.7 477.8 217.2 458.1 202.7 435.1C188.3 411.2 181.6 383.4 183.7 355.5C183.1 335.4 189.1 315.2 198.7 297.3C212.6 330.4 236.2 358.6 266.3 378.1C296.4 397.6 331.8 407.6 367.7 406.7C398.7 407 429.8 400 457.9 386.2L459.8 385.3C463.7 383 467.5 381.4 471.4 385.3C475.9 390.2 473.2 394.5 470.2 399.3C470 399.5 469.9 399.8 469.8 400V400z\"/></svg></span>`],
+    ["Recycle Bin",`<span class="desktop-app-icon" style="--app-bg:#e6f4ff;--app-color:#1261a0"><span class="app-glyph">♻</span></span>`],
+    ["Streamlabs",`<span class="desktop-app-icon" style="--app-bg:#101820;--app-color:#80f5d2"><span class="app-word">STREAM<br>LABS</span></span>`],
+    ["ARC Raiders",`<span class="desktop-app-icon" style="--app-bg:#342713;--app-color:#ffd36b"><span class="app-word">ARC<br>RAIDERS</span></span>`],
+    ["EYEOTA Browser",`<span class="desktop-app-icon eyeota-app"><span class="app-word">EYEOTA</span></span>`],
+    ["Discord",`<span class="desktop-app-icon" style="--app-bg:#5865f2;--app-color:#fff"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 512\"><path d=\"M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.971,0-52.843-26.587-52.843-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.844,59.239C470.715,310.993,447.538,337.58,417.871,337.58Z\"/></svg></span>`],
+    ["Spotify",`<span class="desktop-app-icon" style="--app-bg:#101010;--app-color:#1ed760"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 496 512\"><path d=\"M248 8C111.1 8 0 119.1 0 256s111.1 248 248 248 248-111.1 248-248S384.9 8 248 8zm100.7 364.9c-4.2 0-6.8-1.3-10.7-3.6-62.4-37.6-135-39.2-206.7-24.5-3.9 1-9 2.6-11.9 2.6-9.7 0-15.8-7.7-15.8-15.8 0-10.3 6.1-15.2 13.6-16.8 81.9-18.1 165.6-16.5 237 26.2 6.1 3.9 9.7 7.4 9.7 16.5s-7.1 15.4-15.2 15.4zm26.9-65.6c-5.2 0-8.7-2.3-12.3-4.2-62.5-37-155.7-51.9-238.6-29.4-4.8 1.3-7.4 2.6-11.9 2.6-10.7 0-19.4-8.7-19.4-19.4s5.2-17.8 15.5-20.7c27.8-7.8 56.2-13.6 97.8-13.6 64.9 0 127.6 16.1 177 45.5 8.1 4.8 11.3 11 11.3 19.7-.1 10.8-8.5 19.5-19.4 19.5zm31-76.2c-5.2 0-8.4-1.3-12.9-3.9-71.2-42.5-198.5-52.7-280.9-29.7-3.6 1-8.1 2.6-12.9 2.6-13.2 0-23.3-10.3-23.3-23.6 0-13.6 8.4-21.3 17.4-23.9 35.2-10.3 74.6-15.2 117.5-15.2 73 0 149.5 15.2 205.4 47.8 7.8 4.5 12.9 10.7 12.9 22.6 0 13.6-11 23.3-23.2 23.3z\"/></svg></span>`],
+    ["File Explorer",`<span class="desktop-app-icon" style="--app-bg:#15324a;--app-color:#ffd84a"><span class="app-glyph">▰</span></span>`],
+    ["Settings",`<span class="desktop-app-icon" style="--app-bg:#27364a;--app-color:#fff"><span class="app-glyph">⚙</span></span>`],
+    ["Downloads",`<span class="desktop-app-icon" style="--app-bg:#16324a;--app-color:#75d5ff"><span class="app-glyph">↓</span></span>`],
+    ["Documents",`<span class="desktop-app-icon" style="--app-bg:#24435d;--app-color:#fff"><span class="app-glyph">▤</span></span>`],
+    ["Photos",`<span class="desktop-app-icon" style="--app-bg:#35224f;--app-color:#f4a8ff"><span class="app-glyph">▧</span></span>`],
+    ["Videos",`<span class="desktop-app-icon" style="--app-bg:#301b35;--app-color:#ff8ee8"><span class="app-glyph">▶</span></span>`],
+    ["Twitch",`<span class="desktop-app-icon" style="--app-bg:#3a1a67;--app-color:#fff"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path d=\"M391.17,103.47H352.54v109.7h38.63ZM285,103H246.37V212.75H285ZM120.83,0,24.31,91.42V420.58H140.14V512l96.53-91.42h77.25L487.69,256V0ZM449.07,237.75l-77.22,73.12H294.61l-67.6,64v-64H140.14V36.58H449.07Z\"/></svg></span>`],
+    ["Windows",`<span class="desktop-app-icon" style="--app-bg:#063d63;--app-color:#49bdf2"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 448 512\"><path d=\"M0 93.7l183.6-25.3v177.4H0V93.7zm0 324.6l183.6 25.3V268.4H0v149.9zm203.8 28L448 480V268.4H203.8v177.9zm0-380.6v180.1H448V32L203.8 65.7z\"/></svg></span>`],
+    ["GitHub",`<span class="desktop-app-icon" style="--app-bg:#171717;--app-color:#fff"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 496 512\"><path d=\"M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z\"/></svg></span>`],
+    ["Chrome",`<span class="desktop-app-icon" style="--app-bg:#f4f4f4;--app-color:#4285f4"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><path d=\"M0 256C0 209.4 12.47 165.6 34.27 127.1L144.1 318.3C166 357.5 207.9 384 256 384C270.3 384 283.1 381.7 296.8 377.4L220.5 509.6C95.9 492.3 0 385.3 0 256zM365.1 321.6C377.4 302.4 384 279.1 384 256C384 217.8 367.2 183.5 340.7 160H493.4C505.4 189.6 512 222.1 512 256C512 397.4 397.4 511.1 256 512L365.1 321.6zM477.8 128H256C193.1 128 142.3 172.1 130.5 230.7L54.19 98.47C101 38.53 174 0 256 0C350.8 0 433.5 51.48 477.8 128V128zM168 256C168 207.4 207.4 168 256 168C304.6 168 344 207.4 344 256C344 304.6 304.6 344 256 344C207.4 344 168 304.6 168 256z\"/></svg></span>`],
+    ["Music",`<span class="desktop-app-icon" style="--app-bg:#331b3f;--app-color:#ff6bd6"><span class="app-glyph">♫</span></span>`],
+    ["Messages",`<span class="desktop-app-icon" style="--app-bg:#153b32;--app-color:#78ffc6"><span class="app-glyph">●</span></span>`],
+    ["Calendar",`<span class="desktop-app-icon" style="--app-bg:#3d2222;--app-color:#ffaaaa"><span class="app-word">CAL</span></span>`],
+    ["Notes",`<span class="desktop-app-icon" style="--app-bg:#453d18;--app-color:#fff2a8"><span class="app-word">NOTES</span></span>`],
+    ["Capture",`<span class="desktop-app-icon" style="--app-bg:#172d35;--app-color:#80eaff"><span class="app-glyph">●</span></span>`],
+    ["Recent Files",`<span class="desktop-app-icon" style="--app-bg:#2c3040;--app-color:#d9ddff"><span class="app-word">RECENT</span></span>`],
+    ["Power",`<span class="desktop-app-icon" style="--app-bg:#351a1a;--app-color:#ff8c8c"><span class="app-glyph">⏻</span></span>`]
+  ];
+
+
   const body=document.body;
   const dial=document.getElementById('dial');
   const leftArrow=document.getElementById('eyeModeArrow');
@@ -7175,7 +7055,7 @@ document.addEventListener('DOMContentLoaded',function(){
   const chip=document.getElementById('modeChip');
   if(!dial || !leftArrow || !rightArrow) return;
 
-  const order=['lock','rhyme','eye','smdial'];
+  const order=['lock','rhyme','eye','smdial','desktop'];
   let current='lock';
   const letters=Array.from(dial.querySelectorAll('.letter'));
   const originals=letters.map(el=>({
@@ -7216,6 +7096,33 @@ document.addEventListener('DOMContentLoaded',function(){
     });
   }
 
+
+  function desktopLetters(){
+    if(!document.body.classList.contains('desktop-mode')) return;
+    restoreLetters();
+    letters.slice(0,desktopApps.length).forEach((el,i)=>{
+      const [name,icon]=desktopApps[i];
+      el.innerHTML=icon;
+      el.setAttribute('title',name+' — desktop concept');
+      el.setAttribute('aria-label',name+' — desktop concept');
+      const fn=function(e){
+        e.preventDefault(); e.stopImmediatePropagation();
+        const panel=document.getElementById('eyeotaDesktopConcept');
+        if(panel){
+          const old=panel.querySelector('.desktop-selection');
+          if(old) old.remove();
+          const msg=document.createElement('div');
+          msg.className='desktop-selection';
+          msg.style.cssText='margin-top:10px;font-size:12px;font-weight:800;color:#00f2ff';
+          msg.textContent=name+' selected • concept launcher';
+          panel.appendChild(msg);
+        }
+      };
+      el.addEventListener('click',fn,true);
+      socialHandlers.push({el,fn});
+    });
+  }
+
   function setMode(mode){
     current=mode;
 
@@ -7224,15 +7131,18 @@ document.addEventListener('DOMContentLoaded',function(){
       window.EYEOTA_EYE_TEST.leave();
     }
 
-    if(mode!=='smdial') restoreLetters();
+    if(mode!=='smdial' && mode!=='desktop') restoreLetters();
 
-    body.classList.remove('rhyme-mode','eye-test-mode','smdial-mode','social-link-concept');
+    body.classList.remove('rhyme-mode','eye-test-mode','smdial-mode','desktop-mode','social-link-concept');
 
     if(mode==='rhyme') body.classList.add('rhyme-mode');
     if(mode==='smdial') body.classList.add('smdial-mode');
+    if(mode==='desktop') body.classList.add('desktop-mode');
 
     if(mode==='smdial'){
       socialLetters();
+    }else if(mode==='desktop'){
+      desktopLetters();
     }else{
       restoreLetters();
     }
@@ -7251,7 +7161,8 @@ document.addEventListener('DOMContentLoaded',function(){
       chip.textContent=
         mode==='rhyme'?'Rhyme Dial':
         mode==='eye'?'Eye Test':
-        mode==='smdial'?'SMDial':'Music Lock';
+        mode==='smdial'?'SMDial':
+        mode==='desktop'?'EYEOTA Desktop':'Music Lock';
     }
 
     body.dispatchEvent(new CustomEvent('eyeota-mode-change',{detail:{mode}}));
@@ -7275,13 +7186,1765 @@ document.addEventListener('DOMContentLoaded',function(){
     #eyeModeArrow,#dialModeArrow{display:flex!important}
     body.rhyme-mode #eyeModeArrow,body.rhyme-mode #dialModeArrow,
     body.eye-test-mode #eyeModeArrow,body.eye-test-mode #dialModeArrow,
-    body.smdial-mode #eyeModeArrow,body.smdial-mode #dialModeArrow{display:flex!important}
+    body.smdial-mode #eyeModeArrow,body.smdial-mode #dialModeArrow,
+    body.desktop-mode #eyeModeArrow,body.desktop-mode #dialModeArrow{display:flex!important}
   `;
   document.head.appendChild(navStyle);
+
+
+  const desktopMute=document.getElementById('eyeotaDesktopMute');
+  if(desktopMute) desktopMute.addEventListener('click',function(e){
+    e.preventDefault();e.stopPropagation();
+    const muted=desktopMute.getAttribute('aria-pressed')==='true';
+    desktopMute.setAttribute('aria-pressed',muted?'false':'true');
+    desktopMute.textContent=muted?'SOUND ON':'MUTED';
+  });
 
   /* Start on Music Lock. */
   setMode('lock');
 });
 </script>
+
+<!-- EYEOTA Desktop V38: the dial IS the desktop -->
+<style id="eyeota-desktop-v38-style">
+/* Keep the existing EYEOTA site. Desktop-only changes live inside the dial. */
+body.desktop-mode{padding-bottom:0!important}
+body.desktop-mode #dial{overflow:visible!important}
+body.desktop-mode .letter{transition:filter .18s ease!important;will-change:left,top}
+body.desktop-mode .desktop-app-icon{transform:rotate(0deg)!important}
+
+/* Remove the connecting audio-wave lines only in Desktop mode. */
+body.desktop-mode #dial .wave-network{display:none!important;visibility:hidden!important}
+
+/* Turn the existing inner dial scene into a shining sun without changing other modes. */
+body.desktop-mode #dial .space-bg{
+  display:block!important;visibility:visible!important;opacity:1!important;
+  background:
+    radial-gradient(circle at 50% 50%,
+      #fffde8 0 5%,
+      #fff5a8 7%,
+      #ffd34f 13%,
+      #ff9d24 22%,
+      rgba(255,176,47,.62) 31%,
+      rgba(255,154,31,.22) 43%,
+      rgba(5,13,27,.20) 58%,
+      rgba(3,9,18,.58) 76%,
+      rgba(3,9,18,.88) 100%)!important;
+}
+body.desktop-mode #dial .space-bg > *{display:none!important}
+body.desktop-mode #dial .space-bg:before{
+  content:"";position:absolute;inset:13%;border-radius:50%;pointer-events:none;
+  background:
+    repeating-conic-gradient(from 0deg,
+      rgba(255,221,93,.0) 0deg 7deg,
+      rgba(255,221,93,.18) 8deg 9deg,
+      rgba(255,221,93,0) 10deg 17deg);
+  -webkit-mask:radial-gradient(circle,transparent 0 24%,#000 40%,transparent 72%);
+  mask:radial-gradient(circle,transparent 0 24%,#000 40%,transparent 72%);
+  animation:eyeotaSunGlow 8s linear infinite;
+}
+@keyframes eyeotaSunGlow{to{transform:rotate(360deg)}}
+
+/* The old vinyl center is replaced only in Desktop mode. */
+body.desktop-mode .center-artwork{
+  visibility:visible!important;display:flex!important;pointer-events:none!important;
+  animation:none!important;z-index:145!important;
+}
+body.desktop-mode .center-artwork > *{display:none!important}
+body.desktop-mode .center-artwork:before{
+  content:"";width:84px;height:84px;border-radius:50%;
+  background:radial-gradient(circle at 42% 38%,#fff 0 8%,#fff6b7 13%,#ffd84f 31%,#ff9e24 58%,rgba(255,136,19,.78) 72%,rgba(255,159,33,.18) 100%);
+  border:1px solid rgba(255,232,145,.9);
+  box-shadow:0 0 18px #ffd84f,0 0 44px rgba(255,177,45,.85),0 0 85px rgba(255,141,24,.46);
+}
+
+/* EYEOTA's system information stays INSIDE the circular interface. */
+#eyeotaDialDesktopUI{display:none}
+body.desktop-mode #eyeotaDialDesktopUI{
+  display:block!important;position:absolute;inset:0;z-index:155;pointer-events:none;
+}
+.eyeota-dial-control{
+  position:absolute;pointer-events:auto;cursor:pointer;
+  min-width:72px;min-height:34px;padding:7px 9px;border-radius:13px;
+  border:1px solid rgba(0,242,255,.48);
+  background:rgba(3,11,22,.78);color:#effdff;
+  box-shadow:0 5px 18px rgba(0,0,0,.44),0 0 10px rgba(0,242,255,.10);
+  backdrop-filter:blur(9px);font:900 9px/1.1 Arial,sans-serif;
+  letter-spacing:.06em;text-align:center;
+}
+.eyeota-dial-control:hover{border-color:#00f2ff;box-shadow:0 0 16px rgba(0,242,255,.32)}
+#eyeotaDialMenuBtn{left:50%;top:31%;transform:translate(-50%,-50%)}
+#eyeotaDialTimeBtn{right:24%;top:43%;transform:translate(50%,-50%)}
+#eyeotaDialWeatherBtn{left:24%;top:43%;transform:translate(-50%,-50%)}
+#eyeotaDialSoundBtn{left:29%;bottom:28%;transform:translate(-50%,50%)}
+#eyeotaDialPersonalizeBtn{right:29%;bottom:28%;transform:translate(50%,50%)}
+.eyeota-mini-time{font-size:11px;letter-spacing:0;color:#fff}
+.eyeota-mini-sub{display:block;margin-top:2px;color:#8ceef5;font-size:7px;letter-spacing:.05em}
+
+/* One circular information layer, opened by controls inside the dial. */
+#eyeotaDialPanel{
+  display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:44%;min-width:210px;max-width:275px;min-height:185px;
+  border-radius:50%;padding:42px 30px 28px;box-sizing:border-box;
+  background:radial-gradient(circle at 50% 36%,rgba(14,35,50,.96),rgba(3,9,18,.97) 72%);
+  border:1px solid rgba(0,242,255,.55);box-shadow:0 0 38px rgba(0,0,0,.75),0 0 22px rgba(0,242,255,.20);
+  color:#fff;text-align:center;pointer-events:auto;z-index:180;
+}
+body.desktop-mode.eyeota-dial-panel-open #eyeotaDialPanel{display:block}
+#eyeotaDialPanel h3{margin:0 0 8px;font:900 13px Arial;letter-spacing:.12em;color:#fff}
+#eyeotaDialPanel p{margin:0;font:700 10px/1.45 Arial;color:#cfe8ee}
+#eyeotaDialPanel .dial-panel-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:10px}
+#eyeotaDialPanel button,#eyeotaDialPanel label{
+  border:1px solid rgba(0,242,255,.34);background:rgba(255,255,255,.06);color:#fff;
+  border-radius:9px;padding:7px 8px;font:800 8px Arial;cursor:pointer
+}
+#eyeotaDialPanelClose{
+  position:absolute;top:17px;right:50%;transform:translateX(50%);
+  width:24px;height:24px;padding:0!important;border-radius:50%!important;font-size:14px!important
+}
+#eyeotaDialWallpaper{display:none}
+
+/* Hide the earlier rectangular Desktop explanation: the concept now lives in the dial. */
+body.desktop-mode #eyeotaDesktopConcept{display:none!important}
+
+@media(max-width:700px){
+  .eyeota-dial-control{min-width:57px;min-height:28px;padding:5px 6px;font-size:7px;border-radius:10px}
+  .eyeota-mini-time{font-size:9px}
+  #eyeotaDialMenuBtn{top:30%}
+  #eyeotaDialTimeBtn{right:22%;top:43%}
+  #eyeotaDialWeatherBtn{left:22%;top:43%}
+  #eyeotaDialSoundBtn{left:27%;bottom:27%}
+  #eyeotaDialPersonalizeBtn{right:27%;bottom:27%}
+  #eyeotaDialPanel{width:51%;min-width:170px;min-height:155px;padding:36px 20px 22px}
+  #eyeotaDialPanel h3{font-size:10px}
+  #eyeotaDialPanel p{font-size:8px}
+  body.desktop-mode .center-artwork:before{width:66px;height:66px}
+}
+</style>
+
+<script id="eyeota-desktop-v38-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+  const body=document.body;
+  const dial=document.getElementById('dial');
+  if(!dial) return;
+
+  /* Build the Desktop information controls inside the existing EYEOTA dial. */
+  const ui=document.createElement('div');
+  ui.id='eyeotaDialDesktopUI';
+  ui.innerHTML=`
+    <button class="eyeota-dial-control" id="eyeotaDialWeatherBtn" type="button">☀ WEATHER<span class="eyeota-mini-sub">OPEN</span></button>
+    <button class="eyeota-dial-control" id="eyeotaDialMenuBtn" type="button">◉ EYEOTA<span class="eyeota-mini-sub">MENU</span></button>
+    <button class="eyeota-dial-control" id="eyeotaDialTimeBtn" type="button"><span class="eyeota-mini-time" id="eyeotaDialClock">--:--</span><span class="eyeota-mini-sub" id="eyeotaDialDate">DATE</span></button>
+    <button class="eyeota-dial-control" id="eyeotaDialSoundBtn" type="button">♫ SOUND<span class="eyeota-mini-sub">ON</span></button>
+    <button class="eyeota-dial-control" id="eyeotaDialPersonalizeBtn" type="button">✦ PERSONALIZE<span class="eyeota-mini-sub">BACKGROUND</span></button>
+    <div id="eyeotaDialPanel" role="dialog" aria-modal="false">
+      <button id="eyeotaDialPanelClose" type="button" aria-label="Close">×</button>
+      <h3 id="eyeotaDialPanelTitle">EYEOTA</h3>
+      <p id="eyeotaDialPanelText">Desktop controls.</p>
+      <div class="dial-panel-actions" id="eyeotaDialPanelActions"></div>
+      <input id="eyeotaDialWallpaper" type="file" accept="image/*">
+    </div>`;
+  dial.appendChild(ui);
+
+  const title=document.getElementById('eyeotaDialPanelTitle');
+  const text=document.getElementById('eyeotaDialPanelText');
+  const actions=document.getElementById('eyeotaDialPanelActions');
+  const wallpaper=document.getElementById('eyeotaDialWallpaper');
+  let wallpaperURL=null;
+
+  function openPanel(name,copy,buttons=''){
+    title.textContent=name;
+    text.innerHTML=copy;
+    actions.innerHTML=buttons;
+    body.classList.add('eyeota-dial-panel-open');
+  }
+  function closePanel(){body.classList.remove('eyeota-dial-panel-open')}
+
+  document.getElementById('eyeotaDialPanelClose').onclick=closePanel;
+
+  document.getElementById('eyeotaDialMenuBtn').onclick=()=>{
+    openPanel('EYEOTA MENU','The dial is the desktop. Open apps from the rotating ring or use these EYEOTA controls.',
+      '<button type="button">APPS</button><button type="button">FILES</button><button type="button">RECENT</button><button type="button">SETTINGS</button><button type="button">POWER</button>');
+  };
+
+  document.getElementById('eyeotaDialTimeBtn').onclick=()=>{
+    const now=new Date();
+    openPanel('TIME + DATE',
+      '<strong style="font-size:20px">'+now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+'</strong><br>'+now.toLocaleDateString([], {weekday:'long',month:'long',day:'numeric',year:'numeric'}));
+  };
+
+  document.getElementById('eyeotaDialWeatherBtn').onclick=()=>{
+    openPanel('WEATHER','Local weather belongs inside EYEOTA. This control is ready for the live weather connection rather than using a Windows-style taskbar.');
+  };
+
+  let soundOn=true;
+  document.getElementById('eyeotaDialSoundBtn').onclick=(e)=>{
+    soundOn=!soundOn;
+    e.currentTarget.innerHTML='♫ SOUND<span class="eyeota-mini-sub">'+(soundOn?'ON':'MUTED')+'</span>';
+    openPanel('SOUND',soundOn?'Desktop sound is on.':'Desktop sound is muted.');
+  };
+
+  document.getElementById('eyeotaDialPersonalizeBtn').onclick=()=>{
+    openPanel('PERSONALIZE','Choose your own EYEOTA Desktop background.',
+      '<label for="eyeotaDialWallpaper">CHOOSE BACKGROUND</label><button id="eyeotaDialResetBg" type="button">RESET</button>');
+    setTimeout(()=>{
+      const reset=document.getElementById('eyeotaDialResetBg');
+      if(reset) reset.onclick=()=>{
+        body.classList.remove('eyeota-custom-wallpaper');
+        body.style.removeProperty('--eyeota-user-wallpaper');
+        if(wallpaperURL){URL.revokeObjectURL(wallpaperURL);wallpaperURL=null;}
+        wallpaper.value='';
+      };
+    },0);
+  };
+
+  wallpaper.addEventListener('change',()=>{
+    const f=wallpaper.files&&wallpaper.files[0];
+    if(!f)return;
+    if(wallpaperURL)URL.revokeObjectURL(wallpaperURL);
+    wallpaperURL=URL.createObjectURL(f);
+    body.style.setProperty('--eyeota-user-wallpaper',`url("${wallpaperURL}")`);
+    body.classList.add('eyeota-custom-wallpaper');
+    closePanel();
+  });
+
+  function updateClock(){
+    const now=new Date(),c=document.getElementById('eyeotaDialClock'),d=document.getElementById('eyeotaDialDate');
+    if(c)c.textContent=now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+    if(d)d.textContent=now.toLocaleDateString([], {month:'numeric',day:'numeric'});
+  }
+  updateClock(); setInterval(updateClock,1000);
+
+  /* Slow orbit: app positions move, but the icons themselves always stay upright. */
+  const letters=Array.from(dial.querySelectorAll('.letter'));
+  let angle=0,last=performance.now(),wasDesktop=false,base=[];
+  function capture(){
+    const r=dial.getBoundingClientRect();
+    base=letters.map(el=>{
+      const er=el.getBoundingClientRect();
+      const x=er.left+er.width/2-r.left-r.width/2;
+      const y=er.top+er.height/2-r.top-r.height/2;
+      return {el,a:Math.atan2(y,x),rad:Math.hypot(x,y)};
+    });
+  }
+  function restore(){
+    for(const o of base){o.el.style.removeProperty('left');o.el.style.removeProperty('top');}
+    base=[];angle=0;
+  }
+  function frame(now){
+    const active=body.classList.contains('desktop-mode');
+    if(active&&!wasDesktop) requestAnimationFrame(capture);
+    if(!active&&wasDesktop){restore();closePanel();}
+    wasDesktop=active;
+    if(active&&base.length){
+      const dt=Math.min(50,now-last);
+      angle += dt*0.000025;
+      const r=dial.getBoundingClientRect();
+      for(const o of base){
+        const a=o.a+angle;
+        o.el.style.left=(r.width/2+Math.cos(a)*o.rad)+'px';
+        o.el.style.top=(r.height/2+Math.sin(a)*o.rad)+'px';
+      }
+    }
+    last=now;requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+});
+</script>
+
+
+
+<!-- V53 recovered site controllers previously trapped in Rhyme export -->
+<style id="eyeota-desktop-v35-style">
+/* EYEOTA Desktop V36: larger app dial, music strip removed. */
+body.desktop-mode .letter{
+  cursor:pointer!important;font-size:0!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:visible!important;
+}
+body.desktop-mode .letter .desktop-app-icon{
+  width:78%;height:78%;display:flex;align-items:center;justify-content:center;border-radius:12px;
+  background:var(--app-bg,rgba(10,18,32,.92));color:var(--app-color,#fff);
+  border:1px solid rgba(255,255,255,.32);box-shadow:0 3px 9px rgba(0,0,0,.7),0 0 8px color-mix(in srgb,var(--app-color,#fff) 35%,transparent);
+  overflow:hidden;pointer-events:none;transition:transform .15s ease,filter .15s ease,box-shadow .15s ease;
+}
+body.desktop-mode .letter:hover .desktop-app-icon{transform:scale(1.14);filter:brightness(1.15);box-shadow:0 3px 9px #000,0 0 13px var(--app-color,#fff)}
+body.desktop-mode .desktop-app-icon svg{width:72%;height:72%;fill:currentColor;display:block}
+body.desktop-mode .desktop-app-icon .app-word{font:900 8px/1 Arial,sans-serif;letter-spacing:-.02em;text-align:center;padding:2px;color:inherit}
+body.desktop-mode .desktop-app-icon .app-glyph{font:900 18px/1 Arial,sans-serif}
+body.desktop-mode .desktop-app-icon.eyeota-app{background:radial-gradient(circle at 35% 25%,#164e63,#06111d 70%);border-color:#00f2ff;box-shadow:0 0 14px rgba(0,242,255,.55)}
+body.desktop-mode .desktop-app-icon.eyeota-app .app-word{font-size:7px;letter-spacing:.08em;color:#e6fbff}
+
+body.desktop-mode .personal-gateway,
+body.desktop-mode .main-layout > .banner,
+body.desktop-mode .main-layout > .color-panel,
+body.desktop-mode .main-layout > .panel,
+body.desktop-mode #rhymeWorkspace,
+body.desktop-mode #eyeTestPanel,
+body.desktop-mode #musicLockDisclosure,
+body.desktop-mode .music-dock,
+body.desktop-mode #smdialVoiceDiagnostic,
+body.desktop-mode #smdialVoiceStatus{display:none!important}
+body.desktop-mode .note-track,body.desktop-mode .note,body.desktop-mode #outerRing{display:none!important;visibility:hidden!important;pointer-events:none!important}
+body.desktop-mode .main-layout{padding-top:52px!important}
+body.desktop-mode #modeChip{position:absolute!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;width:max-content!important;min-width:170px!important;text-align:center!important;justify-content:center!important}
+body.desktop-mode .center-artwork{visibility:visible!important;display:flex!important;pointer-events:none!important;animation:none!important}
+body.desktop-mode .center-artwork > *{display:none!important}
+body.desktop-mode .center-artwork:before{
+  content:"EYEOTA\\A DESKTOP";white-space:pre;text-align:center;color:#fff;font:900 15px/1.12 Arial,sans-serif;letter-spacing:.12em;
+  width:112px;height:112px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 40% 30%,rgba(0,242,255,.25),rgba(3,10,20,.96) 68%);border:2px solid rgba(0,242,255,.8);
+  box-shadow:0 0 0 6px rgba(0,0,0,.35),0 0 24px rgba(0,242,255,.38);
+  animation:eyeotaDesktopPulse 1.8s ease-in-out infinite alternate;
+}
+@keyframes eyeotaDesktopPulse{from{box-shadow:0 0 0 6px rgba(0,0,0,.35),0 0 14px rgba(0,242,255,.25)}to{box-shadow:0 0 0 6px rgba(0,0,0,.35),0 0 30px rgba(0,242,255,.62)}}
+#eyeotaDesktopConcept{display:none}
+body.desktop-mode #eyeotaDesktopConcept{display:block!important;width:min(720px,calc(100% - 28px));margin:12px auto 26px;padding:18px;border-radius:16px;background:rgba(3,9,18,.9);border:1px solid rgba(0,242,255,.35);box-shadow:0 12px 34px rgba(0,0,0,.38);color:#eafcff;text-align:left}
+#eyeotaDesktopConcept h2{font-size:20px;margin:0 0 7px;color:#fff}
+#eyeotaDesktopConcept .desktop-kicker{font:800 11px/1.2 Arial,sans-serif;letter-spacing:.14em;color:#00f2ff;margin-bottom:9px}
+#eyeotaDesktopConcept p{font-size:13px;line-height:1.55;margin:0 0 12px;color:#d8e7ef}
+
+#eyeotaDesktopConcept .music-bars{display:flex;align-items:center;gap:3px;height:22px}
+#eyeotaDesktopConcept .music-bars i{width:3px;background:#00f2ff;border-radius:4px;animation:desktopBars .7s ease-in-out infinite alternate}
+#eyeotaDesktopConcept .music-bars i:nth-child(1){height:8px}#eyeotaDesktopConcept .music-bars i:nth-child(2){height:18px;animation-delay:.15s}#eyeotaDesktopConcept .music-bars i:nth-child(3){height:12px;animation-delay:.3s}#eyeotaDesktopConcept .music-bars i:nth-child(4){height:21px;animation-delay:.08s}#eyeotaDesktopConcept .music-bars i:nth-child(5){height:10px;animation-delay:.22s}
+@keyframes desktopBars{to{transform:scaleY(.45)}}
+#eyeotaDesktopConcept .music-copy{flex:1;font-size:12px;font-weight:700}
+#eyeotaDesktopMute{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:#fff;border-radius:999px;padding:7px 10px;font-weight:800;cursor:pointer}
+@media(max-width:700px){body.desktop-mode .main-layout{padding-top:34px!important}body.desktop-mode #modeChip{top:8px!important}body.desktop-mode .desktop-app-icon .app-word{font-size:6px}body.desktop-mode .desktop-app-icon .app-glyph{font-size:14px}body.desktop-mode .center-artwork:before{width:94px;height:94px;font-size:12px}}
+</style>
+
+
+<style id="eyeota-v38-wallpaper-support">
+body.desktop-mode.eyeota-custom-wallpaper:before{
+ content:"";position:fixed;inset:0;z-index:-5;
+ background-image:var(--eyeota-user-wallpaper);background-size:cover;background-position:center;background-repeat:no-repeat
+}
+body.desktop-mode.eyeota-custom-wallpaper #eyeotaPubgBackground{opacity:0!important}
+body.desktop-mode.eyeota-custom-wallpaper #eyeotaPubgShade{background:rgba(0,0,0,.34)!important}
+</style>
+
+</head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+editor.innerHTML+'</div>
+<script id="eyeota-smdial-voice-launcher">
+document.addEventListener('DOMContentLoaded',function(){
+  const body=document.body;
+  const dial=document.getElementById('dial');
+  const stage=document.getElementById('dialStage');
+  const center=dial && dial.querySelector('.center-artwork');
+  if(!dial || !stage || !center) return;
+
+  const nativeMic=document.createElement('span');
+  nativeMic.className='smdial-native-mic';
+  nativeMic.innerHTML='<span class="voice-symbol" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="mic-copy">TAP TO SPEAK</span>';
+  center.appendChild(nativeMic);
+  center.setAttribute('role','button');
+  center.setAttribute('tabindex','0');
+  center.setAttribute('aria-label','Speak a social platform name');
+
+  const status=document.createElement('div');
+  status.id='smdialVoiceStatus';
+  status.setAttribute('role','status');
+  status.setAttribute('aria-live','polite');
+  status.textContent='Tap the center and say a social platform name.';
+  stage.insertAdjacentElement('afterend',status);
+
+  const diagnostic=document.createElement('div');
+  diagnostic.id='smdialVoiceDiagnostic';
+  diagnostic.innerHTML='<strong>VOICE DIAGNOSTIC</strong><div class="diag-current">READY — tap the voice symbol.</div><div class="diag-detail"></div>';
+  status.insertAdjacentElement('afterend',diagnostic);
+
+  function diag(stageText,detail){
+    const current=diagnostic.querySelector('.diag-current');
+    const info=diagnostic.querySelector('.diag-detail');
+    if(current) current.textContent=stageText;
+    if(info) info.textContent=detail||'';
+  }
+
+  function positionVoiceCenter(){}
+  requestAnimationFrame(positionVoiceCenter);
+
+  const destinations={
+    instagram:'https://www.instagram.com/',
+    youtube:'https://www.youtube.com/',
+    tiktok:'https://www.tiktok.com/',
+    x:'https://x.com/',
+    facebook:'https://www.facebook.com/',
+    linkedin:'https://www.linkedin.com/',
+    snapchat:'https://www.snapchat.com/',
+    pinterest:'https://www.pinterest.com/',
+    twitch:'https://www.twitch.tv/',
+    reddit:'https://www.reddit.com/',
+    discord:'https://discord.com/',
+    threads:'https://www.threads.net/',
+    whatsapp:'https://www.whatsapp.com/',
+    messenger:'https://www.messenger.com/',
+    telegram:'https://telegram.org/',
+    tumblr:'https://www.tumblr.com/',
+    quora:'https://www.quora.com/',
+    mastodon:'https://joinmastodon.org/',
+    bluesky:'https://bsky.app/',
+    vimeo:'https://vimeo.com/',
+    flickr:'https://www.flickr.com/',
+    medium:'https://medium.com/',
+    github:'https://github.com/',
+    spotify:'https://open.spotify.com/',
+    soundcloud:'https://soundcloud.com/',
+    patreon:'https://www.patreon.com/'
+  };
+
+  const aliases=[
+    ['facebook messenger','messenger'],['linked in','linkedin'],['linkedin','linkedin'],
+    ['you tube','youtube'],['youtube','youtube'],['tik tok','tiktok'],['tiktok','tiktok'],
+    ['twitter','x'],['x dot com','x'],['instagram','instagram'],['facebook','facebook'],
+    ['snap chat','snapchat'],['snapchat','snapchat'],['pinterest','pinterest'],
+    ['twitch','twitch'],['reddit','reddit'],['discord','discord'],['threads','threads'],
+    ['whats app','whatsapp'],['whatsapp','whatsapp'],['messenger','messenger'],
+    ['telegram','telegram'],['tumblr','tumblr'],['quora','quora'],['mastodon','mastodon'],
+    ['blue sky','bluesky'],['bluesky','bluesky'],['vimeo','vimeo'],['flickr','flickr'],
+    ['medium','medium'],['git hub','github'],['github','github'],['spotify','spotify'],
+    ['sound cloud','soundcloud'],['soundcloud','soundcloud'],['patreon','patreon'],
+    ['x','x']
+  ];
+
+  function findPlatform(spoken){
+    const t=(' '+spoken.toLowerCase().replace(/[^\w\s.]/g,' ').replace(/\s+/g,' ').trim()+' ');
+    for(const [phrase,key] of aliases){
+      const p=' '+phrase+' ';
+      if(t.includes(p)) return key;
+    }
+    return null;
+  }
+
+  function logoFor(key){
+    const labels={
+      x:'X',linkedin:'LinkedIn',youtube:'YouTube',tiktok:'TikTok',instagram:'Instagram',
+      facebook:'Facebook',snapchat:'Snapchat',pinterest:'Pinterest',twitch:'Twitch',
+      reddit:'Reddit',discord:'Discord',threads:'Threads',whatsapp:'WhatsApp',
+      messenger:'Messenger',telegram:'Telegram',tumblr:'Tumblr',quora:'Quora',
+      mastodon:'Mastodon',bluesky:'Bluesky',vimeo:'Vimeo',flickr:'Flickr',
+      medium:'Medium',github:'GitHub',spotify:'Spotify',soundcloud:'SoundCloud',
+      patreon:'Patreon'
+    };
+    return Array.from(dial.querySelectorAll('.letter')).find(el=>{
+      const a=(el.getAttribute('aria-label')||'').toLowerCase();
+      return a==='open '+(labels[key]||key).toLowerCase();
+    });
+  }
+
+  function launch(key){
+    const el=logoFor(key);
+    if(el) el.classList.add('smdial-voice-match');
+    const display=(el && (el.getAttribute('aria-label')||'').replace(/^Open /,'')) || key;
+    status.textContent='Opening '+display+'…';
+    setTimeout(function(){
+      window.open(destinations[key],'_blank','noopener,noreferrer');
+      if(el) el.classList.remove('smdial-voice-match');
+      status.textContent='Tap the center and say another social platform name.';
+    },650);
+  }
+
+  function listen(e){
+    if(e){e.preventDefault();e.stopPropagation();}
+    if(!body.classList.contains('smdial-mode')) return;
+
+    diag('1/4 — CLICK DETECTED','The center voice control is receiving your click.');
+
+    if(!window.isSecureContext){
+      diag('STOPPED — NOT HTTPS','Open the deployed EYEOTA HTTPS website before testing voice.');
+      status.textContent='Voice requires the secure HTTPS website.';
+      return;
+    }
+
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR){
+      diag('STOPPED — SPEECH ENGINE UNAVAILABLE',
+        'This browser does not expose SpeechRecognition. The social logos can still be opened by clicking them.');
+      status.textContent='Speech recognition is unavailable in this browser.';
+      return;
+    }
+
+    diag('2/4 — SPEECH ENGINE FOUND','Starting browser speech recognition now…');
+
+    let recognition;
+    try{
+      recognition=new SR();
+      recognition.lang='en-US';
+      recognition.continuous=false;
+      recognition.interimResults=false;
+      recognition.maxAlternatives=5;
+    }catch(err){
+      diag('STOPPED — ENGINE CREATION FAILED',(err&&err.name?err.name+': ':'')+(err&&err.message?err.message:String(err)));
+      return;
+    }
+
+    recognition.onstart=function(){
+      body.classList.add('smdial-listening');
+      status.textContent='Listening… say a social platform name.';
+      diag('3/4 — LISTENING','Say “Facebook”, “LinkedIn”, “YouTube”, or another logo on the dial.');
+    };
+
+    recognition.onaudiostart=function(){
+      diag('3/4 — MICROPHONE ACTIVE','Audio reached the browser speech engine. Say a platform name.');
+    };
+
+    recognition.onspeechstart=function(){
+      diag('3/4 — VOICE DETECTED','Your voice was detected. Keep speaking the platform name.');
+    };
+
+    recognition.onresult=function(ev){
+      let key=null,heard='';
+      for(let r=0;r<ev.results.length && !key;r++){
+        for(let i=0;i<ev.results[r].length;i++){
+          heard=ev.results[r][i].transcript;
+          key=findPlatform(heard);
+          if(key) break;
+        }
+      }
+      body.classList.remove('smdial-listening');
+      if(key){
+        diag('4/4 — HEARD: “'+heard+'”','Platform recognized. Opening it now.');
+        launch(key);
+      }else{
+        diag('HEARD: “'+heard+'” — NO PLATFORM MATCH','Tap the center and try saying only the platform name.');
+        status.textContent='I heard “'+heard+'”, but did not recognize a platform.';
+      }
+    };
+
+    recognition.onerror=function(ev){
+      body.classList.remove('smdial-listening');
+      const code=(ev&&ev.error)||'unknown';
+      let help='Browser speech recognition returned an error.';
+      if(code==='not-allowed'||code==='service-not-allowed') help='Microphone/speech permission is blocked. Allow microphone access for this site in the browser address bar/site permissions.';
+      if(code==='audio-capture') help='The browser could not access a working microphone.';
+      if(code==='no-speech') help='The microphone opened, but no speech was detected. Tap again and speak immediately.';
+      if(code==='network') help='The browser speech-recognition service could not be reached.';
+      diag('STOPPED — '+code.toUpperCase(),help);
+      status.textContent='Voice error: '+code+'.';
+    };
+
+    recognition.onend=function(){
+      body.classList.remove('smdial-listening');
+    };
+
+    try{
+      recognition.start();
+      diag('2/4 — START REQUEST SENT','Waiting for the browser to activate speech recognition…');
+    }catch(err){
+      diag('STOPPED — START FAILED',(err&&err.name?err.name+': ':'')+(err&&err.message?err.message:String(err)));
+      status.textContent='Speech recognition could not start.';
+    }
+  }
+
+  center.addEventListener('click',function(e){
+    if(!body.classList.contains('smdial-mode')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    listen(e);
+  },true);
+  center.addEventListener('keydown',function(e){
+    if(e.key==='Enter'||e.key===' '){listen(e);}
+  });
+});
+</script>
+
+<!-- EYEOTA Desktop V38: the dial IS the desktop -->
+<style id="eyeota-desktop-v38-style">
+/* Keep the existing EYEOTA site. Desktop-only changes live inside the dial. */
+body.desktop-mode{padding-bottom:0!important}
+body.desktop-mode #dial{overflow:visible!important}
+body.desktop-mode .letter{transition:filter .18s ease!important;will-change:left,top}
+body.desktop-mode .desktop-app-icon{transform:rotate(0deg)!important}
+
+/* Remove the connecting audio-wave lines only in Desktop mode. */
+body.desktop-mode #dial .wave-network{display:none!important;visibility:hidden!important}
+
+/* Turn the existing inner dial scene into a shining sun without changing other modes. */
+body.desktop-mode #dial .space-bg{
+  display:block!important;visibility:visible!important;opacity:1!important;
+  background:
+    radial-gradient(circle at 50% 50%,
+      #fffde8 0 5%,
+      #fff5a8 7%,
+      #ffd34f 13%,
+      #ff9d24 22%,
+      rgba(255,176,47,.62) 31%,
+      rgba(255,154,31,.22) 43%,
+      rgba(5,13,27,.20) 58%,
+      rgba(3,9,18,.58) 76%,
+      rgba(3,9,18,.88) 100%)!important;
+}
+body.desktop-mode #dial .space-bg > *{display:none!important}
+body.desktop-mode #dial .space-bg:before{
+  content:"";position:absolute;inset:13%;border-radius:50%;pointer-events:none;
+  background:
+    repeating-conic-gradient(from 0deg,
+      rgba(255,221,93,.0) 0deg 7deg,
+      rgba(255,221,93,.18) 8deg 9deg,
+      rgba(255,221,93,0) 10deg 17deg);
+  -webkit-mask:radial-gradient(circle,transparent 0 24%,#000 40%,transparent 72%);
+  mask:radial-gradient(circle,transparent 0 24%,#000 40%,transparent 72%);
+  animation:eyeotaSunGlow 8s linear infinite;
+}
+@keyframes eyeotaSunGlow{to{transform:rotate(360deg)}}
+
+/* The old vinyl center is replaced only in Desktop mode. */
+body.desktop-mode .center-artwork{
+  visibility:visible!important;display:flex!important;pointer-events:none!important;
+  animation:none!important;z-index:145!important;
+}
+body.desktop-mode .center-artwork > *{display:none!important}
+body.desktop-mode .center-artwork:before{
+  content:"";width:84px;height:84px;border-radius:50%;
+  background:radial-gradient(circle at 42% 38%,#fff 0 8%,#fff6b7 13%,#ffd84f 31%,#ff9e24 58%,rgba(255,136,19,.78) 72%,rgba(255,159,33,.18) 100%);
+  border:1px solid rgba(255,232,145,.9);
+  box-shadow:0 0 18px #ffd84f,0 0 44px rgba(255,177,45,.85),0 0 85px rgba(255,141,24,.46);
+}
+
+/* EYEOTA's system information stays INSIDE the circular interface. */
+#eyeotaDialDesktopUI{display:none}
+body.desktop-mode #eyeotaDialDesktopUI{
+  display:block!important;position:absolute;inset:0;z-index:155;pointer-events:none;
+}
+.eyeota-dial-control{
+  position:absolute;pointer-events:auto;cursor:pointer;
+  min-width:72px;min-height:34px;padding:7px 9px;border-radius:13px;
+  border:1px solid rgba(0,242,255,.48);
+  background:rgba(3,11,22,.78);color:#effdff;
+  box-shadow:0 5px 18px rgba(0,0,0,.44),0 0 10px rgba(0,242,255,.10);
+  backdrop-filter:blur(9px);font:900 9px/1.1 Arial,sans-serif;
+  letter-spacing:.06em;text-align:center;
+}
+.eyeota-dial-control:hover{border-color:#00f2ff;box-shadow:0 0 16px rgba(0,242,255,.32)}
+#eyeotaDialMenuBtn{left:50%;top:31%;transform:translate(-50%,-50%)}
+#eyeotaDialTimeBtn{right:24%;top:43%;transform:translate(50%,-50%)}
+#eyeotaDialWeatherBtn{left:24%;top:43%;transform:translate(-50%,-50%)}
+#eyeotaDialSoundBtn{left:29%;bottom:28%;transform:translate(-50%,50%)}
+#eyeotaDialPersonalizeBtn{right:29%;bottom:28%;transform:translate(50%,50%)}
+.eyeota-mini-time{font-size:11px;letter-spacing:0;color:#fff}
+.eyeota-mini-sub{display:block;margin-top:2px;color:#8ceef5;font-size:7px;letter-spacing:.05em}
+
+/* One circular information layer, opened by controls inside the dial. */
+#eyeotaDialPanel{
+  display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:44%;min-width:210px;max-width:275px;min-height:185px;
+  border-radius:50%;padding:42px 30px 28px;box-sizing:border-box;
+  background:radial-gradient(circle at 50% 36%,rgba(14,35,50,.96),rgba(3,9,18,.97) 72%);
+  border:1px solid rgba(0,242,255,.55);box-shadow:0 0 38px rgba(0,0,0,.75),0 0 22px rgba(0,242,255,.20);
+  color:#fff;text-align:center;pointer-events:auto;z-index:180;
+}
+body.desktop-mode.eyeota-dial-panel-open #eyeotaDialPanel{display:block}
+#eyeotaDialPanel h3{margin:0 0 8px;font:900 13px Arial;letter-spacing:.12em;color:#fff}
+#eyeotaDialPanel p{margin:0;font:700 10px/1.45 Arial;color:#cfe8ee}
+#eyeotaDialPanel .dial-panel-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:10px}
+#eyeotaDialPanel button,#eyeotaDialPanel label{
+  border:1px solid rgba(0,242,255,.34);background:rgba(255,255,255,.06);color:#fff;
+  border-radius:9px;padding:7px 8px;font:800 8px Arial;cursor:pointer
+}
+#eyeotaDialPanelClose{
+  position:absolute;top:17px;right:50%;transform:translateX(50%);
+  width:24px;height:24px;padding:0!important;border-radius:50%!important;font-size:14px!important
+}
+#eyeotaDialWallpaper{display:none}
+
+/* Hide the earlier rectangular Desktop explanation: the concept now lives in the dial. */
+body.desktop-mode #eyeotaDesktopConcept{display:none!important}
+
+@media(max-width:700px){
+  .eyeota-dial-control{min-width:57px;min-height:28px;padding:5px 6px;font-size:7px;border-radius:10px}
+  .eyeota-mini-time{font-size:9px}
+  #eyeotaDialMenuBtn{top:30%}
+  #eyeotaDialTimeBtn{right:22%;top:43%}
+  #eyeotaDialWeatherBtn{left:22%;top:43%}
+  #eyeotaDialSoundBtn{left:27%;bottom:27%}
+  #eyeotaDialPersonalizeBtn{right:27%;bottom:27%}
+  #eyeotaDialPanel{width:51%;min-width:170px;min-height:155px;padding:36px 20px 22px}
+  #eyeotaDialPanel h3{font-size:10px}
+  #eyeotaDialPanel p{font-size:8px}
+  body.desktop-mode .center-artwork:before{width:66px;height:66px}
+}
+</style>
+
+<script id="eyeota-desktop-v38-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+  const body=document.body;
+  const dial=document.getElementById('dial');
+  if(!dial) return;
+
+  /* Build the Desktop information controls inside the existing EYEOTA dial. */
+  const ui=document.createElement('div');
+  ui.id='eyeotaDialDesktopUI';
+  ui.innerHTML=`
+    <button class="eyeota-dial-control" id="eyeotaDialWeatherBtn" type="button">☀ WEATHER<span class="eyeota-mini-sub">OPEN</span></button>
+    <button class="eyeota-dial-control" id="eyeotaDialMenuBtn" type="button">◉ EYEOTA<span class="eyeota-mini-sub">MENU</span></button>
+    <button class="eyeota-dial-control" id="eyeotaDialTimeBtn" type="button"><span class="eyeota-mini-time" id="eyeotaDialClock">--:--</span><span class="eyeota-mini-sub" id="eyeotaDialDate">DATE</span></button>
+    <button class="eyeota-dial-control" id="eyeotaDialSoundBtn" type="button">♫ SOUND<span class="eyeota-mini-sub">ON</span></button>
+    <button class="eyeota-dial-control" id="eyeotaDialPersonalizeBtn" type="button">✦ PERSONALIZE<span class="eyeota-mini-sub">BACKGROUND</span></button>
+    <div id="eyeotaDialPanel" role="dialog" aria-modal="false">
+      <button id="eyeotaDialPanelClose" type="button" aria-label="Close">×</button>
+      <h3 id="eyeotaDialPanelTitle">EYEOTA</h3>
+      <p id="eyeotaDialPanelText">Desktop controls.</p>
+      <div class="dial-panel-actions" id="eyeotaDialPanelActions"></div>
+      <input id="eyeotaDialWallpaper" type="file" accept="image/*">
+    </div>`;
+  dial.appendChild(ui);
+
+  const title=document.getElementById('eyeotaDialPanelTitle');
+  const text=document.getElementById('eyeotaDialPanelText');
+  const actions=document.getElementById('eyeotaDialPanelActions');
+  const wallpaper=document.getElementById('eyeotaDialWallpaper');
+  let wallpaperURL=null;
+
+  function openPanel(name,copy,buttons=''){
+    title.textContent=name;
+    text.innerHTML=copy;
+    actions.innerHTML=buttons;
+    body.classList.add('eyeota-dial-panel-open');
+  }
+  function closePanel(){body.classList.remove('eyeota-dial-panel-open')}
+
+  document.getElementById('eyeotaDialPanelClose').onclick=closePanel;
+
+  document.getElementById('eyeotaDialMenuBtn').onclick=()=>{
+    openPanel('EYEOTA MENU','The dial is the desktop. Open apps from the rotating ring or use these EYEOTA controls.',
+      '<button type="button">APPS</button><button type="button">FILES</button><button type="button">RECENT</button><button type="button">SETTINGS</button><button type="button">POWER</button>');
+  };
+
+  document.getElementById('eyeotaDialTimeBtn').onclick=()=>{
+    const now=new Date();
+    openPanel('TIME + DATE',
+      '<strong style="font-size:20px">'+now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+'</strong><br>'+now.toLocaleDateString([], {weekday:'long',month:'long',day:'numeric',year:'numeric'}));
+  };
+
+  document.getElementById('eyeotaDialWeatherBtn').onclick=()=>{
+    openPanel('WEATHER','Local weather belongs inside EYEOTA. This control is ready for the live weather connection rather than using a Windows-style taskbar.');
+  };
+
+  let soundOn=true;
+  document.getElementById('eyeotaDialSoundBtn').onclick=(e)=>{
+    soundOn=!soundOn;
+    e.currentTarget.innerHTML='♫ SOUND<span class="eyeota-mini-sub">'+(soundOn?'ON':'MUTED')+'</span>';
+    openPanel('SOUND',soundOn?'Desktop sound is on.':'Desktop sound is muted.');
+  };
+
+  document.getElementById('eyeotaDialPersonalizeBtn').onclick=()=>{
+    openPanel('PERSONALIZE','Choose your own EYEOTA Desktop background.',
+      '<label for="eyeotaDialWallpaper">CHOOSE BACKGROUND</label><button id="eyeotaDialResetBg" type="button">RESET</button>');
+    setTimeout(()=>{
+      const reset=document.getElementById('eyeotaDialResetBg');
+      if(reset) reset.onclick=()=>{
+        body.classList.remove('eyeota-custom-wallpaper');
+        body.style.removeProperty('--eyeota-user-wallpaper');
+        if(wallpaperURL){URL.revokeObjectURL(wallpaperURL);wallpaperURL=null;}
+        wallpaper.value='';
+      };
+    },0);
+  };
+
+  wallpaper.addEventListener('change',()=>{
+    const f=wallpaper.files&&wallpaper.files[0];
+    if(!f)return;
+    if(wallpaperURL)URL.revokeObjectURL(wallpaperURL);
+    wallpaperURL=URL.createObjectURL(f);
+    body.style.setProperty('--eyeota-user-wallpaper',`url("${wallpaperURL}")`);
+    body.classList.add('eyeota-custom-wallpaper');
+    closePanel();
+  });
+
+  function updateClock(){
+    const now=new Date(),c=document.getElementById('eyeotaDialClock'),d=document.getElementById('eyeotaDialDate');
+    if(c)c.textContent=now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+    if(d)d.textContent=now.toLocaleDateString([], {month:'numeric',day:'numeric'});
+  }
+  updateClock(); setInterval(updateClock,1000);
+
+  /* Slow orbit: app positions move, but the icons themselves always stay upright. */
+  const letters=Array.from(dial.querySelectorAll('.letter'));
+  let angle=0,last=performance.now(),wasDesktop=false,base=[];
+  function capture(){
+    const r=dial.getBoundingClientRect();
+    base=letters.map(el=>{
+      const er=el.getBoundingClientRect();
+      const x=er.left+er.width/2-r.left-r.width/2;
+      const y=er.top+er.height/2-r.top-r.height/2;
+      return {el,a:Math.atan2(y,x),rad:Math.hypot(x,y)};
+    });
+  }
+  function restore(){
+    for(const o of base){o.el.style.removeProperty('left');o.el.style.removeProperty('top');}
+    base=[];angle=0;
+  }
+  function frame(now){
+    const active=body.classList.contains('desktop-mode');
+    if(active&&!wasDesktop) requestAnimationFrame(capture);
+    if(!active&&wasDesktop){restore();closePanel();}
+    wasDesktop=active;
+    if(active&&base.length){
+      const dt=Math.min(50,now-last);
+      angle += dt*0.000025;
+      const r=dial.getBoundingClientRect();
+      for(const o of base){
+        const a=o.a+angle;
+        o.el.style.left=(r.width/2+Math.cos(a)*o.rad)+'px';
+        o.el.style.top=(r.height/2+Math.sin(a)*o.rad)+'px';
+      }
+    }
+    last=now;requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+});
+</script>
+
+
+<!-- V40: Eye Test controller restart + EYEOTA Desktop presentation -->
+<style id="eyeota-v41-eye-test-fix">
+body.eye-test-mode #eyeTestOverlay{display:block!important;visibility:visible!important;opacity:1!important;z-index:220!important}
+body.eye-test-mode .eyeStimulus{z-index:225!important}
+</style>
+<script id="eyeota-v41-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+  const body=document.body,dial=document.getElementById('dial');
+  if(!dial)return;
+
+  /* Keep presentation music optional and OUTSIDE the center of the dial.
+     This opens the user's supplied YouTube page in a separate tab only after a click. */
+  const music=document.createElement('button');
+  music.id='eyeotaPresentationMusicLink';
+  music.type='button';
+  music.textContent='♫ MUSIC';
+  music.style.cssText='display:none;position:absolute;left:50%;bottom:18%;transform:translate(-50%,50%);z-index:170;min-width:78px;min-height:32px;padding:7px 10px;border-radius:13px;cursor:pointer;border:1px solid rgba(255,211,79,.65);background:rgba(3,11,22,.82);color:#fff;box-shadow:0 5px 18px rgba(0,0,0,.44);font:900 8px Arial;letter-spacing:.08em';
+  dial.appendChild(music);
+  music.addEventListener('click',()=>window.open('https://youtu.be/-XwmYbr1iSo','_blank','noopener,noreferrer'));
+
+  const sync=()=>{
+    music.style.display=body.classList.contains('desktop-mode')?'block':'none';
+  };
+  sync();
+  new MutationObserver(sync).observe(body,{attributes:true,attributeFilter:['class']});
+
+  /* Preserve the V40 Eye Test restart fix, without any Desktop autoplay/player. */
+  body.addEventListener('eyeota-mode-change',ev=>{
+    const mode=ev.detail&&ev.detail.mode;
+    if(mode==='eye' && window.EYEOTA_EYE_TEST){
+      window.EYEOTA_EYE_TEST.leave();
+      requestAnimationFrame(()=>window.EYEOTA_EYE_TEST.enter());
+    }
+  });
+});
+</script>
+
+
+<!-- V42: clean orbital desktop information + center EYEOTA menu -->
+<style id="eyeota-v42-desktop-info">
+/* Retire the earlier Desktop control boxes completely. */
+body.desktop-mode #eyeotaDialWeatherBtn,
+body.desktop-mode #eyeotaDialTimeBtn,
+body.desktop-mode #eyeotaDialSoundBtn,
+body.desktop-mode #eyeotaDialPersonalizeBtn,
+body.desktop-mode #eyeotaDialMenuBtn,
+body.desktop-mode #eyeotaPresentationMusicLink{display:none!important}
+
+/* Time and weather are information, not buttons. */
+#eyeotaOrbitInfo{display:none}
+body.desktop-mode #eyeotaOrbitInfo{
+ display:block;position:absolute;inset:0;z-index:166;pointer-events:none;
+}
+.eyeota-orbit-readout{
+ position:absolute;left:50%;top:50%;width:132px;
+ transform:translate(-50%,-50%);
+ color:#fff;text-align:center;white-space:nowrap;
+ font:900 10px/1.08 Arial,sans-serif;letter-spacing:.055em;
+ text-shadow:0 2px 5px #000,0 0 8px rgba(0,0,0,.9);
+}
+.eyeota-orbit-readout .main{display:block;font-size:12px}
+.eyeota-orbit-readout .sub{display:block;margin-top:3px;color:#dffbff;font-size:8px;letter-spacing:.04em}
+
+/* EYEOTA becomes the Start/Menu control in the exact center. */
+#eyeotaCenterMenu{
+ display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ z-index:172;width:86px;height:86px;border-radius:50%;cursor:pointer;
+ border:1px solid rgba(255,225,120,.9);
+ background:radial-gradient(circle at 42% 35%,rgba(255,252,214,.94),rgba(255,193,56,.88) 18%,rgba(26,15,5,.92) 54%,rgba(3,9,18,.96) 76%);
+ color:#fff;box-shadow:0 0 18px rgba(255,213,77,.68),0 0 42px rgba(255,155,31,.35);
+ font:900 11px/1 Arial,sans-serif;letter-spacing:.10em;text-shadow:0 2px 4px #000
+}
+body.desktop-mode #eyeotaCenterMenu{display:block}
+body.desktop-mode .center-artwork{display:none!important}
+
+/* Circular EYEOTA menu; no Windows-style rectangle. */
+#eyeotaCenterMenuPanel{
+ display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ z-index:190;width:250px;height:250px;border-radius:50%;box-sizing:border-box;
+ padding:50px 35px 35px;background:radial-gradient(circle,rgba(11,30,42,.98),rgba(2,8,16,.985) 72%);
+ border:1px solid rgba(0,242,255,.5);box-shadow:0 0 40px rgba(0,0,0,.8),0 0 22px rgba(0,242,255,.16);
+ color:#fff;text-align:center;pointer-events:auto
+}
+body.desktop-mode.eyeota-center-menu-open #eyeotaCenterMenuPanel{display:block}
+#eyeotaCenterMenuPanel h3{margin:0 0 11px;font:900 13px Arial;letter-spacing:.15em}
+#eyeotaCenterMenuPanel .menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+#eyeotaCenterMenuPanel button{
+ border:1px solid rgba(0,242,255,.28);border-radius:10px;padding:9px 5px;
+ background:rgba(255,255,255,.06);color:#fff;font:800 8px Arial;cursor:pointer
+}
+#eyeotaCenterMenuClose{
+ position:absolute;left:50%;top:20px;transform:translateX(-50%);
+ width:26px;height:26px!important;padding:0!important;border-radius:50%!important;font-size:14px!important
+}
+@media(max-width:700px){
+ .eyeota-orbit-readout{width:100px;font-size:8px}
+ .eyeota-orbit-readout .main{font-size:10px}
+ .eyeota-orbit-readout .sub{font-size:7px}
+ #eyeotaCenterMenu{width:68px;height:68px;font-size:9px}
+ #eyeotaCenterMenuPanel{width:205px;height:205px;padding:43px 28px 28px}
+}
+</style>
+
+<script id="eyeota-v42-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+ const body=document.body,dial=document.getElementById('dial');
+ if(!dial)return;
+
+ /* Remove the old V41 music control from the interface. */
+ const oldMusic=document.getElementById('eyeotaPresentationMusicLink');
+ if(oldMusic)oldMusic.remove();
+
+ const info=document.createElement('div');
+ info.id='eyeotaOrbitInfo';
+ info.innerHTML=`
+   <div class="eyeota-orbit-readout" id="eyeotaOrbitTime">
+     <span class="main" id="eyeotaActualTime">--:--</span>
+     <span class="sub" id="eyeotaActualDate">--</span>
+   </div>
+   <div class="eyeota-orbit-readout" id="eyeotaOrbitWeather">
+     <span class="main" id="eyeotaActualWeather">WEATHER --</span>
+     <span class="sub" id="eyeotaWeatherDetail">LOCAL WEATHER</span>
+   </div>`;
+ dial.appendChild(info);
+
+ const center=document.createElement('button');
+ center.id='eyeotaCenterMenu';center.type='button';center.textContent='EYEOTA';
+ dial.appendChild(center);
+
+ const panel=document.createElement('div');
+ panel.id='eyeotaCenterMenuPanel';
+ panel.innerHTML=`
+   <button id="eyeotaCenterMenuClose" type="button" aria-label="Close">×</button>
+   <h3>EYEOTA</h3>
+   <div class="menu-grid">
+     <button type="button">APPS</button><button type="button">FILES</button>
+     <button type="button">RECENT</button><button type="button">SEARCH</button>
+     <button type="button">SETTINGS</button><button type="button">POWER</button>
+   </div>`;
+ dial.appendChild(panel);
+ center.onclick=()=>body.classList.toggle('eyeota-center-menu-open');
+ document.getElementById('eyeotaCenterMenuClose').onclick=()=>body.classList.remove('eyeota-center-menu-open');
+
+ /* Actual browser-local clock. */
+ function clock(){
+   const n=new Date();
+   document.getElementById('eyeotaActualTime').textContent=n.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+   document.getElementById('eyeotaActualDate').textContent=n.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'});
+ }
+ clock();setInterval(clock,1000);
+
+ /* Actual local weather: ask the browser for location, then use Open-Meteo.
+    If location is unavailable, do not invent weather. */
+ const w=document.getElementById('eyeotaActualWeather'),wd=document.getElementById('eyeotaWeatherDetail');
+ const weatherNames={0:'CLEAR',1:'MOSTLY CLEAR',2:'PARTLY CLOUDY',3:'CLOUDY',45:'FOG',48:'FOG',51:'DRIZZLE',53:'DRIZZLE',55:'DRIZZLE',61:'RAIN',63:'RAIN',65:'HEAVY RAIN',71:'SNOW',73:'SNOW',75:'HEAVY SNOW',80:'SHOWERS',81:'SHOWERS',82:'HEAVY SHOWERS',95:'THUNDERSTORM'};
+ function getWeather(){
+   if(!navigator.geolocation){w.textContent='WEATHER --';wd.textContent='LOCATION UNAVAILABLE';return;}
+   navigator.geolocation.getCurrentPosition(async pos=>{
+     try{
+       const {latitude,longitude}=pos.coords;
+       const url=`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto`;
+       const r=await fetch(url);if(!r.ok)throw new Error();
+       const j=await r.json(),c=j.current;
+       w.textContent=`${Math.round(c.temperature_2m)}°  ${weatherNames[c.weather_code]||'CURRENT'}`;
+       wd.textContent=`FEELS ${Math.round(c.apparent_temperature)}°  •  WIND ${Math.round(c.wind_speed_10m)} MPH`;
+     }catch(e){w.textContent='WEATHER --';wd.textContent='WEATHER UNAVAILABLE';}
+   },()=>{w.textContent='WEATHER --';wd.textContent='ALLOW LOCATION FOR LOCAL WEATHER';},
+   {enableHighAccuracy:false,timeout:8000,maximumAge:600000});
+ }
+ getWeather();setInterval(getWeather,600000);
+
+ /* Symmetrical orbit just inside the outer boundary. Both readouts remain upright. */
+ let theta=-Math.PI/2,last=performance.now();
+ function animate(now){
+   if(body.classList.contains('desktop-mode')){
+     const rect=dial.getBoundingClientRect();
+     const radius=Math.max(0,Math.min(rect.width,rect.height)*0.445);
+     theta += Math.min(50,now-last)*0.000025;
+     const cx=rect.width/2,cy=rect.height/2;
+     const a=document.getElementById('eyeotaOrbitTime');
+     const b=document.getElementById('eyeotaOrbitWeather');
+     a.style.left=(cx+Math.cos(theta)*radius)+'px';
+     a.style.top=(cy+Math.sin(theta)*radius)+'px';
+     b.style.left=(cx+Math.cos(theta+Math.PI)*radius)+'px';
+     b.style.top=(cy+Math.sin(theta+Math.PI)*radius)+'px';
+   }else{
+     body.classList.remove('eyeota-center-menu-open');
+   }
+   last=now;requestAnimationFrame(animate);
+ }
+ requestAnimationFrame(animate);
+});
+</script>
+
+
+<!-- V43: curved information written along the outer EYEOTA ring -->
+<style id="eyeota-v43-ring-info">
+/* Replace V42's floating readouts with compact curved ring typography. */
+body.desktop-mode #eyeotaOrbitInfo{display:none!important}
+#eyeotaCurvedInfo{display:none}
+body.desktop-mode #eyeotaCurvedInfo{
+ display:block;position:absolute;inset:0;z-index:168;pointer-events:none;overflow:visible
+}
+#eyeotaCurvedInfo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#eyeotaCurvedInfo text{
+ fill:#fff;font-family:Arial,sans-serif;font-size:10px;font-weight:900;letter-spacing:1.25px;
+ paint-order:stroke;stroke:rgba(0,0,0,.72);stroke-width:2px;
+}
+#eyeotaCurvedInfo .weatherText{fill:#dffbff}
+@media(max-width:700px){
+ #eyeotaCurvedInfo text{font-size:8px;letter-spacing:.85px;stroke-width:1.5px}
+}
+</style>
+
+<script id="eyeota-v43-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+ const body=document.body,dial=document.getElementById('dial');
+ if(!dial)return;
+
+ const wrap=document.createElement('div');
+ wrap.id='eyeotaCurvedInfo';
+ wrap.innerHTML=`
+ <svg viewBox="0 0 1000 1000" aria-hidden="true">
+   <defs>
+     <path id="eyeotaTimeArc" d="M 90,500 A 410,410 0 0,1 910,500"/>
+     <path id="eyeotaWeatherArc" d="M 910,500 A 410,410 0 0,1 90,500"/>
+   </defs>
+   <g id="eyeotaCurvedRotor">
+     <text><textPath id="eyeotaCurvedTime" href="#eyeotaTimeArc" startOffset="50%" text-anchor="middle">--:-- • --</textPath></text>
+     <text class="weatherText"><textPath id="eyeotaCurvedWeather" href="#eyeotaWeatherArc" startOffset="50%" text-anchor="middle">WEATHER —</textPath></text>
+   </g>
+ </svg>`;
+ dial.appendChild(wrap);
+
+ const time=document.getElementById('eyeotaCurvedTime');
+ const weather=document.getElementById('eyeotaCurvedWeather');
+ const rotor=document.getElementById('eyeotaCurvedRotor');
+
+ function updateTime(){
+   const n=new Date();
+   const t=n.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+   const d=n.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'}).toUpperCase();
+   time.textContent=`${t} • ${d}`;
+ }
+ updateTime();setInterval(updateTime,1000);
+
+ const names={0:'CLEAR',1:'MOSTLY CLEAR',2:'PARTLY CLOUDY',3:'CLOUDY',45:'FOG',48:'FOG',51:'DRIZZLE',53:'DRIZZLE',55:'DRIZZLE',61:'RAIN',63:'RAIN',65:'HEAVY RAIN',71:'SNOW',73:'SNOW',75:'HEAVY SNOW',80:'SHOWERS',81:'SHOWERS',82:'HEAVY SHOWERS',95:'STORM'};
+ function updateWeather(){
+   weather.textContent='WEATHER —';
+   if(!navigator.geolocation)return;
+   navigator.geolocation.getCurrentPosition(async pos=>{
+     try{
+       const {latitude,longitude}=pos.coords;
+       const url=`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=auto`;
+       const r=await fetch(url);if(!r.ok)throw 0;
+       const j=await r.json(),c=j.current;
+       weather.textContent=`${Math.round(c.temperature_2m)}° • ${names[c.weather_code]||'WEATHER'}`;
+     }catch(e){weather.textContent='WEATHER —';}
+   },()=>{weather.textContent='WEATHER —';},{enableHighAccuracy:false,timeout:7000,maximumAge:600000});
+ }
+ updateWeather();setInterval(updateWeather,600000);
+
+ /* The typography travels around the same circular baseline as one symmetrical unit. */
+ let angle=0,last=performance.now();
+ function frame(now){
+   if(body.classList.contains('desktop-mode')){
+     angle=(angle+Math.min(50,now-last)*0.000018)%360;
+     rotor.setAttribute('transform',`rotate(${angle} 500 500)`);
+   }
+   last=now;requestAnimationFrame(frame);
+ }
+ requestAnimationFrame(frame);
+});
+</script>
+
+
+<!-- V44: upright rotating time/weather -->
+<style id="eyeota-v44-upright-info">
+body.desktop-mode #eyeotaCurvedInfo{display:none!important}
+#eyeotaUprightOrbitInfo{display:none}
+body.desktop-mode #eyeotaUprightOrbitInfo{
+ display:block;position:absolute;inset:0;z-index:169;pointer-events:none;overflow:visible
+}
+.eyeota-upright-orbit{
+ position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ color:#fff;white-space:nowrap;text-align:center;
+ font:900 9px/1 Arial,sans-serif;letter-spacing:.08em;
+ text-shadow:0 2px 5px #000,0 0 8px rgba(0,0,0,.9)
+}
+#eyeotaUprightWeather{color:#dffbff}
+@media(max-width:700px){.eyeota-upright-orbit{font-size:7px;letter-spacing:.05em}}
+</style>
+
+<script id="eyeota-v44-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+ const body=document.body,dial=document.getElementById('dial');
+ if(!dial)return;
+
+ const wrap=document.createElement('div');
+ wrap.id='eyeotaUprightOrbitInfo';
+ wrap.innerHTML='<div class="eyeota-upright-orbit" id="eyeotaUprightTime">--:-- • --</div><div class="eyeota-upright-orbit" id="eyeotaUprightWeather">WEATHER —</div>';
+ dial.appendChild(wrap);
+
+ const time=document.getElementById('eyeotaUprightTime');
+ const weather=document.getElementById('eyeotaUprightWeather');
+
+ function clock(){
+   const n=new Date();
+   time.textContent=n.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+' • '+n.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'}).toUpperCase();
+ }
+ clock();setInterval(clock,1000);
+
+ const names={0:'CLEAR',1:'MOSTLY CLEAR',2:'PARTLY CLOUDY',3:'CLOUDY',45:'FOG',48:'FOG',51:'DRIZZLE',53:'DRIZZLE',55:'DRIZZLE',61:'RAIN',63:'RAIN',65:'HEAVY RAIN',71:'SNOW',73:'SNOW',75:'HEAVY SNOW',80:'SHOWERS',81:'SHOWERS',82:'HEAVY SHOWERS',95:'STORM'};
+ function getWeather(){
+   weather.textContent='WEATHER —';
+   if(!navigator.geolocation)return;
+   navigator.geolocation.getCurrentPosition(async pos=>{
+     try{
+       const {latitude,longitude}=pos.coords;
+       const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=auto`);
+       if(!r.ok)throw 0;
+       const c=(await r.json()).current;
+       weather.textContent=Math.round(c.temperature_2m)+'° • '+(names[c.weather_code]||'WEATHER');
+     }catch(e){weather.textContent='WEATHER —';}
+   },()=>weather.textContent='WEATHER —',{enableHighAccuracy:false,timeout:7000,maximumAge:600000});
+ }
+ getWeather();setInterval(getWeather,600000);
+
+ /* Opposite positions rotate around the dial, but the text itself never rotates. */
+ let a=-Math.PI/2,last=performance.now();
+ function frame(now){
+   if(body.classList.contains('desktop-mode')){
+     const r=dial.getBoundingClientRect();
+     const radius=Math.min(r.width,r.height)*0.445;
+     a+=Math.min(50,now-last)*0.000018;
+     const cx=r.width/2,cy=r.height/2;
+     time.style.left=(cx+Math.cos(a)*radius)+'px';
+     time.style.top=(cy+Math.sin(a)*radius)+'px';
+     weather.style.left=(cx+Math.cos(a+Math.PI)*radius)+'px';
+     weather.style.top=(cy+Math.sin(a+Math.PI)*radius)+'px';
+     time.style.transform='translate(-50%,-50%) rotate(0deg)';
+     weather.style.transform='translate(-50%,-50%) rotate(0deg)';
+   }
+   last=now;requestAnimationFrame(frame);
+ }
+ requestAnimationFrame(frame);
+});
+</script>
+
+
+<!-- V45: adaptive curved character-by-character orbit -->
+<style id="eyeota-v45-adaptive-curve">
+body.desktop-mode #eyeotaUprightOrbitInfo,
+body.desktop-mode #eyeotaCurvedInfo{display:none!important}
+#eyeotaAdaptiveRingInfo{display:none}
+body.desktop-mode #eyeotaAdaptiveRingInfo{
+ display:block;position:absolute;inset:0;z-index:170;pointer-events:none;overflow:visible
+}
+.eyeota-curve-char{
+ position:absolute;left:50%;top:50%;transform-origin:center center;
+ color:#fff;font:900 9px/1 Arial,sans-serif;
+ text-shadow:0 2px 5px #000,0 0 7px rgba(0,0,0,.9);
+ white-space:pre;will-change:transform
+}
+#eyeotaAdaptiveWeather .eyeota-curve-char{color:#dffbff}
+@media(max-width:700px){.eyeota-curve-char{font-size:7px}}
+</style>
+
+<script id="eyeota-v45-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+ const body=document.body,dial=document.getElementById('dial');
+ if(!dial)return;
+
+ const root=document.createElement('div');
+ root.id='eyeotaAdaptiveRingInfo';
+ root.innerHTML='<div id="eyeotaAdaptiveTime"></div><div id="eyeotaAdaptiveWeather"></div>';
+ dial.appendChild(root);
+ const timeRoot=document.getElementById('eyeotaAdaptiveTime');
+ const weatherRoot=document.getElementById('eyeotaAdaptiveWeather');
+
+ let timeText='',weatherText='WEATHER —';
+
+ function setChars(el,text){
+   if(el.dataset.text===text)return;
+   el.dataset.text=text;
+   el.replaceChildren(...Array.from(text).map(ch=>{
+     const s=document.createElement('span');
+     s.className='eyeota-curve-char';
+     s.textContent=ch===' '?' ':ch;
+     return s;
+   }));
+ }
+ function updateClock(){
+   const n=new Date();
+   timeText=n.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+' • '+n.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'}).toUpperCase();
+   setChars(timeRoot,timeText);
+ }
+ updateClock();setInterval(updateClock,1000);
+ setChars(weatherRoot,weatherText);
+
+ const names={0:'CLEAR',1:'MOSTLY CLEAR',2:'PARTLY CLOUDY',3:'CLOUDY',45:'FOG',48:'FOG',51:'DRIZZLE',53:'DRIZZLE',55:'DRIZZLE',61:'RAIN',63:'RAIN',65:'HEAVY RAIN',71:'SNOW',73:'SNOW',75:'HEAVY SNOW',80:'SHOWERS',81:'SHOWERS',82:'HEAVY SHOWERS',95:'STORM'};
+ function weather(){
+   weatherText='WEATHER —';setChars(weatherRoot,weatherText);
+   if(!navigator.geolocation)return;
+   navigator.geolocation.getCurrentPosition(async p=>{
+     try{
+       const {latitude,longitude}=p.coords;
+       const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=auto`);
+       if(!r.ok)throw 0;
+       const c=(await r.json()).current;
+       weatherText=Math.round(c.temperature_2m)+'° • '+(names[c.weather_code]||'WEATHER');
+     }catch(e){weatherText='WEATHER —';}
+     setChars(weatherRoot,weatherText);
+   },()=>{weatherText='WEATHER —';setChars(weatherRoot,weatherText)},
+   {enableHighAccuracy:false,timeout:7000,maximumAge:600000});
+ }
+ weather();setInterval(weather,600000);
+
+ /* Place every character independently on the circular "writing line".
+    On the lower half we reverse the character progression and orientation,
+    keeping the phrase naturally readable instead of upside-down. */
+ function placePhrase(el,centerAngle,radius,charStep){
+   const chars=[...el.children],n=chars.length;
+   if(!n)return;
+   const norm=((centerAngle%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+   const lower=norm>0 && norm<Math.PI;
+   for(let visual=0;visual<n;visual++){
+     const sourceIndex=lower ? n-1-visual : visual;
+     const node=chars[sourceIndex];
+     const offset=(visual-(n-1)/2)*charStep;
+     const a=centerAngle+offset;
+     const x=Math.cos(a)*radius,y=Math.sin(a)*radius;
+     let deg=a*180/Math.PI+90;
+     if(lower)deg+=180;
+     node.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%) rotate(${deg}deg)`;
+   }
+ }
+
+ let a=-Math.PI/2,last=performance.now();
+ function frame(now){
+   if(body.classList.contains('desktop-mode')){
+     const r=dial.getBoundingClientRect();
+     const radius=Math.min(r.width,r.height)*0.445;
+     const pxPerChar=7.5;
+     const step=pxPerChar/Math.max(radius,1);
+     a+=Math.min(50,now-last)*0.000018;
+     placePhrase(timeRoot,a,radius,step);
+     placePhrase(weatherRoot,a+Math.PI,radius,step);
+   }
+   last=now;requestAnimationFrame(frame);
+ }
+ requestAnimationFrame(frame);
+});
+</script>
+
+
+<!-- V46: raise curved text off the white line + stable readable orientation -->
+<style id="eyeota-v46-readable-curve">
+body.desktop-mode #eyeotaAdaptiveRingInfo{display:block!important}
+.eyeota-curve-char{
+ paint-order:stroke;
+ -webkit-text-stroke:.25px rgba(0,0,0,.55);
+}
+</style>
+<script id="eyeota-v46-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+ const body=document.body,dial=document.getElementById('dial');
+ const timeRoot=document.getElementById('eyeotaAdaptiveTime');
+ const weatherRoot=document.getElementById('eyeotaAdaptiveWeather');
+ if(!dial||!timeRoot||!weatherRoot)return;
+
+ /* V46 owns final positioning. It lifts the writing inward from the white ring.
+    Each phrase flips its reading direction on the side arcs, before it can
+    become upside-down, while every character still follows the curvature. */
+ function placeReadable(el,centerAngle,radius,charStep){
+   const chars=[...el.children],n=chars.length;if(!n)return;
+   const two=Math.PI*2;
+   let norm=((centerAngle%two)+two)%two;
+
+   // Natural upper/lower reading orientation:
+   // top half: left -> right along the upper arc
+   // bottom half: left -> right along the lower arc, with reversed path direction.
+   const onBottom=norm>0 && norm<Math.PI;
+
+   for(let visual=0;visual<n;visual++){
+     const node=chars[onBottom ? n-1-visual : visual];
+     const offset=(visual-(n-1)/2)*charStep;
+     const ang=centerAngle+offset;
+     const x=Math.cos(ang)*radius,y=Math.sin(ang)*radius;
+
+     let rot=ang*180/Math.PI+90;
+     if(onBottom)rot+=180;
+
+     // Normalize rotation so glyphs never accumulate full turns.
+     rot=((rot+180)%360+360)%360-180;
+     node.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%) rotate(${rot}deg)`;
+   }
+ }
+
+ let a=-Math.PI/2,last=performance.now();
+ function frame(now){
+   if(body.classList.contains('desktop-mode')){
+     const box=dial.getBoundingClientRect();
+     // V45 used .445. Pulling inward to .414 puts a clean gap above the white ring.
+     const radius=Math.min(box.width,box.height)*0.414;
+     const step=7.5/Math.max(radius,1);
+     a+=Math.min(50,now-last)*0.000018;
+     placeReadable(timeRoot,a,radius,step);
+     placeReadable(weatherRoot,a+Math.PI,radius,step);
+   }
+   last=now;requestAnimationFrame(frame);
+ }
+ requestAnimationFrame(frame);
+});
+</script>
+
+
+<!-- V47: reorient curved info earlier, before side arcs become hard to read -->
+<script id="eyeota-v47-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+ const body=document.body,dial=document.getElementById('dial');
+ const timeRoot=document.getElementById('eyeotaAdaptiveTime');
+ const weatherRoot=document.getElementById('eyeotaAdaptiveWeather');
+ if(!dial||!timeRoot||!weatherRoot)return;
+
+ function placeEarly(el,centerAngle,radius,charStep){
+   const chars=[...el.children],n=chars.length;if(!n)return;
+   const two=Math.PI*2;
+   const norm=((centerAngle%two)+two)%two;
+
+   /*
+     Flip early: use a wide "bottom reading" zone beginning about 35°
+     after the right/top quadrant and ending about 35° before the left/top
+     quadrant. This prevents the phrase from spending much time near vertical.
+   */
+   const early=Math.PI*35/180;
+   const bottomReading = norm > early && norm < (Math.PI-early);
+
+   for(let visual=0;visual<n;visual++){
+     const node=chars[bottomReading ? n-1-visual : visual];
+     const offset=(visual-(n-1)/2)*charStep;
+     const ang=centerAngle+offset;
+     const x=Math.cos(ang)*radius,y=Math.sin(ang)*radius;
+     let rot=ang*180/Math.PI+90+(bottomReading?180:0);
+     rot=((rot+180)%360+360)%360-180;
+     node.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%) rotate(${rot}deg)`;
+   }
+ }
+
+ let a=-Math.PI/2,last=performance.now();
+ function frame(now){
+   if(body.classList.contains('desktop-mode')){
+     const box=dial.getBoundingClientRect();
+     const radius=Math.min(box.width,box.height)*0.414;
+     const step=7.5/Math.max(radius,1);
+     a+=Math.min(50,now-last)*0.000018;
+     placeEarly(timeRoot,a,radius,step);
+     placeEarly(weatherRoot,a+Math.PI,radius,step);
+   }
+   last=now;requestAnimationFrame(frame);
+ }
+ requestAnimationFrame(frame);
+});
+</script>
+
+
+<!-- V48: official Spotify embed — Mapei, "As 1" -->
+<style id="eyeota-v48-spotify">
+#eyeotaSpotifyPresentation{display:none}
+body.desktop-mode #eyeotaSpotifyPresentation{
+ display:block;position:relative;z-index:40;
+ width:min(92%,520px);margin:14px auto 6px;
+}
+#eyeotaSpotifyPresentation .eyeota-song-label{
+ margin:0 0 5px;text-align:center;color:#fff;
+ font:800 9px/1.2 Arial,sans-serif;letter-spacing:.12em;
+ text-shadow:0 2px 4px #000;
+}
+#eyeotaSpotifyPresentation iframe{
+ display:block;width:100%;height:152px;border:0;border-radius:12px;
+}
+@media(max-width:700px){
+ body.desktop-mode #eyeotaSpotifyPresentation{width:94%;margin-top:10px}
+ #eyeotaSpotifyPresentation iframe{height:152px}
+}
+</style>
+
+<script id="eyeota-v48-spotify-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+ const body=document.body;
+ const player=document.createElement('section');
+ player.id='eyeotaSpotifyPresentation';
+ player.setAttribute('aria-label','EYEOTA Desktop presentation music');
+ player.innerHTML=`
+   
+   <iframe
+     title="Spotify Embed: Mapei — As 1"
+     src="https://open.spotify.com/embed/track/02jL8kZ7igHQBUdSNCVt3c?utm_source=generator&theme=0"
+     width="100%"
+     height="152"
+     frameborder="0"
+     allowfullscreen=""
+     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+     loading="lazy">
+   </iframe>`;
+ const dial=document.getElementById('dial');
+ const desktopHost=document.querySelector('.desktop-workspace, #desktopWorkspace, .dial-wrap, .dial-stage');
+ if(desktopHost && desktopHost.parentNode){
+   desktopHost.parentNode.insertBefore(player,desktopHost.nextSibling);
+ }else if(dial && dial.parentNode){
+   dial.parentNode.insertBefore(player,dial.nextSibling);
+ }else{
+   body.appendChild(player);
+ }
+});
+</script>
+
+
+<!-- V49: spaced rotating Desktop system indicators -->
+<style id="eyeota-v49-system-orbit">
+#eyeotaSystemOrbit{display:none}
+body.desktop-mode #eyeotaSystemOrbit{
+ display:block;position:absolute;inset:0;z-index:171;pointer-events:none
+}
+.eyeota-system-item{
+ position:absolute;left:50%;top:50%;
+ color:#fff;font:900 9px/1 Arial,sans-serif;letter-spacing:.05em;
+ text-shadow:0 2px 5px #000,0 0 7px rgba(0,0,0,.9);
+ white-space:nowrap;will-change:transform
+}
+.eyeota-system-item .ico{font-size:12px;margin-right:3px}
+@media(max-width:700px){
+ .eyeota-system-item{font-size:7px}
+ .eyeota-system-item .ico{font-size:10px;margin-right:2px}
+}
+</style>
+
+<script id="eyeota-v49-system-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+ const body=document.body,dial=document.getElementById('dial');
+ if(!dial)return;
+
+ const root=document.createElement('div');
+ root.id='eyeotaSystemOrbit';
+ root.innerHTML=`
+   <div class="eyeota-system-item" id="eyeotaSysVolume"><span class="ico">🔊</span><span>VOL</span></div>
+   <div class="eyeota-system-item" id="eyeotaSysNetwork"><span class="ico">◉</span><span id="eyeotaNetText">ONLINE</span></div>
+   <div class="eyeota-system-item" id="eyeotaSysBattery"><span class="ico">▰</span><span id="eyeotaBatText">POWER</span></div>`;
+ dial.appendChild(root);
+
+ const vol=document.getElementById('eyeotaSysVolume');
+ const net=document.getElementById('eyeotaSysNetwork');
+ const bat=document.getElementById('eyeotaSysBattery');
+ const netText=document.getElementById('eyeotaNetText');
+ const batText=document.getElementById('eyeotaBatText');
+
+ /* Only show network state the browser can actually establish. */
+ function updateNetwork(){
+   netText.textContent=navigator.onLine?'ONLINE':'OFFLINE';
+ }
+ updateNetwork();
+ addEventListener('online',updateNetwork);
+ addEventListener('offline',updateNetwork);
+
+ /* Battery percentage only when the browser exposes Battery Status API. */
+ if(navigator.getBattery){
+   navigator.getBattery().then(b=>{
+     const update=()=>{
+       batText.textContent=Math.round(b.level*100)+'%'+(b.charging?' ⚡':'');
+     };
+     update();
+     b.addEventListener('levelchange',update);
+     b.addEventListener('chargingchange',update);
+   }).catch(()=>{batText.textContent='POWER';});
+ }else{
+   batText.textContent='POWER';
+ }
+
+ /* Three indicators occupy separate 120° positions.
+    They rotate as a group but counter-rotate individually to stay readable. */
+ let a=-Math.PI/2,last=performance.now();
+ const items=[vol,net,bat];
+ function frame(now){
+   if(body.classList.contains('desktop-mode')){
+     const box=dial.getBoundingClientRect();
+     // Slightly farther inward than time/weather so the two systems don't collide.
+     const radius=Math.min(box.width,box.height)*0.365;
+     a+=Math.min(50,now-last)*0.000018;
+
+     items.forEach((el,i)=>{
+       const ang=a+i*(Math.PI*2/3);
+       const x=Math.cos(ang)*radius,y=Math.sin(ang)*radius;
+       // Keep each compact indicator horizontal/readable while its position orbits.
+       el.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%)`;
+     });
+   }
+   last=now;requestAnimationFrame(frame);
+ }
+ requestAnimationFrame(frame);
+});
+</script>
+
+
+<!-- V50: replace Spotify presentation player with compact YouTube music player -->
+<style id="eyeota-v50-youtube">
+body.desktop-mode #eyeotaSpotifyPresentation{display:none!important}
+#eyeotaYouTubeMusic{display:none}
+body.desktop-mode #eyeotaYouTubeMusic{
+ display:block;position:relative;z-index:40;
+ width:min(92%,420px);margin:12px auto 6px;
+}
+#eyeotaYouTubeMusic iframe{
+ display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:12px;
+ background:#000;
+}
+@media(max-width:700px){
+ body.desktop-mode #eyeotaYouTubeMusic{width:92%;max-width:340px}
+}
+</style>
+
+<script id="eyeota-v50-youtube-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+ const spotify=document.getElementById('eyeotaSpotifyPresentation');
+ if(spotify)spotify.remove();
+
+ const player=document.createElement('section');
+ player.id='eyeotaYouTubeMusic';
+ player.setAttribute('aria-label','Mapei As 1 music player');
+ player.innerHTML=`
+   <iframe
+     title="Mapei — As 1"
+     src="https://www.youtube.com/embed/-XwmYbr1iSo?rel=0"
+     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+     referrerpolicy="strict-origin-when-cross-origin"
+     allowfullscreen>
+   </iframe>`;
+
+ const dial=document.getElementById('dial');
+ const host=document.querySelector('.desktop-workspace, #desktopWorkspace, .dial-wrap, .dial-stage');
+ if(host && host.parentNode)host.parentNode.insertBefore(player,host.nextSibling);
+ else if(dial && dial.parentNode)dial.parentNode.insertBefore(player,dial.nextSibling);
+ else document.body.appendChild(player);
+});
+</script>
+
+
+<!-- V51: all Desktop system information shares one circumference -->
+<style id="eyeota-v51-one-ring">
+/* Retire V49's separate inner system orbit. */
+body.desktop-mode #eyeotaSystemOrbit{display:none!important}
+#eyeotaSharedSystemRing{display:none}
+body.desktop-mode #eyeotaSharedSystemRing{
+ display:block;position:absolute;inset:0;z-index:172;pointer-events:none
+}
+.eyeota-shared-item{
+ position:absolute;left:50%;top:50%;
+ color:#fff;font:900 8px/1 Arial,sans-serif;letter-spacing:.045em;
+ text-shadow:0 2px 5px #000,0 0 7px rgba(0,0,0,.9);
+ white-space:nowrap;will-change:transform
+}
+.eyeota-shared-item .ico{font-size:10px;margin-right:2px}
+@media(max-width:700px){
+ .eyeota-shared-item{font-size:6.8px}
+ .eyeota-shared-item .ico{font-size:8px}
+}
+</style>
+
+<script id="eyeota-v51-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+ const body=document.body,dial=document.getElementById('dial');
+ if(!dial)return;
+
+ const root=document.createElement('div');
+ root.id='eyeotaSharedSystemRing';
+ root.innerHTML=`
+   <div class="eyeota-shared-item" id="eyeotaSharedVol"><span class="ico">🔊</span> VOL</div>
+   <div class="eyeota-shared-item" id="eyeotaSharedNet"><span class="ico">◉</span> <span id="eyeotaSharedNetText">ONLINE</span></div>
+   <div class="eyeota-shared-item" id="eyeotaSharedBat"><span class="ico">▰</span> <span id="eyeotaSharedBatText">POWER</span></div>`;
+ dial.appendChild(root);
+
+ const vol=document.getElementById('eyeotaSharedVol');
+ const net=document.getElementById('eyeotaSharedNet');
+ const bat=document.getElementById('eyeotaSharedBat');
+ const netText=document.getElementById('eyeotaSharedNetText');
+ const batText=document.getElementById('eyeotaSharedBatText');
+
+ function netState(){netText.textContent=navigator.onLine?'ONLINE':'OFFLINE'}
+ netState();addEventListener('online',netState);addEventListener('offline',netState);
+
+ if(navigator.getBattery){
+   navigator.getBattery().then(b=>{
+     const u=()=>batText.textContent=Math.round(b.level*100)+'%'+(b.charging?' ⚡':'');
+     u();b.addEventListener('levelchange',u);b.addEventListener('chargingchange',u);
+   }).catch(()=>batText.textContent='POWER');
+ }
+
+ /* Same radius as the raised V47 time/weather writing line (.414).
+    System items are deliberately placed in three separate gaps around that
+    SAME circumference rather than on an inner orbit. */
+ let a=-Math.PI/2,last=performance.now();
+ const items=[
+   {el:vol, offset:Math.PI*2/5},
+   {el:net, offset:Math.PI*4/5},
+   {el:bat, offset:Math.PI*6/5}
+ ];
+
+ function readableTransform(el,ang,radius){
+   const x=Math.cos(ang)*radius,y=Math.sin(ang)*radius;
+   let tangent=ang*180/Math.PI+90;
+   /* Flip early on the lower-side arcs, matching the readable-ring idea. */
+   const norm=((ang%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+   if(norm>Math.PI*35/180 && norm<Math.PI-Math.PI*35/180)tangent+=180;
+   tangent=((tangent+180)%360+360)%360-180;
+   el.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%) rotate(${tangent}deg)`;
+ }
+
+ function frame(now){
+   if(body.classList.contains('desktop-mode')){
+     const box=dial.getBoundingClientRect();
+     const radius=Math.min(box.width,box.height)*0.414;
+     a+=Math.min(50,now-last)*0.000018;
+     items.forEach(o=>readableTransform(o.el,a+o.offset,radius));
+   }
+   last=now;requestAnimationFrame(frame);
+ }
+ requestAnimationFrame(frame);
+});
+</script>
+
+
+<!-- V56: Desktop dial true-axis centering -->
+<style id="eyeota-v56-axis-center">
+/*
+  Desktop-only axis correction:
+  center the dial itself in its available row and make every absolute
+  orbital layer use that dial box as its coordinate system.
+*/
+body.desktop-mode #dial{
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  transform-origin:50% 50%!important;
+}
+body.desktop-mode #dialWrap,
+body.desktop-mode .dial-wrap,
+body.desktop-mode .dial-stage{
+  justify-content:center!important;
+  align-items:center!important;
+}
+body.desktop-mode #eyeotaSystemOrbit,
+body.desktop-mode #eyeotaSharedSystemRing{
+  left:0!important;
+  top:0!important;
+  right:0!important;
+  bottom:0!important;
+  width:100%!important;
+  height:100%!important;
+  transform:none!important;
+  transform-origin:50% 50%!important;
+}
+body.desktop-mode #eyeotaCenterMenu,
+body.desktop-mode .eyeota-center-menu,
+body.desktop-mode .eyeota-desktop-center{
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  transform-origin:50% 50%!important;
+}
+</style>
+
+<script id="eyeota-v56-axis-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+  const dial=document.getElementById('dial');
+  if(!dial)return;
+
+  function centerDesktopDial(){
+    if(!document.body.classList.contains('desktop-mode'))return;
+    /* Clear any inherited inline offsets that can move the physical dial
+       away from the coordinate center used by the orbit calculations. */
+    dial.style.left='';
+    dial.style.right='';
+    dial.style.marginLeft='auto';
+    dial.style.marginRight='auto';
+    dial.style.transformOrigin='50% 50%';
+  }
+
+  centerDesktopDial();
+  window.addEventListener('resize',centerDesktopDial);
+  document.body.addEventListener('eyeota-mode-change',()=>{
+    requestAnimationFrame(centerDesktopDial);
+  });
+});
+</script>
+
+
+<!-- V57: small optical-center correction for Desktop dial -->
+<style id="eyeota-v57-optical-center">
+/*
+  The Desktop dial was geometrically centered but visually weighted toward
+  the lower-right. Move the ENTIRE dial assembly together by a few pixels,
+  preserving one common axis for every ring and orbital element.
+*/
+body.desktop-mode #dial{
+  translate:-5px -5px!important;
+}
+@media(max-width:700px){
+  body.desktop-mode #dial{
+    translate:-3px -3px!important;
+  }
+}
+</style>
+
+
+<!-- V58: true Desktop dial geometry fix -->
+<style id="eyeota-v58-true-geometry">
+/*
+  Root cause: Desktop gave #dial a 620px width/height while its 7px border
+  was added OUTSIDE that size (content-box). Orbit JS measures the outer
+  border box, while absolute 50% positioning is based on the inner
+  containing box. That creates a subtle lower-right center mismatch.
+
+  Make the declared dial size the complete border box. No visual nudge.
+*/
+body.desktop-mode #dial{
+  box-sizing:border-box!important;
+  translate:none!important;
+  left:auto!important;
+  right:auto!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  transform-origin:50% 50%!important;
+}
+body.desktop-mode #dialStage{
+  box-sizing:border-box!important;
+  width:min(620px,calc(100vw - 32px))!important;
+  max-width:620px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+@media(max-width:700px){
+  body.desktop-mode #dialStage{
+    width:calc(100vw - 20px)!important;
+    max-width:none!important;
+  }
+  body.desktop-mode #dial{
+    width:calc(100vw - 20px)!important;
+    height:calc(100vw - 20px)!important;
+  }
+}
+</style>
+
 </body>
 </html>
