@@ -9146,5 +9146,123 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
+
+<!-- V65: Desktop visual polish — preserve structure, refine spacing/motion/depth -->
+<style id="eyeota-v65-desktop-polish">
+/* OUTER APP RING: consistent visual footprint without altering app identities */
+body.desktop-mode #dial .letter{
+  width:44px!important;
+  height:44px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border-radius:50%!important;
+  transition:filter .22s ease, box-shadow .22s ease!important;
+  will-change:transform;
+}
+body.desktop-mode #dial .letter img,
+body.desktop-mode #dial .letter svg{
+  max-width:30px!important;
+  max-height:30px!important;
+  object-fit:contain!important;
+}
+body.desktop-mode #dial .letter:hover{
+  filter:brightness(1.18)!important;
+  box-shadow:0 0 13px rgba(255,255,255,.42)!important;
+  z-index:190!important;
+}
+
+/* INNER SYSTEM RING: one quiet, consistent information language */
+body.desktop-mode #eyeotaInnerSystemRing .eyeota-inner-system{
+  font-size:7.5px!important;
+  font-weight:800!important;
+  letter-spacing:.055em!important;
+  text-shadow:0 1px 4px #000,0 0 6px rgba(0,0,0,.9)!important;
+  opacity:.92;
+}
+body.desktop-mode #eyeotaInnerSystemRing .ico{
+  font-size:8px!important;
+  opacity:.9;
+}
+
+/* Give the center a little more visual authority without adding another box/ring. */
+body.desktop-mode #dial .center,
+body.desktop-mode #dial #center,
+body.desktop-mode #dial .dial-center{
+  filter:drop-shadow(0 0 13px rgba(255,255,255,.16));
+}
+
+@media(max-width:700px){
+ body.desktop-mode #dial .letter{width:36px!important;height:36px!important}
+ body.desktop-mode #dial .letter img,
+ body.desktop-mode #dial .letter svg{max-width:25px!important;max-height:25px!important}
+ body.desktop-mode #eyeotaInnerSystemRing .eyeota-inner-system{font-size:6px!important}
+}
+</style>
+
+<script id="eyeota-v65-polished-motion">
+document.addEventListener('DOMContentLoaded',()=>{
+ const body=document.body,dial=document.getElementById('dial');
+ if(!dial)return;
+
+ /* Override V60/V61 transforms last in the frame with calmer, separated motion. */
+ let appPhase=-Math.PI/2;
+ let infoPhase=-Math.PI/2+Math.PI/5;
+ let last=performance.now();
+ let hoverPause=false;
+
+ dial.addEventListener('mouseover',e=>{
+   if(body.classList.contains('desktop-mode') && e.target.closest('.letter'))hoverPause=true;
+ });
+ dial.addEventListener('mouseout',e=>{
+   if(body.classList.contains('desktop-mode') && e.target.closest('.letter'))hoverPause=false;
+ });
+
+ function frame(now){
+   const dt=Math.min(50,now-last);
+   last=now;
+
+   if(body.classList.contains('desktop-mode')){
+     const box=dial.getBoundingClientRect();
+     const size=Math.min(box.width,box.height);
+
+     /* Clear separation: apps farther out; system information comfortably inside. */
+     const appRadius=size*.405;
+     const infoRadius=size*.292;
+
+     /* Very slow apps clockwise; inner information even slower counter-clockwise. */
+     if(!hoverPause) appPhase+=dt*.000010;
+     infoPhase-=dt*.000006;
+
+     const apps=[...dial.querySelectorAll('.letter')].filter(el=>el.offsetParent!==null);
+     apps.forEach((el,i)=>{
+       const a=appPhase+i*Math.PI*2/apps.length;
+       el.style.left='50%';
+       el.style.top='50%';
+       el.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*appRadius}px,${Math.sin(a)*appRadius}px)`;
+     });
+
+     const info=[...dial.querySelectorAll('#eyeotaInnerSystemRing .eyeota-inner-system')];
+     info.forEach((el,i)=>{
+       const a=infoPhase+i*Math.PI*2/info.length;
+       const x=Math.cos(a)*infoRadius,y=Math.sin(a)*infoRadius;
+
+       /* Tangential circular writing, flipped on left half for readability. */
+       let rot=a*180/Math.PI+90;
+       const n=((a%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+       if(n>Math.PI/2 && n<Math.PI*3/2)rot+=180;
+       rot=((rot+180)%360+360)%360-180;
+
+       el.style.left='50%';
+       el.style.top='50%';
+       el.style.transform=`translate(-50%,-50%) translate(${x}px,${y}px) rotate(${rot}deg)`;
+     });
+   }
+   requestAnimationFrame(frame);
+ }
+ requestAnimationFrame(frame);
+});
+</script>
+
 </body>
 </html>
