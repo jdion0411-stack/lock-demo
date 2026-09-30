@@ -9516,5 +9516,166 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
 
+
+<!-- V69: mobile Desktop lifecycle isolation + label outside dial -->
+<style id="eyeota-v69-mobile-fix">
+@media(max-width:700px){
+  /* The old Desktop label inside/over the dial is removed on mobile. */
+  body.desktop-mode #dialLabel,
+  body.desktop-mode #modeLabel,
+  body.desktop-mode .dial-label,
+  body.desktop-mode .mode-label,
+  body.desktop-mode .desktop-label,
+  body.desktop-mode [data-mode-label]{
+    display:none!important;
+  }
+
+  /* This replacement is in normal page flow BEFORE the dial. */
+  #eyeotaDesktopMobileLabel{display:none}
+  body.desktop-mode #eyeotaDesktopMobileLabel{
+    display:block!important;
+    position:relative!important;
+    inset:auto!important;
+    transform:none!important;
+    width:100%!important;
+    margin:0 auto 18px!important;
+    padding:0!important;
+    text-align:center!important;
+    color:#fff!important;
+    font:800 9px/1.15 Arial,sans-serif!important;
+    letter-spacing:.12em!important;
+    white-space:nowrap!important;
+    pointer-events:none!important;
+    z-index:5!important;
+    text-shadow:0 2px 5px #000!important;
+  }
+}
+@media(min-width:701px){
+  #eyeotaDesktopMobileLabel{display:none!important}
+}
+</style>
+
+<script id="eyeota-v69-mobile-desktop-lifecycle">
+document.addEventListener('DOMContentLoaded',()=>{
+  const body=document.body;
+  const dial=document.getElementById('dial');
+  if(!dial)return;
+
+  /* Mobile label is a sibling before the dial, not an overlay inside it. */
+  let label=document.getElementById('eyeotaDesktopMobileLabel');
+  if(!label){
+    label=document.createElement('div');
+    label.id='eyeotaDesktopMobileLabel';
+    label.textContent='EYEOTA DESKTOP';
+    dial.parentNode.insertBefore(label,dial);
+  }
+
+  let active=false;
+  let saved=[];
+  let appPhase=-Math.PI/2;
+  let infoPhase=-Math.PI/2+Math.PI/5;
+  let raf=0,last=0;
+
+  function captureSharedDial(){
+    saved=[...dial.querySelectorAll('.letter')].map(el=>({
+      el,
+      style:el.getAttribute('style')
+    }));
+  }
+
+  function restoreSharedDial(){
+    saved.forEach(({el,style})=>{
+      if(!el.isConnected)return;
+      if(style===null)el.removeAttribute('style');
+      else el.setAttribute('style',style);
+    });
+    saved=[];
+  }
+
+  function desktopFrame(now){
+    if(!active || !body.classList.contains('desktop-mode')){
+      raf=0;
+      return;
+    }
+
+    const dt=last?Math.min(50,now-last):0;
+    last=now;
+    const box=dial.getBoundingClientRect();
+    const size=Math.min(box.width,box.height);
+
+    appPhase+=dt*.000010;
+    infoPhase-=dt*.000006;
+
+    const apps=[...dial.querySelectorAll('.letter')].filter(el=>el.offsetParent!==null);
+    const appRadius=size*.405;
+    apps.forEach((el,i)=>{
+      const a=appPhase+i*Math.PI*2/apps.length;
+      el.style.left='50%';
+      el.style.top='50%';
+      el.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*appRadius}px,${Math.sin(a)*appRadius}px)`;
+    });
+
+    const info=[...dial.querySelectorAll('#eyeotaInnerSystemRing .eyeota-inner-system')];
+    const infoRadius=size*.292;
+    info.forEach((el,i)=>{
+      const a=infoPhase+i*Math.PI*2/info.length;
+      let rot=a*180/Math.PI+90;
+      const n=((a%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+      if(n>Math.PI/2 && n<Math.PI*3/2)rot+=180;
+      rot=((rot+180)%360+360)%360-180;
+      el.style.left='50%';
+      el.style.top='50%';
+      el.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*infoRadius}px,${Math.sin(a)*infoRadius}px) rotate(${rot}deg)`;
+    });
+
+    raf=requestAnimationFrame(desktopFrame);
+  }
+
+  function enterDesktop(){
+    if(active)return;
+    captureSharedDial();
+    active=true;
+    last=0;
+    if(!raf)raf=requestAnimationFrame(desktopFrame);
+  }
+
+  function leaveDesktop(){
+    if(!active)return;
+    active=false;
+    if(raf){cancelAnimationFrame(raf);raf=0;}
+    restoreSharedDial();
+
+    /* Remove Desktop-only inline geometry from system items.
+       They are hidden outside Desktop anyway. */
+    dial.querySelectorAll('#eyeotaInnerSystemRing .eyeota-inner-system').forEach(el=>{
+      el.style.removeProperty('left');
+      el.style.removeProperty('top');
+      el.style.removeProperty('transform');
+    });
+
+    /* Give the destination mode a clean frame to initialize itself. */
+    requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));
+  }
+
+  function sync(){
+    if(body.classList.contains('desktop-mode'))enterDesktop();
+    else leaveDesktop();
+  }
+
+  /* Body class is the authoritative mode state. */
+  const mo=new MutationObserver(sync);
+  mo.observe(body,{attributes:true,attributeFilter:['class']});
+
+  /* Also respond immediately to the site's existing navigation event. */
+  body.addEventListener('eyeota-mode-change',ev=>{
+    const mode=ev.detail&&ev.detail.mode;
+    if(mode==='desktop')enterDesktop();
+    else if(mode)leaveDesktop();
+  });
+
+  sync();
+});
+</script>
+
 </body>
 </html>
