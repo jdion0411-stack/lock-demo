@@ -2975,7 +2975,12 @@ body.desktop-mode.eyeota-custom-wallpaper #eyeotaPubgShade{background:rgba(0,0,0
 #eyeotaPersonalApology{max-width:760px;margin:12px auto;padding:12px 16px;box-sizing:border-box;text-align:center;color:rgba(255,255,255,.9);background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.16);border-radius:8px;letter-spacing:normal}
 #eyeotaPersonalApology h2{margin:0 0 8px;font-size:14px;color:#fff}
 #eyeotaPersonalApology p{margin:0;font-size:12px;line-height:1.6}
-body.rhyme-mode #eyeotaPersonalApology,body.eye-test-mode #eyeotaPersonalApology,body.smdial-mode #eyeotaPersonalApology,body.desktop-mode #eyeotaPersonalApology,body.eb-browser-mode #eyeotaPersonalApology{display:none!important}
+#eyeotaPersonalApology{display:block!important;position:relative;z-index:1;width:calc(100% - 24px);flex-shrink:0}
+</style>
+<style id="eyeota-patent-notice-style">
+#eyeotaPatentNotice{display:block!important;position:static;max-width:760px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:12px 16px;flex-shrink:0;text-align:center;background:rgba(0,0,0,.68);border:1px solid rgba(255,255,255,.16);border-radius:8px;color:#e2e8f0;letter-spacing:normal;overflow-wrap:anywhere}
+#eyeotaPatentNotice p{margin:0;font:12px/1.6 Arial,sans-serif}
+#eyeotaPatentNotice strong{display:block;color:#fff;font-size:15px;margin-bottom:4px}
 </style>
 </head>
 
@@ -3244,10 +3249,7 @@ body.rhyme-mode #eyeotaPersonalApology,body.eye-test-mode #eyeotaPersonalApology
   <strong>EYEOTA MOVING-LETTER EYE TEST — WORK IN PROGRESS</strong><br>
   This research/development project explores whether a circular moving-letter interface may be useful for vision testing. It is not a medical device, clinic, diagnosis, prescription, or substitute for an examination by a licensed eye-care professional. The creator is not a doctor or clinic. Prototype results must not be interpreted as a medical diagnosis.
 </div><div id="musicLockDisclosure" role="note" aria-label="Music Lock development and origins notice"><p><strong>WORK IN PROGRESS</strong> — EYEOTA Music Lock is an evolving prototype rooted in a rhyme dial I began developing when I was young, around ages 20–23, while in jail for something minor. I was writing raps and struggling to find rhyming words without a dictionary, so I traced a circle using my cup and arranged the alphabet around it. That dial helped me cycle through letters, explore words, and identify rhyme patterns. People familiar with my early work saw the concept during that period. Around the same time, a family member helped me create shirts featuring the EYEOTA logo and some of my early concepts.</p><p>Years later, encountering circular designs in publicly released creative work and hearing faith-centered music renewed my motivation when I was close to giving up on my ideas. When I heard that music, I was going through what felt like the worst time of my life, which made its message especially meaningful to me. I personally experienced this as encouragement from God to keep creating.</p><p>EYEOTA’s early concepts were developed independently. Later sources of inspiration encouraged me to continue that work; they were not the origin of those concepts. This project does not claim affiliation with or endorsement by the creators whose work inspired me.</p></div>
-<section id="eyeotaPersonalApology" aria-labelledby="eyeotaPersonalApologyTitle">
-<h2 id="eyeotaPersonalApologyTitle">A Personal Apology</h2>
-<p>Several years ago, during a period of serious personal hardship and mental health difficulties, I sent emails to public figures and others that included offensive and inappropriate language. I sincerely apologize to those who received them. Those circumstances help explain what I was experiencing, but they do not excuse the way I communicated. I regret my words and am committed to sharing my ideas with respect and care.</p>
-</section>
+
 
 
         </div>
@@ -3604,6 +3606,10 @@ body.rhyme-mode #eyeotaPersonalApology,body.eye-test-mode #eyeotaPersonalApology
         </div>
 
     </div>
+
+<section id="eyeotaPatentNotice" role="note" aria-label="Patent application notice">
+<p><strong>PATENT PENDING</strong> — U.S. provisional patent application for “Multi-Factor Security and Access Control System with Acoustic and Biometric Recognition,” Application No. 64/161,513.</p>
+</section>
 
     <!-- ======================================================
          PERSONAL RECORDS PORTAL
@@ -6454,14 +6460,7 @@ checkUnlock();
  document.getElementById('clearWriting')?.addEventListener('click',()=>{if(editor&&confirm('Clear the writing pad?')){editor.innerHTML='';safeStore.remove('eyeotaRhymeWriting');updateCount();}});
  document.getElementById('saveWriting')?.addEventListener('click',()=>{
    if(!editor)return;
-   const doc='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+editor.innerHTML+'</div><style id="eyeota-code-display-guard">
-/* Source-only elements must never become visible UI at any viewport size. */
-html body script,html body style,html body template,
-html head,html head script,html head style{
- display:none!important;visibility:hidden!important;content-visibility:hidden!important;
-}
-</style>
-</body></html>';
+   const doc='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+editor.innerHTML+'</div></body></html>';
    const blob=new Blob([doc],{type:'text/html;charset=utf-8'}), url=URL.createObjectURL(blob), a=document.createElement('a');
    a.href=url;a.download='EYEOTA-Rhyme-Dial-Writing.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);if(status)status.textContent='Document saved';
  });
@@ -7346,7 +7345,7 @@ body.desktop-mode.eyeota-custom-wallpaper #eyeotaPubgBackground{opacity:0!import
 body.desktop-mode.eyeota-custom-wallpaper #eyeotaPubgShade{background:rgba(0,0,0,.34)!important}
 </style>
 
-</head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+editor.innerHTML+'</div>
+
 <script id="eyeota-smdial-voice-launcher">
 document.addEventListener('DOMContentLoaded',function(){
   const body=document.body;
@@ -10471,6 +10470,11 @@ body.eye-test-mode #eyeotaRhymeFeaturedVideo,body.smdial-mode #eyeotaRhymeFeatur
 <section id="eyeotaRhymeFeaturedVideo" aria-label="Rhyme Dial featured YouTube video">
 <iframe title="Featured music video for EYEOTA Rhyme Dial" src="https://www.youtube-nocookie.com/embed/dVVpLg7pnME?playsinline=1" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 <p>Music is a big part of my creative process. Videos shared here reflect what I enjoy listening to while developing this site, along with sources of personal inspiration. Their inclusion does not imply any affiliation, sponsorship, or endorsement by the artists or creators. EYEOTA is an independent project. Video provided through YouTube; rights remain with their respective owners.<br><a href="https://www.youtube.com/watch?v=dVVpLg7pnME" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></p>
+</section>
+
+<section id="eyeotaPersonalApology" aria-labelledby="eyeotaPersonalApologyTitle">
+<h2 id="eyeotaPersonalApologyTitle">A Personal Apology</h2>
+<p>Several years ago, during a period of serious personal hardship and mental health difficulties, I sent emails to public figures and others that included offensive and inappropriate language. I sincerely apologize to those who received them. Those circumstances help explain what I was experiencing, but they do not excuse the way I communicated. I regret my words and am committed to sharing my ideas with respect and care.</p>
 </section>
 </body>
 </html>
