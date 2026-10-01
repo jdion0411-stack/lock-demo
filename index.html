@@ -3013,7 +3013,8 @@ body.desktop-mode.eyeota-custom-wallpaper #eyeotaPubgShade{background:rgba(0,0,0
             id="dial"
         >
 
-            <div id="noteCipherScene" aria-label="Musical typing rotary dial">
+            <form id="ebOrbitSearch" role="search" aria-label="EYEOTA Browser website search"><svg viewBox="0 0 600 600" aria-hidden="true"><defs><path id="ebAddressCurve" d="M 80 146 A 268 268 0 0 1 520 146"/></defs><use href="#ebAddressCurve" id="ebCurveBorder"/><use href="#ebAddressCurve" id="ebCurveSurface"/><text class="ebCurveHint"><textPath href="#ebAddressCurve" startOffset="1%">⌕</textPath></text><text id="ebCurveText"><textPath id="ebAddressText" href="#ebAddressCurve" startOffset="7%">Search or enter website address</textPath></text><line id="ebCurveCaret"/></svg><input type="text" aria-label="Search or enter website address" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="url"><button type="submit" aria-label="Open website or search" title="Open website or search">→</button></form>
+<div id="noteCipherScene" aria-label="Musical typing rotary dial">
  
  <div id="noteCipherRotor"></div>
  
@@ -10341,14 +10342,13 @@ body.eb-browser-mode:not(.ebRect):not(.ebMinimized) #ebOrbitSearch{display:block
 </style>
 <script id="eb-fixed-curved-search-code">
 document.addEventListener('DOMContentLoaded',()=>{
-const body=document.body,dial=document.getElementById('dial'),form=document.createElement('form');
-form.id='ebOrbitSearch';form.setAttribute('role','search');form.setAttribute('aria-label','EYEOTA Browser website search');
-form.innerHTML=`<svg viewBox="0 0 600 600" aria-hidden="true"><defs><path id="ebAddressCurve" d="M 80 146 A 268 268 0 0 1 520 146"/></defs><use href="#ebAddressCurve" id="ebCurveBorder"/><use href="#ebAddressCurve" id="ebCurveSurface"/><text class="ebCurveHint"><textPath href="#ebAddressCurve" startOffset="1%">⌕</textPath></text><text id="ebCurveText"><textPath id="ebAddressText" href="#ebAddressCurve" startOffset="7%">Search or enter website address</textPath></text><line id="ebCurveCaret"/></svg><input type="text" aria-label="Search or enter website address" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="url"><button type="submit" aria-label="Open website or search" title="Open website or search">→</button>`;
-dial.append(form);
+const body=document.body,dial=document.getElementById('dial'),form=document.getElementById('ebOrbitSearch');
+if(!dial||!form)return;
+
 const input=form.querySelector('input'),path=form.querySelector('#ebAddressCurve'),text=form.querySelector('#ebAddressText'),caret=form.querySelector('#ebCurveCaret');
-const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');ctx.font='17px Arial';
-function width(value){return ctx.measureText(value).width+value.length*.1}
-function render(){const length=path.getTotalLength(),limit=length*.81,value=input.value,pos=input.selectionStart??value.length;let start=0,end=value.length;
+const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');if(ctx)ctx.font='17px Arial';
+function width(value){return (ctx?ctx.measureText(value).width:value.length*8.5)+value.length*.1}
+function render(){if(!body.classList.contains('eb-browser-mode')||body.classList.contains('ebMinimized'))return;const length=path.getTotalLength(),limit=length*.81,value=input.value,pos=input.selectionStart??value.length;let start=0,end=value.length;
 while(start<pos&&width(value.slice(start,pos))>limit-12)start++;
 while(end>pos&&width(value.slice(start,end))>limit)end--;
 const displayed=value.slice(start,end);text.textContent=value?displayed:'Search or enter website address';form.querySelector('#ebCurveText').style.fill=value?'#243e50':'#627b8d';
@@ -10357,9 +10357,10 @@ caret.setAttribute('x1',point.x-nx*15);caret.setAttribute('y1',point.y-ny*15);ca
 }
 ['input','focus','click','keyup','select','compositionend'].forEach(type=>input.addEventListener(type,render));
 form.querySelector('#ebCurveSurface').addEventListener('click',()=>input.focus());
-form.onsubmit=e=>{e.preventDefault();const value=input.value.trim();if(!value)return;window.ebBrowserSession.navigate(value)};
+form.onsubmit=e=>{e.preventDefault();const value=input.value.trim();if(!value)return;window.ebBrowserSession?.navigate(value)};
 function clean(){if(body.classList.contains('eb-browser-mode'))body.classList.remove('eyeota-center-menu-open','eyeota-dial-panel-open')}
-body.addEventListener('eyeota-mode-change',clean);
+body.addEventListener('eyeota-mode-change',()=>{clean();requestAnimationFrame(render)});
+window.addEventListener('resize',()=>requestAnimationFrame(render));
 // Keep center clicks inert in Browser mode, while retaining the EYEOTA mark.
 document.addEventListener('click',e=>{if(body.classList.contains('eb-browser-mode')&&e.target.closest('#eyeotaCenterMenu,#eyeotaCenterMenuPanel,#eyeotaDialDesktopUI,#eyeotaInnerSystemRing,.center-artwork')){e.preventDefault();e.stopImmediatePropagation()}},true);
 window.addEventListener('eb-current-site',e=>{if(e.detail.url){input.value=e.detail.url;render()}});clean();render();
@@ -10476,5 +10477,22 @@ body.eye-test-mode #eyeotaRhymeFeaturedVideo,body.smdial-mode #eyeotaRhymeFeatur
 <h2 id="eyeotaPersonalApologyTitle">A Personal Apology</h2>
 <p>Several years ago, during a period of serious personal hardship and mental health difficulties, I sent emails to public figures and others that included offensive and inappropriate language. I sincerely apologize to those who received them. Those circumstances help explain what I was experiencing, but they do not excuse the way I communicated. I regret my words and am committed to sharing my ideas with respect and care.</p>
 </section>
+<style id="eb-search-visibility-repair">
+body.eb-browser-mode:not(.ebRect):not(.ebMinimized) #dial > #ebOrbitSearch{display:block!important;visibility:visible!important;opacity:1!important}
+body.eb-browser-mode #ebOrbitSearch svg{display:block!important;visibility:visible!important;opacity:1!important}
+</style>
+
+<style id="eb-sun-move-hint-style">
+#ebSunMoveHint{display:none}
+body.eb-browser-mode.ebMinimized #ebSunMoveHint{display:block;position:absolute;top:calc(100% + 64px);left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100vw - 24px);box-sizing:border-box;padding:6px 11px;border:1px solid rgba(184,210,240,.16);border-radius:999px;background:rgba(7,15,31,.78);color:#c3d3e6;font:500 11px/1.3 Arial,sans-serif;letter-spacing:normal;white-space:nowrap;text-shadow:none;box-shadow:0 2px 8px rgba(0,0,0,.15);pointer-events:none;user-select:none}
+body.eb-browser-mode.ebMinimized #ebRestore.ebSunDragging #ebSunMoveHint{opacity:.45}
+</style>
+<script id="eb-sun-move-hint-code">
+document.addEventListener('DOMContentLoaded',()=>{
+ const sun=document.getElementById('ebRestore');if(!sun)return;
+ const hint=document.createElement('span');hint.id='ebSunMoveHint';hint.textContent='Drag the sun to move it';sun.appendChild(hint);
+ sun.setAttribute('aria-describedby',[sun.getAttribute('aria-describedby'),hint.id].filter(Boolean).join(' '));
+});
+</script>
 </body>
 </html>
