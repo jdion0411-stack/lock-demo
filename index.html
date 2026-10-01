@@ -3028,6 +3028,16 @@ body.clips-mode #eyeotaClipsScene{display:block!important;position:absolute;inse
 body.clips-mode #smdialVoiceStatus,body.clips-mode #smdialVoiceDiagnostic,body.clips-mode #eyeotaHome24,body.clips-mode #eyeotaRhymeFeaturedVideo{display:none!important}
 @media(max-width:600px){.clips-controls{padding:5px 8px;bottom:8%}.clips-buttons{gap:6px}.clips-buttons button{height:28px;padding:2px 7px}#clipsSeek{margin-top:4px}}
 </style>
+<style id="eyeota-clips-gallery-style">
+#clipsGameFloat,#clipsGalleryNav{display:none}
+body.clips-mode #clipsGameFloat{display:block;position:absolute;inset:0;z-index:180;pointer-events:none}
+#clipsGameFloat span{position:absolute;offset-path:circle(54% at 50% 50%);offset-rotate:0deg;offset-anchor:center;animation:clipsGameDrift 26s ease-in-out infinite alternate;padding:4px 8px;border-radius:999px;background:rgba(4,16,29,.82);border:1px solid #93c8d844;color:#bedbe5;font:700 10px Arial;letter-spacing:1.5px;white-space:nowrap}
+@keyframes clipsGameDrift{from{offset-distance:8%}to{offset-distance:42%}}
+body.clips-mode #clipsGalleryNav{display:flex!important;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;width:calc(100% - 24px);margin:22px auto 4px;color:#def4ff;text-align:center}
+#clipsGalleryNav button{border:1px solid #83cfdf88;border-radius:999px;padding:9px 13px;background:#0a2235;color:#edfaff;font:700 12px Arial;cursor:pointer}
+#clipsCurrent{font:700 12px/1.5 Arial;min-width:96px}
+@media(prefers-reduced-motion:reduce){#clipsGameFloat span{animation:none;offset-distance:25%}}
+</style>
 </head>
 
 <body>
@@ -10570,6 +10580,17 @@ document.addEventListener('DOMContentLoaded',()=>{
  scene.addEventListener('click',event=>event.stopPropagation());scene.addEventListener('pointerdown',event=>event.stopPropagation());
  function sync(){if(document.body.classList.contains('clips-mode')){video.play().catch(()=>{});document.getElementById('modeChip').textContent='Clips'}else video.pause()}
  document.body.addEventListener('eyeota-mode-change',sync);sync();update();
+});
+</script>
+<script id="eyeota-clips-gallery-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+ const video=document.getElementById('eyeotaClipsVideo'),stage=document.getElementById('dialStage');
+ const clips=[{src:'eyeota-clips.mp4',name:'PUBG · Clip 1'},{src:'eyeota-clips-2.mp4',name:'PUBG · Clip 2'},{src:'eyeota-clips-3.mp4',name:'PUBG · Clip 3'}];let index=0;
+ stage.insertAdjacentHTML('beforeend','<div id="clipsGameFloat" aria-hidden="true"><span>PUBG</span></div>');
+ stage.insertAdjacentHTML('afterend','<nav id="clipsGalleryNav" aria-label="Choose gameplay clip"><button type="button" id="clipsPrevious">← Previous clip</button><span id="clipsCurrent" aria-live="polite">PUBG · 1 / 3</span><button type="button" id="clipsNext">Next clip →</button></nav>');
+ function change(step){index=(index+step+clips.length)%clips.length;video.pause();video.querySelector('source').src=clips[index].src;video.setAttribute('aria-label',clips[index].name);video.load();document.getElementById('clipsCurrent').textContent='PUBG · '+(index+1)+' / '+clips.length;document.getElementById('clipsSeek').value=0;if(document.body.classList.contains('clips-mode'))video.play().catch(()=>{})}
+ document.getElementById('clipsPrevious').onclick=()=>change(-1);document.getElementById('clipsNext').onclick=()=>change(1);
+ video.addEventListener('error',()=>{document.getElementById('clipsTime').textContent='Clip unavailable — upload its video file.'});
 });
 </script>
 </body>
