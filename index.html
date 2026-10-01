@@ -3033,10 +3033,25 @@ body.clips-mode #smdialVoiceStatus,body.clips-mode #smdialVoiceDiagnostic,body.c
 body.clips-mode #clipsGameFloat{display:block;position:absolute;inset:0;z-index:180;pointer-events:none}
 #clipsGameFloat span{position:absolute;offset-path:circle(54% at 50% 50%);offset-rotate:0deg;offset-anchor:center;animation:clipsGameDrift 26s ease-in-out infinite alternate;padding:4px 8px;border-radius:999px;background:rgba(4,16,29,.82);border:1px solid #93c8d844;color:#bedbe5;font:700 10px Arial;letter-spacing:1.5px;white-space:nowrap}
 @keyframes clipsGameDrift{from{offset-distance:8%}to{offset-distance:42%}}
-body.clips-mode #clipsGalleryNav{display:flex!important;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;width:calc(100% - 24px);margin:22px auto 4px;color:#def4ff;text-align:center}
+body.clips-mode .main-layout > nav#clipsGalleryNav{display:flex!important;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;width:calc(100% - 24px);margin:22px auto 4px;color:#def4ff;text-align:center}
 #clipsGalleryNav button{border:1px solid #83cfdf88;border-radius:999px;padding:9px 13px;background:#0a2235;color:#edfaff;font:700 12px Arial;cursor:pointer}
 #clipsCurrent{font:700 12px/1.5 Arial;min-width:96px}
 @media(prefers-reduced-motion:reduce){#clipsGameFloat span{animation:none;offset-distance:25%}}
+</style>
+<style id="eyeota-clips-switcher-clear">
+body.clips-mode .main-layout > nav#clipsGalleryNav{display:flex!important;visibility:visible!important;opacity:1!important;position:relative!important;z-index:400;gap:12px;margin:28px auto 12px!important;padding:14px 12px;box-sizing:border-box;max-width:620px;background:rgba(3,15,28,.94);border:1px solid #72dce3;border-radius:16px;box-shadow:0 4px 22px #0008}
+#clipsGalleryNav button{background:#8debe7!important;color:#05202b!important;border:2px solid #c6ffff!important;font-size:13px!important;min-height:44px;padding:10px 16px!important}
+#clipsGalleryNav button:hover{background:#c3fffc!important}
+#clipsGalleryNav button:focus-visible{outline:3px solid white;outline-offset:4px}
+#clipsCurrent{font-size:13px!important;color:#fff;min-width:130px}
+@media(max-width:600px){body.clips-mode .main-layout > nav#clipsGalleryNav{gap:8px;margin-top:24px!important;padding:12px 8px;width:calc(100% - 20px)}#clipsCurrent{order:-1;flex-basis:100%}#clipsGalleryNav button{flex:1;font-size:12px!important;padding:10px 8px!important}}
+</style>
+<style id="eyeota-clips-inline-switcher">
+body.clips-mode #eyeotaClipsScene .clips-controls{bottom:7%;left:12%;width:76%;padding:8px;}
+body.clips-mode #eyeotaClipsScene nav#clipsGalleryNav{display:flex!important;visibility:visible!important;opacity:1!important;position:static!important;margin:0 0 7px!important;padding:0!important;width:100%!important;max-width:none!important;gap:5px!important;flex-wrap:nowrap!important;background:transparent!important;border:0!important;box-shadow:none!important;align-items:center;justify-content:center}
+body.clips-mode #eyeotaClipsScene #clipsGalleryNav button{display:block!important;flex:1!important;min-width:0!important;min-height:34px!important;padding:5px!important;font:700 11px Arial!important;background:#8debe7!important;color:#05202b!important}
+body.clips-mode #eyeotaClipsScene #clipsCurrent{display:block!important;order:0!important;flex:0 0 auto!important;min-width:42px!important;font:700 11px Arial!important;color:white!important}
+@media(max-width:600px){body.clips-mode #eyeotaClipsScene .clips-controls{bottom:6%;padding:6px}body.clips-mode #eyeotaClipsScene #clipsGalleryNav button{font-size:10px!important;min-height:30px!important}}
 </style>
 </head>
 
@@ -3076,7 +3091,7 @@ body.clips-mode #clipsGalleryNav{display:flex!important;align-items:center;justi
 
             <section id="eyeotaClipsScene" aria-label="Clips circular video player">
 <video id="eyeotaClipsVideo" playsinline muted loop preload="metadata" aria-label="Uploaded gaming clip"><source src="eyeota-clips.mp4" type="video/mp4"></video>
-<div class="clips-controls"><div class="clips-buttons"><button type="button" id="clipsPlay" aria-label="Play clip">▶</button><button type="button" id="clipsSound" aria-label="Turn sound on">Sound off</button><button type="button" id="clipsFullscreen" aria-label="Play clip fullscreen">⛶</button></div><input id="clipsSeek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek in clip"><span id="clipsTime">0:00 / 0:47</span></div>
+<div class="clips-controls"><nav id="clipsGalleryNav" aria-label="Choose gameplay clip"><button type="button" id="clipsPrevious">◀ PREVIOUS</button><span id="clipsCurrent" aria-live="polite">1 of 3</span><button type="button" id="clipsNext">NEXT ▶</button></nav><div class="clips-buttons"><button type="button" id="clipsPlay" aria-label="Play clip">▶</button><button type="button" id="clipsSound" aria-label="Turn sound on">Sound off</button><button type="button" id="clipsFullscreen" aria-label="Play clip fullscreen">⛶</button></div><input id="clipsSeek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek in clip"><span id="clipsTime">0:00 / 0:47</span></div>
 </section>
 <form id="ebOrbitSearch" role="search" aria-label="EYEOTA Browser website search"><svg viewBox="0 0 600 600" aria-hidden="true"><defs><path id="ebAddressCurve" d="M 80 146 A 268 268 0 0 1 520 146"/></defs><use href="#ebAddressCurve" id="ebCurveBorder"/><use href="#ebAddressCurve" id="ebCurveSurface"/><text class="ebCurveHint"><textPath href="#ebAddressCurve" startOffset="1%">⌕</textPath></text><text id="ebCurveText"><textPath id="ebAddressText" href="#ebAddressCurve" startOffset="7%">Search or enter website address</textPath></text><line id="ebCurveCaret"/></svg><input type="text" aria-label="Search or enter website address" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="url"><button type="submit" aria-label="Open website or search" title="Open website or search">→</button></form>
 <div id="noteCipherScene" aria-label="Musical typing rotary dial">
@@ -10587,8 +10602,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  const video=document.getElementById('eyeotaClipsVideo'),stage=document.getElementById('dialStage');
  const clips=[{src:'eyeota-clips.mp4',name:'PUBG · Clip 1'},{src:'eyeota-clips-2.mp4',name:'PUBG · Clip 2'},{src:'eyeota-clips-3.mp4',name:'PUBG · Clip 3'}];let index=0;
  stage.insertAdjacentHTML('beforeend','<div id="clipsGameFloat" aria-hidden="true"><span>PUBG</span></div>');
- stage.insertAdjacentHTML('afterend','<nav id="clipsGalleryNav" aria-label="Choose gameplay clip"><button type="button" id="clipsPrevious">← Previous clip</button><span id="clipsCurrent" aria-live="polite">PUBG · 1 / 3</span><button type="button" id="clipsNext">Next clip →</button></nav>');
- function change(step){index=(index+step+clips.length)%clips.length;video.pause();video.querySelector('source').src=clips[index].src;video.setAttribute('aria-label',clips[index].name);video.load();document.getElementById('clipsCurrent').textContent='PUBG · '+(index+1)+' / '+clips.length;document.getElementById('clipsSeek').value=0;if(document.body.classList.contains('clips-mode'))video.play().catch(()=>{})}
+ function change(step){index=(index+step+clips.length)%clips.length;video.pause();video.querySelector('source').src=clips[index].src;video.setAttribute('aria-label',clips[index].name);video.load();document.getElementById('clipsCurrent').textContent=(index+1)+' of '+clips.length;document.getElementById('clipsSeek').value=0;if(document.body.classList.contains('clips-mode'))video.play().catch(()=>{})}
  document.getElementById('clipsPrevious').onclick=()=>change(-1);document.getElementById('clipsNext').onclick=()=>change(1);
  video.addEventListener('error',()=>{document.getElementById('clipsTime').textContent='Clip unavailable — upload its video file.'});
 });
