@@ -3010,6 +3010,24 @@ body.smdial-mode #dialModeArrow{right:0!important;left:auto!important}
 body.smdial-mode #eyeotaShiftConcept h2{margin:0 0 12px;font-size:19px}
 @media(max-width:700px){body.smdial-mode #dialStage{width:calc(100% - 20px)!important}body.smdial-mode #modeChip{font-size:10px!important;letter-spacing:1px!important}body.smdial-mode #eyeotaShiftConcept h2{font-size:17px}}
 </style>
+<style id="eyeota-clips-style">
+#eyeotaClipsScene{display:none}
+body.clips-mode .main-layout> :not(#dialStage){display:none!important}
+body.clips-mode #dial>:not(#eyeotaClipsScene){display:none!important;visibility:hidden!important}
+body.clips-mode #dial{overflow:hidden!important;border-radius:50%!important;isolation:isolate;background:#06111e!important}
+body.clips-mode #dial:before,body.clips-mode #dial:after{display:none!important}
+body.clips-mode #eyeotaClipsScene{display:block!important;position:absolute;inset:0;border-radius:50%;overflow:hidden;z-index:350}
+#eyeotaClipsVideo{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 60%;background:#000}
+#eyeotaClipsVideo:fullscreen{object-fit:contain;border-radius:0}
+.clips-controls{position:absolute;left:15%;bottom:9%;width:70%;box-sizing:border-box;background:rgba(2,10,20,.88);border:1px solid #a7d9ed66;border-radius:14px;padding:8px 10px;color:#fff;text-align:center;z-index:2;}
+.clips-buttons{display:flex;justify-content:center;align-items:center;gap:12px}
+.clips-buttons button{border:1px solid #8bd9ed77;border-radius:999px;background:#102c40;color:#fff;min-width:34px;height:32px;padding:3px 10px;font:700 12px Arial;cursor:pointer}
+#clipsPlay,#clipsFullscreen{font-size:18px}
+#clipsSeek{display:block;width:100%;margin:7px 0 2px;accent-color:#83e7e4;cursor:pointer}
+#clipsTime{font:11px Arial;color:#e4f5ff}
+body.clips-mode #smdialVoiceStatus,body.clips-mode #smdialVoiceDiagnostic,body.clips-mode #eyeotaHome24,body.clips-mode #eyeotaRhymeFeaturedVideo{display:none!important}
+@media(max-width:600px){.clips-controls{padding:5px 8px;bottom:8%}.clips-buttons{gap:6px}.clips-buttons button{height:28px;padding:2px 7px}#clipsSeek{margin-top:4px}}
+</style>
 </head>
 
 <body>
@@ -3046,7 +3064,11 @@ body.smdial-mode #eyeotaShiftConcept h2{margin:0 0 12px;font-size:19px}
             id="dial"
         >
 
-            <form id="ebOrbitSearch" role="search" aria-label="EYEOTA Browser website search"><svg viewBox="0 0 600 600" aria-hidden="true"><defs><path id="ebAddressCurve" d="M 80 146 A 268 268 0 0 1 520 146"/></defs><use href="#ebAddressCurve" id="ebCurveBorder"/><use href="#ebAddressCurve" id="ebCurveSurface"/><text class="ebCurveHint"><textPath href="#ebAddressCurve" startOffset="1%">⌕</textPath></text><text id="ebCurveText"><textPath id="ebAddressText" href="#ebAddressCurve" startOffset="7%">Search or enter website address</textPath></text><line id="ebCurveCaret"/></svg><input type="text" aria-label="Search or enter website address" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="url"><button type="submit" aria-label="Open website or search" title="Open website or search">→</button></form>
+            <section id="eyeotaClipsScene" aria-label="Clips circular video player">
+<video id="eyeotaClipsVideo" playsinline muted loop preload="metadata" aria-label="Uploaded gaming clip"><source src="eyeota-clips.mp4" type="video/mp4"></video>
+<div class="clips-controls"><div class="clips-buttons"><button type="button" id="clipsPlay" aria-label="Play clip">▶</button><button type="button" id="clipsSound" aria-label="Turn sound on">Sound off</button><button type="button" id="clipsFullscreen" aria-label="Play clip fullscreen">⛶</button></div><input id="clipsSeek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek in clip"><span id="clipsTime">0:00 / 0:47</span></div>
+</section>
+<form id="ebOrbitSearch" role="search" aria-label="EYEOTA Browser website search"><svg viewBox="0 0 600 600" aria-hidden="true"><defs><path id="ebAddressCurve" d="M 80 146 A 268 268 0 0 1 520 146"/></defs><use href="#ebAddressCurve" id="ebCurveBorder"/><use href="#ebAddressCurve" id="ebCurveSurface"/><text class="ebCurveHint"><textPath href="#ebAddressCurve" startOffset="1%">⌕</textPath></text><text id="ebCurveText"><textPath id="ebAddressText" href="#ebAddressCurve" startOffset="7%">Search or enter website address</textPath></text><line id="ebCurveCaret"/></svg><input type="text" aria-label="Search or enter website address" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="url"><button type="submit" aria-label="Open website or search" title="Open website or search">→</button></form>
 <div id="noteCipherScene" aria-label="Musical typing rotary dial">
  
  <div id="noteCipherRotor"></div>
@@ -3278,7 +3300,7 @@ body.smdial-mode #eyeotaShiftConcept h2{margin:0 0 12px;font-size:19px}
             </h1>
 
             <p>DOCUMENT SOLUTIONS</p>
-            <div class="eyeota-feature-line" aria-label="EYEOTA features">EYEOTA LOCK <span>•</span> RHYME DIAL <span>•</span> EYE TEST <span>•</span> EYEOTA KEYBOARD <span>•</span> DESKTOP <span>•</span> EYEOTA BROWSER <span>•</span> MUSICAL CIPHER</div>
+            <div class="eyeota-feature-line" aria-label="EYEOTA features">EYEOTA LOCK <span>•</span> RHYME DIAL <span>•</span> EYE TEST <span>•</span> EYEOTA KEYBOARD <span>•</span> DESKTOP <span>•</span> EYEOTA BROWSER <span>•</span> MUSICAL CIPHER <span>•</span> CLIPS</div>
 <div class="eyeota-wip-disclaimer">
   <strong>EYEOTA MOVING-LETTER EYE TEST — WORK IN PROGRESS</strong><br>
   This research/development project explores whether a circular moving-letter interface may be useful for vision testing. It is not a medical device, clinic, diagnosis, prescription, or substitute for an examination by a licensed eye-care professional. The creator is not a doctor or clinic. Prototype results must not be interpreted as a medical diagnosis.
@@ -6765,7 +6787,7 @@ document.addEventListener('DOMContentLoaded',function(){
 document.addEventListener('DOMContentLoaded',function(){
   const chip=document.getElementById('modeChip');
   if(!chip)return;
-  function syncModeChip(){
+  function syncModeChip(){if(document.body.classList.contains('clips-mode')){chip.textContent='Clips';return;}
     if(document.body.classList.contains('eb-browser-mode')){chip.textContent='EYEOTA Browser';
     }else if(document.body.classList.contains('note-cipher-mode')){
       chip.textContent='Musical Cipher';
@@ -6860,7 +6882,7 @@ document.addEventListener('DOMContentLoaded',function(){
   const chip=document.getElementById('modeChip');
   if(!dial || !leftArrow || !rightArrow) return;
 
-  const order=['lock','rhyme','eye','smdial','desktop','browser','notes'];
+  const order=['lock','rhyme','eye','smdial','desktop','browser','notes','clips'];
   let current='lock';
   const letters=Array.from(dial.querySelectorAll('.letter'));
   const originals=letters.map(el=>({
@@ -6945,13 +6967,14 @@ document.addEventListener('DOMContentLoaded',function(){
 
     if(mode!=='smdial' && mode!=='desktop') restoreLetters();
 
-    body.classList.remove('rhyme-mode','eye-test-mode','smdial-mode','desktop-mode','note-cipher-mode','social-link-concept','eb-browser-mode');
+    body.classList.remove('rhyme-mode','eye-test-mode','smdial-mode','desktop-mode','note-cipher-mode','social-link-concept','eb-browser-mode','clips-mode');
 
     if(mode==='rhyme') body.classList.add('rhyme-mode');
     if(mode==='smdial') body.classList.add('smdial-mode');
     if(mode==='desktop') body.classList.add('desktop-mode');
     if(mode==='browser') body.classList.add('eb-browser-mode');
     if(mode==='notes') body.classList.add('note-cipher-mode');
+    if(mode==='clips') body.classList.add('clips-mode');
 
     if(mode==='smdial'){
       socialLetters();
@@ -6980,10 +7003,10 @@ document.addEventListener('DOMContentLoaded',function(){
         mode==='smdial'?'EYEOTA KEYBOARD':
         mode==='desktop'?'EYEOTA Desktop':
         mode==='browser'?'EYEOTA Browser':
-        mode==='notes'?'Musical Cipher':'Music Lock';
+        mode==='notes'?'Musical Cipher':mode==='clips'?'Clips':'Music Lock';
     }
 
-    const names={lock:'Music Lock',rhyme:'Rhyme Dial',eye:'Eye Test',smdial:'EYEOTA KEYBOARD',desktop:'EYEOTA Desktop',browser:'EYEOTA Browser',notes:'Musical Cipher'};
+    const names={lock:'Music Lock',rhyme:'Rhyme Dial',eye:'Eye Test',smdial:'EYEOTA KEYBOARD',desktop:'EYEOTA Desktop',browser:'EYEOTA Browser',notes:'Musical Cipher',clips:'Clips'};
     const position=order.indexOf(mode);
     [[leftArrow,-1],[rightArrow,1]].forEach(([button,direction])=>{
       const destination=order[(position+direction+order.length)%order.length];
@@ -7002,7 +7025,7 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 
   /* One document-level controller runs before legacy target handlers. */
-  function visibleMode(){
+  function visibleMode(){if(body.classList.contains('clips-mode'))return 'clips';
     if(body.classList.contains('eb-browser-mode'))return 'browser';
     if(body.classList.contains('note-cipher-mode'))return 'notes';
     if(body.classList.contains('desktop-mode'))return 'desktop';
@@ -10329,8 +10352,8 @@ body.eb-browser-mode.ebMinimized.ebClosedSun #ebRestore:before,body.eb-browser-m
 <button id="eyeotaBuildNoticeRestore" type="button" hidden aria-label="Show development notice">Development notice</button>
 <script id="eyeota-mode-notices-and-close-to-sun">
 document.addEventListener('DOMContentLoaded',()=>{
-const body=document.body,notice=document.getElementById('eyeotaBuildNotice'),restore=document.getElementById('eyeotaBuildNoticeRestore'),title=document.getElementById('eyeotaBuildNoticeTitle');const names={lock:'EYEOTA Lock',rhyme:'Rhyme Dial',eye:'Eye Test',smdial:'EYEOTA KEYBOARD',desktop:'EYEOTA Desktop',browser:'EYEOTA Browser',notes:'Musical Cipher'};let mode='lock';const closed=new Set();try{const saved=JSON.parse(sessionStorage.getItem('eyeota-development-notices')||'[]');if(Array.isArray(saved))saved.forEach(x=>closed.add(x))}catch{}
-function visibleMode(){if(body.classList.contains('eb-browser-mode'))return 'browser';if(body.classList.contains('note-cipher-mode'))return 'notes';if(body.classList.contains('desktop-mode'))return 'desktop';if(body.classList.contains('smdial-mode'))return 'smdial';if(body.classList.contains('eye-test-mode'))return 'eye';if(body.classList.contains('rhyme-mode'))return 'rhyme';return 'lock'}
+const body=document.body,notice=document.getElementById('eyeotaBuildNotice'),restore=document.getElementById('eyeotaBuildNoticeRestore'),title=document.getElementById('eyeotaBuildNoticeTitle');const names={lock:'EYEOTA Lock',rhyme:'Rhyme Dial',eye:'Eye Test',smdial:'EYEOTA KEYBOARD',desktop:'EYEOTA Desktop',browser:'EYEOTA Browser',notes:'Musical Cipher',clips:'Clips'};let mode='lock';const closed=new Set();try{const saved=JSON.parse(sessionStorage.getItem('eyeota-development-notices')||'[]');if(Array.isArray(saved))saved.forEach(x=>closed.add(x))}catch{}
+function visibleMode(){if(body.classList.contains('clips-mode'))return 'clips';if(body.classList.contains('eb-browser-mode'))return 'browser';if(body.classList.contains('note-cipher-mode'))return 'notes';if(body.classList.contains('desktop-mode'))return 'desktop';if(body.classList.contains('smdial-mode'))return 'smdial';if(body.classList.contains('eye-test-mode'))return 'eye';if(body.classList.contains('rhyme-mode'))return 'rhyme';return 'lock'}
 function refresh(){mode=visibleMode();title.textContent=names[mode]+' · In development';notice.querySelector('p').textContent=(mode==='smdial'?'This keyboard':'This dial')+' is still being built and worked on. Features and design will continue to evolve.';notice.setAttribute('aria-label',mode==='smdial'?'Keyboard development notice':'Dial development notice');notice.hidden=closed.has(mode);restore.hidden=!closed.has(mode);restore.title='Show '+names[mode]+' development notice'}
 function save(){try{sessionStorage.setItem('eyeota-development-notices',JSON.stringify([...closed]))}catch{}}
 document.getElementById('eyeotaBuildNoticeClose').onclick=()=>{closed.add(mode);save();refresh();restore.focus()};restore.onclick=()=>{closed.delete(mode);save();refresh();document.getElementById('eyeotaBuildNoticeClose').focus()};body.addEventListener('eyeota-mode-change',()=>{if(!body.classList.contains('eb-browser-mode')&&body.classList.contains('ebClosedSun'))body.classList.remove('ebClosedSun');refresh()});refresh();
@@ -10535,6 +10558,19 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 <script id="eyeota-keyboard-animation-playback">
 document.addEventListener('DOMContentLoaded',()=>{const video=document.querySelector('#eyeotaShiftConcept video');function sync(){if(document.body.classList.contains('smdial-mode'))video.play().catch(()=>{});else video.pause()}document.body.addEventListener('eyeota-mode-change',sync);sync()});
+</script>
+<script id="eyeota-clips-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+ const scene=document.getElementById('eyeotaClipsScene'),video=document.getElementById('eyeotaClipsVideo'),play=document.getElementById('clipsPlay'),sound=document.getElementById('clipsSound'),seek=document.getElementById('clipsSeek'),time=document.getElementById('clipsTime');
+ function stamp(v){v=Number.isFinite(v)?Math.floor(v):0;return Math.floor(v/60)+':'+String(v%60).padStart(2,'0')}
+ function update(){play.textContent=video.paused?'▶':'Ⅱ';play.setAttribute('aria-label',video.paused?'Play clip':'Pause clip');sound.textContent=video.muted?'Sound off':'Sound on';sound.setAttribute('aria-label',video.muted?'Turn sound on':'Mute clip');seek.value=video.duration?video.currentTime/video.duration*100:0;time.textContent=stamp(video.currentTime)+' / '+stamp(video.duration)}
+ play.onclick=()=>{if(video.paused)video.play().catch(()=>{time.textContent='Tap play to retry'});else video.pause()};sound.onclick=()=>{video.muted=!video.muted;update()};seek.oninput=()=>{if(Number.isFinite(video.duration))video.currentTime=Number(seek.value)*video.duration/100};
+ document.getElementById('clipsFullscreen').onclick=()=>{if(video.requestFullscreen)video.requestFullscreen().catch(()=>{});else if(video.webkitEnterFullscreen)video.webkitEnterFullscreen()};
+ ['play','pause','timeupdate','loadedmetadata','volumechange'].forEach(event=>video.addEventListener(event,update));
+ scene.addEventListener('click',event=>event.stopPropagation());scene.addEventListener('pointerdown',event=>event.stopPropagation());
+ function sync(){if(document.body.classList.contains('clips-mode')){video.play().catch(()=>{});document.getElementById('modeChip').textContent='Clips'}else video.pause()}
+ document.body.addEventListener('eyeota-mode-change',sync);sync();update();
+});
 </script>
 </body>
 </html>
