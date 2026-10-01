@@ -6442,7 +6442,14 @@ checkUnlock();
  document.getElementById('clearWriting')?.addEventListener('click',()=>{if(editor&&confirm('Clear the writing pad?')){editor.innerHTML='';safeStore.remove('eyeotaRhymeWriting');updateCount();}});
  document.getElementById('saveWriting')?.addEventListener('click',()=>{
    if(!editor)return;
-   const doc='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+editor.innerHTML+'</div></body></html>';
+   const doc='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+editor.innerHTML+'</div><style id="eyeota-code-display-guard">
+/* Source-only elements must never become visible UI at any viewport size. */
+html body script,html body style,html body template,
+html head,html head script,html head style{
+ display:none!important;visibility:hidden!important;content-visibility:hidden!important;
+}
+</style>
+</body></html>';
    const blob=new Blob([doc],{type:'text/html;charset=utf-8'}), url=URL.createObjectURL(blob), a=document.createElement('a');
    a.href=url;a.download='EYEOTA-Rhyme-Dial-Writing.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);if(status)status.textContent='Document saved';
  });
@@ -10387,6 +10394,32 @@ body.eb-browser-mode.ebSpaceNotice #ebPageFallback h2{font-size:clamp(16px,3vw,2
 body.eb-browser-mode.ebSpaceNotice #ebPageFallback p{font-size:clamp(11px,2vw,14px);line-height:1.45;text-shadow:0 2px 8px #000}
 body.eb-browser-mode.ebSpaceNotice #ebFallbackAddress{font-size:11px;overflow-wrap:anywhere}
 body.eb-browser-mode.ebSpaceNotice #ebPageFallback button,body.eb-browser-mode.ebSpaceNotice #ebPageFallback a{font-size:11px;background:#142943cc;border:1px solid #72bce870;padding:8px;border-radius:99px}
+</style>
+<style id="eyeota-clean-click-surfaces">
+/* Mouse/touch clicks never expose native rectangular focus or tap paint. */
+button,a,[role="button"],#dial,.center-artwork{-webkit-tap-highlight-color:transparent}
+button:focus:not(:focus-visible),a:focus:not(:focus-visible),[role="button"]:focus:not(:focus-visible),#dial:focus:not(:focus-visible),.center-artwork:focus:not(:focus-visible){outline:none!important}
+#dial,.center-artwork{border-radius:50%!important}
+.center-artwork:focus-visible{outline:none!important;box-shadow:0 0 0 3px #82e5ff!important;border-radius:50%!important}
+body.eb-browser-mode .center-artwork,body.eb-browser-mode #eyeotaCenterMenu{outline:none!important}
+body.eb-browser-mode #dial:focus{outline:none!important}
+body.eb-browser-mode #ebEdge,body.eb-browser-mode #ebContentArea{outline:none!important;box-shadow:none!important;border:0!important}
+body.eb-browser-mode #ebPage{outline:none!important;border:0!important}
+</style>
+<script id="eyeota-browser-inert-center-focus">
+document.addEventListener('DOMContentLoaded',()=>{
+const center=document.querySelector('#dial .center-artwork'),logo=document.getElementById('eyeotaCenterMenu');
+const originals=[center,logo].filter(Boolean).map(el=>({el,tab:el.getAttribute('tabindex'),role:el.getAttribute('role')}));
+function sync(){const browser=document.body.classList.contains('eb-browser-mode');for(const {el,tab,role} of originals){if(browser){el.setAttribute('tabindex','-1');el.removeAttribute('role');if(document.activeElement===el)el.blur()}else{tab===null?el.removeAttribute('tabindex'):el.setAttribute('tabindex',tab);role===null?el.removeAttribute('role'):el.setAttribute('role',role)}}}
+document.body.addEventListener('eyeota-mode-change',sync);sync();
+});
+</script>
+<style id="eyeota-code-display-guard">
+/* Source-only elements must never become visible UI at any viewport size. */
+html body script,html body style,html body template,
+html head,html head script,html head style{
+ display:none!important;visibility:hidden!important;content-visibility:hidden!important;
+}
 </style>
 </body>
 </html>
