@@ -3068,7 +3068,7 @@ body.clips-mode #eyeotaClipsOwnership{display:block!important}
 </style>
 </head>
 
-<body>
+<body class="clips-mode">
 
 <video id="eyeotaPubgBackground" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
   <source media="(max-width: 700px)" src="pubg-background-mobile.mp4" type="video/mp4">
@@ -3330,7 +3330,7 @@ body.clips-mode #eyeotaClipsOwnership{display:block!important}
 
         <!-- BRAND -->
 
-        <div class="brand">
+        <div class="brand" id="eyeotaBrandNavigation">
 
             <h1 id="eyeotaColorLogo" aria-label="EYEOTA">
                 <span data-logo-letter aria-hidden="true" style="color:#0066FF">E</span><span data-logo-letter aria-hidden="true" style="color:#FFD700">Y</span><span data-logo-letter aria-hidden="true" style="color:#FFD700">E</span><span data-logo-letter aria-hidden="true" style="color:#28A745">O</span><span data-logo-letter aria-hidden="true" style="color:#28A745">T</span><span data-logo-letter aria-hidden="true" style="color:#28A745">A</span>
@@ -10691,7 +10691,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </script>
 
 <style id="eyeota-circle-safe-clips">
-body.clips-mode #eyeotaClipsVideo{object-fit:contain!important;object-position:center!important;background:#07111b}
+body.clips-mode #eyeotaClipsVideo{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;border-radius:50%!important;clip-path:circle(50% at 50% 50%)!important;background:#07111b}
 </style>
 <script id="eyeota-clips-link-repair">
 document.addEventListener('click',event=>{
@@ -10720,5 +10720,8 @@ body.clips-mode .brand .eyeota-wip-disclaimer,body.clips-mode #musicLockDisclosu
 <script id="eyeota-feature-navigation">
 document.addEventListener('click',event=>{const button=event.target.closest('[data-eyeota-mode]');if(!button)return;event.preventDefault();window.eyeotaNavigate?.(button.dataset.eyeotaMode);document.getElementById('dialStage')?.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});});
 </script>
+<style id="eyeota-clips-brand-fix">
+body.clips-mode #mainLayout > #eyeotaBrandNavigation{display:block!important;visibility:visible!important;opacity:1!important;position:relative!important;transform:none!important;flex-shrink:0!important;width:min(94%,700px)!important;max-width:700px!important;margin:18px auto 24px!important;box-sizing:border-box!important;}
+</style>
 </body>
 </html>
