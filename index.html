@@ -2972,12 +2972,7 @@ body.desktop-mode.eyeota-custom-wallpaper #eyeotaPubgShade{background:rgba(0,0,0
 }
 </style>
 
-<style id="eyeota-personal-apology-style">
-#eyeotaPersonalApology{max-width:760px;margin:12px auto;padding:12px 16px;box-sizing:border-box;text-align:center;color:rgba(255,255,255,.9);background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.16);border-radius:8px;letter-spacing:normal}
-#eyeotaPersonalApology h2{margin:0 0 8px;font-size:14px;color:#fff}
-#eyeotaPersonalApology p{margin:0;font-size:12px;line-height:1.6}
-#eyeotaPersonalApology{display:block!important;position:relative;z-index:1;width:calc(100% - 24px);flex-shrink:0}
-</style>
+
 <style id="eyeota-patent-notice-style">
 #eyeotaPatentNotice{display:block!important;position:static;max-width:760px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:12px 16px;flex-shrink:0;text-align:center;background:rgba(0,0,0,.68);border:1px solid rgba(255,255,255,.16);border-radius:8px;color:#e2e8f0;letter-spacing:normal;overflow-wrap:anywhere}
 #eyeotaPatentNotice p{margin:0;font:12px/1.6 Arial,sans-serif}
@@ -3346,7 +3341,7 @@ body.clips-mode #eyeotaClipsOwnership{display:block!important}
 <div class="eyeota-wip-disclaimer">
   <strong>EYEOTA MOVING-LETTER EYE TEST — WORK IN PROGRESS</strong><br>
   This research/development project explores whether a circular moving-letter interface may be useful for vision testing. It is not a medical device, clinic, diagnosis, prescription, or substitute for an examination by a licensed eye-care professional. The creator is not a doctor or clinic. Prototype results must not be interpreted as a medical diagnosis.
-</div><div id="musicLockDisclosure" role="note" aria-label="Music Lock development and origins notice"><p><strong>WORK IN PROGRESS</strong> — EYEOTA Music Lock is an evolving prototype rooted in a rhyme dial I began developing when I was young, around ages 20–23, while in jail for something petty. I was writing raps and struggling to find rhyming words without a dictionary, so I traced a circle using my cup and arranged the alphabet around it. That dial helped me cycle through letters, explore words, and identify rhyme patterns. People familiar with my early work saw the concept during that period. Around the same time, a family member helped me create shirts featuring the EYEOTA logo and some of my early concepts.</p><p>Years later, encountering circular designs in publicly released creative work and hearing faith-centered music renewed my motivation when I was close to giving up on my ideas. When I heard that music, I was going through what felt like the worst time of my life, which made its message especially meaningful to me. I personally experienced this as encouragement from God to keep creating.</p><p>EYEOTA’s early concepts were developed independently. Later sources of inspiration encouraged me to continue that work; they were not the origin of those concepts. This project does not claim affiliation with or endorsement by the creators whose work inspired me.</p></div>
+</div><div id="musicLockDisclosure" role="note" aria-label="Music Lock development and origins notice"><p><strong>WORK IN PROGRESS</strong> — EYEOTA Music Lock is an evolving prototype rooted in a rhyme dial I began developing when I was young, around ages 20–23, while in jail for something petty. I was writing raps and struggling to find rhyming words without a dictionary, so I traced a circle using my cup and arranged the alphabet around it. That dial helped me cycle through letters, explore words, and identify rhyme patterns. People familiar with my early work saw the concept during that period. Around the same time, a family member helped me create shirts featuring the EYEOTA logo and some of my early concepts.</p><p>Years later, encountering circular designs in publicly released creative work and hearing faith-centered music renewed my motivation when I was close to giving up on my ideas. When I heard that music, I was going through what felt like the worst time of my life, which made its message especially meaningful to me. I personally experienced this as encouragement from God to keep creating.</p><p>EYEOTA’s early concepts were developed independently. Later sources of inspiration encouraged me to continue that work; they were not the origin of those concepts.</p></div>
 
 
 
@@ -6926,8 +6921,8 @@ document.addEventListener('DOMContentLoaded',function(){
   const chip=document.getElementById('modeChip');
   if(!dial || !leftArrow || !rightArrow) return;
 
-  const order=['lock','rhyme','eye','smdial','desktop','browser','notes','clips'];
-  let current='lock';
+  const order=['clips','rhyme','eye','smdial','desktop','browser','notes','lock'];
+  let current='clips';
   const letters=Array.from(dial.querySelectorAll('.letter'));
   const originals=letters.map(el=>({
     html:el.innerHTML,
@@ -7060,6 +7055,7 @@ document.addEventListener('DOMContentLoaded',function(){
     body.dispatchEvent(new CustomEvent('eyeota-mode-change',{detail:{mode}}));
   }
 
+  window.eyeotaOpenClips=()=>{body.classList.remove('clips-minimized','ebMinimized','eyeota-dial-minimized');setMode('clips')};
   function step(direction,e){
     e.preventDefault();
     e.stopPropagation();
@@ -7137,7 +7133,7 @@ document.addEventListener('DOMContentLoaded',function(){
   });
 
   /* Start on Music Lock. */
-  setMode('lock');
+  setMode('clips');
 });
 </script>
 
@@ -10552,10 +10548,7 @@ body.eye-test-mode #eyeotaRhymeFeaturedVideo,body.smdial-mode #eyeotaRhymeFeatur
 </style>
 
 
-<section id="eyeotaPersonalApology" aria-labelledby="eyeotaPersonalApologyTitle">
-<h2 id="eyeotaPersonalApologyTitle">A Personal Apology</h2>
-<p>To anyone I have offended or hurt through my words over the past several years, I sincerely apologize. During that time, I experienced serious personal hardship and mental health difficulties. Those circumstances help explain what I was going through, but they do not excuse how I communicated. I regret the hurt my words caused and am committed to expressing myself and sharing my ideas with respect and care.</p>
-</section>
+
 <style id="eb-search-visibility-repair">
 body.eb-browser-mode:not(.ebRect):not(.ebMinimized) #dial > #ebOrbitSearch{display:block!important;visibility:visible!important;opacity:1!important}
 body.eb-browser-mode #ebOrbitSearch svg{display:block!important;visibility:visible!important;opacity:1!important}
@@ -10591,12 +10584,18 @@ document.addEventListener('DOMContentLoaded',()=>{
 <script id="eyeota-clips-gallery-controller">
 document.addEventListener('DOMContentLoaded',()=>{
  const video=document.getElementById('eyeotaClipsVideo'),stage=document.getElementById('dialStage');
- const clips=[{src:'eyeota-clips.mp4',name:'PUBG · Clip 1'},{src:'eyeota-clips-2.mp4',name:'PUBG · Clip 2'},{src:'eyeota-clips-3.mp4',name:'PUBG · Clip 3'},{src:'eyeota-clips-4.mp4',name:'illclip'},{src:'eyeota-clips-5.mp4',name:'3k'},{src:'eyeota-clips-6.mp4',name:'another3k'},{src:'eyeota-clips-7.mp4',name:'okclip'},{src:'eyeota-clips-8.mp4',name:'sickclip'},{src:'eyeota-clips-9.mp4',name:'greatsnipe'},{src:'eyeota-clips-10.mp4',name:'rangerclip'}];let index=0;
+ const clips=Array.from({length:28},(_,i)=>({src:'eyeota-clips'+(i===0?'':'-'+(i+1))+'.mp4',name:'Personal PUBG · Clip '+(i+1),id:i+1}));
+ function shuffle(){for(let i=clips.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[clips[i],clips[j]]=[clips[j],clips[i]]}}
+ shuffle();
+ try{const last=sessionStorage.getItem('eyeotaLastClipOrder');if(last===clips.map(c=>c.id).join(','))clips.push(clips.shift());sessionStorage.setItem('eyeotaLastClipOrder',clips.map(c=>c.id).join(','));}catch(e){}
+ let index=0;
  stage.insertAdjacentHTML('beforeend','<div id="clipsGameFloat" aria-hidden="true"><span>PUBG</span></div>');
- function change(step){index=(index+step+clips.length)%clips.length;video.pause();video.querySelector('source').src=clips[index].src;video.setAttribute('aria-label',clips[index].name);video.load();document.getElementById('clipsCurrent').textContent=(index+1)+' of '+clips.length;document.getElementById('clipsSeek').value=0;if(document.body.classList.contains('clips-mode'))video.play().catch(()=>{})}
+ function change(step){index=(index+step+clips.length)%clips.length;video.pause();video.querySelector('source').src=clips[index].src;video.setAttribute('aria-label',clips[index].name);video.dataset.clipId=clips[index].id;video.load();document.getElementById('clipsCurrent').textContent=(index+1)+' of '+clips.length;document.getElementById('clipsSeek').value=0;if(document.body.classList.contains('clips-mode'))video.play().catch(()=>{})}
  document.getElementById('clipsPrevious').onclick=()=>change(-1);document.getElementById('clipsNext').onclick=()=>change(1);
  video.addEventListener('ended',()=>change(1));
  video.addEventListener('error',()=>{document.getElementById('clipsTime').textContent='Clip unavailable — upload its video file.'});
+ window.eyeotaClipPlaylist={get order(){return clips.map(c=>c.id)},get current(){return clips[index].id}};
+ change(0);
 });
 </script>
 
@@ -10706,8 +10705,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(c.contains('rhyme-mode'))return 1;
   return 0;
  }
- function play(){const attempt=music.play();if(attempt&&attempt.catch)attempt.catch(()=>{});}
- function sync(){const next=modeIndex();if(next!==active){music.pause();active=next;music.src=sources[next];music.load();}if(enabled&&music.paused)play();}
+ function play(){if(document.body.classList.contains('clips-mode')){music.pause();return;}const attempt=music.play();if(attempt&&attempt.catch)attempt.catch(()=>{});}
+ function sync(){if(document.body.classList.contains('clips-mode')){music.pause();return;}const next=modeIndex();if(next!==active){music.pause();active=next;music.src=sources[next];music.load();}if(enabled&&music.paused)play();}
  function begin(){enabled=true;sync();}
  document.addEventListener('click',begin,{capture:true});
  document.addEventListener('touchend',begin,{capture:true,passive:true});
@@ -10716,9 +10715,21 @@ document.addEventListener('DOMContentLoaded',()=>{
  window.addEventListener('pagehide',()=>music.pause());
  document.addEventListener('visibilitychange',()=>{if(document.hidden)music.pause();else if(enabled)sync();});
  // Try immediate audible autoplay; browser permission decides whether it can start.
- sync();const attempt=music.play();if(attempt&&attempt.then)attempt.then(()=>{enabled=true;}).catch(()=>{});
+ sync();const attempt=document.body.classList.contains('clips-mode')?null:music.play();if(attempt&&attempt.then)attempt.then(()=>{enabled=true;}).catch(()=>{});
  window.eyeotaBackgroundMusic={modeIndex,sync};
 });
+</script>
+
+<style id="eyeota-circle-safe-clips">
+body.clips-mode #eyeotaClipsVideo{object-fit:contain!important;object-position:center!important;background:#07111b}
+</style>
+<script id="eyeota-clips-link-repair">
+document.addEventListener('click',event=>{
+ const link=event.target.closest('a,button');if(!link)return;
+ if(link.id==='eyeotaClipsShortcut'||link.textContent.trim().toUpperCase()==='CLIPS'){
+  event.preventDefault();event.stopImmediatePropagation();window.eyeotaOpenClips?.();
+ }
+},true);
 </script>
 </body>
 </html>
