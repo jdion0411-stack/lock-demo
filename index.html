@@ -10554,25 +10554,32 @@ document.addEventListener('DOMContentLoaded',()=>{
  play.onclick=()=>{if(video.paused)video.play().catch(()=>{time.textContent='Tap play to retry'});else video.pause()};sound.onclick=()=>{video.muted=!video.muted;update()};seek.oninput=()=>{if(Number.isFinite(video.duration))video.currentTime=Number(seek.value)*video.duration/100};
  ['play','pause','timeupdate','loadedmetadata','volumechange'].forEach(event=>video.addEventListener(event,update));
  scene.addEventListener('click',event=>event.stopPropagation());scene.addEventListener('pointerdown',event=>event.stopPropagation());
- function sync(){if(document.body.classList.contains('clips-mode')){video.play().catch(()=>{});document.getElementById('modeChip').textContent='Clips'}else video.pause()}
+ function sync(){if(document.body.classList.contains('clips-mode')&&!video.hidden){video.play().catch(()=>{});document.getElementById('modeChip').textContent='Clips'}else video.pause()}
  document.body.addEventListener('eyeota-mode-change',sync);sync();update();
 });
 </script>
 <script id="eyeota-clips-gallery-controller">
 document.addEventListener('DOMContentLoaded',()=>{
- const video=document.getElementById('eyeotaClipsVideo'),stage=document.getElementById('dialStage');
- const clips=Array.from({length:28},(_,i)=>({src:'eyeota-clips'+(i===0?'':'-'+(i+1))+'.mp4?v=circle-mobile-2',name:'Personal PUBG · Clip '+(i+1),id:i+1}));
- function shuffle(){for(let i=clips.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[clips[i],clips[j]]=[clips[j],clips[i]]}}
- shuffle();
- try{const last=sessionStorage.getItem('eyeotaLastClipOrder');if(last===clips.map(c=>c.id).join(','))clips.push(clips.shift());sessionStorage.setItem('eyeotaLastClipOrder',clips.map(c=>c.id).join(','));}catch(e){}
- let index=0;
- stage.insertAdjacentHTML('beforeend','<div id="clipsGameFloat" aria-hidden="true"><span>PUBG</span></div>');
- function change(step){index=(index+step+clips.length)%clips.length;video.pause();video.querySelector('source').src=clips[index].src;video.setAttribute('aria-label',clips[index].name);video.dataset.clipId=clips[index].id;video.load();document.getElementById('clipsCurrent').textContent=(index+1)+' of '+clips.length;document.getElementById('clipsSeek').value=0;if(document.body.classList.contains('clips-mode'))video.play().catch(()=>{})}
- document.getElementById('clipsPrevious').onclick=()=>change(-1);document.getElementById('clipsNext').onclick=()=>change(1);
- video.addEventListener('ended',()=>change(1));
- video.addEventListener('error',()=>{document.getElementById('clipsTime').textContent='Clip unavailable — upload its video file.'});
- window.eyeotaClipPlaylist={get order(){return clips.map(c=>c.id)},get current(){return clips[index].id}};
- change(0);
+ const video=document.getElementById('eyeotaClipsVideo'),stage=document.getElementById('dialStage'),dial=document.getElementById('dial'),scene=document.getElementById('eyeotaClipsScene');
+ const playlists={pubg:Array.from({length:28},(_,i)=>({src:'eyeota-clips'+(i===0?'':'-'+(i+1))+'.mp4?v=circle-mobile-2',name:'Personal PUBG · Clip '+(i+1),id:i+1})),overwatch:[]};
+ const positions={pubg:0,overwatch:0};let game='pubg';
+ function shuffle(list){for(let i=list.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[list[i],list[j]]=[list[j],list[i]];}}
+ shuffle(playlists.pubg);
+ try{const last=sessionStorage.getItem('eyeotaLastClipOrder');if(last===playlists.pubg.map(c=>c.id).join(','))playlists.pubg.push(playlists.pubg.shift());sessionStorage.setItem('eyeotaLastClipOrder',playlists.pubg.map(c=>c.id).join(','));}catch(e){}
+ stage.insertAdjacentHTML('beforeend',`<nav id="eyeotaGameSelector" aria-label="Choose a game"><div class="game-orbit-carrier"><button type="button" class="eyeota-game-chip" data-game="pubg" aria-pressed="true"><strong>PUBG</strong><span class="game-switch-hint">Now playing</span></button></div><div class="game-orbit-carrier"><button type="button" class="eyeota-game-chip" data-game="overwatch" aria-pressed="false"><strong>OVERWATCH</strong><span class="game-switch-hint">Tap to switch ↗</span></button></div></nav>`);
+ const selector=document.getElementById('eyeotaGameSelector');
+ const empty=document.createElement('div');empty.id='eyeotaOverwatchEmpty';empty.hidden=true;empty.setAttribute('role','status');empty.innerHTML='<strong>OVERWATCH</strong><span>Clips coming soon</span><small>Choose PUBG to keep watching</small>';scene.appendChild(empty);
+ const buttons=[...selector.querySelectorAll('button')],controls=['clipsPrevious','clipsNext','clipsPlay','clipsSound'].map(id=>document.getElementById(id));
+ function position(){const w=dial.offsetWidth,h=dial.offsetHeight;selector.style.setProperty('--game-orbit-size',(w+58)+'px');selector.style.setProperty('--game-center-x',(dial.offsetLeft+w/2)+'px');selector.style.setProperty('--game-center-y',(dial.offsetTop+h/2)+'px');}
+ new ResizeObserver(position).observe(dial);window.addEventListener('resize',position);position();
+ function updateSelector(){buttons.forEach(button=>{const selected=button.dataset.game===game;button.setAttribute('aria-pressed',String(selected));button.querySelector('.game-switch-hint').textContent=selected?'Selected':'Tap to switch ↗';});}
+ function change(step){const list=playlists[game];if(!list.length)return;positions[game]=(positions[game]+step+list.length)%list.length;const clip=list[positions[game]];video.pause();video.querySelector('source').src=clip.src;video.setAttribute('aria-label',clip.name);video.dataset.clipId=clip.id;video.dataset.game=game;video.load();document.getElementById('clipsCurrent').textContent=(positions[game]+1)+' of '+list.length;document.getElementById('clipsSeek').value=0;if(document.body.classList.contains('clips-mode'))video.play().catch(()=>{});}
+ function select(next){if(!(next in playlists)||next===game)return;game=next;video.dataset.game=game;const hasClips=playlists[game].length>0;empty.hidden=hasClips;video.hidden=!hasClips;controls.forEach(control=>{control.disabled=!hasClips;});updateSelector();if(hasClips)change(0);else{video.pause();video.querySelector('source').removeAttribute('src');video.removeAttribute('src');video.load();document.getElementById('clipsCurrent').textContent='OVERWATCH';document.getElementById('clipsTime').textContent='Clips coming soon';document.getElementById('clipsProgress').style.strokeDasharray='0 100';}}
+ selector.addEventListener('click',event=>{const button=event.target.closest('[data-game]');if(button){event.stopPropagation();select(button.dataset.game);}});
+ document.getElementById('clipsPrevious').onclick=()=>change(-1);document.getElementById('clipsNext').onclick=()=>change(1);video.addEventListener('ended',()=>change(1));
+ video.addEventListener('error',()=>{if(playlists[game].length)document.getElementById('clipsTime').textContent='Clip unavailable — upload its video file.';});
+ window.eyeotaClipPlaylist={select,setPlaylist(key,clips){if(!(key in playlists))return;playlists[key]=clips.slice();shuffle(playlists[key]);positions[key]=0;if(game===key){empty.hidden=!!clips.length;video.hidden=!clips.length;controls.forEach(c=>{c.disabled=!clips.length;});if(clips.length)change(0);}},get game(){return game},get order(){return playlists[game].map(c=>c.id)},get current(){return playlists[game][positions[game]]?.id}};
+ video.dataset.game=game;updateSelector();change(0);
 });
 </script>
 
@@ -10736,10 +10743,23 @@ document.addEventListener('DOMContentLoaded',()=>{
 const video=document.getElementById('eyeotaClipsVideo'),time=document.getElementById('clipsTime');
 video.addEventListener('waiting',()=>{time.textContent='Loading clip…';});
 video.addEventListener('stalled',()=>{if(video.readyState<3)time.textContent='Buffering clip…';});
-video.addEventListener('canplay',()=>{if(document.body.classList.contains('clips-mode')&&video.paused&&video.dataset.userPaused!=='true')video.play().catch(()=>{time.textContent='Tap ▶ to play';});});
+video.addEventListener('canplay',()=>{if(document.body.classList.contains('clips-mode')&&!video.hidden&&video.paused&&video.dataset.userPaused!=='true')video.play().catch(()=>{time.textContent='Tap ▶ to play';});});
 document.getElementById('clipsPlay').addEventListener('click',()=>{video.dataset.userPaused=video.paused?'true':'false';});
 video.addEventListener('loadstart',()=>{video.dataset.userPaused='false';});
 });
 </script>
+<style id="eyeota-game-choice-style">
+#eyeotaGameSelector{display:none;}body.clips-mode #eyeotaGameSelector{display:block;position:absolute;left:var(--game-center-x,50%);top:var(--game-center-y,240px);width:var(--game-orbit-size,538px);height:var(--game-orbit-size,538px);transform:translate(-50%,-50%);z-index:470;pointer-events:none;}
+.game-orbit-carrier{position:absolute;inset:0;animation:eyeotaGameOrbit 48s linear infinite;pointer-events:none;}.game-orbit-carrier:nth-child(2){animation-delay:-24s;}
+.eyeota-game-chip{position:absolute;left:100%;top:50%;transform:translate(-50%,-50%);animation:eyeotaGameUpright 48s linear infinite;pointer-events:auto;min-width:102px;min-height:46px;padding:7px 12px;display:flex;flex-direction:column;align-items:center;gap:3px;background:#071b28f5;color:#e6ffff;border:1px solid #78e7de;border-radius:22px;font:12px/1.2 Arial;cursor:pointer;touch-action:manipulation;}
+.game-orbit-carrier:nth-child(2) .eyeota-game-chip{animation-delay:-24s;}.eyeota-game-chip strong{letter-spacing:1px;}.game-switch-hint{font-size:10px;color:#b7dfdf;}
+.eyeota-game-chip[aria-pressed="true"]{background:#153c46;border-color:#e0ffff;}.eyeota-game-chip[aria-pressed="false"]{box-shadow:0 0 14px #54ffd578;}.eyeota-game-chip[aria-pressed="false"] .game-switch-hint{color:#87ffd9;animation:eyeotaGamePrompt 2.3s ease-in-out infinite;}.eyeota-game-chip:focus-visible{outline:3px solid white;outline-offset:3px;}#eyeotaGameSelector:hover .game-orbit-carrier,#eyeotaGameSelector:hover .eyeota-game-chip,#eyeotaGameSelector:focus-within .game-orbit-carrier,#eyeotaGameSelector:focus-within .eyeota-game-chip{animation-play-state:paused;}
+#eyeotaOverwatchEmpty{position:absolute;inset:0;z-index:1;border-radius:50%;background:radial-gradient(circle at 50% 35%,#164757,#06121e 75%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;color:#e9ffff;font:16px Arial;}#eyeotaOverwatchEmpty strong{font-size:23px;letter-spacing:2px;}#eyeotaOverwatchEmpty small{font-size:11px;max-width:60%;}#eyeotaOverwatchEmpty[hidden]{display:none!important;}#eyeotaClipsVideo[hidden]{display:none!important;}.clips-controls button:disabled{opacity:.3;cursor:default;}
+@keyframes eyeotaGameOrbit{to{transform:rotate(360deg)}}@keyframes eyeotaGameUpright{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(-360deg)}}@keyframes eyeotaGamePrompt{50%{opacity:.55;transform:translateY(-1px)}}
+@media(min-width:701px){body.clips-mode #dialStage{margin-bottom:75px!important;margin-top:35px!important;}}
+@media(max-width:700px){body.clips-mode #eyeotaGameSelector{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important;transform:none!important;display:flex!important;justify-content:center;gap:10px;margin-top:18px;}.game-orbit-carrier{position:static;inset:auto;animation:none!important;}.eyeota-game-chip{position:static;left:auto;top:auto;transform:none!important;animation:none!important;min-width:110px;}.eyeota-game-chip[aria-pressed="false"] .game-switch-hint{animation:eyeotaGamePrompt 2.3s ease-in-out infinite;}}
+body.clips-mode.clips-minimized #eyeotaGameSelector{display:none!important;}
+@media(prefers-reduced-motion:reduce){.game-orbit-carrier,.eyeota-game-chip,.game-switch-hint{animation:none!important;}.game-orbit-carrier:nth-child(2){transform:rotate(180deg)}.game-orbit-carrier:nth-child(2) .eyeota-game-chip{transform:translate(-50%,-50%) rotate(-180deg)}@media(max-width:700px){.game-orbit-carrier:nth-child(2),.game-orbit-carrier:nth-child(2) .eyeota-game-chip{transform:none!important;}}}
+</style>
 </body>
 </html>
