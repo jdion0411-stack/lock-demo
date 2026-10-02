@@ -3090,8 +3090,8 @@ body.clips-mode #eyeotaClipsScene #clipsCurrent{display:block!important;order:0!
         >
 
             <section id="eyeotaClipsScene" aria-label="Clips circular video player">
-<video id="eyeotaClipsVideo" playsinline muted loop preload="metadata" aria-label="Uploaded gaming clip"><source src="eyeota-clips.mp4" type="video/mp4"></video>
-<div class="clips-controls"><nav id="clipsGalleryNav" aria-label="Choose gameplay clip"><button type="button" id="clipsPrevious">◀ PREVIOUS</button><span id="clipsCurrent" aria-live="polite">1 of 10</span><button type="button" id="clipsNext">NEXT ▶</button></nav><div class="clips-buttons"><button type="button" id="clipsPlay" aria-label="Play clip">▶</button><button type="button" id="clipsSound" aria-label="Turn sound on">Sound off</button><button type="button" id="clipsFullscreen" aria-label="Play clip fullscreen">⛶</button></div><input id="clipsSeek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek in clip"><span id="clipsTime">0:00 / 0:47</span></div>
+<video id="eyeotaClipsVideo" controlslist="nofullscreen" disablepictureinpicture playsinline muted loop preload="metadata" aria-label="Uploaded gaming clip"><source src="eyeota-clips.mp4" type="video/mp4"></video>
+<div class="clips-controls"><nav id="clipsGalleryNav" aria-label="Choose gameplay clip"><button type="button" id="clipsPrevious">◀ PREVIOUS</button><span id="clipsCurrent" aria-live="polite">1 of 10</span><button type="button" id="clipsNext">NEXT ▶</button></nav><div class="clips-buttons"><button type="button" id="clipsPlay" aria-label="Play clip">▶</button><button type="button" id="clipsSound" aria-label="Turn sound on">Sound off</button><button type="button" id="clipsMinimize" aria-label="Minimize clip player">Minimize</button></div><input id="clipsSeek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek in clip"><span id="clipsTime">0:00 / 0:47</span></div>
 </section>
 <form id="ebOrbitSearch" role="search" aria-label="EYEOTA Browser website search"><svg viewBox="0 0 600 600" aria-hidden="true"><defs><path id="ebAddressCurve" d="M 80 146 A 268 268 0 0 1 520 146"/></defs><use href="#ebAddressCurve" id="ebCurveBorder"/><use href="#ebAddressCurve" id="ebCurveSurface"/><text class="ebCurveHint"><textPath href="#ebAddressCurve" startOffset="1%">⌕</textPath></text><text id="ebCurveText"><textPath id="ebAddressText" href="#ebAddressCurve" startOffset="7%">Search or enter website address</textPath></text><line id="ebCurveCaret"/></svg><input type="text" aria-label="Search or enter website address" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="url"><button type="submit" aria-label="Open website or search" title="Open website or search">→</button></form>
 <div id="noteCipherScene" aria-label="Musical typing rotary dial">
@@ -3687,6 +3687,11 @@ body.clips-mode #eyeotaClipsScene #clipsCurrent{display:block!important;order:0!
         </div>
 
     </div>
+<section id="eyeotaClipsYoutube" aria-label="Featured YouTube video on Clips page">
+<iframe src="https://www.youtube.com/embed/C2Mp48ccAqg" title="Featured YouTube video" loading="eager" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<p><a href="https://www.youtube.com/watch?v=C2Mp48ccAqg" target="_blank" rel="noopener noreferrer">Watch on YouTube</a><br>Music is a big part of my creative process. Videos shared here reflect what I enjoy listening to while developing this site, along with sources of personal inspiration. Their inclusion does not imply any affiliation, sponsorship, or endorsement by the artists or creators. EYEOTA is an independent project. Videos are provided through YouTube; rights remain with their respective owners.</p>
+</section>
+
 
 <section id="eyeotaPatentNotice" role="note" aria-label="Patent application notice">
 <p><strong>PATENT PENDING</strong> — U.S. provisional patent application for “Multi-Factor Security and Access Control System with Acoustic and Biometric Recognition,” Application No. 64/161,513.</p>
@@ -10590,7 +10595,6 @@ document.addEventListener('DOMContentLoaded',()=>{
  function stamp(v){v=Number.isFinite(v)?Math.floor(v):0;return Math.floor(v/60)+':'+String(v%60).padStart(2,'0')}
  function update(){play.textContent=video.paused?'▶':'Ⅱ';play.setAttribute('aria-label',video.paused?'Play clip':'Pause clip');sound.textContent=video.muted?'Sound off':'Sound on';sound.setAttribute('aria-label',video.muted?'Turn sound on':'Mute clip');seek.value=video.duration?video.currentTime/video.duration*100:0;time.textContent=stamp(video.currentTime)+' / '+stamp(video.duration)}
  play.onclick=()=>{if(video.paused)video.play().catch(()=>{time.textContent='Tap play to retry'});else video.pause()};sound.onclick=()=>{video.muted=!video.muted;update()};seek.oninput=()=>{if(Number.isFinite(video.duration))video.currentTime=Number(seek.value)*video.duration/100};
- document.getElementById('clipsFullscreen').onclick=()=>{if(video.requestFullscreen)video.requestFullscreen().catch(()=>{});else if(video.webkitEnterFullscreen)video.webkitEnterFullscreen()};
  ['play','pause','timeupdate','loadedmetadata','volumechange'].forEach(event=>video.addEventListener(event,update));
  scene.addEventListener('click',event=>event.stopPropagation());scene.addEventListener('pointerdown',event=>event.stopPropagation());
  function sync(){if(document.body.classList.contains('clips-mode')){video.play().catch(()=>{});document.getElementById('modeChip').textContent='Clips'}else video.pause()}
@@ -10609,15 +10613,49 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 <style id="eyeota-clips-youtube-style">
-#eyeotaClipsYoutube{display:none;width:min(92%,640px);margin:32px auto 24px;text-align:center;color:#e2e8f0}
+#eyeotaClipsYoutube{position:relative;z-index:3;clear:both;background:#06111e;border-radius:12px;display:none;width:min(92%,640px);margin:16px auto 24px;text-align:center;color:#e2e8f0}
 body.clips-mode #eyeotaClipsYoutube{display:block!important}
 #eyeotaClipsYoutube iframe{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#000}
 #eyeotaClipsYoutube p{font:12px/1.6 Arial,sans-serif;margin:10px 0;padding:8px 12px;background:rgba(0,0,0,.75);border-radius:8px}
 #eyeotaClipsYoutube a{color:#a5e7ff}
 </style>
-<section id="eyeotaClipsYoutube" aria-label="Featured YouTube video on Clips page">
-<iframe src="https://www.youtube.com/embed/ChNBMA-soXA" title="Featured YouTube video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-<p><a href="https://www.youtube.com/watch?v=ChNBMA-soXA" target="_blank" rel="noopener noreferrer">Watch on YouTube</a><br>Music is a big part of my creative process. Videos shared here reflect what I enjoy listening to while developing this site, along with sources of personal inspiration. Their inclusion does not imply any affiliation, sponsorship, or endorsement by the artists or creators. EYEOTA is an independent project. Videos are provided through YouTube; rights remain with their respective owners.</p>
-</section>
+
+
+<style id="eyeota-clips-minimize-style">
+body.clips-mode #dialStage{width:min(620px,calc(100vw - 40px))!important;overflow:visible!important;margin:0 auto 30px!important;}
+body.clips-mode #dial{width:min(480px,calc(100vw - 88px))!important;height:min(480px,calc(100vw - 88px))!important;margin:0 auto!important;}
+body.clips-mode #clipsGameFloat{inset:auto 0 -26px!important;height:24px;z-index:450!important;}
+body.clips-mode #clipsGameFloat span{offset-path:none!important;position:absolute;left:50%;top:0;font-size:12px;color:#e7fcff;animation:clipsLabelFloat 12s ease-in-out infinite alternate!important;}
+@keyframes clipsLabelFloat{from{transform:translateX(calc(-50% - 24px))}to{transform:translateX(calc(-50% + 24px))}}
+#clipsMiniHandle{display:none;}
+body.clips-mode.clips-minimized #mainLayout{min-height:320px;}
+body.clips-mode.clips-minimized #dialStage{position:fixed!important;left:var(--clip-x,16px)!important;top:var(--clip-y,80px)!important;width:260px!important;height:304px!important;padding:38px 0 26px!important;box-sizing:border-box!important;margin:0!important;z-index:10000!important;}
+body.clips-mode.clips-minimized #dial{width:240px!important;height:240px!important;}
+body.clips-mode.clips-minimized #dialModeArrow,body.clips-mode.clips-minimized #eyeModeArrow,body.clips-mode.clips-minimized #modeChip{display:none!important;}
+body.clips-mode.clips-minimized #clipsMiniHandle{display:flex;position:absolute;top:0;left:0;width:100%;height:34px;box-sizing:border-box;align-items:center;justify-content:space-between;gap:8px;padding:4px 10px;border-radius:18px;background:#082434;color:white;border:1px solid #8debe7;touch-action:none;cursor:grab;font:700 12px Arial;}
+#clipsRestore{background:#8debe7;color:#05202b;border:0;border-radius:12px;padding:4px 10px;cursor:pointer;}
+body.clips-mode.clips-minimized #clipsGameFloat{bottom:0!important;}
+body.clips-mode.clips-minimized #clipsMinimize{display:none;}
+body.clips-mode.clips-minimized .clips-controls{left:10%!important;width:80%!important;bottom:8%!important;padding:5px!important;}
+body.clips-mode.clips-minimized #clipsGalleryNav button{font-size:9px!important;min-height:26px!important;}
+body.clips-mode.clips-minimized #clipsSound{font-size:10px;padding:2px 6px;}
+@media(prefers-reduced-motion:reduce){body.clips-mode #clipsGameFloat span{animation:none!important;transform:translateX(-50%);}}
+</style>
+<script id="eyeota-clips-minimize-controller">
+document.addEventListener('DOMContentLoaded',()=>{
+ const body=document.body,stage=document.getElementById('dialStage');
+ stage.insertAdjacentHTML('beforeend','<div id="clipsMiniHandle" aria-label="Drag minimized clip player"><span>Drag player</span><button id="clipsRestore" type="button">Restore</button></div>');
+ const handle=document.getElementById('clipsMiniHandle');let drag=null;
+ function place(x,y){const rect=stage.getBoundingClientRect();stage.style.setProperty('--clip-x',Math.max(0,Math.min(x,window.innerWidth-rect.width))+'px');stage.style.setProperty('--clip-y',Math.max(0,Math.min(y,window.innerHeight-rect.height))+'px');}
+ function restore(){body.classList.remove('clips-minimized');drag=null;}
+ document.getElementById('clipsMinimize').onclick=()=>{body.classList.add('clips-minimized');place(window.innerWidth-276,Math.max(20,window.innerHeight-324));};
+ document.getElementById('clipsRestore').onclick=restore;
+ handle.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;const rect=stage.getBoundingClientRect();drag={id:e.pointerId,x:e.clientX-rect.left,y:e.clientY-rect.top};handle.setPointerCapture(e.pointerId);e.preventDefault();e.stopPropagation();});
+ handle.addEventListener('pointermove',e=>{if(drag&&drag.id===e.pointerId){place(e.clientX-drag.x,e.clientY-drag.y);e.preventDefault();}});
+ for(const name of ['pointerup','pointercancel','lostpointercapture'])handle.addEventListener(name,()=>{drag=null;});
+ window.addEventListener('resize',()=>{if(body.classList.contains('clips-minimized')){const rect=stage.getBoundingClientRect();place(rect.left,rect.top);}});
+ body.addEventListener('eyeota-mode-change',()=>{if(!body.classList.contains('clips-mode'))restore();});
+});
+</script>
 </body>
 </html>
