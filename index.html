@@ -10723,5 +10723,9 @@ document.addEventListener('click',event=>{const button=event.target.closest('[da
 <style id="eyeota-clips-brand-fix">
 body.clips-mode #mainLayout > #eyeotaBrandNavigation{display:block!important;visibility:visible!important;opacity:1!important;position:relative!important;transform:none!important;flex-shrink:0!important;width:min(94%,700px)!important;max-width:700px!important;margin:18px auto 24px!important;box-sizing:border-box!important;}
 </style>
+<style id="eyeota-gameplay-circle-crop">
+body.clips-mode #dial #eyeotaClipsScene{overflow:hidden!important;border-radius:50%!important;clip-path:circle(50% at 50% 50%)!important;}
+body.clips-mode #dial #eyeotaClipsScene #eyeotaClipsVideo{position:absolute!important;inset:auto!important;left:50%!important;top:50%!important;width:200%!important;height:200%!important;max-width:none!important;max-height:none!important;transform:translate(-50%,-50%)!important;object-fit:cover!important;object-position:center!important;border-radius:0!important;clip-path:none!important;}
+</style>
 </body>
 </html>
