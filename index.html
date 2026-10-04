@@ -9719,6 +9719,24 @@ body.eye-test-mode #eyeotaCipherFeaturedVideo,body.smdial-mode #eyeotaCipherFeat
 </style>
 
 
+<section id="eyeotaCipherFeaturedVideo" aria-label="Musical Cipher featured videos">
+ <iframe title="Musical Cipher featured YouTube video 1" data-cipher-video-src="https://www.youtube-nocookie.com/embed/n5NiG3i_I8U" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+ <p>YouTube disclosure: This third-party video is embedded through YouTube. Video and music belong to their respective owners. EYEOTA claims no ownership, affiliation, or endorsement. Playing it connects to YouTube, which may collect viewing information. <a href="https://youtu.be/n5NiG3i_I8U" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></p>
+ <iframe title="Musical Cipher featured YouTube video 2" data-cipher-video-src="https://www.youtube-nocookie.com/embed/NtLiiZEPTfE" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+ <p>YouTube disclosure: This third-party video is embedded through YouTube. Video and music belong to their respective owners. EYEOTA claims no ownership, affiliation, or endorsement. Playing it connects to YouTube, which may collect viewing information. <a href="https://youtu.be/NtLiiZEPTfE" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></p>
+</section>
+<style>
+body.note-cipher-mode #eyeotaCipherFeaturedVideo iframe{height:auto;aspect-ratio:16/9}
+#eyeotaCipherFeaturedVideo iframe:nth-of-type(2){margin-top:24px}
+</style>
+<script id="eyeota-cipher-video-lifecycle">
+(()=>{
+ const frames=document.querySelectorAll('#eyeotaCipherFeaturedVideo iframe');
+ function sync(){const active=document.body.classList.contains('note-cipher-mode');frames.forEach(frame=>{if(active){if(!frame.hasAttribute('src'))frame.src=frame.dataset.cipherVideoSrc;}else if(frame.hasAttribute('src'))frame.removeAttribute('src');});}
+ new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});sync();
+})();
+</script>
+
 <script id="eyeota-v76-musical-cipher-controller">
 /* Password encryption and musical serialization; no network or persistent storage. */
 const EyeotaNoteCrypto=(()=>{
