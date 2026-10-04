@@ -6571,13 +6571,7 @@ checkUnlock();
  document.getElementById('clearWriting')?.addEventListener('click',()=>{if(editor&&confirm('Clear the writing pad?')){editor.innerHTML='';safeStore.remove('eyeotaRhymeWriting');updateCount();}});
  document.getElementById('saveWriting')?.addEventListener('click',()=>{
    if(!editor)return;
-   const doc='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+safeWriting(editor.innerHTML)+'</div><script id="eyeota-legal-direct-link">
-document.addEventListener('DOMContentLoaded',()=>{
- function openLinkedPage(){if(location.hash.toLowerCase()==='#legal'&&typeof window.eyeotaNavigate==='function')window.eyeotaNavigate('legal')}
- window.addEventListener('hashchange',openLinkedPage);openLinkedPage();
-});
-</script>
-</body></html>';
+   const doc='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+safeWriting(editor.innerHTML)+'</div></body></html>';
    const blob=new Blob([doc],{type:'text/html;charset=utf-8'}), url=URL.createObjectURL(blob), a=document.createElement('a');
    a.href=url;a.download='EYEOTA-Rhyme-Dial-Writing.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);if(status)status.textContent='Document saved';
  });
@@ -10574,18 +10568,21 @@ document.addEventListener('DOMContentLoaded',()=>{
 <script id="eyeota-clips-gallery-controller">
 document.addEventListener('DOMContentLoaded',()=>{
  const video=document.getElementById('eyeotaClipsVideo'),stage=document.getElementById('dialStage'),dial=document.getElementById('dial'),scene=document.getElementById('eyeotaClipsScene');
- const playlists={pubg:Array.from({length:28},(_,i)=>({src:'eyeota-clips'+(i===0?'':'-'+(i+1))+'.mp4?v=circle-mobile-2',name:'Personal PUBG · Clip '+(i+1),id:i+1})),overwatch:[]};
+ const playlists={pubg:Array.from({length:28},(_,i)=>({src:'eyeota-clips'+(i===0?'':'-'+(i+1))+'.mp4?v=circle-mobile-2',name:'Personal PUBG · Clip '+(i+1),id:i+1})),overwatch:Array.from({length:14},(_,i)=>({src:'eyeota-overwatch-'+(i+1)+'.mp4?v=overwatch-1',name:'Personal Overwatch · Clip '+(i+1),id:i+1}))};
  const positions={pubg:0,overwatch:0};let game='pubg';
  function shuffle(list){for(let i=list.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[list[i],list[j]]=[list[j],list[i]];}}
- shuffle(playlists.pubg);
- try{const last=sessionStorage.getItem('eyeotaLastClipOrder');if(last===playlists.pubg.map(c=>c.id).join(','))playlists.pubg.push(playlists.pubg.shift());sessionStorage.setItem('eyeotaLastClipOrder',playlists.pubg.map(c=>c.id).join(','));}catch(e){}
+ for(const key of Object.keys(playlists)){
+  shuffle(playlists[key]);
+  try{const storageKey=key==='pubg'?'eyeotaLastClipOrder':'eyeotaLastOverwatchOrder';const last=sessionStorage.getItem(storageKey);if(last===playlists[key].map(c=>c.id).join(','))playlists[key].push(playlists[key].shift());sessionStorage.setItem(storageKey,playlists[key].map(c=>c.id).join(','));}catch(e){}
+ }
  stage.insertAdjacentHTML('beforeend',`<nav id="eyeotaGameSelector" aria-label="Choose a game"><div class="game-orbit-carrier"><button type="button" class="eyeota-game-chip" data-game="pubg" aria-pressed="true"><strong>PUBG</strong><span class="game-switch-hint">Now playing</span></button></div><div class="game-orbit-carrier"><button type="button" class="eyeota-game-chip" data-game="overwatch" aria-pressed="false"><strong>OVERWATCH</strong><span class="game-switch-hint">Tap to switch ↗</span></button></div></nav>`);
+ if(!document.getElementById('clipsGameFloat'))stage.insertAdjacentHTML('beforeend','<div id="clipsGameFloat" aria-live="polite"><span>PUBG</span></div>');
  const selector=document.getElementById('eyeotaGameSelector');
  const empty=document.createElement('div');empty.id='eyeotaOverwatchEmpty';empty.hidden=true;empty.setAttribute('role','status');empty.innerHTML='<strong>OVERWATCH</strong><span>Clips coming soon</span><small>Choose PUBG to keep watching</small>';scene.appendChild(empty);
  const buttons=[...selector.querySelectorAll('button')],controls=['clipsPrevious','clipsNext','clipsPlay','clipsSound'].map(id=>document.getElementById(id));
  function position(){const w=dial.offsetWidth,h=dial.offsetHeight;selector.style.setProperty('--game-orbit-size',(w+58)+'px');selector.style.setProperty('--game-center-x',(dial.offsetLeft+w/2)+'px');selector.style.setProperty('--game-center-y',(dial.offsetTop+h/2)+'px');}
  new ResizeObserver(position).observe(dial);window.addEventListener('resize',position);position();
- function updateSelector(){buttons.forEach(button=>{const selected=button.dataset.game===game;button.setAttribute('aria-pressed',String(selected));button.querySelector('.game-switch-hint').textContent=selected?'Selected':'Tap to switch ↗';});}
+ function updateSelector(){const label=document.querySelector('#clipsGameFloat span');if(label)label.textContent=game==='overwatch'?'OVERWATCH':'PUBG';buttons.forEach(button=>{const selected=button.dataset.game===game;button.setAttribute('aria-pressed',String(selected));button.querySelector('.game-switch-hint').textContent=selected?'Selected':'Tap to switch ↗';});}
  function change(step){const list=playlists[game];if(!list.length)return;positions[game]=(positions[game]+step+list.length)%list.length;const clip=list[positions[game]];video.pause();video.querySelector('source').src=clip.src;video.setAttribute('aria-label',clip.name);video.dataset.clipId=clip.id;video.dataset.game=game;video.load();document.getElementById('clipsCurrent').textContent=(positions[game]+1)+' of '+list.length;document.getElementById('clipsSeek').value=0;if(document.body.classList.contains('clips-mode'))video.play().catch(()=>{});}
  function select(next){if(!(next in playlists)||next===game)return;game=next;video.dataset.game=game;const hasClips=playlists[game].length>0;empty.hidden=hasClips;video.hidden=!hasClips;controls.forEach(control=>{control.disabled=!hasClips;});updateSelector();if(hasClips)change(0);else{video.pause();video.querySelector('source').removeAttribute('src');video.removeAttribute('src');video.load();document.getElementById('clipsCurrent').textContent='OVERWATCH';document.getElementById('clipsTime').textContent='Clips coming soon';document.getElementById('clipsProgress').style.strokeDasharray='0 100';}}
  selector.addEventListener('click',event=>{const button=event.target.closest('[data-game]');if(button){event.stopPropagation();select(button.dataset.game);}});
@@ -10825,6 +10822,12 @@ document.addEventListener('DOMContentLoaded',()=>{
  redraw();choose(0);body.classList.remove('legal-mode');window.eyeotaNavigate?.('clips');
 });
 
+</script>
+<script id="eyeota-legal-direct-link">
+document.addEventListener('DOMContentLoaded',()=>{
+ function openLinkedPage(){if(location.hash.toLowerCase()==='#legal'&&typeof window.eyeotaNavigate==='function')window.eyeotaNavigate('legal')}
+ window.addEventListener('hashchange',openLinkedPage);openLinkedPage();
+});
 </script>
 </body>
 </html>
