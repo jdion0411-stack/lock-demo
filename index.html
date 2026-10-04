@@ -6571,7 +6571,13 @@ checkUnlock();
  document.getElementById('clearWriting')?.addEventListener('click',()=>{if(editor&&confirm('Clear the writing pad?')){editor.innerHTML='';safeStore.remove('eyeotaRhymeWriting');updateCount();}});
  document.getElementById('saveWriting')?.addEventListener('click',()=>{
    if(!editor)return;
-   const doc='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+safeWriting(editor.innerHTML)+'</div></body></html>';
+   const doc='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+safeWriting(editor.innerHTML)+'</div><script id="eyeota-legal-direct-link">
+document.addEventListener('DOMContentLoaded',()=>{
+ function openLinkedPage(){if(location.hash.toLowerCase()==='#legal'&&typeof window.eyeotaNavigate==='function')window.eyeotaNavigate('legal')}
+ window.addEventListener('hashchange',openLinkedPage);openLinkedPage();
+});
+</script>
+</body></html>';
    const blob=new Blob([doc],{type:'text/html;charset=utf-8'}), url=URL.createObjectURL(blob), a=document.createElement('a');
    a.href=url;a.download='EYEOTA-Rhyme-Dial-Writing.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);if(status)status.textContent='Document saved';
  });
