@@ -10574,6 +10574,29 @@ body.eye-test-mode #eyeotaRhymeFeaturedVideo,body.smdial-mode #eyeotaRhymeFeatur
 #eyeotaRhymeFeaturedVideo p{font:12px/1.6 Arial,sans-serif;margin:10px 0;padding:8px 12px;background:rgba(0,0,0,.75);border-radius:8px}
 #eyeotaRhymeFeaturedVideo a{color:#a5e7ff;text-decoration:underline}
 </style>
+<section id="eyeotaRhymeFeaturedVideo" aria-label="Rhyme Dial featured video">
+ <h3>Rhyme Dial featured video</h3>
+ <iframe title="Rhyme Dial featured video on YouTube" data-rhyme-video-src="https://www.youtube-nocookie.com/embed/eL_FLXC9r9w?rel=0&amp;playsinline=1" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+ <p>YouTube disclosure: This third-party video is embedded through YouTube. Video and music belong to their respective owners. EYEOTA claims no ownership, affiliation, or endorsement. Playing it connects to YouTube, which may collect viewing information. <a href="https://youtu.be/eL_FLXC9r9w" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></p>
+</section>
+<style id="eyeota-rhyme-video-responsive">
+#eyeotaRhymeFeaturedVideo iframe{height:auto;aspect-ratio:16/9}
+body.eyeota-dial-minimized #eyeotaRhymeFeaturedVideo{display:none!important}
+</style>
+<script id="eyeota-rhyme-video-playback">
+(()=>{
+ const frame=document.querySelector('#eyeotaRhymeFeaturedVideo iframe');
+ function sync(){
+  const active=document.body.classList.contains('rhyme-mode');
+  if(active){if(!frame.hasAttribute('src'))frame.setAttribute('src',frame.dataset.rhymeVideoSrc);}
+  else frame.removeAttribute('src');
+ }
+ document.body.addEventListener('eyeota-mode-change',sync);
+ new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});
+ sync();
+})();
+</script>
+
 
 
 
