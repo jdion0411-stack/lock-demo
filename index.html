@@ -3364,7 +3364,7 @@ body.clips-mode #eyeotaClipsOwnership{display:block!important}
             </h1>
 
             <p>DOCUMENT SOLUTIONS</p>
-            <nav class="eyeota-feature-line" aria-label="Explore EYEOTA pages"><button type="button" id="eyeotaClipsShortcut" data-eyeota-mode="clips">CLIPS</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="lock">MUSIC LOCK</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="rhyme">RHYME DIAL</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="eye">EYE TEST</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="smdial">EYEOTA KEYBOARD</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="desktop">DESKTOP</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="browser">EYEOTA BROWSER</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="notes">MUSICAL CIPHER</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="legal">LEGAL DOCUMENT TRACKING ✝</button><span aria-hidden="true">•</span><a href="#eyeota-qr" style="color:#f6dba3;font-size:12px;padding:8px;text-decoration:none">EYEOTA QR CODE</a></nav><p class="eyeota-navigation-hint">Explore the other dials — tap a page above or use the glowing arrows.</p>
+            <nav class="eyeota-feature-line" aria-label="Explore EYEOTA pages"><button type="button" id="eyeotaClipsShortcut" data-eyeota-mode="clips">CLIPS</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="lock">MUSIC LOCK</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="rhyme">RHYME DIAL</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="eye">EYE TEST</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="smdial">EYEOTA KEYBOARD</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="desktop">DESKTOP</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="browser">EYEOTA BROWSER</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="notes">MUSICAL CIPHER</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="legal">LEGAL DOCUMENT TRACKING ✝</button> <span aria-hidden="true">•</span> <button type="button" data-eyeota-mode="qr">EYEOTA QR CODE</button></nav><p class="eyeota-navigation-hint">Explore the other dials — tap a page above or use the glowing arrows.</p>
 <div class="eyeota-wip-disclaimer">
   <strong>EYEOTA MOVING-LETTER EYE TEST — WORK IN PROGRESS</strong><br>
   This research/development project explores whether a circular moving-letter interface may be useful for vision testing. It is not a medical device, clinic, diagnosis, prescription, or substitute for an examination by a licensed eye-care professional. The creator is not a doctor or clinic. Prototype results must not be interpreted as a medical diagnosis.
@@ -6594,62 +6594,7 @@ checkUnlock();
  document.getElementById('clearWriting')?.addEventListener('click',()=>{if(editor&&confirm('Clear the writing pad?')){editor.innerHTML='';safeStore.remove('eyeotaRhymeWriting');updateCount();}});
  document.getElementById('saveWriting')?.addEventListener('click',()=>{
    if(!editor)return;
-   const doc='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+safeWriting(editor.innerHTML)+'</div><script>
-/* Sun / altar tab icon. No record totals are included in this artwork. */
-(()=>{
- const link=document.getElementById('eyeotaTabIcon'), art=new Image();
- const canvas=document.createElement('canvas');canvas.width=canvas.height=128;
- const ctx=canvas.getContext('2d');if(!ctx)return;
- const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');let frame=0,timer=null;
- function draw(){
-  ctx.clearRect(0,0,128,128);ctx.save();ctx.translate(64,64);
-  const phase=reduce.matches?0:frame++*.18;
-  ctx.rotate(Math.sin(phase)*.025);const scale=1+Math.sin(phase)*.014;
-  ctx.scale(scale,scale);ctx.drawImage(art,-64,-64,128,128);ctx.restore();
-  link.type='image/png';link.href=canvas.toDataURL('image/png');
- }
- function schedule(){clearInterval(timer);timer=null;draw();if(!document.hidden&&!reduce.matches)timer=setInterval(draw,500);}
- art.onload=()=>{schedule();document.addEventListener('visibilitychange',schedule);reduce.addEventListener('change',schedule);};
- art.src=link.href;
-})();
-</script>
-<div id="eyeota-qr">
-<style>
-#eyeota-qr{scroll-margin-top:24px;margin:32px auto;position:relative;z-index:2;padding:16px 8px;display:grid;place-items:center;font-family:Arial,sans-serif}
-#eyeota-qr .stage{background:radial-gradient(circle,#192c4a,#050a16);border-radius:24px;width:min(100%,520px);padding:22px 12px;box-sizing:border-box;display:grid;justify-items:center;gap:16px;color:#f6dba3}
-#eyeota-qr canvas{width:100%;max-width:450px;aspect-ratio:1;display:block}
-#eyeota-qr button{font:inherit;background:#e8b653;color:#22180d;border:0;border-radius:24px;min-height:44px;padding:12px 24px}
-#eyeota-qr .status{font-size:14px;min-height:20px}
-</style>
-<div class="stage"><h2 style="font-size:20px;letter-spacing:2px;margin:0">EYEOTA QR Code</h2><canvas aria-label="Moving QR pieces orbiting in a circular dial, then assembling into a code" role="img"></canvas><button class="cursor-interaction" type="button" aria-pressed="false">Summon QR code</button><div class="status" aria-live="polite">Orbiting</div></div>
-<script>
-(()=>{
-const root=document.getElementById('eyeota-qr'),canvas=root.querySelector('canvas'),ctx=canvas.getContext('2d'),button=root.querySelector('button'),status=root.querySelector('.status');
-const matrix=[[true,true,true,true,true,true,true,false,true,true,true,false,false,true,false,false,false,true,true,false,false,true,true,true,false,true,false,false,true,false,true,true,true,true,true,true,true],[true,false,false,false,false,false,true,false,true,false,false,true,false,false,false,true,true,false,true,true,true,false,false,true,true,false,true,true,true,false,true,false,false,false,false,false,true],[true,false,true,true,true,false,true,false,true,true,true,true,false,true,false,true,true,false,true,false,false,true,true,false,false,false,false,true,false,false,true,false,true,true,true,false,true],[true,false,true,true,true,false,true,false,false,true,false,true,true,false,false,true,true,false,false,false,false,false,true,false,false,true,true,true,false,false,true,false,true,true,true,false,true],[true,false,true,true,true,false,true,false,false,true,true,false,true,true,true,true,false,false,true,true,false,false,true,true,false,false,true,false,false,false,true,false,true,true,true,false,true],[true,false,false,false,false,false,true,false,true,false,false,true,true,false,false,false,true,true,false,false,false,true,false,false,false,false,false,true,true,false,true,false,false,false,false,false,true],[true,true,true,true,true,true,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,true,true,true,true,true,true],[false,false,false,false,false,false,false,false,true,true,true,false,true,false,true,false,false,false,true,false,false,false,false,false,true,false,true,false,true,false,false,false,false,false,false,false,false],[false,false,true,true,true,false,true,false,true,true,false,true,true,false,false,true,false,true,false,true,true,true,true,false,true,false,false,false,false,true,true,true,false,false,true,true,true],[true,false,true,true,true,true,false,true,true,true,false,true,false,false,false,true,true,true,false,false,true,false,true,false,true,true,true,true,true,false,false,true,false,false,true,false,false],[true,false,false,false,false,true,true,true,true,false,false,false,true,false,false,true,true,false,true,true,true,true,true,false,true,true,true,false,false,false,true,true,true,true,true,true,true],[false,false,false,true,false,false,false,false,false,false,false,false,true,false,false,true,false,true,true,true,true,true,true,true,true,false,true,false,true,false,true,false,false,false,false,true,true],[false,true,false,false,true,false,true,false,false,false,false,true,true,false,false,true,false,true,false,true,true,false,false,true,true,true,true,false,false,true,true,true,true,false,true,true,true],[false,false,false,true,false,true,false,true,true,true,true,false,false,false,true,false,false,false,true,false,true,true,true,false,false,false,true,false,true,true,false,true,false,true,true,false,false],[true,false,true,false,false,false,true,false,false,true,false,false,true,true,true,true,true,false,false,true,false,false,false,true,true,false,true,true,true,true,true,false,true,true,false,false,true],[true,true,true,false,false,false,false,true,true,false,true,false,true,false,false,false,true,true,true,true,true,false,true,true,true,false,false,false,true,true,true,true,true,false,false,true,false],[false,false,false,false,true,false,true,true,true,true,false,true,false,false,true,true,true,false,true,true,true,false,false,true,false,true,true,false,false,true,true,false,true,false,true,true,true],[true,true,false,false,false,true,false,true,false,false,true,true,true,true,true,false,true,false,true,false,true,true,false,true,true,false,false,false,true,false,false,true,false,false,true,false,false],[false,false,true,true,true,false,true,false,true,true,false,true,true,false,true,false,false,false,true,false,true,false,true,false,true,false,true,true,false,true,true,true,false,true,true,true,true],[true,false,false,true,true,true,false,true,false,true,true,true,true,false,false,true,false,false,true,false,false,false,false,false,true,false,true,true,true,false,true,false,true,false,false,true,false],[true,true,false,true,false,true,true,true,true,false,false,true,false,true,true,false,false,false,false,false,true,false,true,false,true,true,true,true,false,true,true,true,true,true,true,true,true],[false,false,false,true,false,true,false,false,false,false,true,true,false,true,true,true,true,false,false,true,false,true,true,false,false,true,true,false,false,true,false,true,false,false,true,false,false],[true,true,false,false,true,false,true,true,false,false,false,true,true,true,false,true,false,false,false,true,true,false,true,false,true,true,true,true,false,true,false,false,false,false,false,true,true],[false,false,true,true,true,true,false,false,false,true,true,false,false,false,false,true,false,true,true,false,false,true,false,true,false,true,false,false,false,true,false,true,false,false,false,true,false],[false,true,true,false,true,true,true,true,true,true,true,false,true,true,false,true,false,false,false,false,true,false,false,true,true,false,true,false,false,true,true,false,true,true,true,true,false],[true,false,true,true,true,true,false,false,false,false,true,true,true,false,false,true,true,false,true,false,false,false,false,false,false,false,false,true,false,false,false,true,false,true,false,true,false],[true,false,false,false,false,true,true,true,false,true,false,false,true,true,true,true,true,true,false,true,true,false,false,true,true,true,true,true,true,false,true,false,true,false,true,true,true],[true,false,false,true,false,false,false,true,false,false,false,false,true,false,false,true,false,true,false,false,true,true,false,true,false,false,true,true,true,true,false,true,true,true,false,true,false],[true,false,true,true,true,false,true,false,true,false,true,false,true,true,false,true,true,false,true,false,true,true,false,true,true,true,true,false,true,true,true,true,true,true,true,false,true],[false,false,false,false,false,false,false,false,true,true,false,true,false,false,true,true,false,false,false,true,false,false,true,true,false,true,true,true,true,false,false,false,true,false,false,true,false],[true,true,true,true,true,true,true,false,false,false,false,true,false,true,false,false,false,false,true,false,true,true,false,false,false,true,true,false,true,false,true,false,true,true,false,true,true],[true,false,false,false,false,false,true,false,false,false,true,true,false,true,false,true,true,false,false,true,false,false,false,false,true,false,true,false,true,false,false,false,true,false,false,true,false],[true,false,true,true,true,false,true,false,true,false,true,false,false,true,false,false,true,false,false,false,true,false,true,true,false,true,true,true,true,true,true,true,true,false,true,true,true],[true,false,true,true,true,false,true,false,true,false,false,false,false,false,true,true,false,false,false,true,true,true,false,false,true,false,false,false,true,false,true,false,true,false,false,false,false],[true,false,true,true,true,false,true,false,true,true,true,false,true,true,false,true,true,true,true,true,true,false,false,false,false,false,true,true,false,true,false,true,false,false,false,false,true],[true,false,false,false,false,false,true,false,false,false,true,false,true,false,false,true,false,false,false,false,false,false,true,false,true,false,false,false,true,true,false,true,false,false,false,false,true],[true,true,true,true,true,true,true,false,false,false,true,false,false,false,true,true,false,false,false,true,false,true,true,false,true,true,true,false,false,true,false,true,false,false,true,true,true]],n=matrix.length,points=[];const cell=5.8;
-for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(matrix[y][x])points.push({qx:(x-(n-1)/2)*cell,qy:(y-(n-1)/2)*cell,extra:false});
-// Decorative modules finish the circular silhouette outside the preserved quiet zone.
-for(let y=-31;y<=31;y++)for(let x=-31;x<=31;x++){const px=x*cell,py=y*cell,r=Math.hypot(px,py);if(r<178&&r>115&&(Math.abs(px)>n*cell/2+26||Math.abs(py)>n*cell/2+26)&&((x*17+y*29)%7+7)%7<3)points.push({qx:px,qy:py,extra:true});}
-points.forEach((p,i)=>{p.angle=i*2.399963;p.radius=35+Math.sqrt((i+.5)/points.length)*140;p.speed=(i%6%2? -1:1)*(.10+(i%6)*.025);p.x=0;p.y=0});
-let target=false,progress=0,last=0,clock=0,from=null,start=0;
-const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-function toggle(){target=!target;from=points.map(p=>({x:p.x,y:p.y}));start=performance.now();button.textContent=target?'Release into orbit':'Summon QR code';button.setAttribute('aria-pressed',String(target));status.textContent=target?'Assembling…':'Returning to orbit…';}
-button.addEventListener('click',toggle);
-let visible=true;new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;}).observe(canvas);
-function draw(time){if(!visible){last=time;requestAnimationFrame(draw);return;}const dt=last?Math.min((time-last)/1000,.05):0;last=time;if(!reduced)clock+=dt;const t=from?Math.min(1,(time-start)/(reduced?1:2300)):1,e=t*t*(3-2*t);progress+=(Number(target)-progress)*Math.min(1,dt*4);
-const size=canvas.clientWidth,dpr=Math.min(devicePixelRatio||1,2);if(canvas.width!==Math.round(size*dpr)){canvas.width=Math.round(size*dpr);canvas.height=canvas.width}ctx.setTransform(canvas.width/450,0,0,canvas.height/450,canvas.width/2,canvas.height/2);ctx.clearRect(-225,-225,450,450);
-ctx.fillStyle=`rgba(255,253,245,${progress})`;ctx.beginPath();ctx.arc(0,0,188,0,Math.PI*2);ctx.fill();
-ctx.strokeStyle='#b98335';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(0,0,194,0,Math.PI*2);ctx.stroke();
-for(let j=0;j<points.length;j++){const p=points[j],a=p.angle+clock*p.speed,ox=Math.cos(a)*p.radius,oy=Math.sin(a)*p.radius;const tx=target?p.qx:ox,ty=target?p.qy:oy;p.x=from?from[j].x+(tx-from[j].x)*e:tx;p.y=from?from[j].y+(ty-from[j].y)*e:ty;
-const gold=[237,185,77],ink=[16,28,50];ctx.fillStyle=`rgb(${gold.map((v,i)=>Math.round(v+(ink[i]-v)*progress)).join(',')})`;ctx.save();ctx.translate(p.x,p.y);ctx.rotate((1-progress)*(a*.3));const s=cell*(target?.98:.66);ctx.fillRect(-s/2,-s/2,s,s);ctx.restore();}
-if(progress<.98){ctx.globalAlpha=1-progress;ctx.fillStyle='#f7d889';ctx.font='500 15px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('EYEOTA',0,0);ctx.globalAlpha=1;}
-if(from&&t===1){from=null;status.textContent=target?'Ready to scan':'Orbiting';}if(target&&!from)points.forEach(p=>{p.x=p.qx;p.y=p.qy});
-requestAnimationFrame(draw);
-}requestAnimationFrame(draw);
-})();
-</script>
-</div>
-
-</body></html>';
+   const doc='<!doctype html><html><head><meta charset="utf-8"><title>EYEOTA Rhyme Dial Writing</title></head><body><div style="max-width:850px;margin:40px auto;font-family:Arial,sans-serif;line-height:1.6">'+safeWriting(editor.innerHTML)+'</div></bo'+'dy></html>';
    const blob=new Blob([doc],{type:'text/html;charset=utf-8'}), url=URL.createObjectURL(blob), a=document.createElement('a');
    a.href=url;a.download='EYEOTA-Rhyme-Dial-Writing.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);if(status)status.textContent='Document saved';
  });
@@ -6914,7 +6859,7 @@ document.addEventListener('DOMContentLoaded',function(){
 document.addEventListener('DOMContentLoaded',function(){
   const chip=document.getElementById('modeChip');
   if(!chip)return;
-  function syncModeChip(){if(document.body.classList.contains('legal-mode')){chip.textContent='Legal Document Tracking ✝';return;}if(document.body.classList.contains('clips-mode')){chip.textContent='Clips';return;}
+  function syncModeChip(){if(document.body.classList.contains('qr-mode')){chip.textContent='EYEOTA QR Code';return;}if(document.body.classList.contains('legal-mode')){chip.textContent='Legal Document Tracking ✝';return;}if(document.body.classList.contains('clips-mode')){chip.textContent='Clips';return;}
     if(document.body.classList.contains('eb-browser-mode')){chip.textContent='EYEOTA Browser';
     }else if(document.body.classList.contains('note-cipher-mode')){
       chip.textContent='Musical Cipher';
@@ -7009,7 +6954,7 @@ document.addEventListener('DOMContentLoaded',function(){
   const chip=document.getElementById('modeChip');
   if(!dial || !leftArrow || !rightArrow) return;
 
-  const order=['clips','lock','rhyme','eye','smdial','desktop','browser','notes','legal'];
+  const order=['clips','lock','rhyme','eye','smdial','desktop','browser','notes','legal','qr'];
   let current='clips';
   const letters=Array.from(dial.querySelectorAll('.letter'));
   const originals=letters.map(el=>({
@@ -7094,7 +7039,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
     if(mode!=='smdial' && mode!=='desktop') restoreLetters();
 
-    body.classList.remove('rhyme-mode','eye-test-mode','smdial-mode','desktop-mode','note-cipher-mode','social-link-concept','eb-browser-mode','clips-mode','legal-mode');
+    body.classList.remove('rhyme-mode','eye-test-mode','smdial-mode','desktop-mode','note-cipher-mode','social-link-concept','eb-browser-mode','clips-mode','legal-mode','qr-mode');
 
     if(mode==='rhyme') body.classList.add('rhyme-mode');
     if(mode==='smdial') body.classList.add('smdial-mode');
@@ -7103,6 +7048,7 @@ document.addEventListener('DOMContentLoaded',function(){
     if(mode==='notes') body.classList.add('note-cipher-mode');
     if(mode==='clips') body.classList.add('clips-mode');
     if(mode==='legal') body.classList.add('legal-mode');
+    if(mode==='qr') body.classList.add('qr-mode');
 
     if(mode==='smdial'){
       socialLetters();
@@ -7126,6 +7072,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
     if(chip){
       chip.textContent=
+        mode==='qr'?'EYEOTA QR Code':
         mode==='rhyme'?'Rhyme Dial':
         mode==='eye'?'Eye Test':
         mode==='smdial'?'EYEOTA KEYBOARD':
@@ -7134,7 +7081,7 @@ document.addEventListener('DOMContentLoaded',function(){
         mode==='notes'?'Musical Cipher':mode==='clips'?'Clips':mode==='legal'?'Legal Document Tracking ✝':'Music Lock';
     }
 
-    const names={lock:'Music Lock',rhyme:'Rhyme Dial',eye:'Eye Test',smdial:'EYEOTA KEYBOARD',desktop:'EYEOTA Desktop',browser:'EYEOTA Browser',notes:'Musical Cipher',clips:'Clips',legal:'Legal Document Tracking ✝'};
+    const names={lock:'Music Lock',rhyme:'Rhyme Dial',eye:'Eye Test',smdial:'EYEOTA KEYBOARD',desktop:'EYEOTA Desktop',browser:'EYEOTA Browser',notes:'Musical Cipher',clips:'Clips',legal:'Legal Document Tracking ✝',qr:'EYEOTA QR Code'};
     const position=order.indexOf(mode);
     [[leftArrow,-1],[rightArrow,1]].forEach(([button,direction])=>{
       const destination=order[(position+direction+order.length)%order.length];
@@ -7155,7 +7102,7 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 
   /* One document-level controller runs before legacy target handlers. */
-  function visibleMode(){if(document.body.classList.contains('legal-mode'))return 'legal';if(body.classList.contains('clips-mode'))return 'clips';
+  function visibleMode(){if(document.body.classList.contains('qr-mode'))return 'qr';if(document.body.classList.contains('legal-mode'))return 'legal';if(body.classList.contains('clips-mode'))return 'clips';
     if(body.classList.contains('eb-browser-mode'))return 'browser';
     if(body.classList.contains('note-cipher-mode'))return 'notes';
     if(body.classList.contains('desktop-mode'))return 'desktop';
@@ -10452,8 +10399,8 @@ body.eb-browser-mode.ebMinimized.ebClosedSun #ebRestore:before,body.eb-browser-m
 <button id="eyeotaBuildNoticeRestore" type="button" hidden aria-label="Show development notice">Development notice</button>
 <script id="eyeota-mode-notices-and-close-to-sun">
 document.addEventListener('DOMContentLoaded',()=>{
-const body=document.body,notice=document.getElementById('eyeotaBuildNotice'),restore=document.getElementById('eyeotaBuildNoticeRestore'),title=document.getElementById('eyeotaBuildNoticeTitle');const names={lock:'EYEOTA Lock',rhyme:'Rhyme Dial',eye:'Eye Test',smdial:'EYEOTA KEYBOARD',desktop:'EYEOTA Desktop',browser:'EYEOTA Browser',notes:'Musical Cipher',clips:'Clips',legal:'Legal Document Tracking ✝'};let mode='lock';const closed=new Set();try{const saved=JSON.parse(sessionStorage.getItem('eyeota-development-notices')||'[]');if(Array.isArray(saved))saved.forEach(x=>closed.add(x))}catch{}
-function visibleMode(){if(document.body.classList.contains('legal-mode'))return 'legal';if(body.classList.contains('clips-mode'))return 'clips';if(body.classList.contains('eb-browser-mode'))return 'browser';if(body.classList.contains('note-cipher-mode'))return 'notes';if(body.classList.contains('desktop-mode'))return 'desktop';if(body.classList.contains('smdial-mode'))return 'smdial';if(body.classList.contains('eye-test-mode'))return 'eye';if(body.classList.contains('rhyme-mode'))return 'rhyme';return 'lock'}
+const body=document.body,notice=document.getElementById('eyeotaBuildNotice'),restore=document.getElementById('eyeotaBuildNoticeRestore'),title=document.getElementById('eyeotaBuildNoticeTitle');const names={lock:'EYEOTA Lock',rhyme:'Rhyme Dial',eye:'Eye Test',smdial:'EYEOTA KEYBOARD',desktop:'EYEOTA Desktop',browser:'EYEOTA Browser',notes:'Musical Cipher',clips:'Clips',legal:'Legal Document Tracking ✝',qr:'EYEOTA QR Code'};let mode='lock';const closed=new Set();try{const saved=JSON.parse(sessionStorage.getItem('eyeota-development-notices')||'[]');if(Array.isArray(saved))saved.forEach(x=>closed.add(x))}catch{}
+function visibleMode(){if(document.body.classList.contains('qr-mode'))return 'qr';if(document.body.classList.contains('legal-mode'))return 'legal';if(body.classList.contains('clips-mode'))return 'clips';if(body.classList.contains('eb-browser-mode'))return 'browser';if(body.classList.contains('note-cipher-mode'))return 'notes';if(body.classList.contains('desktop-mode'))return 'desktop';if(body.classList.contains('smdial-mode'))return 'smdial';if(body.classList.contains('eye-test-mode'))return 'eye';if(body.classList.contains('rhyme-mode'))return 'rhyme';return 'lock'}
 function refresh(){mode=visibleMode();title.textContent=names[mode]+' · In development';notice.querySelector('p').textContent=(mode==='smdial'?'This keyboard':'This dial')+' is still being built and worked on. Features and design will continue to evolve.';notice.setAttribute('aria-label',mode==='smdial'?'Keyboard development notice':'Dial development notice');notice.hidden=closed.has(mode);restore.hidden=!closed.has(mode);restore.title='Show '+names[mode]+' development notice'}
 function save(){try{sessionStorage.setItem('eyeota-development-notices',JSON.stringify([...closed]))}catch{}}
 document.getElementById('eyeotaBuildNoticeClose').onclick=()=>{closed.add(mode);save();refresh();restore.focus()};restore.onclick=()=>{closed.delete(mode);save();refresh();document.getElementById('eyeotaBuildNoticeClose').focus()};body.addEventListener('eyeota-mode-change',()=>{if(!body.classList.contains('eb-browser-mode')&&body.classList.contains('ebClosedSun'))body.classList.remove('ebClosedSun');refresh()});refresh();
@@ -11125,13 +11072,13 @@ body.legal-mode #legalMusicalDialSection:not([hidden]){display:block}
 #legalMusicalDialSection .legal-musical-dial-center{display:none}
 </style><div id="eyeota-qr">
 <style>
-#eyeota-qr{scroll-margin-top:24px;margin:32px auto;position:relative;z-index:2;padding:16px 8px;display:grid;place-items:center;font-family:Arial,sans-serif}
+#eyeota-qr{padding:16px 8px;display:grid;place-items:center;font-family:Arial,sans-serif}
 #eyeota-qr .stage{background:radial-gradient(circle,#192c4a,#050a16);border-radius:24px;width:min(100%,520px);padding:22px 12px;box-sizing:border-box;display:grid;justify-items:center;gap:16px;color:#f6dba3}
 #eyeota-qr canvas{width:100%;max-width:450px;aspect-ratio:1;display:block}
 #eyeota-qr button{font:inherit;background:#e8b653;color:#22180d;border:0;border-radius:24px;min-height:44px;padding:12px 24px}
 #eyeota-qr .status{font-size:14px;min-height:20px}
 </style>
-<div class="stage"><h2 style="font-size:20px;letter-spacing:2px;margin:0">EYEOTA QR Code</h2><canvas aria-label="Moving QR pieces orbiting in a circular dial, then assembling into a code" role="img"></canvas><button class="cursor-interaction" type="button" aria-pressed="false">Summon QR code</button><div class="status" aria-live="polite">Orbiting</div></div>
+<div class="stage"><canvas aria-label="Moving QR pieces orbiting in a circular dial, then assembling into a code" role="img"></canvas><button class="cursor-interaction" type="button" aria-pressed="false">Summon QR code</button><div class="status" aria-live="polite">Orbiting</div></div>
 <script>
 (()=>{
 const root=document.getElementById('eyeota-qr'),canvas=root.querySelector('canvas'),ctx=canvas.getContext('2d'),button=root.querySelector('button'),status=root.querySelector('.status');
@@ -11144,8 +11091,8 @@ let target=false,progress=0,last=0,clock=0,from=null,start=0;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function toggle(){target=!target;from=points.map(p=>({x:p.x,y:p.y}));start=performance.now();button.textContent=target?'Release into orbit':'Summon QR code';button.setAttribute('aria-pressed',String(target));status.textContent=target?'Assembling…':'Returning to orbit…';}
 button.addEventListener('click',toggle);
-let visible=true;new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;}).observe(canvas);
-function draw(time){if(!visible){last=time;requestAnimationFrame(draw);return;}const dt=last?Math.min((time-last)/1000,.05):0;last=time;if(!reduced)clock+=dt;const t=from?Math.min(1,(time-start)/(reduced?1:2300)):1,e=t*t*(3-2*t);progress+=(Number(target)-progress)*Math.min(1,dt*4);
+let visible=false;new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;}).observe(canvas);
+function draw(time){if(!visible||document.hidden){last=time;requestAnimationFrame(draw);return;}const dt=last?Math.min((time-last)/1000,.05):0;last=time;if(!reduced)clock+=dt;const t=from?Math.min(1,(time-start)/(reduced?1:2300)):1,e=t*t*(3-2*t);progress+=(Number(target)-progress)*Math.min(1,dt*4);
 const size=canvas.clientWidth,dpr=Math.min(devicePixelRatio||1,2);if(canvas.width!==Math.round(size*dpr)){canvas.width=Math.round(size*dpr);canvas.height=canvas.width}ctx.setTransform(canvas.width/450,0,0,canvas.height/450,canvas.width/2,canvas.height/2);ctx.clearRect(-225,-225,450,450);
 ctx.fillStyle=`rgba(255,253,245,${progress})`;ctx.beginPath();ctx.arc(0,0,188,0,Math.PI*2);ctx.fill();
 ctx.strokeStyle='#b98335';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(0,0,194,0,Math.PI*2);ctx.stroke();
@@ -11158,6 +11105,21 @@ requestAnimationFrame(draw);
 })();
 </script>
 </div>
-
-</body>
+<style id="eyeota-qr-mode-styles">
+#eyeota-qr{display:none!important;box-sizing:border-box;width:100%;padding:30px 8px 8px!important}
+body.qr-mode #eyeota-qr{display:grid!important}
+body.qr-mode #dialStage{width:min(94vw,560px)!important;height:auto!important;min-height:520px;position:relative!important;margin:30px auto!important;}
+body.qr-mode #dialStage > :not(#eyeota-qr):not(#modeChip):not(#eyeModeArrow):not(#dialModeArrow){display:none!important}
+body.qr-mode #mainLayout > :not(#dialStage):not(.brand):not(#eyeotaBrandNavigation){display:none!important}
+body.qr-mode .brand{display:block!important;grid-column:1/-1}
+body.qr-mode #musicLockDisclosure,body.qr-mode .eyeota-wip-disclaimer,body.qr-mode #eyeotaBuildNotice,body.qr-mode #eyeotaBuildNoticeRestore{display:none!important}
+body.qr-mode #modeChip{display:block!important;top:-12px!important}
+body.qr-mode #eyeModeArrow,body.qr-mode #dialModeArrow{display:flex!important;visibility:visible!important;z-index:20!important;top:50%!important}
+#eyeota-qr .stage{background:transparent!important;border-radius:0!important;padding:0 26px!important;width:100%!important}
+#eyeota-qr canvas{max-width:450px}
+@media(max-width:600px){body.qr-mode #dialStage{min-height:0}body.qr-mode #eyeModeArrow{left:0!important}body.qr-mode #dialModeArrow{right:0!important}}
+</style>
+<script id="eyeota-qr-navigation">
+(()=>{const panel=document.getElementById('eyeota-qr');document.getElementById('dialStage').appendChild(panel);function open(){if(location.hash.toLowerCase()==='#eyeota-qr'){window.eyeotaNavigate('qr');document.getElementById('dialStage').scrollIntoView({block:'start'});}}window.addEventListener('hashchange',open);open();})();
+</script></body>
 </html>
