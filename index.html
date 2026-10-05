@@ -10647,8 +10647,24 @@ document.addEventListener('DOMContentLoaded',()=>{
  const selector=document.getElementById('eyeotaGameSelector');
  const empty=document.createElement('div');empty.id='eyeotaOverwatchEmpty';empty.hidden=true;empty.setAttribute('role','status');empty.innerHTML='<strong>OVERWATCH</strong><span>Clips coming soon</span><small>Choose PUBG to keep watching</small>';scene.appendChild(empty);
  const buttons=[...selector.querySelectorAll('button')],controls=['clipsPrevious','clipsNext','clipsPlay','clipsSound'].map(id=>document.getElementById(id));
- function position(){const w=dial.offsetWidth,h=dial.offsetHeight;selector.style.setProperty('--game-orbit-size',(w+58)+'px');selector.style.setProperty('--game-center-x',(dial.offsetLeft+w/2)+'px');selector.style.setProperty('--game-center-y',(dial.offsetTop+h/2)+'px');}
- new ResizeObserver(position).observe(dial);window.addEventListener('resize',position);position();
+ function position(){
+  if(!document.body.classList.contains('clips-mode')||document.hidden)return;
+  const parent=selector.offsetParent;if(!parent)return;
+  const d=dial.getBoundingClientRect(),p=parent.getBoundingClientRect();
+  if(d.width<=0||d.height<=0||p.width<=0||p.height<=0)return;
+  const sx=p.width/(parent.offsetWidth||p.width),sy=p.height/(parent.offsetHeight||p.height);
+  selector.style.setProperty('--game-orbit-size',(d.width/sx+58)+'px');
+  selector.style.setProperty('--game-center-x',((d.left+d.width/2-p.left)/sx-parent.clientLeft+parent.scrollLeft)+'px');
+  selector.style.setProperty('--game-center-y',((d.top+d.height/2-p.top)/sy-parent.clientTop+parent.scrollTop)+'px');
+ }
+ let positionFrame=0;
+ function schedulePosition(){cancelAnimationFrame(positionFrame);positionFrame=requestAnimationFrame(()=>{position();positionFrame=requestAnimationFrame(position);});}
+ const gameResize=new ResizeObserver(schedulePosition);gameResize.observe(dial);gameResize.observe(stage);
+ document.body.addEventListener('eyeota-mode-change',schedulePosition);
+ new MutationObserver(schedulePosition).observe(document.body,{attributes:true,attributeFilter:['class']});
+ document.addEventListener('visibilitychange',schedulePosition);window.addEventListener('pageshow',schedulePosition);
+ window.addEventListener('resize',schedulePosition);window.addEventListener('focus',schedulePosition);
+ schedulePosition();
  function updateSelector(){buttons.forEach(button=>{const selected=button.dataset.game===game;button.setAttribute('aria-pressed',String(selected));button.querySelector('.game-switch-hint').textContent=selected?'Selected':'Tap to switch ↗';});}
  let loadTimer=null,loadSerial=0;const failed={pubg:new Set(),overwatch:new Set()};function change(step){clearTimeout(loadTimer);loadSerial++;const list=playlists[game];if(!list.length)return;positions[game]=(positions[game]+step+list.length)%list.length;const clip=list[positions[game]];empty.hidden=true;video.hidden=false;video.pause();video.removeAttribute('src');video.preload='auto';video.querySelector('source').src=clip.src;video.setAttribute('aria-label',clip.name);video.dataset.clipId=clip.id;video.dataset.game=game;video.load();const serial=loadSerial;loadTimer=setTimeout(()=>{if(serial===loadSerial&&document.body.classList.contains('clips-mode')&&video.readyState<2)skipFailed();},20000);document.getElementById('clipsCurrent').textContent=(positions[game]+1)+' of '+list.length;document.getElementById('clipsSeek').value=0;if(document.body.classList.contains('clips-mode'))video.play().catch(()=>{});}
  function select(next){if(!(next in playlists)||next===game)return;game=next;video.dataset.game=game;const hasClips=playlists[game].length>0;empty.hidden=hasClips;video.hidden=!hasClips;controls.forEach(control=>{control.disabled=!hasClips;});updateSelector();if(hasClips)change(0);else{video.pause();video.querySelector('source').removeAttribute('src');video.removeAttribute('src');video.load();document.getElementById('clipsCurrent').textContent='OVERWATCH';document.getElementById('clipsTime').textContent='Clips coming soon';document.getElementById('clipsProgress').style.strokeDasharray='0 100';}}
