@@ -3181,6 +3181,20 @@ body.rhyme-mode #dial .letter {width:clamp(25px,6.7%,40px);height:clamp(25px,6.7
 #eyeotaRhymeDigraphLines{display:none;position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:50;}
 body.rhyme-mode #eyeotaRhymeDigraphLines{display:block;}
 </style>
+<style id="eyeota-rhyme-mobile-multi-marker-spacing">
+@media(max-width:700px){
+ body.rhyme-mode #dial .letter[data-letter="B"]::after,
+ body.rhyme-mode #dial .letter[data-letter="B"]::before,
+ body.rhyme-mode #dial .letter[data-letter="P"]::after,
+ body.rhyme-mode #dial .letter[data-letter="P"]::before,
+ body.rhyme-mode #dial .letter[data-letter="D"]::after,
+ body.rhyme-mode #dial .letter[data-letter="D"]::before,
+ body.rhyme-mode #dial .letter[data-letter="T"]::after,
+ body.rhyme-mode #dial .letter[data-letter="T"]::before,
+ body.rhyme-mode #dial .letter[data-letter="L"]::after,
+ body.rhyme-mode #dial .letter[data-letter="L"]::before {width:12px!important;height:12px!important;}
+}
+</style>
 </head>
 
 <body class="clips-mode">
@@ -5075,7 +5089,7 @@ function applyRotation() {
                     letter.style.setProperty('--rhyme-marker-x', `calc(${50 + markerCos * 50}% + ${markerCos * 10}px)`);
                     letter.style.setProperty('--rhyme-marker-y', `calc(${50 + markerSin * 50}% + ${markerSin * 10}px)`);
                     if (['L', 'B', 'P', 'D', 'T'].includes(letter.dataset.letter)) {
-                        const pairDistance = window.innerWidth <= 700 ? 22 : 30;
+                        const pairDistance = window.innerWidth <= 700 ? 26 : 30;
                         letter.style.setProperty('--rhyme-pair-x', `calc(${50 + markerCos * 50}% + ${markerCos * pairDistance}px)`);
                         letter.style.setProperty('--rhyme-pair-y', `calc(${50 + markerSin * 50}% + ${markerSin * pairDistance}px)`);
                     }
@@ -10632,8 +10646,8 @@ body.eye-test-mode #eyeotaRhymeFeaturedVideo,body.smdial-mode #eyeotaRhymeFeatur
 </style>
 <section id="eyeotaRhymeFeaturedVideo" aria-label="Rhyme Dial featured video">
  <h3>Rhyme Dial featured video</h3>
- <iframe title="Rhyme Dial featured video on YouTube" data-rhyme-video-src="https://www.youtube-nocookie.com/embed/C2Mp48ccAqg?rel=0&amp;playsinline=1" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
- <p>YouTube disclosure: This third-party video is embedded through YouTube. Video and music belong to their respective owners. EYEOTA claims no ownership, affiliation, or endorsement. Playing it connects to YouTube, which may collect viewing information. <a href="https://youtu.be/C2Mp48ccAqg" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></p>
+ <iframe title="Rhyme Dial featured video on YouTube" data-rhyme-video-src="https://www.youtube-nocookie.com/embed/Yl_-3oSlWaU?rel=0&amp;playsinline=1" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+ <p>YouTube disclosure: This third-party video is embedded through YouTube. Video and music belong to their respective owners. EYEOTA claims no ownership, affiliation, or endorsement. Playing it connects to YouTube, which may collect viewing information. <a href="https://youtu.be/Yl_-3oSlWaU" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></p>
 </section>
 <style id="eyeota-rhyme-video-responsive">
 #eyeotaRhymeFeaturedVideo iframe{height:auto;aspect-ratio:16/9}
@@ -11247,7 +11261,7 @@ body.qr-mode #eyeModeArrow,body.qr-mode #dialModeArrow{display:flex!important;vi
  const ring=document.querySelector('#dial .inner-ring');if(!ring)return;
  let canvas;
  function draw(){
-  if(!canvas || !canvas.isConnected){canvas=document.createElement('canvas');canvas.id='eyeotaRhymeDigraphLines';canvas.setAttribute('role','img');canvas.setAttribute('aria-label','C H and S H pronunciation-dependent connections, each joined by two inner white lines and a gold hexagon labeled CH or SH');ring.appendChild(canvas);}
+  if(!canvas || !canvas.isConnected){canvas=document.createElement('canvas');canvas.id='eyeotaRhymeDigraphLines';canvas.setAttribute('role','img');canvas.setAttribute('aria-label','CH and SH joined by inner white lines and labeled gold hexagons; a smaller provisional ZH hexagon adjoins SH as a sound label, without a connection to letter Z');ring.appendChild(canvas);}
   const size=ring.clientWidth;if(!size)return;
   const dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=size*dpr;canvas.height=size*dpr;
   const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);const center=size/2;
@@ -11266,15 +11280,94 @@ body.qr-mode #eyeModeArrow,body.qr-mode #dialModeArrow{display:flex!important;vi
    const x=center+Math.cos(mid)*radius,y=center+Math.sin(mid)*radius;
    ctx.save();ctx.translate(x,y);ctx.rotate(-((typeof rotation==='number'?rotation:0)*Math.PI/180));
    ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3;const px=Math.cos(a)*marker,py=Math.sin(a)*marker;i?ctx.lineTo(px,py):ctx.moveTo(px,py);}ctx.closePath();ctx.fillStyle='#ffe082';ctx.fill();
-   ctx.fillStyle='#fff';ctx.font='800 '+Math.round(marker*.85)+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#342600';ctx.shadowBlur=2;ctx.fillText(first+second,0,0);ctx.restore();
+   ctx.fillStyle='#fff';ctx.font='800 '+Math.round(marker*.85)+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#342600';ctx.shadowBlur=2;ctx.fillText(first+second,0,0);
+   if(first==='S' && second==='H'){
+    const small=marker*.78;
+    // Keep the ZH cell inward toward the vinyl; counter-rotate its text.
+    const screenAngle=mid+(typeof rotation==='number'?rotation:0)*Math.PI/180;
+    const inwardAngle=screenAngle+Math.PI;
+    // Distance to a flat-topped hexagon boundary along the inward direction.
+    const normal=Array.from({length:6},(_,i)=>Math.PI/6+i*Math.PI/3);
+    const maxProjection=Math.max(...normal.map(a=>Math.cos(inwardAngle-a)));
+    const shEdge=marker*Math.sqrt(3)/2/maxProjection;
+    const zhEdge=small*Math.sqrt(3)/2/maxProjection;
+    const cellGap=Math.max(2,size*.004),distance=shEdge+zhEdge+cellGap;
+    const dx=-Math.cos(screenAngle),dy=-Math.sin(screenAngle);
+    const hx=dx*distance,hy=dy*distance;
+    ctx.shadowBlur=0;ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(1.4,size*.003);
+    ctx.beginPath();ctx.moveTo(dx*shEdge,dy*shEdge);ctx.lineTo(dx*(distance-zhEdge),dy*(distance-zhEdge));ctx.stroke();
+    ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3;const px=hx+Math.cos(a)*small,py=hy+Math.sin(a)*small;i?ctx.lineTo(px,py):ctx.moveTo(px,py);}ctx.closePath();
+    ctx.shadowBlur=0;ctx.fillStyle='#ffe082';ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=1;ctx.stroke();
+    ctx.fillStyle='#fff';ctx.font='800 '+Math.round(small*.85)+'px Arial,sans-serif';ctx.shadowColor='#342600';ctx.shadowBlur=2;ctx.fillText('ZH',hx,hy);
+   }
+   ctx.restore();
   }
+  // T follows the inner circumference to C's stem, like the S/H connection.
+  const cAngle=angle('C'),tAngle=angle('T');let tDelta=cAngle-tAngle;
+  while(tDelta>Math.PI)tDelta-=Math.PI*2;while(tDelta< -Math.PI)tDelta+=Math.PI*2;
+  const tEnd=tAngle+tDelta,tMid=tAngle+tDelta/2,tDir=Math.sign(tDelta);
+  const tRadius=radius,tGap=(marker+3)/tRadius;
+  ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(1.4,size*.003);ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(center+Math.cos(tAngle)*size*.295,center+Math.sin(tAngle)*size*.295);
+  ctx.lineTo(center+Math.cos(tAngle)*tRadius,center+Math.sin(tAngle)*tRadius);
+  ctx.arc(center,center,tRadius,tAngle,tMid-tDir*tGap,tDir<0);ctx.stroke();
+  ctx.beginPath();ctx.arc(center,center,tRadius,tMid+tDir*tGap,tEnd,tDir<0);ctx.stroke();
+  ctx.save();ctx.translate(center+Math.cos(tMid)*tRadius,center+Math.sin(tMid)*tRadius);
+  ctx.rotate(-((typeof rotation==='number'?rotation:0)*Math.PI/180));
+  ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3;i?ctx.lineTo(Math.cos(a)*marker,Math.sin(a)*marker):ctx.moveTo(Math.cos(a)*marker,Math.sin(a)*marker);}ctx.closePath();ctx.fillStyle='#ffe082';ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='800 '+Math.round(marker*.65)+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#342600';ctx.shadowBlur=2;ctx.fillText('TCH',0,0);ctx.restore();
   connect('C','H');connect('S','H');
+  // Continue the shared radius between S and T, retaining both inward stems.
+  const sAngle=angle('S');let stDelta=tAngle-sAngle;
+  while(stDelta>Math.PI)stDelta-=Math.PI*2;while(stDelta< -Math.PI)stDelta+=Math.PI*2;
+  ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(1.4,size*.003);ctx.lineCap='round';
+  ctx.beginPath();ctx.arc(center,center,radius,sAngle,sAngle+stDelta,stDelta<0);ctx.stroke();
+  // I meets the same radius with an inward stem, like C, H, S and T.
+  const iAngle=angle('I');
+  ctx.beginPath();ctx.moveTo(center+Math.cos(iAngle)*size*.295,center+Math.sin(iAngle)*size*.295);
+  ctx.lineTo(center+Math.cos(iAngle)*radius,center+Math.sin(iAngle)*radius);ctx.stroke();
+  // A second, slightly inward lane joins C and I around the CI honeycomb.
+  const ciRadius=radius-Math.max(18,size*.045);let ciDelta=iAngle-cAngle;
+  while(ciDelta>Math.PI)ciDelta-=Math.PI*2;while(ciDelta< -Math.PI)ciDelta+=Math.PI*2;
+  const ciEnd=cAngle+ciDelta,ciMid=cAngle+ciDelta/2,ciDir=Math.sign(ciDelta),ciGap=(marker+3)/ciRadius;
+  ctx.beginPath();ctx.moveTo(center+Math.cos(cAngle)*radius,center+Math.sin(cAngle)*radius);
+  ctx.lineTo(center+Math.cos(cAngle)*ciRadius,center+Math.sin(cAngle)*ciRadius);
+  ctx.arc(center,center,ciRadius,cAngle,ciMid-ciDir*ciGap,ciDir<0);ctx.stroke();
+  ctx.beginPath();ctx.arc(center,center,ciRadius,ciMid+ciDir*ciGap,ciEnd,ciDir<0);
+  ctx.lineTo(center+Math.cos(iAngle)*radius,center+Math.sin(iAngle)*radius);ctx.stroke();
+  ctx.save();ctx.translate(center+Math.cos(ciMid)*ciRadius,center+Math.sin(ciMid)*ciRadius);
+  ctx.rotate(-((typeof rotation==='number'?rotation:0)*Math.PI/180));
+  ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3;i?ctx.lineTo(Math.cos(a)*marker,Math.sin(a)*marker):ctx.moveTo(Math.cos(a)*marker,Math.sin(a)*marker);}ctx.closePath();ctx.fillStyle='#ffe082';ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='800 '+Math.round(marker*.85)+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#342600';ctx.shadowBlur=2;ctx.fillText('CI',0,0);ctx.restore();
+  // TI takes the opposite side from SH/ZH, sharing the CI lane without crossing its cell.
+  let tiEnd=iAngle;while(tiEnd<=tAngle)tiEnd+=Math.PI*2;
+  const tiMid=(tAngle+tiEnd)/2,tiRadius=ciRadius,tiGap=(marker+3)/tiRadius;
+  let ciOnLane=ciMid;while(ciOnLane<tAngle)ciOnLane+=Math.PI*2;
+  const exclusions=[[tiMid-tiGap,tiMid+tiGap]];
+  if(ciOnLane<tiEnd)exclusions.push([ciOnLane-tiGap,ciOnLane+tiGap]);
+  exclusions.sort((a,b)=>a[0]-b[0]);
+  ctx.shadowBlur=0;ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(1.4,size*.003);
+  ctx.beginPath();ctx.moveTo(center+Math.cos(tAngle)*radius,center+Math.sin(tAngle)*radius);
+  ctx.lineTo(center+Math.cos(tAngle)*tiRadius,center+Math.sin(tAngle)*tiRadius);ctx.stroke();
+  let cursor=tAngle;
+  for(const [from,to] of exclusions){if(from>cursor){ctx.beginPath();ctx.arc(center,center,tiRadius,cursor,Math.min(from,tiEnd));ctx.stroke();}cursor=Math.max(cursor,to);}
+  if(cursor<tiEnd){ctx.beginPath();ctx.arc(center,center,tiRadius,cursor,tiEnd);ctx.stroke();}
+  ctx.save();ctx.translate(center+Math.cos(tiMid)*tiRadius,center+Math.sin(tiMid)*tiRadius);
+  ctx.rotate(-((typeof rotation==='number'?rotation:0)*Math.PI/180));
+  ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3;i?ctx.lineTo(Math.cos(a)*marker,Math.sin(a)*marker):ctx.moveTo(Math.cos(a)*marker,Math.sin(a)*marker);}ctx.closePath();ctx.fillStyle='#ffe082';ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='800 '+Math.round(marker*.85)+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#342600';ctx.shadowBlur=2;ctx.fillText('TI',0,0);ctx.restore();
+
+
+
  }
  window.eyeotaRedrawRhymeConnections=draw;
  new ResizeObserver(draw).observe(ring);
  new MutationObserver(()=>{if(!canvas?.isConnected)draw();}).observe(ring,{childList:true});
  draw();
 })();
+</script>
+<script type="application/json" id="eyeota-rhyme-connection-decisions">
+{"updated":"2026-10-05","group":["CH","SH","ZH"],"color":"gold","pairing_rule":"Every member pairs with every other member, subject to pronunciation conditions.","ZH":{"status":"provisional","display":"Smaller honeycomb hexagon separated slightly from SH and joined by a short white line on the inward side nearest the vinyl, with upright text; no line to letter Z.","user_decision":"Accepted for now; not definite and may change after further testing.","sound":"The sound in pleasure, IPA ʒ; ZH is a sound label, not ordinary Z plus H."},"CH":{"condition":"Applies to the CH sound in chip, not other CH pronunciations such as Bach."}}
 </script>
 </body>
 </html>
