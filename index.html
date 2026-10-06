@@ -3195,6 +3195,11 @@ body.rhyme-mode #eyeotaRhymeDigraphLines{display:block;}
  body.rhyme-mode #dial .letter[data-letter="L"]::before {width:12px!important;height:12px!important;}
 }
 </style>
+<style id="eyeota-rhyme-november-notice-style">
+#eyeotaRhymeNovemberNotice{display:none;}
+body.rhyme-mode #eyeotaRhymeNovemberNotice{display:block;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(121,187,205,.4);}
+body.rhyme-mode #eyeotaRhymeNovemberNotice strong{display:inline;font-size:inherit;color:#98eaff;}
+</style>
 </head>
 
 <body class="clips-mode">
@@ -10465,7 +10470,7 @@ function orbitState(){system.dataset.hasSite=site&&document.body.classList.conta
 body.eb-browser-mode.ebMinimized.ebClosedSun #ebRestore{box-shadow:none!important;filter:none!important;background:radial-gradient(circle at 42% 38%,#fff2ac 0 8%,#ffdc64 30%,#eaa03e 65%,#ce7c22 100%)!important;border:1px solid #d9a655!important}
 body.eb-browser-mode.ebMinimized.ebClosedSun #ebRestore:before,body.eb-browser-mode.ebMinimized.ebClosedSun #ebRestore:after,body.eb-browser-mode.ebClosedSun #ebSunPlanetSystem{display:none!important;animation:none!important}
 </style>
-<aside id="eyeotaBuildNotice" role="note" aria-label="Dial development notice"><button id="eyeotaBuildNoticeClose" type="button" aria-label="Hide development notice" title="Hide notice">×</button><strong id="eyeotaBuildNoticeTitle">EYEOTA Lock · In development</strong><p>This dial is still being built and worked on. Features and design will continue to evolve.</p></aside>
+<aside id="eyeotaBuildNotice" role="note" aria-label="Dial development notice"><button id="eyeotaBuildNoticeClose" type="button" aria-label="Hide development notice" title="Hide notice">×</button><div id="eyeotaRhymeNovemberNotice" role="note">This dial is expected to be fully operational in <strong>November 2026.</strong></div><strong id="eyeotaBuildNoticeTitle">EYEOTA Lock · In development</strong><p>This dial is still being built and worked on. Features and design will continue to evolve.</p></aside>
 <button id="eyeotaBuildNoticeRestore" type="button" hidden aria-label="Show development notice">Development notice</button>
 <script id="eyeota-mode-notices-and-close-to-sun">
 document.addEventListener('DOMContentLoaded',()=>{
@@ -11441,6 +11446,18 @@ body.qr-mode #eyeModeArrow,body.qr-mode #dialModeArrow{display:flex!important;vi
 </script>
 <script type="application/json" id="eyeota-rhyme-connection-decisions">
 {"updated":"2026-10-05","group":["CH","SH","ZH"],"color":"gold","pairing_rule":"Every member pairs with every other member, subject to pronunciation conditions.","ZH":{"status":"provisional","display":"Smaller honeycomb hexagon separated slightly from SH and joined by a short white line on the inward side nearest the vinyl, with upright text; no line to letter Z.","user_decision":"Accepted for now; not definite and may change after further testing.","sound":"The sound in pleasure, IPA ʒ; ZH is a sound label, not ordinary Z plus H."},"CH":{"condition":"Applies to the CH sound in chip, not other CH pronunciations such as Bach."}}
+</script>
+<script id="eyeota-rhyme-direct-link">
+(function(){
+ function openRhymeLink(){
+  if(['#rhyme','#rhyme-dial'].includes(location.hash.toLowerCase()) && typeof window.eyeotaNavigate==='function'){
+   window.eyeotaNavigate('rhyme');
+   document.getElementById('dialStage')?.scrollIntoView({block:'start',behavior:'instant'});
+  }
+ }
+ window.addEventListener('hashchange',openRhymeLink);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',openRhymeLink,{once:true});else openRhymeLink();
+})();
 </script>
 </body>
 </html>
