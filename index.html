@@ -3097,6 +3097,90 @@ body.clips-mode #eyeotaClipsOwnership{display:block!important}
 [data-eyeota-mode="legal"],body.legal-mode #modeChip{color:#ff4545!important;text-shadow:0 0 5px #ff4545,0 0 12px #ff4545,0 0 24px #ff4545!important}
 [data-eyeota-mode="legal"]:focus-visible{outline:2px solid #ff7777;outline-offset:3px}
 </style>
+<style id="eyeota-rhyme-sound-markers">
+body.rhyme-mode #dial .letter[data-letter="D"]::after,
+body.rhyme-mode #dial .letter[data-letter="B"]::after,
+body.rhyme-mode #dial .letter[data-letter="T"]::after,
+body.rhyme-mode #dial .letter[data-letter="P"]::after,
+body.rhyme-mode #dial .letter[data-letter="G"]::after,
+body.rhyme-mode #dial .letter[data-letter="S"]::after,
+body.rhyme-mode #dial .letter[data-letter="K"]::after,
+body.rhyme-mode #dial .letter[data-letter="C"]::after,
+body.rhyme-mode #dial .letter[data-letter="X"]::after,
+body.rhyme-mode #dial .letter[data-letter="F"]::after,
+body.rhyme-mode #dial .letter[data-letter="V"]::after,
+body.rhyme-mode #dial .letter[data-letter="Z"]::after,
+body.rhyme-mode #dial .letter[data-letter="J"]::after,
+body.rhyme-mode #dial .letter[data-letter="M"]::after,
+body.rhyme-mode #dial .letter[data-letter="N"]::after,
+body.rhyme-mode #dial .letter[data-letter="Q"]::after,
+body.rhyme-mode #dial .letter[data-letter="A"]::after,
+body.rhyme-mode #dial .letter[data-letter="E"]::after,
+body.rhyme-mode #dial .letter[data-letter="I"]::after,
+body.rhyme-mode #dial .letter[data-letter="O"]::after,
+body.rhyme-mode #dial .letter[data-letter="U"]::after,
+body.rhyme-mode #dial .letter[data-letter="Y"]::after,
+body.rhyme-mode #dial .letter[data-letter="L"]::after,
+body.rhyme-mode #dial .letter[data-letter="R"]::after,
+body.rhyme-mode #dial .letter[data-letter="W"]::after {
+ content:"";position:absolute;left:var(--rhyme-marker-x,calc(100% + 10px));top:var(--rhyme-marker-y,50%);transform:translate(-50%,-50%);
+ width:14px;height:14px;background-position:center;background-repeat:no-repeat;background-size:contain;
+ pointer-events:none;filter:drop-shadow(0 1px 1px #000);
+}
+body.rhyme-mode #dial .letter[data-letter="D"]::after,
+body.rhyme-mode #dial .letter[data-letter="B"]::after {background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAD1ElEQVR4nOWYQascRRCAv9q3+14i5kke6E1P/gaJUkiUaBLB+A8UD+pBDBpRED0kSu4ShBxyML8gJIryHnkiYuFBf4JXLypG0SAmuzPtoavf9tvMzM7OjOaQgmFnZ6arvq6u7q5quJckqEpQHQ+pczSEkqAqfvso8KY/GwR0EEAgwbwEnA+qh8RsloF3lt6ADjELqlvAq8A6cMZf9/biEB4ci1kA3gAeBErgdFDdErNpXy/2apwZPwz8CGwBU2ACnAM+AkZiNu1qo68Hc+8luDSsrwNrxOHv7IjOgAuxdxoIDidAAWwCR/ra6ePBRe/N2B8y68CH/k1n6eT6itg7XKGvIA7xUTH7JqiuiVmxqq3aZaAibkbMPT4G/mF/7E1qVJ0DjgKToJqP2Cz/qM7TexC+8qf/QcxmVQ2y7w8CP1HtvSTJi0+K2bdL9OX2AQoxK2uHOKjez9xrJTHgH3clAXgCeNbf1cVy4e++B7b9vgBuA5f8F6AUs5tVCsSHcgK8678FcAB4hRjoCWiztvvd5CaxcywAT4EHgKti9p0E1TUHeBH4dInSfMEdEYevjZTEjicRmrfBH4DngV9HaWaJ2WXgODH4b7vCkF0QPZyutnAQO5O3HS/oDsDf/u1VMXtMzH4GQj5JJr53Pgd8xjxgh8p4miStAl8ALzgwYlbuGXe4iZh9CZxi7rWS/1Zq4WDBO3cBshHuDsD/GXIpXCXgEshe++qqcLWAFZB7SgaALNrCQYtkYWF2X3Hl0qZtDdwI+Ao4iYdNHRy0W0Jmvsl/Ddxq2aYJUIBrvtePm+DaAiYl7xC3uyndS4W0uJ8KqgdokW2v4o1bHaGq7D0FHFzmvbxBpXjviqC64UqXtmkpf/m1VJYa816uA0+3aFMQQ6BpphfAfS31tfbGBvPNvM4oxBhLs3zGnaBCnLkbwLEhAFNK9BrVEyRlPCn4t4kp/h/sr/Cq5JcltlsBJlms2FKKtObPt4ETYnZSzM4SD5HOMk/583ww2Tzmsd1YSDWl/GkxngDXiLliGrZUIG0DH4vZTtZmnE4SguozwNveNnWsdOgZ8JCY/R5Upa5oajzcEbMyqK4TZ/As+/434GUx+zwDS8nvNAO9DlwPqseJx3InMrg/aTGT25w+TYhr4CEH+wS4IGY3FsD2hsq9MfUdKLiHdxz0DLHY2iSWo7vMi6mVAMfESfEWsdcfABfF7AZAVojXxlBaiFPdI2Y7QXUXeA94n5gs7Lr+1Yr6VGQHVQ2qj2TPx10Pgxw03T8cVI/ktnpJH7AFPcOeYwfV0RBgFXplEM/dbfkXu+2rTSrQs+gAAAAASUVORK5CYII=");}
+body.rhyme-mode #dial .letter[data-letter="T"]::after,
+body.rhyme-mode #dial .letter[data-letter="P"]::after {background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAACiklEQVR4nO2YPXITQRCFv5EWCqogUUxxkraUQoC4Bi4sZyK2y5yASyiGhAvMRSgfAihrtwmmV+hntTu7M8gKeFVKtFLPmzfdb54E/3FGUBGnIu6xeXQiJ9EiRxEVGQMV8Aa4dN7PVWQEaGrtUWqBGs57BT4B71READXiSUgmqCIFUKnIDJgCJfDZCCcjh4JqZG6tngIzFZk670vbwGAkNbKKjI3EHPhKUE+BMeCBt8AvoBqq6GAFbUorFZkAKyPmCIO3Bi6ApfO+JGEYU464XnQBPDdSo61nFbCwDZRDbWcQQbOQtRG73iMMQckSmABXzvuKgSoOVdBZT62MRMVhPxdGcqkiF8B6iO30JlibstnK3Eg0LewIffkCuDvpkGzZitJ+W9QqzmxDVV/b6UVQRQqzlSkwIxxtzIIK3NrGeikZPVk2hSPgGfAdECMY01d1G7x33n+r/TNm3T4KFlZ0SfC4dSQ5+NuPK7OdKtZ2oghasdKKL4g/2u11alta2HtR349VsDAvuyLYSkn/a7ImdI0Zu/lpGkGzlbV52dLIDTFdR1B+AqxsYDo3GaWgFbsjeFpU4SMYEzY437Kd1j5uJbiX9WYMV2+nLLu204ouBXXPlHOgDhJRmfHoUR3JeskR3lASxOnMjI0KtmS9XBgTmRmPHXFb1suFqMx4sGhE1suFqMzYpEpM1suFzsy4Q7BH1suFzsx4oGCPrJcLrZlxQzAh6+VCY2Z0Ri4l6+VCY2bc/ExMyHq50JgZRyrinPcPKvIS+AD8tg8+nPhVAj8JbXVpR104FXliD78AH/+VPAPw2nl/X5h6T4EfwI09rOU+NWrzHgOvgPtH4NAPmxvCvOec/l8u7fo7b/wBiz1lCfVe0GkAAAAASUVORK5CYII=");}
+body.rhyme-mode #dial .letter[data-letter="G"]::after,
+body.rhyme-mode #dial .letter[data-letter="J"]::after {background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAE4klEQVR4nOWYzYscVRDAf9Uzs5uIu2YH9KYG8bL/gEZ5StTormLUW26KB/UgCZqAIIokSi6eRAIBc9B/QFiVlQ27F7HwYHLMIcFbMCRRMkYTTbL9UR76vZme2Z6e3pkBDxY009MfVb9XVa9evYb/k5hzYs41p6kzmoYSc0786cPAO/7aVECnAggEmNeA4+bcnKgmBfCxZWJAD5GYc23gTWAGOOxvT+zFaXiwKaoGHATuBTLgkDnXFtV4Ui9O9HLB+ALwC9AGYqAFHAM+ASJRjce1MakHi94LcCGsbwMN8vCP7YixAQdy7xBgHk6AFJgH9kxqZxIPDnovoT9lZoCP/TNjy1iuL8m9hRJ9KXmI94rqD+ZcQ1TT7doaWgZK8iai5/EmcJv+3GsNUXUM2Au0zLlixJLiQ8M83YXwlT/8N1FNyl4oPL8T+JVy7wUJXnxSVH8coa9oHyAV1WxoiM25u+l5LSNP+Me8EgMeB57z9yL8xQHS1N/7GVjz5ymwCZzyvwCZqN4s4xAfyhbwnv9NgR3AG+SJHoDmhw4GSM1oSg8tNaMhlSl+0w+OAeAYuAdYEdWfxJxreBuvAl9WafQvB4mAhtHz2N9pmteXRmMQMvMDDyJUL4NngP3A71GYWaL6FbBEnvybXqEVDsg9HI4uXGLG0YsXeejsWR48c4alc+dYv36dhgiZWRhM8d3mgG4D/vE2VkT1EVG9ClhxkrT82vkC8G3BMaW10gAz41aWceDCBVY7nb77DRFWFhd5sd2uE+5QBVaBl4NDRDXrGvdwLVH9Hnip4LWMEknMiET49NIlVjsddkYR4kfVFCE148D581yLYyIRKqr1ULgt3qkLaUBLhBtpysnLl4mA21nWjVViRkuEW1nGqatXu2mwXbgtgNuBBMjM+DNJ+pK0q8cf1+KhjcxIuFLAEZBdjtSMHVHEo3NzXY8W4cyP6Jldu8oM1YIbClgC2VVCYWbNRhHHd++mKULsw9oSIfL/97fbLC8skPVPkrQuXCXgAOQquSc3vUJr+InwxPw8K4uLtJtNYjNiM1IP9/XiIqkZ0g8XARvAK6PgoEY341caAWaBK+QrSrc+Z342d5KEL65c4U6WsWdujqWFhbKlb5N8dTooqifMuRlR3aRC6gCG+vgReWeypXMJkDUkNA/rFCJS1TNup2G9M1SJr3PFEI+w9xSwsyq0QSq3hT68qTk365UWjfSJ0D+TR8gNf4yUkR70o5wBnq7xTkqeAlVtfgrcVVNf7RDP0lvMhxmFPL9a+B6C8vqdeX37pgEYUuAt8tkbs3XfYR4M8qb0GHCd/h1emfw2wnYtwCCDO7awujX89TVgWVSfF9Wj5B+RjtKbtcV+MNjc53O7ciNV1fKH+tcCviHvFUPYQplZAz4T1dOFd5rhS4I59yxwxL8bBpZ56AS4T1T/MOdkWKmpnMWimplzM+QzOCk8fw14XVS/K4CF5jcugK4D6+bcEvlnueUC3F/UmMl1vj61yGvgnAc7AXwuqp0BsG6ovDdiv8007+HTHvQw+WZrnnw7ukFvM7UtwCb5pHiXfNQfAidFtQNQ2IgPzaFQiMO+R1RPm3MbwPvAB+TNwobXv71Nfdhkm3POnHugcL057scgDxrO7zfn9hRtTSSTgA3ome53bHMumgZYiV6Ziuf+a/kXIOdU/jxOI+wAAAAASUVORK5CYII=");}
+body.rhyme-mode #dial .letter[data-letter="S"]::after,
+body.rhyme-mode #dial .letter[data-letter="K"]::after,
+body.rhyme-mode #dial .letter[data-letter="C"]::after,
+body.rhyme-mode #dial .letter[data-letter="X"]::after,
+body.rhyme-mode #dial .letter[data-letter="Z"]::after,
+body.rhyme-mode #dial .letter[data-letter="Q"]::after {background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAD1UlEQVR4nO2YMY8bVRSFvzuehUTgKOsaQUTnXwDF23UkigREljJ/AUQ23VJnRWgoaZDgB2yFlCBFFDQBvS4pUyQliaIkRawAQpvI896lmDuz47HXHs8smy24kgt7PO+ed+69Z84b+D9OUKhzos7J68axNI4SaHoUi6hzPSACF4EvxPstdS4BtOvaSdcFihDvFfgKuKTOOUANeKfoDFCdS4Gozo2ATSAA1w1w5zgKBtXA7Np6CozUuU3xPtgGWkenRlbnegZiC7hJzp4CPcADHwMvgdiW0dYM2pRGdW4A7BkwIR+8DNgAdsT7QIdh7FLiIuk2cNpAJZVrEdi2DYS2stMKoElIZsCu1gBDzmQABsAV8T7SksW2DIr11J6BiMz2c2ogd9S5DSBrIzsrAyxE2WRly0DMSyzkffk28PWxDklFVpTFT4uCxZFtKK4qOysBVOdSk5VNYERe2iYJFdi1ja3EZOPJsilMgFPAL4AzgE36qmiDz8T7nwv9bJJ3FQZTW3SHXOOyOrgF9BT9uGeyE5vKTiOAtliwxbeplVaBTBXhoCRBp6BWZWnbfmvUi00ZTE3LrpDLSiiwlI8PEf4Jgb9CXrmeSB1kAeiqAc1MT7sBNFnJTMt2DFxaBZepcu3hQ96/e5f37tzhwr17/PriBT0R4gFIIWd+AOzZwCwt89I/VAzBbfLJzYBUAVVlP0YuP3jArfF46r6eCDeGQz4dDAiq9KRMVQzMeeB3IFk0MAsZrHm9ERX2MlUSEb59/Jhb4zGnk6TswdTKe/n+fZ5PJiQi1eEpZmm3iXgvK7HWRLnMsCbC3yHw/ZMnJMDLGMvMmSprIuzHyI/PnpVtYFEYiUae8VCANa9XiPKUrERV/syyufJSsPl8Mjk0BXBdnXuL/Hgwt93mAlzg9crkQZVTScIH/X7JaPW62o4+Ont2XqIeDT3jYQwu8nplvJkkfHPuHKkIEyvrmgiJfb80GHBxfZ04PSTVHEs940zSBl4PONC5jTNnuDEcMkhTJqpMVAkG7qfhkKCKzIKDhp5x5s5K791ksZ0C8j5MRBhnGT88fcqrGPmw3+fC+nrZlwu0rOiEfeAT8nPMlOxM3Vs5gG8Ct5eBq4NsGRk5c7+J9+frRmKmxCt4vTIKnauWeIVY6BlLgB28HpCXohiSOQPRJOZ6RjFwXbzeUcVcz1geE5d5vWOIuZ4xUedEvJ+oc33gc+CV/XFyzJ9APs0p+RsyBVJR59bs4nfAl/8VPS3iXfH+UWrsvQH8AVyziwXdxx2FePeAd4BHrwHDalHqgWnPSXq/HOzxd7LjXwqMEDlBZt8eAAAAAElFTkSuQmCC");}
+body.rhyme-mode #dial .letter[data-letter="F"]::after,
+body.rhyme-mode #dial .letter[data-letter="V"]::after {background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAD60lEQVR4nMXYvW7bVhTA8f8hJacI3ABWguQRjKhbu3IourSxFcsIknZpgfjNCqNLEaCFbdnx5gx8g8BkkkdwBAnqFtPk6cB7KVoWRYpk0TOZ5P34mbzn8FJCi6Ge5wAKIL6vbY7dOAwufyxtjNvKIOp5XfH9SD3vZ+A3YM+OL76fNBm7MTCH2wX+AjaAEbDP/HHXRjrlTSrhdoAjoAtcAwNzLKZd7Xlqd1zAHRuMkt7BCNhtA1mrUwEuP163LeTaHSrgbLSCXKvxGrjWkJUb1sC1gqzUqAEOBWLV2sjyCVbgFEi0+I2mprErQlITufJiEU5NPwGcdPI7fRNVBPgnjrmYzXBEuKmBLLxQhlPgeRDwZjzGESHKIS34RpVfPnzgh/fvOZ9O6dS4k0tPluESVYZBwGgy4dePHzmdTOgapMUpsB+GnE+nuCIMg4A/P3/GLIvKyDsnVq25RJVIlUEQcDKZ8JXjEKkyDMMMqQaXP+cC16r8fnVFbK5TMbsXt0grs1UAF3j9+DEbInxJEpsAt+7WIAgyHAa32+sx6vfpiuBItkcpRWYtq5aSRBVHhNPJhGEYkqjipgnAA9flu81NLmYzOiIIEBnc0dOnGWzJFioy2FNgaG+y+H6SicX3E7NlOqKkzkWqdA1yLwhITMNkoVMCGS4bUJbwliDF92P1PJHc7XwFHJpGWoRbRJ5Npxx8+sQ4igAQEVQVEeHlw4ccbm+na9Pc+ZKwyDPgABg7zJfWAfOtUmkBd0nLyM7WFt/cv09icInBucDrJ0/YMNldAZcNC+wAffH9xD6ZmHShjnLIwrClRIBnl5dczGZZsgBoLttHk0mGLAm7QgTYEd9/p57nOubrS02DfdI1YLPrTijmMZKWEluAVZX8QE4uu/N1sgSnwJ74/lv1vI74fpyWjxRpd8TDIqQdPlmofWJmePXoESf9fnpssnux7ZLX4iLuzFSUG8ittdyHTSEyX6hPzaODeSn5Y3ubQa/Hcb+PI0KcQ74Iw/ybpAyXzXkrGcqQi4U65nad64pwrcogV/diVe45zrI3SSnOznkncqVHSOvirkF2baE+n055dnnJT1tbnPT72X9qNw62Tr4IQ65Ved7r8bdBq2pisnolrhBYhrxRpSPCu9mMbzc3eeC62RvGhkW+GY85vLrieL42K+NWAsuQdn3ZmZYNtIheF1cKrIJ0TBYXhS3cUnHNrQ0sQ1bpT00cVPxoqlKC/gtcZWADZCPcWsAayMa4tYFrIFvBQYPfB1ckjtsWrhFwBTI25xrjGgPhFtIh3U/+SLqfe9sU11pYpHre1+p535u/O/8rajHyv+qr57mr2q4T/wKkkiEd5LKx6gAAAABJRU5ErkJggg==");}
+body.rhyme-mode #dial .letter[data-letter="M"]::after,
+body.rhyme-mode #dial .letter[data-letter="N"]::after {background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAA7klEQVR4nO2YQQrCMBBFX8QiSl2I1+nFPIEey0Xu4FWUqnVhqrVNKjIZEZm3KeXTzuOTzQSMP8elgqaqkpmKiPfNN+dlI9pSaK9M5ZlpwpyT8/7UD6d9sVB1CRyAZecHWpyDxxbYNVVVOO/rqGAHB6yAhaJYS1vAPBamBAHq8LF2gzVQANdYOCboeIppCnbnDJgoDs6CCUoxQSkmKMUEpZigFBOUYoJSTFCKCUoxQSk/L/huL253Y+29GD7cix2wVtEZUoRnGQtfBDtXYEdgA8z0vB5cuR+1fXi/fGFmPsYuMItUpsTFeR89h8ZfcwPl+y0+mD0bQwAAAABJRU5ErkJggg==");}
+body.rhyme-mode #dial .letter[data-letter="A"]::after,
+body.rhyme-mode #dial .letter[data-letter="E"]::after,
+body.rhyme-mode #dial .letter[data-letter="I"]::after,
+body.rhyme-mode #dial .letter[data-letter="O"]::after,
+body.rhyme-mode #dial .letter[data-letter="U"]::after {background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAADL0lEQVR4nO2YvW4TQRCAvz2fCTSIl+ARSEBsCEJBIUhEdOnyDjTUIBANVLFoiNLSEQoSJBoa5nGIhYQjAj7fUuysfLb3zmfnjBSUkU5Rbm9nPs/P7uzChfznYppS5Kyd0GVE3Fn1ngnQWdsCEiPSLxlP1UY2L+xcgM7alhEZjL27CriCztyI9MZgB7OCzgzorDXBiLN2E1gGVoDbQA4k+ukfYA/4CbwzIsc6JzEieeOAGk5nRHJn7QbwBNioOb0LdIBdI9J11rbL0mIuwBBShfwIPApDwED1JJGpmY6lBdAdI3JU15NTAQtw68BT4L5CAbSmzQ9qFLatf18Cr1SPq8rL2K8uwqUKZ4EvCpcpWF048I5oK2gCPAM+qAcr9ZR6UNe1MPkrsIpP/EszgEVVA33Vs2VEPsVWhSBVHkyMSAYcKNygATgYejMDDpy1q4DT/K4HqB/nzto1fEH0mS2kdSDBF8+LqmIp9aAm7nNGF98mJcV7cc1Ze6ewSoxyjL8oVO1D4Agf2ia9V5QB3knfgAf4HM+LVR3zYIC5wXCdW5QkeCct47fBCVvRxdVZu4TfvoqVvCgZ4B1xN8Y08o/uszlwGViPfdOwGPz+fQW4NxWwIA44WRxXVKL2KtfBBYHMZO/cAjrg1+JYovZOYwMjgEbEOWvbQA/Y19fZgsHa+Pzbi9mLelAXyh8LBBuX39TxoEr4Bfv4BjO0SYuQYKsDnGinPWJrAjCE2Yh8B3YZNptNS+gNu0BHwSbslBVJpv1gB18sbfyC2qSExrdTOKdMRKoqBxMj0gW28UUTtqQm4Q6B19rFRKNU1W4N9FcdAm8YNplNwKX4otg2IidUnEsq+zwNcwosAe/xzWuuT1oxNaqO4cGpC+wAn/GRKu2YKneLkLhGpGdEthTQKVzOMOxloQ9j4fjZxveY143IkdqobOembmeFW4REw72JP+El+Dwy+vTHnqwwlgLH+NPcYy2KVp1rkJla+eLpq3C7sAJcK5nSw+faW/RWQeeaOnAzA6ryhEJS66XRTeAW8buZ03CJNO8F0lxSdkws+TaN3R/WkbPeD4b5CRXb5j/x2IWcV/kLKsptUrz2pjgAAAAASUVORK5CYII=");}
+body.rhyme-mode #dial .letter[data-letter="Y"]::after {background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAEYklEQVR4nO2YzWtcVRTAf/fOG9MuEpJZFyyCi+xrU/HGilbSKC3dZdf/wY24bPFjoa4aRGjp1l2rYCKo4Ma7a5ctLbgLlLZihpFmaOr7OC7ueTMvmfeVSValF4Zh5r577u+dr3vugVfjJR/mqASJcxOyjPdyWLmHAhTnOoA13scV85HukUwLOxWgONcx3qf7/psDpCAzM97v7INNDwp6YEBxzuSbiHOrwGlgCXgHyACrj/4H3ACeAdeN99u6xhrvsyMHVHOK8T4T51aAT4CVlsv7wDpwzXjfF+e6VW4xFWBuUoX8EbiQTwGpyrElSxOdiwqgl433m2012QhYgDsHfAp8qFAAnab1uRiF7er3F8BXKkfq/LLsrYtwkcI54FeFSxSsLRwERXQV1AJXgFuqwVo5lRrUvJYv/gNYJjj+awcAKxUNxCrnovH+57KskI86DVrjfQLcVrj0COBgrM0EuC3OLQOi/t0OUB/OxLmzhICIaWFS0U9LSAjB83ldsFRqUB33KnuTbyVYIoIpPJhKI2pE0OJZce7dQpbYyzGx2ThqPwI2Caat1F6RfpimpMBcpzOC7Jjad0sJSvoTOE/w8awY1WUazGHeYpznauESEa5sbfHG3bu8fucOK/fu8ftgQMcYsnpNWhVxmnAMTuxVmlzFuRnC8VWM5Ak4EWGYplx68ICrW1v8HccMkoTfBgNW799no9/HGtNk7lTFvVfGtOeHnrMZcAw4V/MSJCJYY/j60SM2+32OWzvywUih1h4+ZDuOscZUBY8hnN/HgfcbAYuswLBiDgG6xvAsTfn+8WMssJtloyhOROgaw/Ms48bTpyM3aBil+9XmwSaJmQj/Jklpesm1uR23qgkq95sK0BAi9Ji1LM3OjjRanBeC7T6Yn2/caBpAAZ43SZyxli9PniQyhljN2jUGq78v9HqcX1gga043Auw2AhrvRZzrAjvATf07KVvY0UBYnpvjp8VFelFELEIsQqpwtxYXSUUw1XBCOPaGhOJ2Yr9o/4oC6KBKahEyE+HjXo+/Tp3i+pMnvMgyzszOsrKwMPLLFkXnCyo0WAaYv8FNQv3Xo+a4swrZiyI+O3Fiz1wLsLxGXAeGZZX2hA/mZjbe/wNcY1xsVo48zxVN3GLktWEfWNfjbWKfqiBJtB5cJwRLlxCUlcPAKEgaAmK0B+GUWi/cUyberBRQH7TG+z6wRgia/Eg6ipHDbQDfaBVTaqW6civVt9oAvmVcZB4FXEQIijXj/ZCae0l9cgpmjoAZ4AdC8ZrppzQD1IljHBR94DLwC8FSlRVTbYLPHdd4v2O8v6iAonAZY7NXmX50PDMu9TeBN433m7pHJVwjYAEy7whsAKuEG54l+FF+7Mb7PklhLgK2Cbe5SxoUnTZtkAO1Poq3r0J3YQmYr1iyQ/C179Cugq41beAODKjCLQWn1qbRGeBtynszu3kTadoG0lSj6ppY8WxU1j9sMw7bH8zXW6p7M0fSyHw1XtrxP+bLGuVRfJShAAAAAElFTkSuQmCC");}
+body.rhyme-mode #dial .letter[data-letter="W"]::after {background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAFsklEQVR4nMWay4scRRzHP9Uzs9lozEgCuQTJXfAaFCtmEeNiNgnqSY8SUC8ioqcFScSYgwEPEQ9BRRCCetMsur6IaMrnwX/AUw455WHMJnGz293loX41Xd3b8+qpWb/QzEx3T9Xv279n/aoVEWG1VsHPdp/bcjlQxtiY808Mq7WyWvcTfFOght/SH1brljImq5zbDnSAF4CZ4FIOJMCvcrSA67G00ugpWq0TwHoSVutdwFFgP/CQ3LZ9wBDXgX+AB4AVq7WalNDYGrFad5Qx6/J9HngFJ3xV8BSoCqfkXAd4C3gdaPvxJsHIGhFHVsqYdav1AeBVYD64JRVBkwFjZziT+hY4KfenDeTegGT4LT1fsEBitT4GLONI5CKcxQneEuH6aTqXa8vKmNtAK5aPDDUt79BW6x3Ax8CCCGRF8FFhZb4rwP3yGS0ED9RIQOIg8BeOxLr8bxwSUJjQB8qYyzjfiJZH+vqI1boFWKv1IeBznOAZzlGbwuIiVnTUasRqnUhonQU+oyAxrhZ6Q+IewE3gQzkXxck9NmhEolNitd4KfApsZTISpeGB1QjjbECdRtrKmBR4DTiEe3IxSAyaM+6g4hep1Xofjsg6DbP/qHNObVCJJG8C2xicE5rAArcijtdDj0gQah/B1UwpcbWR44LHY9W5Y6BqWh2cNnzyigVfimwB9kpAiel3johUnxmwA3iQcs0UC17wvWK+UcNvtcB7RiZcJ65GoMhFB63Wj+OSbTStJKLm3Gq9BVeCtJhSZKGo0eZFK/GIAIhZzQBz4fkpoI0jc9RqrZUxa7GWyKHAW4DbMQYdAG+uXeCkmFYuK86JkFD4x/O4VV5f/1i3tnfktnHh6n1lH/CFn2tSMuGfZxni4B2lekeiJooFPqAsUCbT2MzCP+Z1N/iEcifPeefSJdasxQJz3S5z3S6ZtbSakepQJnNEGZNKLsur3ZlxiAzEap6zePFi7/ft3buZ63bJmSj0hGS+tlq/rYz5HnpVeAv3LOsechvANy6GasRDKcXOdpuVLMMC21rRImcH5zMHgDmr9SngJ2XMNwxOmqXOS0jk7mEzekfv94gmQLj6XAQWrdbLwB/A78DPOH/2087gGoBbgRPKmNV2cPE88DKOXOxaaxR4M8pEhifkALhB0RNDPrvAn8AJq3USsjwPrBG5mBsTisJKMgrz2Q7cI5/+ewp8ooxZBVph+L0L+HdTxB0NLYpGh60cvhk4629OlDFWQt4N4Kycj1qZRoCivMibwRE6I79Tr5FcirhlnHlNq9aKgdAVrvsuaFK5+ANOM97xSihl9qnL2xde1mXJIQkU1a83Lwu8JzeWzMtay9U0ZU1C8M1srMQbC74/dg04K0kzhXIeSYXQaeAl4F6CMDybJJzcs6dUosCm26DvI5xWxlwOtzhKucJfsFofB47hwt8kLdKY8Ca1CtwH/A1FE7z6QFNZI5wCLuBI9EwsUhnfFH7r7lllzDUk4vqLJSL+gjLmFq5U8CQsRC3jx4XP9kvKmHN1e5e10gQ9rsPAOf5fE/N+cQF4VM5l1S2JWl8VEm1lzBKwhCNxZ4rC9kOKkzEDFqUnXbs5NCjoZLJiexr4Erem912QzUDY6TyijDFiKbVVR18iwjqTPz4JvEGxBzjNEsavEtrAd7jW0VdiIX2T1yh7iH43N7daL+D2EXcEE8aqln0x6H1xCXhKzHyDc1cxcugJcsxO4CPgcCCA3wgaN5T5h+F3hQGuAs8pY5aks6KGkWDcicMnE7wsMF+5zbeT+mnKv1QTrj3AlR3v4rL2tXHfhmjy5oOCInIIof24Vzh2jTncTdwy9kfgfWXMFRlzqClV0Tir+S5hQGgb8DDudY428CL1L9X8AvyG09wZL7yM0aYmR4yCidOzEFLVsCjENoyvjFmpGaMxgd64Tf9YI4zfU/FvDvUN0bJkAKm4Y8z/H1OLbUciQG39AAAAAElFTkSuQmCC");width:18px;height:18px;}
+body.rhyme-mode #dial .letter[data-letter="L"]::after {background-image:url("data:image/png;base64,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");width:18px;height:18px;}
+body.rhyme-mode #dial .letter[data-letter="R"]::after {background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAFoklEQVR4nN2az29VRRTHPzPvFkqoBdqFSQ02JETaRjaauNCBIu4MBtREo3+AO0pc6EIDDfHHxkSDuPIP8FdiRDS6UihMXEBwg2lLQkIaQhNDWml9hMK79x4Xd+b2vp+9F/reM3yTm/fy3rkzc+YzM+ec+x48JFL3c5MYc1/3FZGyVtrdR0ckxugi9rln1lNQ1ooY0w9IkfsLKlbWlovcEBSwVcraWIw5BewHIqDQrOVUDIRizCuABbSyNlpzcHlaFmNKroO9wNkHGGQRTSlr94kxpTyO5J5Rt/mOkyyp0L226wqBcTFmXFkbuYl8MEf8jIgx48A4CZmAhGY7Lz9xuVRkjXsanZBfyrmptHSkCY01Ma+jclPJS6STNLwKUWnqyP+ARjoUclDJQ6QbNLyqqACxGNMw9jV0RIwJHI29dJdGOiTguAsBDSe1LiC6VEQDvcCvgKH7jkSu/4PK2tONgmQjIoEzegfYQxKcSlAdsfKoqH0L+bjytRgzQLLEqiBUOeK+DJ3xYVaDX9qav/L2XsS+hTTJhG4CDrslFtQaZBU4o8PAAAlSBcl0/BtFLLvrbhy37LmofSRSR06AWNJP/cAn3ESHWSqpIzU0Jlw7gW+mHEWMXrrE4xcvsv3CBT69cQOAilR3X9QeIBShpFRKzjugAK3SsSoSKgM0oJIlUksjJLMqBPgnDFkKQ5ajiDs5iOS1D5TizNISNysVYhEiEbRSHJqZ4ZubN8E5FosEruk6Khqa06jtsEdrtPMuM1NN1creHwJ/Vyp8fP06+y9f5sT8PFopAqX4eXGRHxcWePPKFV6dmaGSLL2mVDyRljTSzt06zn1qtbD3S+ev27d5f26OklKcmJ/n/PIyf5bLHJqZYaPWCLCjt5cN7r0beB0VnZfGequkFLEIL2zdysuDg0QilKOIl6aneevqVUSEUIQDAwN8MDyMuH1ENZUJT0WzSmOCFjTaIaUUkQjfjYzwbH8/AMthyKVyOTn3leLbkRE26WThZAaVpbJFWVvRytqKGPMYybLqCI3UET8qpfhsxw56tU73SK/W/DI2xiat081fc2sEbAPeFWO03yNPkNCI6RCNdZIAzwCBdnnLGeAcyeZfs9Bfz1FAEkfevnaNlTgmdntjJY55cXqaO3Gc7qca+aThQ2XtvWwcOUaHafgN/NrsLH8sLwPQHwQ83deX5CQivD47m8agjCv+UdQ5Ze2UGFPSvvJS1k4BU3SIil/3v926xQ8LC5SUoq9U4qexMb7cuROViSdH5+bSgyEjBRyrCoiQBsVJWlBRLo3InTS2sNdKIcCTmzfz0fAwkQhHhobY09/PU319nBod5W4co4BrKyvcc+9jEU9jyk2+VtZGGsCl7XotKpU4JqYumWuqVvbewUd7enhv+3Z+372bI0ND6R45MDDAwcFBvtq1i+9HR+lRCu0ud+tkNmlsdNRO0uBpogK2BQE9cYyIpGd7MxWxD0V4fsuWqntjEU6NjqafOQeqaGQLrCrqmQcOZ0kej6aVoZBktH5eNyrFxhaDK2rv90x2QEJyIGRiiK8U99U60iz41VFRwCOl/NVuUftSgyRUkewzJ1+p1tGAmsKqwQlWcg0AXS11YXVbTdaWudD8KYoCjgJlVuvlbpa6fkmdzp5UWYM6R5xBoKw9D3xCDZUuSEjGuQi84Sa5DnKz3Re6n76+cA34bLMb8tn458AdkkmuKzcbOuLS+pKydtE14GuATstn44vASfdZw3G0Cga+Hj5J96ikNNyk+tqpTk0d8ZVXF6lU0fCVbDPjtR5id5NKbhqwhiNdpFKIBuT7WaEbVArRgByONKACsAJU2nTdc33kppHLEacslRWSh8k9bbo2uNeTeWlAzicm7m8bWlm7KMYcBJ6jff98gISKp9/NrKLzKpzPuV9W20Uiq/Ch+atTEf0HaNNU2rDEQMEAAAAASUVORK5CYII=");width:18px;height:18px;}
+body.rhyme-mode #dial .letter[data-letter="L"]::before {content:"";position:absolute;left:var(--rhyme-pair-x,50%);top:var(--rhyme-pair-y,calc(100% + 12px));transform:translate(-50%,-50%);width:18px;height:18px;background-image:url("data:image/png;base64,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");background-size:contain;background-repeat:no-repeat;pointer-events:none;filter:drop-shadow(0 1px 1px #000);}
+body.rhyme-mode #dial .letter[data-letter="B"]::before,
+body.rhyme-mode #dial .letter[data-letter="P"]::before {content:"";position:absolute;left:var(--rhyme-pair-x,50%);top:var(--rhyme-pair-y,calc(100% + 12px));transform:translate(-50%,-50%);width:18px;height:18px;background-image:url("data:image/png;base64,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");background-size:contain;background-repeat:no-repeat;pointer-events:none;filter:drop-shadow(0 1px 1px #000);}
+body.rhyme-mode #dial .letter[data-letter="D"]::before,
+body.rhyme-mode #dial .letter[data-letter="T"]::before {content:"";position:absolute;left:var(--rhyme-pair-x,50%);top:var(--rhyme-pair-y,calc(100% + 12px));transform:translate(-50%,-50%);width:18px;height:18px;background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAD6klEQVR4nO2ZTWhcVRTHf+e+92YyM2mSFmsVKSmWipTuxkXEDxKsIIGqmwmuRFxE6NqPlU6DoJtQybKaLu2isyxxo5BuuhCSlRsR6kIEXZQkJvPxvo+Ll0ymzTgmnXlhoO8Hb/HuO+/e83/nnvvuB2RkZDwRyGENVVWOYD5QRNC+KlAQXZt3BuTP4/uhVVtvV6xeNv/5ifV2xZK5WrRf2dIYv7qK1TzesIwTy5mFeuJD1RZZCLuZdXVKtWKJ1CK9UXaYffcTYl4nb7+MG8SASdHtR7wTUHUZH7nJRmtVzld/VFURkQNd7YCQvUjo/eplxoqfMpp/kx0X3ACM0GdvfTxOleDBToRlvuTvP76i/GwEC9qZOw8JaUfifvVVThTuYsRi2w0wYlBMouK4E14BQjAWz40Z/ty8I89fe1u1akQW4gNCVBFqFUO5PIoT3KGYe40dz0fIHbPn3VEUIWA0n6PhvcPPv6wA7OXxfn9fn7dlrhZh/A95+sRwiQAQBBUbL1Qi/Z7TF4W5WqyaBGNfyO+bsf62lEd4i20vRug53B0W1f2rb0QNYRxTyjlMmjeSjK0Y2BWiishcLcJqjQAzuP5uTvSJEcQ27QszgPyKNaaUz2OZGQDWTxoA+yGjqKVYVgORib6HJxE8N8TzQ4SktnzOJp+3+wuPAJGCaqOzuNtX7zsSQRjDRIHry/c4O7XIheklzk4tcn35HkwUkuf9IAf9tLsaDgIRWm7Idt3D9UL8IKLlhslPLgVS/UsbI4iAYxtEkvvU2kqt5l0GOmr14PjmTSmTCRk2MiHDRiZk2MiEDBuZkGEjE3Koyo3g2KZ9pTn7TXU9Um/4BGHMP3UPgHrDT209kooQYwSaHrMzFygWHBzbEIQx01PnoOmlEpluQvrubpYRaPpMz7zA9Owl2ht7LR+afvK8X6TXUjcqKnhNoNR/Q0Lc8Il2vHaRZaT/aAgQa0SM21lsdttUXZt3ePGzOnCLUyUBuu56H4WBJ7uiIA5bLSGwlgEofxtCZzcqb8YiKCIrNLw6luy+OFREjNiK6grbT20l+7+Jj20hIrVI1+Ydmfz8J7bdRZ4Zd4AQTXu1fQgURQkpODZe2CIXvScvfRRwbaFt8shuPMLdqsVFRvDsWxRyV/BCCEIFwrSGzl4KUBEsscnbABu0/PeZ/OIHanOm8yDq4PmIInvh0r++voKRm/jhaU4WIY67vZIeAgQxhFGdpr9KffMDufTNRqePnaY90dWro5w/8wpjpSm2msd7YmUMRLHPueJ3Ih8/gP0znCPVo1odqrlYcrLcnf+PiCJQMaxfNrA+WM8OS/lG2O3cMCMj4wnkX2UwhjHwtzYuAAAAAElFTkSuQmCC");background-size:contain;background-repeat:no-repeat;pointer-events:none;filter:drop-shadow(0 1px 1px #000);}
+</style>
+<style id="eyeota-rhyme-readable-letters">
+body.rhyme-mode #dial .letter {
+ background:#000!important;color:#fff!important;
+ width:clamp(25px,7.1%,36px);height:clamp(25px,7.1%,36px);
+ margin-left:calc(clamp(25px,7.1%,36px) / -2);margin-top:calc(clamp(25px,7.1%,36px) / -2);
+ font-family:Arial,sans-serif;font-size:clamp(15px,3.8vw,21px);font-weight:800;
+ line-height:1;display:flex;align-items:center;justify-content:center;
+ border:1px solid #e2e8f0;text-shadow:none;
+ box-shadow:0 0 0 2px #000;
+}
+</style>
+<style id="eyeota-rhyme-roomier-dial">
+body.rhyme-mode #dialStage {width:min(700px,calc(100vw - 144px))!important;max-width:none!important;margin-inline:auto!important;}
+body.rhyme-mode #dial {width:100%!important;height:auto!important;aspect-ratio:1;max-width:none!important;max-height:none!important;box-sizing:border-box;margin-inline:auto;}
+body.rhyme-mode #dial .letter {width:clamp(25px,6.7%,40px);height:clamp(25px,6.7%,40px);margin-left:calc(clamp(25px,6.7%,40px) / -2);margin-top:calc(clamp(25px,6.7%,40px) / -2);font-size:clamp(16px,3.8vw,24px);}
+@media(max-width:700px){
+ body.rhyme-mode #dialStage {width:calc(100vw - 16px)!important;max-width:calc(100vw - 16px)!important;padding-bottom:64px!important;box-sizing:border-box;}
+}
+</style>
+<style id="eyeota-rhyme-digraph-style">
+#eyeotaRhymeDigraphLines{display:none;position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:50;}
+body.rhyme-mode #eyeotaRhymeDigraphLines{display:block;}
+</style>
 </head>
 
 <body class="clips-mode">
@@ -3392,22 +3476,7 @@ body.clips-mode #eyeotaClipsOwnership{display:block!important}
             <div class="rhyme-word-row">
                 <input class="rhyme-word-input" id="rhymeWord" type="text" maxlength="80" placeholder="Type a word — example: yo" autocomplete="off">
             </div>
-            <div class="rhyme-choice-row">
-                <label for="rhymeStyle">How do you want to rhyme?</label>
-                <select id="rhymeStyle">
-                    <option value="">Choose rhyme style…</option>
-                    <option value="exact">Exact sound rhyme</option>
-                    <option value="near">Near / slant rhyme</option>
-                    <option value="custom">Choose the ending sound yourself</option>
-                </select>
-                <input id="customRhymeSound" type="text" maxlength="24" placeholder="Ending sound, e.g. oh" hidden>
-            </div>
-            <div class="eyeota-range-panel" id="eyeotaRangePanel">
-<label for="rhymeRange"><strong>Rhyme Range</strong> <span id="rhymeRangeName">Exact</span></label>
-<input id="rhymeRange" type="range" min="0" max="4" step="1" value="0" aria-label="Rhyme range from exact to experimental">
-<div class="eyeota-range-labels"><span>Exact</span><span>Close</span><span>Slant</span><span>Loose</span><span>Experimental</span></div>
-<div class="eyeota-range-help" id="rhymeRangeHelp">Perfect pronunciation rhyme. Move right to deliberately widen the sound match.</div>
-</div>
+
 <div class="rhyme-cycle-controls" aria-label="Cycle dial letters">
                 <button id="rhymePrevLetter" type="button" aria-label="Previous letter">←</button>
                 <div id="rhymeCycleLetter" aria-live="polite">A</div>
@@ -4998,6 +5067,19 @@ function applyRotation() {
 
                 letter.style.transform =
                     `rotate(${-rotation}deg)`;
+                if ('BDGPTSKCXFVZJMNQAEIOUYLRW'.includes(letter.dataset.letter || '?')) {
+                    const markerAngle = Math.atan2(parseFloat(letter.style.top) - 50, parseFloat(letter.style.left) - 50) + rotation * Math.PI / 180;
+                    const markerCos = Math.cos(markerAngle), markerSin = Math.sin(markerAngle);
+                    letter.style.setProperty('--rhyme-marker-x', `calc(${50 + markerCos * 50}% + ${markerCos * 10}px)`);
+                    letter.style.setProperty('--rhyme-marker-y', `calc(${50 + markerSin * 50}% + ${markerSin * 10}px)`);
+                    if (['L', 'B', 'P', 'D', 'T'].includes(letter.dataset.letter)) {
+                        const pairDistance = window.innerWidth <= 700 ? 22 : 30;
+                        letter.style.setProperty('--rhyme-pair-x', `calc(${50 + markerCos * 50}% + ${markerCos * pairDistance}px)`);
+                        letter.style.setProperty('--rhyme-pair-y', `calc(${50 + markerSin * 50}% + ${markerSin * pairDistance}px)`);
+                    }
+
+                }
+
 
 
             }
@@ -6293,6 +6375,7 @@ checkUnlock();
     }
 
     function playLetterVoice(letter, strength = 1) {
+        if (document.body.classList.contains('rhyme-mode')) return;
         const fn = letterVoices[String(letter || '').toUpperCase()];
         if (!fn) return;
         triggerVisual(strength);
@@ -6486,9 +6569,9 @@ checkUnlock();
         highlight();
         const word=cleanWord();
         const lead=current();
-        const style=rhymeStyle?.value||'';
+        const style='exact';
         const custom=(customRhymeSound?.value||'').trim();
-        if(!word){letterLabel.textContent='Choose a word first';rhymeHint.textContent='Type a word, then choose how you want to rhyme it.';return;}
+        if(!word){letterLabel.textContent='Choose a word first';rhymeHint.textContent='Type a word, then use the arrows to cycle A–Z.';return;}
         if(!style){letterLabel.textContent='Choose how you want to rhyme';rhymeHint.textContent='Pick Exact, Near / Slant, or choose the ending sound yourself. The dial will not assume “OH”.';return;}
         if(style==='custom' && !custom){letterLabel.textContent='Enter the ending sound';rhymeHint.textContent='Type the sound you want to keep, for example “oh”, then cycle the dial.';return;}
         const target=style==='custom'?custom:(word==='yo'?'oh':'the word’s pronunciation');
@@ -6601,35 +6684,6 @@ checkUnlock();
 })();
 </script>
 
-<style id="eyeota-rhyme-range-style">
-.eyeota-range-panel{width:min(760px,100%);margin:12px auto 16px;padding:12px 14px;border-radius:12px;background:rgba(5,15,28,.88);border:1px solid rgba(0,242,255,.25);box-sizing:border-box}.eyeota-range-panel label{display:flex;justify-content:space-between;gap:12px;color:#e2e8f0;margin-bottom:8px}.eyeota-range-panel input[type=range]{width:100%;accent-color:#00d9ff}.eyeota-range-labels{display:grid;grid-template-columns:repeat(5,1fr);font-size:10px;color:#94a3b8;text-align:center;gap:4px}.eyeota-range-help{margin-top:8px;color:#cbd5e1;font-size:12px;line-height:1.35;text-align:center}@media(max-width:600px){.eyeota-range-panel{padding:10px}.eyeota-range-labels{font-size:8px}.eyeota-range-help{font-size:11px}}
-</style>
-<script id="eyeota-rhyme-range-engine-v2">
-(function(){
- const $=id=>document.getElementById(id), A='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
- const range=$('rhymeRange'), rangeName=$('rhymeRangeName'), rangeHelp=$('rhymeRangeHelp');
- const names=['Exact','Close','Slant','Loose','Experimental'];
- const helps=['Perfect pronunciation rhyme.','Perfect rhymes plus very close pronunciation neighbors.','Allows noticeable slant-rhyme differences.','Broadens the ending sound for writing possibilities.','Widens the sound search aggressively for creative exploration.'];
- const cache=new Map(); let token=0;
- const fallback={
-  dad:{exact:['bad','brad','cad','clad','fad','glad','had','lad','mad','pad','sad','tad'],close:['bad','brad','cad','clad','fad','glad','had','lad','mad','pad','sad','tad','ad','add'],slant:['bad','brad','cad','clad','fad','glad','had','lad','mad','pad','sad','tad','dab','dam','dan','dash','drag','jam','lab','lag','map','rag','ram','ran','sap','sat'],loose:['bad','brad','cad','clad','fad','glad','had','lad','mad','pad','sad','tad','dab','dam','jam','lab','lag','map','rag','ram','slab','stab','tab'],experimental:['bad','brad','cad','clad','fad','glad','had','lad','mad','pad','sad','tad','dab','dam','jam','lab','lag','map','rag','ram','slab','stab','tab','bag','bat','cap','cat','crab','grab','lap','snap']},
-  yo:{exact:['beau','beaux','bow','Coe','doe','dough','doh','foe','go','hoe','Joe','low','mow','no','know','oh','owe','Poe','pro','row','so','show','slow','snow','stow','toe','tow','though','woe','whoa','woah','yo']}
- };
- function clean(){return (($('rhymeWord')||{}).value||'').trim().toLowerCase().replace(/[^a-z'-]/g,'');}
- function activeLetter(){const el=$('rhymeCycleLetter');return ((el&&el.textContent)||'A').trim().charAt(0).toUpperCase();}
- function level(){return +(range?range.value:0)}
- function setStatus(title,hint){const a=$('dialLetterLabel'),b=$('rhymeHint');if(a)a.textContent=title;if(b)b.textContent=hint;}
- function insert(word){const ed=$('writerEditor');if(!ed)return;ed.focus();document.execCommand('insertText',false,word+' ');ed.dispatchEvent(new Event('input',{bubbles:true}));}
- function render(words,letter){const box=$('rhymeResults');if(!box)return;box.innerHTML='';const filtered=[...new Set(words)].filter(w=>w&&w.charAt(0).toUpperCase()===letter).sort((a,b)=>a.length-b.length||a.localeCompare(b));if(!filtered.length){const x=document.createElement('span');x.className='rhyme-result';x.textContent='No matches at this range for '+letter;box.appendChild(x);return 0;}filtered.slice(0,80).forEach(w=>{const b=document.createElement('button');b.type='button';b.className='rhyme-result';b.textContent=w;b.title='Insert into writing pad';b.addEventListener('click',()=>insert(w));box.appendChild(b)});return filtered.length;}
- async function dm(param,word){const key=param+'|'+word;if(cache.has(key))return cache.get(key);const u='https://api.datamuse.com/words?'+param+'='+encodeURIComponent(word)+'&max=1000';const r=await fetch(u,{headers:{Accept:'application/json'}});if(!r.ok)throw Error(String(r.status));const j=await r.json();const v=j.map(x=>x.word).filter(Boolean);cache.set(key,v);return v;}
- async function search(word,lvl){const exact=await dm('rel_rhy',word);if(lvl===0)return exact;const near=await dm('rel_nry',word).catch(()=>[]);if(lvl===1)return [...exact,...near];const sound=await dm('sl',word).catch(()=>[]);if(lvl===2)return [...exact,...near,...sound.slice(0,350)];if(lvl===3)return [...exact,...near,...sound.slice(0,700)];return [...exact,...near,...sound];}
- async function draw(){const word=clean(), letter=activeLetter(), lvl=level(), mine=++token; if(rangeName)rangeName.textContent=names[lvl];if(rangeHelp)rangeHelp.textContent=helps[lvl]; const style=$('rhymeStyle');if(style&&style.value==='custom'){setStatus(letter+' • Custom ending sound','Custom sound mode remains separate from the phonetic range control.');return;}if(!word){setStatus(letter+' • Enter a word','Type a word, then cycle A–Z.');return;}setStatus(letter+' • '+names[lvl]+' range for '+word,'Searching pronunciation relationships…');try{let words=await search(word,lvl);if(mine!==token)return;const fb=fallback[word];if(fb){const key=names[lvl].toLowerCase();words=[...words,...(fb[key]||fb.exact||[])];}const n=render(words,letter);setStatus(letter+' • '+names[lvl]+' range for '+word,n?('Showing '+n+' result'+(n===1?'':'s')+' beginning with '+letter+'.'):('No '+names[lvl].toLowerCase()+' matches beginning with '+letter+'. Move the range right to search more loosely.'));}catch(e){if(mine!==token)return;const fb=fallback[word];const key=names[lvl].toLowerCase();const words=fb?((fb[key]||fb.exact)||[]):[];const n=render(words,letter);setStatus(letter+' • '+names[lvl]+' range for '+word,n?'Offline fallback results shown.':'Live rhyme lookup needs an internet connection.');}}
- window.eyeotaRangeDraw=draw;
- range&&range.addEventListener('input',draw);$('rhymeWord')&&$('rhymeWord').addEventListener('input',draw);$('rhymeStyle')&&$('rhymeStyle').addEventListener('change',draw);$('rhymePrevLetter')&&$('rhymePrevLetter').addEventListener('click',()=>setTimeout(draw,0));$('rhymeNextLetter')&&$('rhymeNextLetter').addEventListener('click',()=>setTimeout(draw,0));
- setTimeout(draw,50);
-})();
-</script>
-
 <style id="eyeota-rhyme-beta-notice-style">
 #eyeotaRhymeBetaNotice{
   position:fixed;
@@ -6685,7 +6739,7 @@ checkUnlock();
   let pos=0;
   const $=id=>document.getElementById(id);
   function word(){return (($('rhymeWord')?.value)||'').trim().toLowerCase().replace(/[^a-z]/g,'');}
-  function style(){return $('rhymeStyle')?.value||'';}
+  function style(){return 'exact';}
   function mark(letter){
     document.querySelectorAll('#dial .letter').forEach(e=>e.classList.remove('rhyme-current-letter'));
     const e=document.querySelector('#dial .letter[data-letter="'+letter+'"]');
@@ -6700,7 +6754,7 @@ checkUnlock();
   function draw(){
     const letter=alphabet[pos], box=$('rhymeResults'), hint=$('rhymeHint'), label=$('dialLetterLabel');
     mark(letter); if(!box)return; box.innerHTML='';
-    if(!word()){ if(label)label.textContent=letter+' • Enter a word'; if(hint)hint.textContent='Type YO, choose Exact sound rhyme, then use the arrows.'; return; }
+    if(!word()){ if(label)label.textContent=letter+' • Enter a word'; if(hint)hint.textContent='Type YO, then use the arrows.'; return; }
     if(!style()){ if(label)label.textContent=letter+' • Choose rhyme style'; if(hint)hint.textContent='Choose Exact sound rhyme, then cycle the dial.'; return; }
     if(word()!=='yo' || style()!=='exact'){
       if(label)label.textContent=letter+' • '+(style()==='near'?'Near / slant rhyme':'Selected rhyme method');
@@ -11185,5 +11239,38 @@ body.qr-mode #eyeModeArrow,body.qr-mode #dialModeArrow{display:flex!important;vi
 </style>
 <script id="eyeota-qr-navigation">
 (()=>{const panel=document.getElementById('eyeota-qr');document.getElementById('dialStage').appendChild(panel);function open(){if(location.hash.toLowerCase()==='#eyeota-qr'){window.eyeotaNavigate('qr');document.getElementById('dialStage').scrollIntoView({block:'start'});}}window.addEventListener('hashchange',open);open();})();
-</script></body>
+</script>
+<script id="eyeota-rhyme-digraph-script">
+(function(){
+ const ring=document.querySelector('#dial .inner-ring');if(!ring)return;
+ let canvas;
+ function draw(){
+  if(!canvas || !canvas.isConnected){canvas=document.createElement('canvas');canvas.id='eyeotaRhymeDigraphLines';canvas.setAttribute('role','img');canvas.setAttribute('aria-label','C H and S H pronunciation-dependent connections, each joined by two inner white lines and a gold hexagon labeled CH or SH');ring.appendChild(canvas);}
+  const size=ring.clientWidth;if(!size)return;
+  const dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=size*dpr;canvas.height=size*dpr;
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);const center=size/2;
+  const radius=size*.255;const marker=Math.max(13,Math.min(19,size*.036));
+  function angle(letter){const node=ring.querySelector('.letter[data-letter="'+letter+'"]');return Math.atan2(parseFloat(node.style.top)-50,parseFloat(node.style.left)-50);}
+  function connect(first,second){
+   let start=angle(first),delta=angle(second)-start;while(delta>Math.PI)delta-=Math.PI*2;while(delta< -Math.PI)delta+=Math.PI*2;
+   const end=start+delta,mid=start+delta/2,dir=Math.sign(delta),gap=(marker+3)/radius;
+   ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(1.4,size*.003);ctx.lineCap='round';
+   function half(from,to,letterAngle){
+    ctx.beginPath();ctx.moveTo(center+Math.cos(letterAngle)*size*.295,center+Math.sin(letterAngle)*size*.295);
+    ctx.lineTo(center+Math.cos(from)*radius,center+Math.sin(from)*radius);ctx.arc(center,center,radius,from,to,dir<0);ctx.stroke();
+   }
+   half(start,mid-dir*gap,start);
+   ctx.beginPath();ctx.arc(center,center,radius,mid+dir*gap,end,dir<0);ctx.lineTo(center+Math.cos(end)*size*.295,center+Math.sin(end)*size*.295);ctx.stroke();
+   const x=center+Math.cos(mid)*radius,y=center+Math.sin(mid)*radius;
+   ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3;const px=x+Math.cos(a)*marker,py=y+Math.sin(a)*marker;i?ctx.lineTo(px,py):ctx.moveTo(px,py);}ctx.closePath();ctx.fillStyle='#ffe082';ctx.fill();
+   ctx.fillStyle='#fff';ctx.font='800 '+Math.round(marker*.85)+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#342600';ctx.shadowBlur=2;ctx.fillText(first+second,x,y);ctx.shadowBlur=0;
+  }
+  connect('C','H');connect('S','H');
+ }
+ new ResizeObserver(draw).observe(ring);
+ new MutationObserver(()=>{if(!canvas?.isConnected)draw();}).observe(ring,{childList:true});
+ draw();
+})();
+</script>
+</body>
 </html>
