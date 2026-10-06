@@ -66,7 +66,7 @@ export function installAnalytics(app, root, options = {}) {
     return response.status === 204 ? null : response.json();
   }
   app.options('/api/analytics/collect', originGate, (req, res) => { res.set('Access-Control-Allow-Methods','POST, OPTIONS'); res.set('Access-Control-Allow-Headers','Content-Type'); res.status(204).end(); });
-  app.get('/api/analytics/config', (req,res) => res.json({ enabled, consentRequired: false, collectionMode: 'automatic-with-optout' }));
+  app.get('/api/analytics/config', (req,res) => { const origin=req.get('origin'); if(origin){if(!allowedOrigin(req))return res.status(403).json({error:'Origin not allowed'});res.set('Access-Control-Allow-Origin',origin);res.set('Vary','Origin');}res.set('Cache-Control','no-store');res.json({enabled,consentRequired:false,collectionMode:'automatic-with-optout'}); });
   app.post('/api/analytics/collect', originGate, async (req,res) => {
     if (!enabled) return res.status(503).json({ error: 'Analytics not configured' });
     if (req.get('sec-gpc') === '1' || req.get('dnt') === '1') return res.status(204).end();
