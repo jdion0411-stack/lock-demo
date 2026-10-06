@@ -5043,6 +5043,8 @@ function updateSwatchSelection() {
 
 function applyRotation() {
 
+    if (document.body.classList.contains('rhyme-mode')) window.eyeotaRedrawRhymeConnections?.();
+
     innerRing.style.transform =
         `rotate(${rotation}deg)`;
 
@@ -10630,8 +10632,8 @@ body.eye-test-mode #eyeotaRhymeFeaturedVideo,body.smdial-mode #eyeotaRhymeFeatur
 </style>
 <section id="eyeotaRhymeFeaturedVideo" aria-label="Rhyme Dial featured video">
  <h3>Rhyme Dial featured video</h3>
- <iframe title="Rhyme Dial featured video on YouTube" data-rhyme-video-src="https://www.youtube-nocookie.com/embed/eL_FLXC9r9w?rel=0&amp;playsinline=1" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
- <p>YouTube disclosure: This third-party video is embedded through YouTube. Video and music belong to their respective owners. EYEOTA claims no ownership, affiliation, or endorsement. Playing it connects to YouTube, which may collect viewing information. <a href="https://youtu.be/eL_FLXC9r9w" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></p>
+ <iframe title="Rhyme Dial featured video on YouTube" data-rhyme-video-src="https://www.youtube-nocookie.com/embed/C2Mp48ccAqg?rel=0&amp;playsinline=1" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+ <p>YouTube disclosure: This third-party video is embedded through YouTube. Video and music belong to their respective owners. EYEOTA claims no ownership, affiliation, or endorsement. Playing it connects to YouTube, which may collect viewing information. <a href="https://youtu.be/C2Mp48ccAqg" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></p>
 </section>
 <style id="eyeota-rhyme-video-responsive">
 #eyeotaRhymeFeaturedVideo iframe{height:auto;aspect-ratio:16/9}
@@ -11262,11 +11264,13 @@ body.qr-mode #eyeModeArrow,body.qr-mode #dialModeArrow{display:flex!important;vi
    half(start,mid-dir*gap,start);
    ctx.beginPath();ctx.arc(center,center,radius,mid+dir*gap,end,dir<0);ctx.lineTo(center+Math.cos(end)*size*.295,center+Math.sin(end)*size*.295);ctx.stroke();
    const x=center+Math.cos(mid)*radius,y=center+Math.sin(mid)*radius;
-   ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3;const px=x+Math.cos(a)*marker,py=y+Math.sin(a)*marker;i?ctx.lineTo(px,py):ctx.moveTo(px,py);}ctx.closePath();ctx.fillStyle='#ffe082';ctx.fill();
-   ctx.fillStyle='#fff';ctx.font='800 '+Math.round(marker*.85)+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#342600';ctx.shadowBlur=2;ctx.fillText(first+second,x,y);ctx.shadowBlur=0;
+   ctx.save();ctx.translate(x,y);ctx.rotate(-((typeof rotation==='number'?rotation:0)*Math.PI/180));
+   ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3;const px=Math.cos(a)*marker,py=Math.sin(a)*marker;i?ctx.lineTo(px,py):ctx.moveTo(px,py);}ctx.closePath();ctx.fillStyle='#ffe082';ctx.fill();
+   ctx.fillStyle='#fff';ctx.font='800 '+Math.round(marker*.85)+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#342600';ctx.shadowBlur=2;ctx.fillText(first+second,0,0);ctx.restore();
   }
   connect('C','H');connect('S','H');
  }
+ window.eyeotaRedrawRhymeConnections=draw;
  new ResizeObserver(draw).observe(ring);
  new MutationObserver(()=>{if(!canvas?.isConnected)draw();}).observe(ring,{childList:true});
  draw();
