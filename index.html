@@ -11378,6 +11378,11 @@ body.qr-mode #eyeModeArrow,body.qr-mode #dialModeArrow{display:flex!important;vi
   ctx.fillStyle='#fff';ctx.font='800 '+Math.round(marker*.85)+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#342600';ctx.shadowBlur=2;ctx.fillText('TI',0,0);ctx.restore();
   // DGE occupies a third, slightly inward lane between D and G.
   const dgeRadius=ciRadius-Math.max(marker*2+4,size*.045),dAngle=angle('D'),gAngle=angle('G');
+  const eAngle=angle('E');
+  ctx.shadowBlur=0;ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(1.4,size*.003);
+  ctx.beginPath();ctx.moveTo(center+Math.cos(eAngle)*ciRadius,center+Math.sin(eAngle)*ciRadius);
+  ctx.lineTo(center+Math.cos(eAngle)*dgeRadius,center+Math.sin(eAngle)*dgeRadius);ctx.stroke();
+
   let dgeDelta=gAngle-dAngle;while(dgeDelta>Math.PI)dgeDelta-=Math.PI*2;while(dgeDelta< -Math.PI)dgeDelta+=Math.PI*2;
   const dgeEnd=dAngle+dgeDelta,dgeMid=dAngle+dgeDelta/2,dgeDir=Math.sign(dgeDelta),dgeGap=(marker+3)/dgeRadius;
   ctx.shadowBlur=0;ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(1.4,size*.003);ctx.lineCap='round';
