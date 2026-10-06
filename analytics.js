@@ -13,7 +13,7 @@ export function installAnalytics(app, root, options = {}) {
   const originList = new Set((env.ANALYTICS_ALLOWED_ORIGINS || '').split(',').map(v => v.trim()).filter(Boolean));
   const dailySalt = randomBytes(32);
   const events = new Set(['site_load', 'dial_view', 'file_compress', 'file_open', 'clip_change']);
-  const modes = new Set(['lock', 'rhyme', 'eye', 'smdial', 'desktop', 'browser', 'notes', 'clips', 'legal', 'qr', 'files']);
+  const modes = new Set(['lock', 'rhyme', 'eye', 'smdial', 'desktop', 'browser', 'notes', 'clips', 'legal', 'qr', 'files', 'sufferxi']);
   const rates = new Map(), sessions = new Map();
   const limits = { collect: 90, login: 6 };
   let geoLookup = options.geoLookup || null;
@@ -66,12 +66,12 @@ export function installAnalytics(app, root, options = {}) {
     return response.status === 204 ? null : response.json();
   }
   app.options('/api/analytics/collect', originGate, (req, res) => { res.set('Access-Control-Allow-Methods','POST, OPTIONS'); res.set('Access-Control-Allow-Headers','Content-Type'); res.status(204).end(); });
-  app.get('/api/analytics/config', (req,res) => res.json({ enabled, consentRequired: true }));
+  app.get('/api/analytics/config', (req,res) => res.json({ enabled, consentRequired: false, collectionMode: 'automatic-with-optout' }));
   app.post('/api/analytics/collect', originGate, async (req,res) => {
     if (!enabled) return res.status(503).json({ error: 'Analytics not configured' });
     if (req.get('sec-gpc') === '1' || req.get('dnt') === '1') return res.status(204).end();
     const body = req.body || {};
-    if (body.consent !== true || !events.has(body.event) || !modes.has(body.mode) || Object.keys(body).some(k => !['consent','event','mode'].includes(k))) return res.status(400).json({ error: 'Invalid analytics event' });
+    if ((body.collectionAllowed !== true && body.consent !== true) || !events.has(body.event) || !modes.has(body.mode) || Object.keys(body).some(k => !['consent','collectionAllowed','event','mode'].includes(k))) return res.status(400).json({ error: 'Invalid analytics event' });
     if (!limit(req, 'collect')) return res.status(429).json({ error: 'Too many events' });
     let city = '', region = '', country = '';
     if (env.ANALYTICS_GEOIP === 'true' && geoLookup) {
