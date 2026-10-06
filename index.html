@@ -11260,13 +11260,15 @@ body.qr-mode #eyeModeArrow,body.qr-mode #dialModeArrow{display:flex!important;vi
 (function(){
  const ring=document.querySelector('#dial .inner-ring');if(!ring)return;
  let canvas;
+ let travelTime=0,lastFrame=0,animationFrame=0;
  function draw(){
   if(!canvas || !canvas.isConnected){canvas=document.createElement('canvas');canvas.id='eyeotaRhymeDigraphLines';canvas.setAttribute('role','img');canvas.setAttribute('aria-label','CH and SH joined by inner white lines and labeled gold hexagons; a smaller provisional ZH hexagon adjoins SH as a sound label, without a connection to letter Z');ring.appendChild(canvas);}
   const size=ring.clientWidth;if(!size)return;
-  const dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=size*dpr;canvas.height=size*dpr;
-  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);const center=size/2;
+  const dpr=Math.min(window.devicePixelRatio||1,2);if(canvas.width!==Math.round(size*dpr)||canvas.height!==Math.round(size*dpr)){canvas.width=size*dpr;canvas.height=size*dpr;}
+  const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,size,size);const center=size/2;
   const radius=size*.255;const marker=Math.max(13,Math.min(19,size*.036));
   function angle(letter){const node=ring.querySelector('.letter[data-letter="'+letter+'"]');return Math.atan2(parseFloat(node.style.top)-50,parseFloat(node.style.left)-50);}
+  let zhAnchorRadius,zhAnchorAngle,zhCellSize;
   function connect(first,second){
    let start=angle(first),delta=angle(second)-start;while(delta>Math.PI)delta-=Math.PI*2;while(delta< -Math.PI)delta+=Math.PI*2;
    const end=start+delta,mid=start+delta/2,dir=Math.sign(delta),gap=(marker+3)/radius;
@@ -11294,11 +11296,10 @@ body.qr-mode #eyeModeArrow,body.qr-mode #dialModeArrow{display:flex!important;vi
     const cellGap=Math.max(2,size*.004),distance=shEdge+zhEdge+cellGap;
     const dx=-Math.cos(screenAngle),dy=-Math.sin(screenAngle);
     const hx=dx*distance,hy=dy*distance;
+    zhAnchorRadius=radius-distance;zhAnchorAngle=mid;zhCellSize=small;
     ctx.shadowBlur=0;ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(1.4,size*.003);
     ctx.beginPath();ctx.moveTo(dx*shEdge,dy*shEdge);ctx.lineTo(dx*(distance-zhEdge),dy*(distance-zhEdge));ctx.stroke();
-    ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3;const px=hx+Math.cos(a)*small,py=hy+Math.sin(a)*small;i?ctx.lineTo(px,py):ctx.moveTo(px,py);}ctx.closePath();
-    ctx.shadowBlur=0;ctx.fillStyle='#ffe082';ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=1;ctx.stroke();
-    ctx.fillStyle='#fff';ctx.font='800 '+Math.round(small*.85)+'px Arial,sans-serif';ctx.shadowColor='#342600';ctx.shadowBlur=2;ctx.fillText('ZH',hx,hy);
+
    }
    ctx.restore();
   }
@@ -11326,8 +11327,22 @@ body.qr-mode #eyeModeArrow,body.qr-mode #dialModeArrow{display:flex!important;vi
   const iAngle=angle('I');
   ctx.beginPath();ctx.moveTo(center+Math.cos(iAngle)*size*.295,center+Math.sin(iAngle)*size*.295);
   ctx.lineTo(center+Math.cos(iAngle)*radius,center+Math.sin(iAngle)*radius);ctx.stroke();
+  // D, G and E connect to the established circular radius.
+  for(const letter of ['D','G','E']){
+   const stemAngle=angle(letter);
+   ctx.beginPath();ctx.moveTo(center+Math.cos(stemAngle)*size*.295,center+Math.sin(stemAngle)*size*.295);
+   ctx.lineTo(center+Math.cos(stemAngle)*radius,center+Math.sin(stemAngle)*radius);ctx.stroke();
+  }
+
   // A second, slightly inward lane joins C and I around the CI honeycomb.
   const ciRadius=radius-Math.max(18,size*.045);let ciDelta=iAngle-cAngle;
+  // Extend the D/G/E stems through the first radius to the second inward radius.
+  for(const letter of ['D','G','E']){
+   const stemAngle=angle(letter);
+   ctx.beginPath();ctx.moveTo(center+Math.cos(stemAngle)*radius,center+Math.sin(stemAngle)*radius);
+   ctx.lineTo(center+Math.cos(stemAngle)*ciRadius,center+Math.sin(stemAngle)*ciRadius);ctx.stroke();
+  }
+
   while(ciDelta>Math.PI)ciDelta-=Math.PI*2;while(ciDelta< -Math.PI)ciDelta+=Math.PI*2;
   const ciEnd=cAngle+ciDelta,ciMid=cAngle+ciDelta/2,ciDir=Math.sign(ciDelta),ciGap=(marker+3)/ciRadius;
   ctx.beginPath();ctx.moveTo(center+Math.cos(cAngle)*radius,center+Math.sin(cAngle)*radius);
@@ -11356,10 +11371,68 @@ body.qr-mode #eyeModeArrow,body.qr-mode #dialModeArrow{display:flex!important;vi
   ctx.rotate(-((typeof rotation==='number'?rotation:0)*Math.PI/180));
   ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3;i?ctx.lineTo(Math.cos(a)*marker,Math.sin(a)*marker):ctx.moveTo(Math.cos(a)*marker,Math.sin(a)*marker);}ctx.closePath();ctx.fillStyle='#ffe082';ctx.fill();
   ctx.fillStyle='#fff';ctx.font='800 '+Math.round(marker*.85)+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#342600';ctx.shadowBlur=2;ctx.fillText('TI',0,0);ctx.restore();
+  // DGE occupies a third, slightly inward lane between D and G.
+  const dgeRadius=ciRadius-Math.max(marker*2+4,size*.045),dAngle=angle('D'),gAngle=angle('G');
+  let dgeDelta=gAngle-dAngle;while(dgeDelta>Math.PI)dgeDelta-=Math.PI*2;while(dgeDelta< -Math.PI)dgeDelta+=Math.PI*2;
+  const dgeEnd=dAngle+dgeDelta,dgeMid=dAngle+dgeDelta/2,dgeDir=Math.sign(dgeDelta),dgeGap=(marker+3)/dgeRadius;
+  ctx.shadowBlur=0;ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(1.4,size*.003);ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(center+Math.cos(dAngle)*ciRadius,center+Math.sin(dAngle)*ciRadius);
+  ctx.lineTo(center+Math.cos(dAngle)*dgeRadius,center+Math.sin(dAngle)*dgeRadius);
+  ctx.arc(center,center,dgeRadius,dAngle,dgeMid-dgeDir*dgeGap,dgeDir<0);ctx.stroke();
+  ctx.beginPath();ctx.arc(center,center,dgeRadius,dgeMid+dgeDir*dgeGap,dgeEnd,dgeDir<0);
+  ctx.lineTo(center+Math.cos(gAngle)*ciRadius,center+Math.sin(gAngle)*ciRadius);ctx.stroke();
+  ctx.save();ctx.translate(center+Math.cos(dgeMid)*dgeRadius,center+Math.sin(dgeMid)*dgeRadius);
+  ctx.rotate(-((typeof rotation==='number'?rotation:0)*Math.PI/180));
+  ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3;i?ctx.lineTo(Math.cos(a)*marker,Math.sin(a)*marker):ctx.moveTo(Math.cos(a)*marker,Math.sin(a)*marker);}ctx.closePath();ctx.fillStyle='#b983ff';ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='800 '+Math.round(marker*.65)+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#342600';ctx.shadowBlur=2;ctx.fillText('DGE',0,0);ctx.restore();
+  // Keep the DGE lane exactly circular; meet ZH via a short radial connector.
+  if(Number.isFinite(zhAnchorRadius)){
+   let bridgeDelta=zhAnchorAngle-dgeMid;
+   while(bridgeDelta>Math.PI)bridgeDelta-=Math.PI*2;while(bridgeDelta< -Math.PI)bridgeDelta+=Math.PI*2;
+   const bridgeDir=Math.sign(bridgeDelta),bridgeEnd=dgeMid+bridgeDelta;
+   ctx.shadowBlur=0;ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(1.4,size*.003);ctx.lineCap='round';
+   ctx.beginPath();ctx.arc(center,center,dgeRadius,dgeMid+bridgeDir*dgeGap,bridgeEnd,bridgeDir<0);ctx.stroke();
+   const screenAngle=zhAnchorAngle+(typeof rotation==='number'?rotation:0)*Math.PI/180;
+   const edgeNormals=Array.from({length:6},(_,i)=>Math.PI/6+i*Math.PI/3);
+   const shEdge=marker*Math.sqrt(3)/2/Math.max(...edgeNormals.map(a=>Math.cos(screenAngle+Math.PI-a)));
+   ctx.beginPath();ctx.moveTo(center+Math.cos(zhAnchorAngle)*dgeRadius,center+Math.sin(zhAnchorAngle)*dgeRadius);
+   ctx.lineTo(center+Math.cos(zhAnchorAngle)*(radius-shEdge),center+Math.sin(zhAnchorAngle)*(radius-shEdge));ctx.stroke();
+   // Three seconds at each endpoint, with a four-second trip each way.
+   const phase=travelTime%14000;
+   const progress=phase<3000?0:phase<7000?(phase-3000)/4000:phase<10000?1:1-(phase-10000)/4000;
+   const stopAngle=dgeMid+bridgeDir*(marker+zhCellSize+3)/dgeRadius;
+   const radialLength=Math.abs(zhAnchorRadius-dgeRadius),arcLength=Math.abs(zhAnchorAngle-stopAngle)*dgeRadius;
+   const traveled=progress*(radialLength+arcLength);
+   let movingRadius,movingAngle;
+   if(traveled<=radialLength){movingRadius=zhAnchorRadius+(dgeRadius-zhAnchorRadius)*(radialLength?traveled/radialLength:1);movingAngle=zhAnchorAngle;}
+   else{movingRadius=dgeRadius;movingAngle=zhAnchorAngle+(stopAngle-zhAnchorAngle)*(arcLength?(traveled-radialLength)/arcLength:1);}
+   const mix=Math.max(0,Math.min(1,(progress-.35)/.3));
+   const color='rgb('+[255+(185-255)*mix,224+(131-224)*mix,130+(255-130)*mix].map(Math.round).join(',')+')';
+   ctx.save();ctx.translate(center+Math.cos(movingAngle)*movingRadius,center+Math.sin(movingAngle)*movingRadius);
+   ctx.rotate(-((typeof rotation==='number'?rotation:0)*Math.PI/180));
+   ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3;i?ctx.lineTo(Math.cos(a)*zhCellSize,Math.sin(a)*zhCellSize):ctx.moveTo(Math.cos(a)*zhCellSize,Math.sin(a)*zhCellSize);}ctx.closePath();
+   ctx.fillStyle=color;ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=1;ctx.stroke();
+   ctx.fillStyle='#fff';ctx.font='800 '+Math.round(zhCellSize*.85)+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#342600';ctx.shadowBlur=2;ctx.fillText('ZH',0,0);ctx.restore();
+  }
+
+
 
 
 
  }
+ function tick(timestamp){
+  if(!document.body.classList.contains('rhyme-mode')||document.hidden){animationFrame=0;lastFrame=0;return;}
+  if(!lastFrame)lastFrame=timestamp;
+  if(timestamp-lastFrame>=33){travelTime+=Math.min(timestamp-lastFrame,100);lastFrame=timestamp;draw();}
+  animationFrame=requestAnimationFrame(tick);
+ }
+ function syncAnimation(){
+  if(document.body.classList.contains('rhyme-mode')&&!document.hidden){if(!animationFrame)animationFrame=requestAnimationFrame(tick);}
+  else{cancelAnimationFrame(animationFrame);animationFrame=0;lastFrame=0;}
+ }
+ new MutationObserver(syncAnimation).observe(document.body,{attributes:true,attributeFilter:['class']});
+ document.addEventListener('visibilitychange',syncAnimation);
+ syncAnimation();
  window.eyeotaRedrawRhymeConnections=draw;
  new ResizeObserver(draw).observe(ring);
  new MutationObserver(()=>{if(!canvas?.isConnected)draw();}).observe(ring,{childList:true});
