@@ -9422,7 +9422,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     saved=[];
   }
 
+  let mobileDesktopPaint=0;
   function desktopFrame(now){
+    if(innerWidth<=768 && now-mobileDesktopPaint<33){raf=requestAnimationFrame(desktopFrame);return;}mobileDesktopPaint=now;
     if(!active || !body.classList.contains('desktop-mode')){
       raf=0;
       return;
@@ -10984,7 +10986,17 @@ document.addEventListener('DOMContentLoaded',()=>{
  function changeYear(direction){year=Math.max(1900,Math.min(2100,year+direction));redraw();choose(month)}
  function monthRecords(m){return records.filter(r=>fromSource(r)&&(r.calendarDates?.length?r.calendarDates:r.date?[r.date]:[]).some(d=>Number(d.slice(0,4))===year&&Number(d.slice(5,7))===m+1))}
  function redraw(){document.querySelectorAll('.legal-social-source').forEach(b=>{const n=records.filter(r=>r.platform===b.dataset.platform).length;b.querySelector('.legal-source-count').textContent=n+' DOC'+(n===1?'':'S');b.setAttribute('aria-label',platforms.find(p=>p[0]===b.dataset.platform)[2]+', '+n+' document'+(n===1?'':'s')+' across all years');}); $('legalYear').textContent=year;const n=records.filter(r=>r.date&&Number(r.date.slice(0,4))===year).length;$('legalYearCount').textContent='';$('legalSunTotal').textContent=new Set(records.map(r=>r.id)).size+' FILES TOTAL';$('legalSunTotal').setAttribute('aria-label',new Set(records.map(r=>r.id)).size+' total records across all years and sources');$('legalNotes').textContent='NOTES '+records.filter(r=>r.summaryOnly&&!r.excerptOnly&&r.date&&Number(r.date.slice(0,4))===year).length;$('legalReview').textContent='REVIEW '+records.filter(r=>!r.date||r.datePrecision==='conversation-context').length;$('legalMonths').replaceChildren();for(let m=0;m<12;m++){const n=monthRecords(m).length,b=document.createElement('button');b.type='button';b.className='legal-month'+(n?' has-records':'')+(sourcePlatform&&n?' social-record-month':'');b.style.setProperty('--month-color',palette[m]);b.dataset.month=m;b.setAttribute('aria-label',new Date(year,m).toLocaleString('en-US',{month:'long',year:'numeric'})+', '+(n?n+' documents':'empty'));const date=document.createElement('span');date.textContent=new Date(year,m).toLocaleString('en-US',{month:'short'})+' '+year;const count=document.createElement('small');count.textContent=n?n+' DOC'+(n===1?'':'S'):'EMPTY';b.append(date,count);b.onpointerenter=e=>{if(e.pointerType==='mouse')choose(m)};b.onfocus=()=>choose(m);b.onclick=e=>{choose(m);if(e.detail>0)b.blur()};$('legalMonths').append(b)}position()}
- function choose(m){const signature=String(m)+'|'+year+'|'+(sourcePlatform||'')+'|'+revision;if(choose.lastSignature===signature)return;choose.lastSignature=signature;month=m;list=m==='social'?records.filter(r=>fromSource(r)&&r.date&&Number(r.date.slice(0,4))===year):m==='notes'?records.filter(r=>fromSource(r)&&r.summaryOnly&&!r.excerptOnly&&r.date&&Number(r.date.slice(0,4))===year):m==='unknown'?records.filter(r=>fromSource(r)&&(!r.date||r.datePrecision==='conversation-context')):monthRecords(m);index=0;$('legalSelection').textContent=m==='social'?sourceName()+' · '+year:m==='notes'?'Event notes · '+year:m==='unknown'?'Date placement review':new Date(year,m).toLocaleString('en-US',{month:'long',year:'numeric'});$('legalCountBadge').textContent=list.length+' record'+(list.length===1?'':'s');if(sourcePlatform&&m!=='social')$('legalSelection').textContent=sourceName()+' · '+$('legalSelection').textContent;document.querySelectorAll('.legal-social-source').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.platform===sourcePlatform)));document.querySelectorAll('.legal-month').forEach(b=>{const matched=!!sourcePlatform&&monthRecords(Number(b.dataset.month)).length>0;b.classList.toggle('source-month-highlight',matched);b.classList.toggle('social-record-month',matched);b.setAttribute('aria-pressed',String(matched||(!sourcePlatform&&Number(b.dataset.month)===m)));});renderDocument()}
+ function choose(m){const signature=String(m)+'|'+year+'|'+(sourcePlatform||'')+'|'+revision;if(choose.lastSignature===signature)return;choose.lastSignature=signature;month=m;list=m==='all'?records.slice():m==='social'?records.filter(r=>fromSource(r)&&r.date&&Number(r.date.slice(0,4))===year):m==='notes'?records.filter(r=>fromSource(r)&&r.summaryOnly&&!r.excerptOnly&&r.date&&Number(r.date.slice(0,4))===year):m==='unknown'?records.filter(r=>fromSource(r)&&(!r.date||r.datePrecision==='conversation-context')):monthRecords(m);index=0;$('legalSelection').textContent=m==='all'?'All documents · all years':m==='social'?sourceName()+' · '+year:m==='notes'?'Event notes · '+year:m==='unknown'?'Date placement review':new Date(year,m).toLocaleString('en-US',{month:'long',year:'numeric'});$('legalCountBadge').textContent=list.length+' record'+(list.length===1?'':'s');if(sourcePlatform&&m!=='social'&&m!=='all')$('legalSelection').textContent=sourceName()+' · '+$('legalSelection').textContent;document.querySelectorAll('.legal-social-source').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.platform===sourcePlatform)));document.querySelectorAll('.legal-month').forEach(b=>{const matched=!!sourcePlatform&&monthRecords(Number(b.dataset.month)).length>0;b.classList.toggle('source-month-highlight',matched);b.classList.toggle('social-record-month',matched);b.setAttribute('aria-pressed',String(matched||(!sourcePlatform&&Number(b.dataset.month)===m)));});renderDocument()}
+
+ const mobileBrowser=document.createElement('div');mobileBrowser.id='legalMobileRecordBrowser';
+ const mobileAll=document.createElement('button');mobileAll.type='button';mobileAll.textContent='Browse all '+records.length+' documents';
+ const mobileLabel=document.createElement('label');mobileLabel.textContent='Select a document (all years and sources)';mobileLabel.htmlFor='legalMobileRecordSelect';
+ const mobileSelect=document.createElement('select');mobileSelect.id='legalMobileRecordSelect';
+ function refreshMobileOptions(){mobileSelect.replaceChildren(new Option('Choose a document…',''));for(const r of records)mobileSelect.add(new Option(r.id+' · '+(r.date||'Date needs review')+' · '+r.title,r.id));mobileAll.textContent='Browse all '+records.length+' documents';}
+ mobileAll.onclick=()=>{sourcePlatform=null;redraw();choose('all');};
+ mobileSelect.onchange=()=>{const id=mobileSelect.value;if(!id)return;sourcePlatform=null;redraw();choose('all');index=list.findIndex(r=>r.id===id);if(index>=0)renderDocument();};
+ mobileBrowser.append(mobileAll,mobileLabel,mobileSelect);panel.querySelector('.legal-document-toolbar').before(mobileBrowser);refreshMobileOptions();
+ window.addEventListener('eyeota-legal-records-updated',refreshMobileOptions);
  function drawLegalMusicalNotes(container,packet){container.hidden=true;}
  function renderDocument(){revoke();const r=list[index];orbitSetRecord(r);panel.classList.toggle('legal-document-encrypted',!!r?.parts.some(p=>p.musical));$('legalEmpty').hidden=!!r;$('legalDocument').hidden=!r;$('legalDocPrev').disabled=!r||index===0;$('legalDocNext').disabled=!r||index===list.length-1;$('legalPosition').textContent=r?(index+1)+' / '+list.length:'0 / 0';$('legalReveal').hidden=!key||!r||r.summaryOnly;if(!r){$('legalEmpty').textContent=sourcePlatform?'No '+sourceName()+' records filed for this selection. Use the months or REVIEW for undated records.':month==='notes'?'No event notes are filed in this year.':month==='unknown'?'All records have confirmed dates.':'Empty — no records are filed in this month. Records without reliable dates remain in Date placement review.';$('legalText').replaceChildren();$('legalPicture').replaceChildren();return} $('legalDocTitle').textContent=r.title+' · '+(r.date||'Date unknown');$('legalDateEvidence').textContent=r.date?(r.datePrecision==='conversation-context'?'CONTEXT / REVIEW · ':'')+(r.calendarDates||[r.date]).join(', ')+' · '+r.dateEvidence:'Year unconfirmed · '+(r.observedDate||'No complete date visible')+' · not assigned to a calendar year';$('legalText').replaceChildren();let paragraph=document.createElement('p');paragraph.className='legal-paragraph';for(const part of r.parts){const el=document.createElement('span');el.className=part.musical?'legal-musical-seal':part.redacted?'legal-redaction':'legal-text-run';if(part.musical)drawLegalMusicalNotes(el,part.notes);else el.textContent=(part.redacted?'[REDACTED] ♫ '+part.notes:part.text)+' ';paragraph.append(el);if(part.paragraphEnd){$('legalText').append(paragraph);paragraph=document.createElement('p');paragraph.className='legal-paragraph'}}if(paragraph.childNodes.length)$('legalText').append(paragraph);$('legalPicture').replaceChildren();const cover=document.createElement('div');cover.className='legal-picture-cover';cover.innerHTML=r.submissionLog?'<span aria-hidden="true">▤</span><strong>SUBMISSION LOG</strong><small>Owner-reported · contents not attached</small>':r.summaryOnly?'<span aria-hidden="true">♫</span><strong>MUSICAL RECORD</strong><small>Unlock to read the transcript</small>':'<span aria-hidden="true">♬</span><strong>ENCRYPTED RECORD</strong><small>Private image / document</small>';const id=document.createElement('p');id.textContent=r.id+' · matching reference'+(r.permanentPhoneRemoval?' · phone permanently removed':'');$('legalPicture').append(cover,id);$('legalText').scrollTop=0;}
  const parkedObjects={cia:[74.75,25.25],fbi:[74.75,74.75],whitehouse:[25.25,25.25],medical:[25.25,74.75],insurance:[50,82]};
@@ -11243,8 +11255,8 @@ try{audioContext=new Audio();await audioContext.resume();const stream=await navi
 
 function listenForWhistle(time){if(!inputEnabled||!analyser||!spectrum)return;analyser.getFloatFrequencyData(spectrum);if(detectWhistle(spectrum,audioContext.sampleRate,analyser.fftSize,time)){setAction(mode==='orbit'?'qr':'orbit');inputStatus.textContent=mode==='qr'?'Whistle heard. QR code summoned.':'Whistle heard. Returned to orbit.';}}
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&inputEnabled)stopInput();});window.addEventListener('pagehide',()=>stopInput());document.body.addEventListener('eyeota-mode-change',e=>{if(e.detail.mode!=='qr'&&inputEnabled)stopInput();});
-function animate(time){if(!visible||document.hidden){last=time;window.eyeotaWaitForMode(animate,'qr-mode');return;}requestAnimationFrame(animate);const dt=last?Math.min(.05,(time-last)/1000):0;last=time;if(!reduced)clock+=dt;listenForWhistle(time);amount+=(Number(mode==='qr')-amount)*Math.min(1,dt*3.6);
-const size=canvas.clientWidth,dpr=Math.min(devicePixelRatio||1,2);if(canvas.width!==Math.round(size*dpr)){canvas.width=Math.round(size*dpr);canvas.height=canvas.width;}ctx.setTransform(canvas.width/450,0,0,canvas.height/450,canvas.width/2,canvas.height/2);ctx.clearRect(-225,-225,450,450);
+let mobileQrPaint=0;function animate(time){if(innerWidth<=768 && time-mobileQrPaint<33){requestAnimationFrame(animate);return;}mobileQrPaint=time;if(!visible||document.hidden){last=time;window.eyeotaWaitForMode(animate,'qr-mode');return;}requestAnimationFrame(animate);const dt=last?Math.min(.05,(time-last)/1000):0;last=time;if(!reduced)clock+=dt;listenForWhistle(time);amount+=(Number(mode==='qr')-amount)*Math.min(1,dt*3.6);
+const size=canvas.clientWidth,dpr=Math.min(devicePixelRatio||1,innerWidth<=768?1.5:2);if(canvas.width!==Math.round(size*dpr)){canvas.width=Math.round(size*dpr);canvas.height=canvas.width;}ctx.setTransform(canvas.width/450,0,0,canvas.height/450,canvas.width/2,canvas.height/2);ctx.clearRect(-225,-225,450,450);
 if(amount>.001){ctx.fillStyle=`rgba(255,253,245,${amount})`;ctx.beginPath();ctx.arc(0,0,188,0,Math.PI*2);ctx.fill();}
 for(const p of particles){const a=p.a+clock*(.12+(p.i%5)*.02),ox=Math.cos(a)*p.r,oy=Math.sin(a)*p.r,q=qrDots[p.i];ctx.globalAlpha=q?1:1-amount;const x=q?ox*(1-amount)+q.x*amount:ox,y=q?oy*(1-amount)+q.y*amount:oy;ctx.fillStyle=`rgb(${[239,183,73].map(v=>Math.round(v*(1-amount)+20*amount)).join(',')})`;const s=1.65*(1-amount)+5.8*amount;ctx.fillRect(x-s/2,y-s/2,s,s);}ctx.globalAlpha=1;if(mode==='qr'&&amount>.995)status.textContent='Ready to scan';
 }requestAnimationFrame(animate);
@@ -12247,7 +12259,7 @@ if(music&&!music.paused) music.pause();
   });
   function flicker(){
    if(!span.isConnected)return;
-   if(document.hidden||matchMedia('(prefers-reduced-motion: reduce)').matches){span._letterTimer=setTimeout(flicker,20000);return;}
+   if(document.hidden||!span.getClientRects().length||span.getBoundingClientRect().bottom<0||span.getBoundingClientRect().top>innerHeight||matchMedia('(prefers-reduced-motion: reduce)').matches){span._letterTimer=setTimeout(flicker,20000);return;}
    const letter=letters[Math.floor(Math.random()*letters.length)];if(!letter)return;
    letter.text.style.opacity='.55';letter.symbol.style.opacity='1';letter.symbol.style.filter='drop-shadow(0 0 4px #8debe7)';
    span._letterTimer=setTimeout(()=>{letter.text.style.opacity='1';letter.symbol.style.opacity='0';span._letterTimer=setTimeout(flicker,3500+Math.random()*6500);},1800);
@@ -12290,7 +12302,7 @@ if(music&&!music.paused) music.pause();
   const symbol=document.createElement('span');symbol.style.cssText='position:absolute;inset:0;opacity:0;background-position:center;background-size:contain;background-repeat:no-repeat;transition:opacity .35s;pointer-events:none';symbol.style.backgroundImage='url("'+notes(letter)+'")';
   const english=document.createElement('span');english.textContent=letter;english.style.transition='opacity .35s';cell.textContent='';cell.append(english,symbol);
   let encrypted=false;
-  function change(){encrypted=!encrypted;english.style.opacity=encrypted?'0':'1';symbol.style.opacity=encrypted?'1':'0';setTimeout(change,encrypted?1200+Math.random()*3800:4000+Math.random()*16000);}
+  function change(){if(document.hidden||!label.getClientRects().length||label.getBoundingClientRect().bottom<0||label.getBoundingClientRect().top>innerHeight){setTimeout(change,5000);return;}encrypted=!encrypted;english.style.opacity=encrypted?'0':'1';symbol.style.opacity=encrypted?'1':'0';setTimeout(change,encrypted?1200+Math.random()*3800:4000+Math.random()*16000);}
   setTimeout(change,2000+Math.random()*18000);
  });
 }
@@ -12328,7 +12340,33 @@ body.dream-mode #dial>.dream-orbit-switch #nightmareView{top:76%!important}
 @keyframes dreamSwitchOrbit{from{rotate:0deg}to{rotate:360deg}}
 @keyframes dreamSwitchUpright{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(-360deg)}}
 @media(prefers-reduced-motion:reduce){body.dream-mode #dial>.dream-orbit-switch,body.dream-mode #dial>.dream-orbit-switch button{animation:none!important}}
-</style></body>
+</style>
+<style id="eota-mobile-performance">
+@media (max-width:768px){
+ #dialStage,#dial,.eyeota-feature-line button{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+}
+</style>
+<script id="eota-mobile-media-budget">
+(()=>{
+ const mobile=matchMedia('(max-width:768px)');
+ if(!mobile.matches)return;
+ const resume=new WeakSet(),visible=new WeakMap();
+ function sync(video){
+  const on=!document.hidden&&visible.get(video)&&video.getClientRects().length>0;
+  if(!on){if(!video.paused){resume.add(video);video.pause();}}
+  else if(resume.has(video)){resume.delete(video);video.play().catch(()=>{});}
+ }
+ const observer=new IntersectionObserver(entries=>entries.forEach(e=>{visible.set(e.target,e.isIntersecting);sync(e.target);}),{threshold:0.01});
+ const videos=[...document.querySelectorAll('video')];
+ videos.forEach(video=>{video.preload='none';observer.observe(video);video.addEventListener('play',()=>sync(video));});
+ document.querySelectorAll('iframe').forEach(frame=>{frame.loading='lazy';});
+ function refresh(){videos.forEach(sync);}
+ document.addEventListener('visibilitychange',refresh);
+ document.body.addEventListener('eyeota-mode-change',()=>requestAnimationFrame(refresh));
+})();
+</script>
+
+</body>
 </html>
 
 <style id="eyeota-mobile-navigation-fix">
@@ -16745,4 +16783,21 @@ html body.eb-browser-mode #eyeotaAppLaunchRing button[aria-label="Open DOCUMENT 
 html body.dream-mode #dial>.dream-orbit-switch{display:block!important;visibility:visible!important;opacity:1!important;pointer-events:none!important;z-index:650!important}
 html body.dream-mode #dial>.dream-orbit-switch button{display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
 html body:not(.dream-mode) #dial>.dream-orbit-switch{display:none!important}
+</style>
+
+<style id="eota-mobile-document-access">
+#legalMobileRecordBrowser{display:none}
+@media(max-width:768px){
+html body.legal-mode:not(.dream-mode){overflow-y:auto!important;height:auto!important;min-height:100svh}
+html body.legal-mode:not(.dream-mode) #legalPanel{display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;position:relative!important;left:auto!important;transform:none!important;width:calc(100% - 24px)!important;max-width:940px!important;height:auto!important;max-height:none!important;overflow:visible!important;margin:18px auto 32px!important;box-sizing:border-box!important}
+html body.legal-mode:not(.dream-mode) #legalMobileRecordBrowser{display:grid!important;gap:10px;margin:12px 0 16px}
+#legalMobileRecordBrowser button,#legalMobileRecordSelect{min-height:44px;touch-action:manipulation;width:100%;box-sizing:border-box;font-size:16px}
+#legalMobileRecordBrowser label{font:12px/1.5 Arial;color:#eafaff}
+#legalMobileRecordSelect{background:#071a29;color:#fff;border:1px solid #72bcc9;border-radius:8px;padding:10px;max-width:100%}
+html body.legal-mode #legalPanel .legal-document-grid{grid-template-columns:minmax(0,1fr)!important}
+html body.legal-mode #legalPanel .legal-view-heading{flex-wrap:wrap}
+html body.legal-mode #legalPanel .legal-document-toolbar button{min-width:44px;min-height:44px;touch-action:manipulation}
+html body.legal-mode #legalDial{pointer-events:auto!important}
+html body.legal-mode #legalDial button{pointer-events:auto!important;touch-action:manipulation}
+}
 </style>
