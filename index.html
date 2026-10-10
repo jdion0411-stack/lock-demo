@@ -12226,7 +12226,7 @@ if(music&&!music.paused) music.pause();
  }
  function convert(node){
   if(!node.isConnected||!/[A-Za-z]/.test(node.nodeValue)||node.parentElement?.closest(skip))return;
-  if(!node.parentElement?.closest('button,[role="button"],input[type="button"],input[type="submit"]'))return;
+  if(!node.parentElement?.closest('.eyeota-feature-line button[data-eyeota-mode],.eyeota-feature-line #eotaSkinnsButton'))return;
   const span=document.createElement('span');span.className='eota-musical-text';
   node.replaceWith(span);span.appendChild(node);redraw(span);
  }
