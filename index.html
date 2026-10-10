@@ -12117,6 +12117,11 @@ html body>.app{position:relative!important;z-index:2!important}
 #eyeotaWindowsDownload{display:none;max-width:700px;margin:30px auto;padding:24px;text-align:center;border:1px solid #8bcddd;border-radius:18px;background:rgba(5,16,29,.94);color:#edf9ff;font:15px/1.6 Arial,sans-serif}body.eb-browser-mode #eyeotaWindowsDownload{display:block}#eyeotaWindowsDownload h2{margin:0 0 8px}#eyeotaWindowsDownload .download{display:inline-block;margin:14px 0;padding:12px 22px;border-radius:24px;background:#f1ce86;color:#14202a;text-decoration:none;font-weight:bold}#eyeotaWindowsDownload small{display:block;color:#b7cfda}#eyeotaWindowsDownload summary{cursor:pointer;color:#a8e6f5}#eyeotaWindowsDownload ol{text-align:left;max-width:510px;margin:14px auto}#eyeotaWindowsDownload .tag{font-size:11px;letter-spacing:2px;color:#f1ce86}
 </style>
 <section id="eyeotaWindowsDownload" aria-label="EOTA Browser Beta download">
+<div id="eotaBrowserShowcase" style="margin:0 auto 36px;max-width:620px">
+<h2 style="font-size:22px;color:#f1ce86">See EOTA Browser in action</h2>
+<p>Move the floating sun, browse inside the dial, and use the built-in MP3 player.</p>
+<video id="eotaShowcaseVideo" controls playsinline preload="none" style="display:block;width:100%;height:auto;border-radius:14px;background:#080f1e;border:1px solid #8bcddd" aria-label="EOTA Browser Beta walkthrough"><source src="eota-browser-showcase.mp4" type="video/mp4">Your browser does not support this video.</video>
+</div>
 <p class="tag">WINDOWS ONLY · 64-BIT PC</p>
 <button id="eotaBetaSun" type="button" aria-label="Click the glowing sun to download EOTA Browser Beta" title="Click to download EOTA Browser Beta"><span>EOTA</span></button>
 <p class="beta-instruction">Click the glowing sun to download the beta.</p>
@@ -12154,6 +12159,15 @@ body.eb-browser-mode #eyeotaWindowsDownload{display:block!important;margin:48px 
 <style>
 #eotaBetaPassword{width:min(92vw,560px);max-height:90vh;overflow:auto;background:#071426;color:#edf9ff;border:1px solid #edca75;border-radius:24px;padding:28px;font:14px/1.5 Arial}#eotaBetaPassword::backdrop{background:#020816cc}#eotaBetaPassword h2{font-size:20px;margin:0 0 14px}.beta-password-fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.beta-password-field{display:grid;gap:8px;font-size:12px}.beta-letter{box-sizing:border-box;width:100%;height:60px;text-align:center;font:bold 30px Arial;border:1px solid #637c93;border-radius:12px;background:#132238;color:#fff}.beta-color{width:100%;height:38px;border:1px solid #637c93;border-radius:8px;background:#132238;color:#fff;font:11px Arial}#eotaBetaPassword button{margin:10px 8px 0 0;border:1px solid #edca75;border-radius:20px;padding:10px 16px;background:#ead08c;color:#122033;cursor:pointer}#eotaBetaPasswordCancel{background:transparent!important;color:#edf9ff!important}#eotaBetaPasswordError{min-height:22px;color:#ffd589}#eotaBetaPassword button:disabled{opacity:.5}.beta-password-note{color:#f5d58e}@media(max-width:420px){.beta-password-fields{gap:6px}#eotaBetaPassword{padding:20px 12px}}
 </style>
+<script id="eota-showcase-audio">
+(function(){
+var video=document.getElementById('eotaShowcaseVideo');
+video.addEventListener('play',function(){
+var music=window.eyeotaBackgroundMusic;
+if(music&&!music.paused) music.pause();
+});
+})();
+</script>
 </body>
 </html>
 
