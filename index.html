@@ -12127,13 +12127,13 @@ html body>.app{position:relative!important;z-index:2!important}
 <p class="beta-instruction">Click the glowing sun to download the beta.</p>
 <button id="eotaBetaDownload" class="download" type="button">EOTA BROWSER BETA</button>
 <p class="beta-password-note">Password required to download.</p>
+<div id="eotaBrowserLiveDemo" aria-label="Interactive EOTA Browser demonstration"></div>
 <p id="eotaBetaStatus" role="status"></p>
 <small>Windows only · Extract the ZIP and open EOTA-Browser-Dial-v2.11.exe.<br>While EOTA is running, press Ctrl + Alt + E to summon it.</small>
 </section>
 
 <dialog id="eotaBetaPassword" aria-labelledby="eotaBetaPasswordTitle"><form id="eotaBetaPasswordForm"><h2 id="eotaBetaPasswordTitle">Download EOTA Browser Beta</h2><p>Enter the four letters and choose a color for each.</p><div class="beta-password-fields"><label class="beta-password-field">Letter 1<input class="beta-letter" type="text" maxlength="1" pattern="[A-Za-z]" autocomplete="off" spellcheck="false" required aria-label="Letter 1"><select class="beta-color" required aria-label="Color for letter 1"><option value="">Choose color</option></select></label><label class="beta-password-field">Letter 2<input class="beta-letter" type="text" maxlength="1" pattern="[A-Za-z]" autocomplete="off" spellcheck="false" required aria-label="Letter 2"><select class="beta-color" required aria-label="Color for letter 2"><option value="">Choose color</option></select></label><label class="beta-password-field">Letter 3<input class="beta-letter" type="text" maxlength="1" pattern="[A-Za-z]" autocomplete="off" spellcheck="false" required aria-label="Letter 3"><select class="beta-color" required aria-label="Color for letter 3"><option value="">Choose color</option></select></label><label class="beta-password-field">Letter 4<input class="beta-letter" type="text" maxlength="1" pattern="[A-Za-z]" autocomplete="off" spellcheck="false" required aria-label="Letter 4"><select class="beta-color" required aria-label="Color for letter 4"><option value="">Choose color</option></select></label></div><p id="eotaBetaPasswordError" role="status"></p><button type="submit">Download beta · Windows only</button><button id="eotaBetaPasswordCancel" type="button">Cancel</button></form></dialog>
 <style id="eota-beta-download-style">
-body.eb-browser-mode #dialStage,body.eb-browser-mode #ebControls,body.eb-browser-mode #ebRestore{display:none!important}
 body.eb-browser-mode #eyeotaWindowsDownload{display:block!important;margin:48px auto 72px;padding:32px 20px;width:min(92vw,620px);border:0;background:transparent;box-shadow:none}
 #eotaBetaSun{position:relative;display:block;margin:70px auto 58px;width:84px;height:84px;padding:0;border:1px solid #fff2bd;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff 0 10%,#fff5a3 25%,#ffd349 50%,#ff942c 80%);color:#fff;box-shadow:0 0 22px #ffce42,0 0 55px #ffb12d;cursor:pointer;animation:eotaBetaColors 12s linear infinite;isolation:isolate}
 #eotaBetaSun:before{content:'';position:absolute;inset:-35px;border-radius:50%;background:repeating-conic-gradient(transparent 0deg 10deg,#ffe178 12deg,transparent 15deg 24deg);mask:radial-gradient(circle,transparent 0 38%,#000 43% 50%,transparent 70%);pointer-events:none}
@@ -16592,13 +16592,12 @@ document.addEventListener('DOMContentLoaded',()=>{
  function cleanup(){if(!body.classList.contains('eb-browser-mode')){body.classList.remove('ebRect','ebCircleLarge','ebMinimized','ebClosedSun','ebHasPage','ebSpaceNotice');const edge=document.getElementById('ebEdge');if(edge)edge.setAttribute('inert','');}else document.getElementById('ebEdge')?.removeAttribute('inert');}
  body.addEventListener('eyeota-mode-change',cleanup);cleanup();
  let phase=0,last=0,raf=0;const buttons=[...ring.children];
- function frame(time){raf=0;const active=!document.hidden&&(body.classList.contains('desktop-mode')||(body.classList.contains('eb-browser-mode')&&!body.classList.contains('ebHasPage')));if(!active){last=0;return;}if(!last||time-last>=50){const elapsed=last?Math.min(time-last,100):0;last=time;if(!matchMedia('(prefers-reduced-motion: reduce)').matches)phase+=elapsed*2*Math.PI/180000;buttons.forEach((b,i)=>{const a=-Math.PI/2+i*2*Math.PI/3+phase;b.style.left=(50+21*Math.cos(a))+'%';b.style.top=(50+21*Math.sin(a))+'%';});}raf=requestAnimationFrame(frame);}
+ function frame(time){raf=0;const active=!document.hidden&&(body.classList.contains('desktop-mode')||(body.classList.contains('eb-browser-mode')&&!body.classList.contains('ebHasPage')));if(!active){last=0;return;}if(!last||time-last>=50){const elapsed=last?Math.min(time-last,100):0;last=time;if(!matchMedia('(prefers-reduced-motion: reduce)').matches)phase+=elapsed*2*Math.PI/180000;buttons.forEach((b,i)=>{const a=-Math.PI/2+i*2*Math.PI/3+phase;const radius=body.classList.contains('eb-browser-mode')?35:21;b.style.left=(50+radius*Math.cos(a))+'%';b.style.top=(50+radius*Math.sin(a))+'%';if(body.classList.contains('eb-browser-mode')){const svg=b.querySelector('svg'),surface=b.querySelector('.launch-surface'),path=b.querySelector('defs path');const lower=Math.sin(a)>0;svg.setAttribute('viewBox','0 0 210 70');path.setAttribute('d',lower?'M 20 23 Q 105 63 190 23':'M 20 48 Q 105 8 190 48');surface.setAttribute('d',lower?'M 7 7 Q 105 59 203 7 L 193 30 Q 105 74 17 30 Z':'M 7 42 Q 105 -10 203 42 L 193 65 Q 105 21 17 65 Z');b.style.transform='translate(-50%,-50%)';}});}raf=requestAnimationFrame(frame);}
  function resume(){if(!raf)raf=requestAnimationFrame(frame);}body.addEventListener('eyeota-mode-change',resume);document.addEventListener('visibilitychange',resume);resume();
 });
 </script>
 
 <style id="eota-beta-landing-final">
-html body.eb-browser-mode #dialStage,html body.eb-browser-mode #ebControls,html body.eb-browser-mode #ebRestore,html body.eb-browser-mode #ebEdge,html body.eb-browser-mode #ebOrbitSearch,html body.eb-browser-mode #eyeotaAppLaunchRing,html body.eb-browser-mode #eyeotaBuildNotice{display:none!important}
 html body.eb-browser-mode #eyeotaWindowsDownload{display:block!important;box-sizing:border-box;margin:32px auto 64px;width:min(92vw,620px)}
 html body.eb-browser-mode #eotaBetaDownload{animation:eotaBetaColors 12s linear infinite;box-shadow:0 0 12px #ffce4266}
 </style>
@@ -16655,4 +16654,27 @@ html body.eota-skinns-mode #eyeotaAnalyticsPrivacy{display:block!important;text-
 @keyframes skinnsBandannaColors{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(360deg)}}
 body:not(.eota-skinns-mode) .skinns-color-glow{animation-play-state:paused!important}
 @media(prefers-reduced-motion:reduce){#eotaSkinnsPage .skinns-color-glow{animation:none}}
+</style>
+
+<style id="eota-live-browser-restored">
+#eotaBrowserLiveDemo{margin:32px auto 20px;width:100%;text-align:left;}
+html body.eb-browser-mode #eotaBrowserLiveDemo #dialStage{display:block!important;position:relative;margin:0 auto;width:min(100%,620px)!important;}
+html body.eb-browser-mode:not(.ebMinimized) #ebControls{display:block!important;}
+html body.eb-browser-mode.ebMinimized #eotaBrowserLiveDemo #dialStage{display:flex!important;}
+html body.eb-browser-mode.ebMinimized #ebRestore{display:block!important;}
+html body.eb-browser-mode:not(.ebMinimized) #ebRestore{display:none!important;}
+html body.eb-browser-mode.ebHasPage:not(.ebMinimized) #ebEdge{display:block!important;}
+html body.eb-browser-mode:not(.ebHasPage):not(.ebMinimized):not(.ebRect) #ebOrbitSearch{display:flex!important;}
+html body.eb-browser-mode:not(.ebHasPage):not(.ebMinimized):not(.ebRect):not(.ebCircleLarge) #eyeotaAppLaunchRing{display:block!important;}
+html body.eb-browser-mode #eyeotaBuildNotice{display:block!important;}
+@media(max-width:700px){html body.eb-browser-mode:not(.ebRect) #eotaBrowserLiveDemo #dial{width:calc(92vw - 40px)!important;height:calc(92vw - 40px)!important;max-width:620px!important;max-height:620px!important;}}
+</style>
+<script id="eota-live-browser-placement">
+(()=>{function start(){const stage=document.getElementById('dialStage'),demo=document.getElementById('eotaBrowserLiveDemo');if(!stage||!demo)return;const home=document.createComment('Original dial position');stage.before(home);function sync(){if(document.body.classList.contains('eb-browser-mode')){if(stage.parentNode!==demo)demo.append(stage);}else if(stage.parentNode===demo){home.after(stage);}}sync();new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();})();
+</script>
+
+<style id="eota-browser-curved-circumference">
+html body.eb-browser-mode #eyeotaAppLaunchRing button{width:32%!important;height:11%!important;min-height:0!important;margin:0!important;line-height:normal!important;overflow:visible!important;}
+html body.eb-browser-mode #eyeotaAppLaunchRing button svg{display:block;width:100%!important;height:100%!important;overflow:visible!important;}
+html body.eb-browser-mode #eyeotaAppLaunchRing button[aria-label="Open DOCUMENT TRACKING"] text{fill:#ff4545;filter:drop-shadow(0 0 3px #ff4545);}
 </style>
