@@ -12226,6 +12226,7 @@ if(music&&!music.paused) music.pause();
  }
  function convert(node){
   if(!node.isConnected||!/[A-Za-z]/.test(node.nodeValue)||node.parentElement?.closest(skip))return;
+  if(!node.parentElement?.closest('button,[role="button"],input[type="button"],input[type="submit"]'))return;
   const span=document.createElement('span');span.className='eota-musical-text';
   node.replaceWith(span);span.appendChild(node);redraw(span);
  }
@@ -12236,7 +12237,7 @@ if(music&&!music.paused) music.pause();
   else for(const node of r.addedNodes){if(node.nodeType===1&&node.matches?.('.eota-musical-word'))continue;queue(node);}
  }});
  function observe(){observer.observe(document.body,{subtree:true,childList:true,characterData:true});}
- function start(){scan(document.body);observe();document.title='𝄞 ♪ ♫ ♩ ♬';}
+ function start(){scan(document.body);observe();}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(start,0));else start();
 })();
 </script>
