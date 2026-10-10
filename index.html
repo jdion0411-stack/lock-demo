@@ -3245,7 +3245,7 @@ html body.legal-mode #legalDial #legalSocialSources [data-platform=insurance] sm
 
 </head>
 
-<body class="clips-mode"><script id="eyeota-resource-scheduler">
+<body class="legal-mode"><script id="eyeota-resource-scheduler">
 window.eyeotaWaitForMode=(callback,mode)=>{let done=false;function resume(){if(done||document.hidden||!(mode==='lock-mode'? !document.body.className.match(/(?:bible|clips|legal|qr|eyeota-files|sufferxi|desktop|smdial|eb-browser|note-cipher|eye-test)-mode/):document.body.classList.contains(mode)))return;done=true;document.body.removeEventListener('eyeota-mode-change',resume);document.removeEventListener('visibilitychange',resume);requestAnimationFrame(callback)}document.body.addEventListener('eyeota-mode-change',resume);document.addEventListener('visibilitychange',resume);setTimeout(resume,250)};
 </script>
 
@@ -11042,7 +11042,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  $('legalDocPrev').onclick=()=>{if(index>0){index--;renderDocument()}};$('legalDocNext').onclick=()=>{if(index<list.length-1){index++;renderDocument()}};
  $('legalExport').onclick=()=>{const r=list[index];if(!r)return;const text=r.musicalSeal;const url=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=r.id+'-encrypted.notes';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
  body.addEventListener('eyeota-mode-change',e=>{const legal=e.detail.mode==='legal';body.classList.toggle('legal-mode',legal);if(notice){if(legal)panel.querySelector('.legal-document-toolbar').before(notice);else noticeAnchor.after(notice)}if(!legal&&e.detail.mode!=='lock')lock();if(legal)status(key?'Private access active.':'Musical cipher view · '+records.filter(r=>!r.date||r.datePrecision==='conversation-context').length+' records need date-placement review.')});window.addEventListener('pagehide',lock);document.addEventListener('visibilitychange',()=>{if(document.hidden)lock()});
- redraw();choose(0);body.classList.remove('legal-mode');window.eyeotaNavigate?.('clips');
+ redraw();choose(0);window.eyeotaNavigate?.(location.hash.toLowerCase()==='#clips'?'clips':'legal');
 });
 
 </script>
