@@ -11008,7 +11008,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   dial.querySelectorAll('.legal-orbit-button').forEach((b,i)=>{const a=(i*360/controls.length-90+angle*.7)*Math.PI/180;b.style.left=(50+25*Math.cos(a))+'%';b.style.top=(50+25*Math.sin(a))+'%'});
   for(const [id,point]of Object.entries(parkedObjects)){const b=dial.querySelector('[data-platform="'+id+'"]');if(b){b.classList.remove('traveler-blocked','comet-blocked');b.style.left=point[0]+'%';b.style.top=point[1]+'%';}}
  }
- const reduced=matchMedia('(prefers-reduced-motion: reduce)');let legalPaintTime=0;function frame(t){if(!body.classList.contains('legal-mode')||document.hidden||paused||reduced.matches){last=0;window.eyeotaWaitForMode(frame,'legal-mode');return;}requestAnimationFrame(frame);if(t-legalPaintTime<33)return;legalPaintTime=t;const dt=last?Math.min(t-last,100):0;last=t;angle=(angle+dt*.0015)%360;position()}requestAnimationFrame(frame);
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');let legalPaintTime=0;function frame(t){if(!body.classList.contains('legal-mode')||document.hidden||paused||reduced.matches){last=0;window.eyeotaWaitForMode(frame,'legal-mode');return;}requestAnimationFrame(frame);if(t-legalPaintTime<(innerWidth<=768?50:33))return;legalPaintTime=t;const dt=last?Math.min(t-last,100):0;last=t;angle=(angle+dt*.0015)%360;position()}requestAnimationFrame(frame);
  async function decode(file,k){const res=await fetch(file,{cache:'no-store'});if(!res.ok)throw Error();const tokens=(await res.text()).trim().split(/\s+/);if(tokens.length%2)throw Error();const bytes=new Uint8Array(tokens.length/2);for(let i=0;i<tokens.length;i+=2){const a=notes.indexOf(tokens[i]),b=notes.indexOf(tokens[i+1]);if(a<0||b<0)throw Error();bytes[i/2]=(a<<4)|b}return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.slice(0,12)},k,bytes.slice(12)))}
  window.EOTA_LEGAL_VERIFIED=()=>{if(!pending||!pinVerified)return false;verified=true;pending=false;window.eyeotaNavigate('legal');$('legalKeyBox').hidden=false;status('Music lock verified. Enter your Musical Cipher password, or your existing original-document key.');return true};
 
@@ -11256,10 +11256,11 @@ try{audioContext=new Audio();await audioContext.resume();const stream=await navi
 
 function listenForWhistle(time){if(!inputEnabled||!analyser||!spectrum)return;analyser.getFloatFrequencyData(spectrum);if(detectWhistle(spectrum,audioContext.sampleRate,analyser.fftSize,time)){setAction(mode==='orbit'?'qr':'orbit');inputStatus.textContent=mode==='qr'?'Whistle heard. QR code summoned.':'Whistle heard. Returned to orbit.';}}
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&inputEnabled)stopInput();});window.addEventListener('pagehide',()=>stopInput());document.body.addEventListener('eyeota-mode-change',e=>{if(e.detail.mode!=='qr'&&inputEnabled)stopInput();});
-let mobileQrPaint=0;function animate(time){if(innerWidth<=768 && time-mobileQrPaint<33){requestAnimationFrame(animate);return;}mobileQrPaint=time;if(!visible||document.hidden){last=time;requestAnimationFrame(animate);return;}requestAnimationFrame(animate);const dt=last?Math.min(.05,(time-last)/1000):0;last=time;if(!reduced)clock+=dt;listenForWhistle(time);amount+=(Number(mode==='qr')-amount)*Math.min(1,dt*3.6);
+let mobileQrPaint=0;function animate(time){if(innerWidth<=768 && time-mobileQrPaint<50){requestAnimationFrame(animate);return;}mobileQrPaint=time;if(!visible||document.hidden){last=time;requestAnimationFrame(animate);return;}requestAnimationFrame(animate);const dt=last?Math.min(.05,(time-last)/1000):0;last=time;if(!reduced)clock+=dt;listenForWhistle(time);amount+=(Number(mode==='qr')-amount)*Math.min(1,dt*3.6);
 const size=canvas.clientWidth,dpr=Math.min(devicePixelRatio||1,innerWidth<=768?1.5:2);if(canvas.width!==Math.round(size*dpr)){canvas.width=Math.round(size*dpr);canvas.height=canvas.width;}ctx.setTransform(canvas.width/450,0,0,canvas.height/450,canvas.width/2,canvas.height/2);ctx.clearRect(-225,-225,450,450);
 if(amount>.001){ctx.fillStyle=`rgba(255,253,245,${amount})`;ctx.beginPath();ctx.arc(0,0,188,0,Math.PI*2);ctx.fill();}
-for(const p of particles){const a=p.a+clock*(.12+(p.i%5)*.02),ox=Math.cos(a)*p.r,oy=Math.sin(a)*p.r,q=qrDots[p.i];ctx.globalAlpha=q?1:1-amount;const x=q?ox*(1-amount)+q.x*amount:ox,y=q?oy*(1-amount)+q.y*amount:oy;ctx.fillStyle=`rgb(${((document.body.classList.contains('legal-mode')&&window.EOTA_PATTERN_CENTER_RGB)||[239,183,73]).map(v=>Math.round(v*(1-amount)+20*amount)).join(',')})`;const s=1.65*(1-amount)+5.8*amount;ctx.fillRect(x-s/2,y-s/2,s,s);}ctx.globalAlpha=1;if(mode==='qr'&&amount>.995)status.textContent='Ready to scan';
+ctx.fillStyle=`rgb(${((document.body.classList.contains('legal-mode')&&window.EOTA_PATTERN_CENTER_RGB)||[239,183,73]).map(v=>Math.round(v*(1-amount)+20*amount)).join(',')})`;
+for(const p of particles){const a=p.a+clock*(.12+(p.i%5)*.02),ox=Math.cos(a)*p.r,oy=Math.sin(a)*p.r,q=qrDots[p.i];ctx.globalAlpha=q?1:1-amount;const x=q?ox*(1-amount)+q.x*amount:ox,y=q?oy*(1-amount)+q.y*amount:oy;const s=1.65*(1-amount)+5.8*amount;ctx.fillRect(x-s/2,y-s/2,s,s);}ctx.globalAlpha=1;if(mode==='qr'&&amount>.995)status.textContent='Ready to scan';
 }requestAnimationFrame(animate);
 })();
 </script>
@@ -16928,3 +16929,22 @@ body.legal-mode #legalArtwork canvas{width:100%!important;height:auto!important;
 
 
 
+
+<style id="eota-mobile-polish-performance">
+@media(max-width:700px){
+body.legal-mode{--legal-dial-size:min(600px,calc(100vw - 16px))}
+body.legal-mode #dialStage{margin-top:14px!important;margin-bottom:18px!important}
+body.legal-mode #legalDial{background:radial-gradient(circle at center,#17314a66,#030917bb 72%)}
+body.legal-mode .pattern-link{animation:none;opacity:.75;stroke-width:2.5}
+body.legal-mode .pattern-record-node{box-shadow:0 0 3px var(--pattern-color);border-width:1px!important;width:8px;height:8px}
+body.legal-mode .pattern-record-node.selected{outline-width:2px}
+body.legal-mode #legalArtwork{filter:none!important}
+html body.legal-mode #eotaPatternKey{width:calc(100% - 20px);margin:16px auto;padding:16px;border-radius:16px;box-shadow:none}
+#eotaPatternKey .pattern-key-columns{grid-template-columns:1fr;gap:12px}
+#eotaPatternKey .pattern-key-columns>div{padding:12px;border:1px solid #9ebfd52b;border-radius:12px;background:#0c1c2b}
+#eotaPatternKey #patternReview{grid-column:auto}
+#eotaPatternKey .pattern-key-tag{font-size:13px;min-height:44px;margin:7px 0}
+#legalQrControls{width:calc(100% - 20px);margin:12px auto 20px;font-size:13px}
+#legalPanel{padding:16px!important;border-radius:16px!important}
+}
+</style>
