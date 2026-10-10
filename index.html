@@ -3234,7 +3234,16 @@ html body.legal-mode #legalDial #legalSocialSources [data-platform=insurance] .l
 html body.legal-mode #legalDial #legalSocialSources [data-platform=insurance] .legal-platform-icon svg{width:100%!important;height:100%!important;overflow:visible}
 html body.legal-mode #legalDial #legalSocialSources [data-platform=insurance]:after{content:none!important}
 html body.legal-mode #legalDial #legalSocialSources [data-platform=insurance] small{background:#062338cc;color:#ffedb7!important;border-radius:6px;padding:1px 3px;font-size:9px!important}
-</style></head>
+</style><style id="eota-ye-shield-style">
+.eota-ye-shield{position:relative;display:inline-grid;place-items:center;width:2.6em;height:2.6em;margin:0 .08em;vertical-align:middle;isolation:isolate;text-decoration:none!important}
+.eota-ye-shield .eota-ye-letters{grid-area:1/1;z-index:1;font-weight:900;font-size:.95em;letter-spacing:.04em;color:#edfaff;opacity:.22;text-shadow:none;animation:eotaYeReveal 6s ease-in-out infinite}
+.eota-ye-shield .eota-ye-armor{grid-area:1/1;width:100%;height:100%;z-index:2;pointer-events:none;opacity:.98;filter:drop-shadow(0 0 3px #96b6c655);animation:eotaYeArmor 6s ease-in-out infinite}
+@keyframes eotaYeReveal{0%,30%,80%,100%{opacity:.22;text-shadow:none}43%,62%{opacity:1;color:#fff5bc;text-shadow:0 0 3px #fff,0 0 7px #ffe275,0 0 13px #68d6ff}}
+@keyframes eotaYeArmor{0%,30%,80%,100%{opacity:.98;filter:drop-shadow(0 0 3px #96b6c655)}43%,62%{opacity:.38;filter:drop-shadow(0 0 5px #8dd9ec)}}
+@media(prefers-reduced-motion:reduce){.eota-ye-shield .eota-ye-letters{animation:none;opacity:1;text-shadow:0 0 3px #ffe275}.eota-ye-shield .eota-ye-armor{animation:none;opacity:.45}}
+</style>
+
+</head>
 
 <body class="clips-mode"><script id="eyeota-resource-scheduler">
 window.eyeotaWaitForMode=(callback,mode)=>{let done=false;function resume(){if(done||document.hidden||!(mode==='lock-mode'? !document.body.className.match(/(?:bible|clips|legal|qr|eyeota-files|sufferxi|desktop|smdial|eb-browser|note-cipher|eye-test)-mode/):document.body.classList.contains(mode)))return;done=true;document.body.removeEventListener('eyeota-mode-change',resume);document.removeEventListener('visibilitychange',resume);requestAnimationFrame(callback)}document.body.addEventListener('eyeota-mode-change',resume);document.addEventListener('visibilitychange',resume);setTimeout(resume,250)};
@@ -10928,8 +10937,8 @@ document.addEventListener('DOMContentLoaded',()=>{
  let year=2026,month=0,records=window.EOTA_LEGAL_PUBLIC?.records||[],list=[],index=0,key=null,verified=false,pending=false,revision=0,urls=[],angle=0,last=0,paused=false,hovered=false;
  const dial=document.createElement('section');dial.id='legalDial';dial.setAttribute('aria-label','Document Tracking ✝ calendar dial');
  dial.innerHTML='<div id="legalArtwork" aria-hidden="true"></div><div id="legalSocialSources" aria-label="Social media document folders"></div><div id="legalMonths"></div><div id="legalOrbitControls"></div><div class="legal-center-label"><strong id="legalYear"></strong><span id="legalYearCount"></span></div>';$('dial').append(dial);
- $('legalArtwork').innerHTML="<div class=\"legal-sun\"><div class=\"legal-sun-altar\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 220\" role=\"img\" aria-label=\"Preacher\u2019s altar with balanced scales and a gavel\">\n<defs><linearGradient id=\"altarWood\" x2=\"1\" y2=\"1\"><stop stop-color=\"#a46b3a\"/><stop offset=\".5\" stop-color=\"#573423\"/><stop offset=\"1\" stop-color=\"#bd8b50\"/></linearGradient><linearGradient id=\"altarGold\" x2=\"0\" y2=\"1\"><stop stop-color=\"#fff2bc\"/><stop offset=\".5\" stop-color=\"#cda85d\"/><stop offset=\"1\" stop-color=\"#80602e\"/></linearGradient><radialGradient id=\"altarHalo\"><stop stop-color=\"#73dcff\" stop-opacity=\".24\"/><stop offset=\"1\" stop-color=\"#73dcff\" stop-opacity=\"0\"/></radialGradient></defs>\n<ellipse cx=\"120\" cy=\"112\" rx=\"117\" ry=\"106\" fill=\"url(#altarHalo)\"/><ellipse cx=\"120\" cy=\"209\" rx=\"94\" ry=\"9\" fill=\"#000\" opacity=\".5\"/>\n<path d=\"M43 121L197 121 185 197 55 197Z\" fill=\"url(#altarWood)\" stroke=\"#d5a56b\" stroke-width=\"2\"/><path d=\"M36 113H204V128H36Z\" fill=\"url(#altarWood)\" stroke=\"#efc88b\" stroke-width=\"2\"/><path d=\"M52 195H188V208H52Z\" fill=\"url(#altarWood)\" stroke=\"#c89b5a\" stroke-width=\"2\"/>\n<path d=\"M78 133H162V194H78Z\" fill=\"#472a20\" stroke=\"#b98548\"/><path d=\"M117 146H124V182H117Z M105 156H137V163H105Z\" fill=\"url(#altarGold)\"/><path d=\"M61 134L66 190M179 134L174 190\" stroke=\"#ebc394\" opacity=\".55\" stroke-width=\"2\"/>\n<path d=\"M106 107H134M112 103L118 96H122L128 103\" fill=\"none\" stroke=\"url(#altarGold)\" stroke-width=\"6\" stroke-linecap=\"round\"/><path d=\"M120 29V99\" stroke=\"url(#altarGold)\" stroke-width=\"5\"/><circle cx=\"120\" cy=\"26\" r=\"6\" fill=\"url(#altarGold)\"/>\n<path d=\"M66 45Q120 28 174 45\" fill=\"none\" stroke=\"url(#altarGold)\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M66 45L44 80M66 45L88 80M174 45L152 80M174 45L196 80\" fill=\"none\" stroke=\"#edd09a\" stroke-width=\"2\"/><path d=\"M43 80H89Q86 96 66 96Q47 96 43 80ZM151 80H197Q194 96 174 96Q155 96 151 80Z\" fill=\"url(#altarGold)\" stroke=\"#ffecaf\"/>\n<g transform=\"translate(163 103) rotate(-23)\"><rect x=\"-2\" y=\"-18\" width=\"6\" height=\"31\" rx=\"2\" fill=\"url(#altarWood)\" stroke=\"#d6a367\"/><rect x=\"-14\" y=\"-25\" width=\"29\" height=\"13\" rx=\"3\" fill=\"url(#altarWood)\" stroke=\"#e1b982\" stroke-width=\"2\"/><path d=\"M-10-24V-13M11-24V-13\" stroke=\"#f5d39b\" stroke-width=\"2\"/></g><ellipse cx=\"169\" cy=\"111\" rx=\"19\" ry=\"4\" fill=\"#462b1e\" stroke=\"#daa65f\"/>\n</svg>\n</div></div>";
- const sunTotal=document.createElement('span');sunTotal.id='legalSunTotal';$('legalArtwork').querySelector('.legal-sun').append(sunTotal);
+ $('legalArtwork').innerHTML="";
+ const sunTotal=document.createElement('span');sunTotal.id='legalSunTotal';sunTotal.hidden=true;$('legalArtwork').removeAttribute('aria-hidden');$('legalArtwork').append(sunTotal);
  const panel=document.createElement('section');panel.id='legalPanel';panel.setAttribute('aria-label','Document viewer');panel.innerHTML='<div class="legal-view-heading"><div><span class="legal-eyebrow">PERSONAL RECORDS · MUSICAL CIPHER</span><h2 id="legalSelection">January 2026</h2></div><span id="legalCountBadge"></span></div><p id="legalStatus" role="status"></p><div id="legalKeyBox" hidden><label for="legalTranscriptKey">Musical Cipher password</label><input id="legalTranscriptKey" type="password" autocomplete="off" spellcheck="false"><button id="legalTranscriptDecrypt" type="button">Read selected document</button><label for="legalKey">Original image / document recovery key</label><input id="legalKey" type="password" autocomplete="off" spellcheck="false"><button id="legalDecrypt" type="button">Open private records</button></div><div class="legal-document-toolbar"><button id="legalDocPrev" type="button" aria-label="Previous document">‹</button><button id="legalDocNext" type="button" aria-label="Next document">›</button><span id="legalPosition"></span></div><div id="legalEmpty" hidden></div><div id="legalDocument" class="legal-document-grid"><article class="legal-paper"><div class="legal-paper-heading"><span>MUSICAL TRANSCRIPT</span><button id="legalExport" type="button">Save musical record</button></div><h3 id="legalDocTitle"></h3><p id="legalDateEvidence" class="legal-evidence"></p><div id="legalText" tabindex="0" aria-label="Scrollable document text"></div></article><aside class="legal-reference"><span>ORIGINAL REFERENCE</span><div id="legalPicture"></div><button id="legalReveal" type="button" hidden>Reveal private original</button></aside></div><p class="legal-reading-note">The document text is encrypted as musical notes moving on circular staff lines in the lower dial. Unlock with your color PIN, music lock and Musical Cipher password. Saved musical records can also be opened on the Musical Cipher page. Existing redactions remain after unlocking. Screenshots remain fully redacted in public. Transcripts come from text extraction and may contain errors; unclear fragments are marked, and originals remain the reference. Message statements and archived AI text are not verified findings or legal guidance.</p><div class="legal-video"></div>';$('mainLayout').after(panel);
  const musicalDial=document.createElement('section');musicalDial.id='legalMusicalDialSection';musicalDial.setAttribute('aria-label','Musical document dial below the calendar');
  musicalDial.innerHTML='<div class="legal-musical-heading"><span>MUSICAL DOCUMENT · CONCENTRIC ROWS</span><h3 id="legalMusicalTitle"></h3><p id="legalMusicalDate"></p><p id="legalMusicalProgress" aria-live="polite"></p></div><div id="legalMusicalDial" role="group" aria-label="Encrypted musical notes filling circular staff lines inward"><canvas id="legalMusicalCanvas" aria-label="Colored encrypted notes moving upright on concentric circular rows"></canvas></div><div class="legal-musical-dial-actions"><button id="legalMusicalPause" type="button">Pause notes</button><button id="legalMusicalPrevious" type="button">Previous notes</button><button id="legalMusicalNext" type="button">Next notes</button></div>';
@@ -11247,7 +11256,7 @@ try{audioContext=new Audio();await audioContext.resume();const stream=await navi
 
 function listenForWhistle(time){if(!inputEnabled||!analyser||!spectrum)return;analyser.getFloatFrequencyData(spectrum);if(detectWhistle(spectrum,audioContext.sampleRate,analyser.fftSize,time)){setAction(mode==='orbit'?'qr':'orbit');inputStatus.textContent=mode==='qr'?'Whistle heard. QR code summoned.':'Whistle heard. Returned to orbit.';}}
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&inputEnabled)stopInput();});window.addEventListener('pagehide',()=>stopInput());document.body.addEventListener('eyeota-mode-change',e=>{if(e.detail.mode!=='qr'&&inputEnabled)stopInput();});
-let mobileQrPaint=0;function animate(time){if(innerWidth<=768 && time-mobileQrPaint<33){requestAnimationFrame(animate);return;}mobileQrPaint=time;if(!visible||document.hidden){last=time;window.eyeotaWaitForMode(animate,'qr-mode');return;}requestAnimationFrame(animate);const dt=last?Math.min(.05,(time-last)/1000):0;last=time;if(!reduced)clock+=dt;listenForWhistle(time);amount+=(Number(mode==='qr')-amount)*Math.min(1,dt*3.6);
+let mobileQrPaint=0;function animate(time){if(innerWidth<=768 && time-mobileQrPaint<33){requestAnimationFrame(animate);return;}mobileQrPaint=time;if(!visible||document.hidden){last=time;requestAnimationFrame(animate);return;}requestAnimationFrame(animate);const dt=last?Math.min(.05,(time-last)/1000):0;last=time;if(!reduced)clock+=dt;listenForWhistle(time);amount+=(Number(mode==='qr')-amount)*Math.min(1,dt*3.6);
 const size=canvas.clientWidth,dpr=Math.min(devicePixelRatio||1,innerWidth<=768?1.5:2);if(canvas.width!==Math.round(size*dpr)){canvas.width=Math.round(size*dpr);canvas.height=canvas.width;}ctx.setTransform(canvas.width/450,0,0,canvas.height/450,canvas.width/2,canvas.height/2);ctx.clearRect(-225,-225,450,450);
 if(amount>.001){ctx.fillStyle=`rgba(255,253,245,${amount})`;ctx.beginPath();ctx.arc(0,0,188,0,Math.PI*2);ctx.fill();}
 for(const p of particles){const a=p.a+clock*(.12+(p.i%5)*.02),ox=Math.cos(a)*p.r,oy=Math.sin(a)*p.r,q=qrDots[p.i];ctx.globalAlpha=q?1:1-amount;const x=q?ox*(1-amount)+q.x*amount:ox,y=q?oy*(1-amount)+q.y*amount:oy;ctx.fillStyle=`rgb(${[239,183,73].map(v=>Math.round(v*(1-amount)+20*amount)).join(',')})`;const s=1.65*(1-amount)+5.8*amount;ctx.fillRect(x-s/2,y-s/2,s,s);}ctx.globalAlpha=1;if(mode==='qr'&&amount>.995)status.textContent='Ready to scan';
@@ -11784,7 +11793,7 @@ body>.app{position:relative;z-index:1;}
 </style>
 
 <footer id="eyeotaAnalyticsPrivacy" style="max-width:900px;margin:24px auto;padding:18px;color:white;background:#111;font:14px/1.6 system-ui;border:1px solid #555;border-radius:12px">
-<p>© 2026 E<span style="text-decoration:line-through;text-decoration-thickness:2px">YE</span>OTA DOCUMENT SOLLUTIONS LLC · EOTA Document Solutions</p><nav class="eyeota-policy-links" aria-label="Site policies"><button type="button" data-eyeota-policy="privacy">Privacy Notice</button><span aria-hidden="true"> · </span><button type="button" data-eyeota-policy="terms">Terms of Use</button></nav><details><summary>Privacy &amp; analytics</summary><p>Analytics automatically count site loads and dial views unless you opt out or your browser requests privacy. Your IP address is used temporarily on our server to estimate city, state or region, and country. Analytics records contain aggregate daily counts, not IP addresses, exact coordinates, document contents, typed words, recordings, or a visitor identifier. Counts are events, not unique people. Records are stored in Supabase and retained for up to 90 days while the service is active. Hosting providers may keep separate operational logs.</p><p>Other features operate separately: location permission supports weather requests to Open-Meteo; recordings used for music identification are sent through our server to AudD; rhyme searches use Datamuse; embedded SoundCloud content can contact those providers. Browser speech features may use your browser provider. Document encryption requests process the submitted text and password on our server. These features have their own provider privacy practices.</p><p>This product includes GeoLite data created by MaxMind, available from <a href="https://www.maxmind.com" style="color:#ffd670">MaxMind</a>. City estimates may be wrong or unavailable.</p></details>
+<p>© 2026 E<span class="eota-ye-shield" aria-label="YE"><span class="eota-ye-letters" aria-hidden="true">YE</span><svg class="eota-ye-armor" viewBox="0 0 36 42" aria-hidden="true"><path d="M18 2L33 8V21C33 30 26 36 18 40C10 36 3 30 3 21V8Z" fill="#172b3b" stroke="#9dc7d8" stroke-width="2"/><path d="M18 5L29 10V21C29 27 24 32 18 36C12 32 7 27 7 21V10Z" fill="none" stroke="#d4e7ee" stroke-opacity=".35"/><path d="M18 5V36" stroke="#a2bac6" stroke-opacity=".22"/></svg></span>OTA DOCUMENT SOLLUTIONS LLC · EOTA Document Solutions</p><nav class="eyeota-policy-links" aria-label="Site policies"><button type="button" data-eyeota-policy="privacy">Privacy Notice</button><span aria-hidden="true"> · </span><button type="button" data-eyeota-policy="terms">Terms of Use</button></nav><details><summary>Privacy &amp; analytics</summary><p>Analytics automatically count site loads and dial views unless you opt out or your browser requests privacy. Your IP address is used temporarily on our server to estimate city, state or region, and country. Analytics records contain aggregate daily counts, not IP addresses, exact coordinates, document contents, typed words, recordings, or a visitor identifier. Counts are events, not unique people. Records are stored in Supabase and retained for up to 90 days while the service is active. Hosting providers may keep separate operational logs.</p><p>Other features operate separately: location permission supports weather requests to Open-Meteo; recordings used for music identification are sent through our server to AudD; rhyme searches use Datamuse; embedded SoundCloud content can contact those providers. Browser speech features may use your browser provider. Document encryption requests process the submitted text and password on our server. These features have their own provider privacy practices.</p><p>This product includes GeoLite data created by MaxMind, available from <a href="https://www.maxmind.com" style="color:#ffd670">MaxMind</a>. City estimates may be wrong or unavailable.</p></details>
 <button id="eyeotaAnalyticsChoice" type="button" style="position:relative;z-index:2;pointer-events:auto;padding:12px 18px;color:white;background:#222;border:1px solid #aaa;border-radius:8px;cursor:pointer;font:inherit">Turn analytics off</button><p id="eyeotaAnalyticsStatus" aria-live="polite">Analytics are off.</p></footer>
 <script id="eyeota-private-analytics">
 (()=>{'use strict';const key='eyeota.analytics.optout.v1',button=document.getElementById('eyeotaAnalyticsChoice'),status=document.getElementById('eyeotaAnalyticsStatus');let ready=false,started=false,last='',blocked=navigator.globalPrivacyControl===true||navigator.doNotTrack==='1',optout=false;try{optout=localStorage.getItem(key)==='yes'||localStorage.getItem('eyeota.analytics.consent.v1')==='no'}catch{}button.disabled=blocked;
@@ -12356,6 +12365,39 @@ body.dream-mode #dial>.dream-orbit-switch #nightmareView{top:76%!important}
  document.addEventListener('visibilitychange',refresh);
  document.body.addEventListener('eyeota-mode-change',()=>requestAnimationFrame(refresh));
 })();
+</script>
+
+
+<style id="document-tracker-eota-qr">
+#legalArtwork > #legalSunTotal{display:none!important}
+body.legal-mode #legalArtwork{width:39%!important;top:50%!important;z-index:5!important;pointer-events:auto!important;filter:none!important}
+body.legal-mode #legalArtwork #eyeota-qr{display:block!important;padding:0!important;width:100%!important}
+body.legal-mode #eyeota-qr .stage{background:transparent!important;border-radius:50%;padding:0!important;gap:0!important;box-shadow:none!important;width:100%!important}
+body.legal-mode #eyeota-qr .qr-art{width:100%;border-radius:50%;overflow:visible;filter:none!important}
+#eyeota-qr canvas{cursor:pointer;touch-action:manipulation}#eyeota-qr canvas:focus-visible{outline:3px solid #8ce8ed;outline-offset:4px;border-radius:50%}
+body.legal-mode #legalDial .legal-center-label{display:none!important}
+#legalQrControls{display:none;position:relative;width:min(760px,calc(100% - 24px));box-sizing:border-box;margin:18px auto;text-align:center;color:#e4f3f5;font:13px/1.5 Arial}
+body.legal-mode #legalQrControls{display:block}
+#legalQrControls .legal-center-label{position:static!important;transform:none!important;display:block!important;width:auto!important;margin-bottom:10px}
+#legalQrControls button{margin:5px;padding:10px 18px;min-height:44px;border:1px solid #8bd7df;border-radius:24px;background:#102d40;color:#edfaff;font:600 13px Arial;cursor:pointer}
+#legalQrControls .forms{display:inline-block}#legalQrControls .status,#legalQrControls .voice-status{margin-top:8px}#legalQrControls .voice-status{color:#a6cbd5}
+body.legal-mode #legalQrControls #legalYear{font-size:16px}
+#legalQrLiveCount{color:#ffdc89;font-weight:bold}
+</style>
+<script id="document-tracker-qr-mount">
+document.addEventListener('DOMContentLoaded',()=>{
+ const root=document.getElementById('eyeota-qr'),art=document.getElementById('legalArtwork'),dial=document.getElementById('legalDial'),stage=root.querySelector('.stage');
+ if(!art||!dial)return;
+ const home=document.getElementById('dialStage'),controls=document.createElement('section');controls.id='legalQrControls';controls.setAttribute('aria-label','Document Tracking QR and microphone controls');
+ const reference=document.getElementById('dialStage');reference.after(controls);
+ const nodes=[...stage.children].filter(n=>!n.classList.contains('qr-art'));
+ const label=dial.querySelector('.legal-center-label');controls.append(label);
+ const count=document.createElement('div');count.id='legalQrLiveCount';count.setAttribute('aria-live','polite');controls.append(count);
+ const hint=document.createElement('p');hint.textContent='Original EOTA QR CODE · summon with the buttons or enable whistle below.';controls.append(hint);
+ function refresh(){count.textContent=document.getElementById('legalSunTotal')?.textContent||new Set((window.EOTA_LEGAL_PUBLIC?.records||[]).map(r=>r.id)).size+' FILES TOTAL';}
+ function mount(){const legal=document.body.classList.contains('legal-mode');if(legal){art.append(root);nodes.forEach(n=>controls.append(n));}else{home.append(root);nodes.forEach(n=>stage.append(n));}refresh();}
+ document.body.addEventListener('eyeota-mode-change',mount);new MutationObserver(refresh).observe(document.getElementById('legalSunTotal'),{childList:true,characterData:true,subtree:true});mount();
+});
 </script>
 
 </body>
@@ -16809,6 +16851,25 @@ function init(){
  key.querySelector('.pattern-review-status').textContent=opened+' / '+records.length+' readable transcripts reviewed · '+(records.length-opened)+' need readable content';
  const coverage=key.querySelector('.pattern-coverage-list');for(const r of records){const row=document.createElement('button');row.type='button';row.className='pattern-coverage-record';row.textContent=r.id+' · '+description(r.id);row.title=review.records[r.id]?.note||'Not yet reviewed';row.onclick=()=>open(r.id);coverage.append(row);}
  key.querySelector('#patternClear').onclick=()=>{active=null;selected=null;draw();};
+ function maskPrivateSelection(){
+  if(!selected)return;
+  const target=key.querySelector('#patternSelection'),style=getComputedStyle(target),measure=document.createElement('canvas').getContext('2d');
+  measure.font=style.fontWeight+' '+style.fontSize+' '+style.fontFamily;
+  const symbols=Array.from('♩♪♫♬♭♮♯𝄞𝄢𝄡𝄆𝄇𝄐𝄑𝄪𝄫'),walker=document.createTreeWalker(target,NodeFilter.SHOW_TEXT),texts=[];
+  while(walker.nextNode())texts.push(walker.currentNode);
+  for(const node of texts){const fragment=document.createDocumentFragment();
+   for(const word of node.textContent.split(/(\s+)/)){
+    if(!word)continue;if(/^\s+$/.test(word)||/^R\d{4}$/.test(word)){fragment.append(document.createTextNode(word));continue;}
+    const group=document.createElement('span');group.className='pattern-private-word';group.style.width=measure.measureText(word).width+'px';
+    let prefix='';for(const char of Array.from(word)){const before=measure.measureText(prefix).width;prefix+=char;const width=measure.measureText(prefix).width-before;
+     const cell=document.createElement('span');cell.className='pattern-private-cell';cell.style.width=width+'px';cell.style.height=style.fontSize;
+     const glyph=document.createElement('span');glyph.textContent=/[A-Za-z]/.test(char)?symbols[(char.toLowerCase().charCodeAt(0)-97)%symbols.length]:char;
+     const natural=measure.measureText(glyph.textContent).width;glyph.style.transform='scaleX('+Math.min(1,width/Math.max(natural,1))+')';cell.append(glyph);group.append(cell);
+    }fragment.append(group);
+   }node.replaceWith(fragment);
+  }
+  target.setAttribute('aria-label','Selected record '+selected+'. Personal pattern details masked with musical symbols.');
+ }
  function draw(){
   svg.replaceChildren();nodes.replaceChildren();const list=key.querySelector('#patternRecords');list.replaceChildren();
   buttons.forEach((b,id)=>b.setAttribute('aria-pressed',String(active===id)));
@@ -16820,11 +16881,13 @@ function init(){
   const allLinked=new Set(connections.flatMap(e=>[e.from,e.to])),allNodes=records.filter(r=>allLinked.has(r.id));
   const points=new Map();allNodes.forEach((r,i)=>{const a=i/Math.max(allNodes.length,1)*Math.PI*2-Math.PI/2;points.set(r.id,{x:500+365*Math.cos(a),y:500+365*Math.sin(a)});});
   for(const edge of visibleEdges){const a=points.get(edge.from),b=points.get(edge.to);if(!a||!b)continue;const path=document.createElementNS(ns,'path');path.setAttribute('d',`M${a.x},${a.y} Q500,500 ${b.x},${b.y}`);path.setAttribute('class','pattern-link '+edge.tone+(selected&&(edge.from===selected||edge.to===selected)?' selected':''));path.dataset.from=edge.from;path.dataset.to=edge.to;const title=document.createElementNS(ns,'title');title.textContent=edge.from+' ↔ '+edge.to+' · '+edge.reason;path.append(title);svg.append(path);}
-  for(const r of tagged){const point=points.get(r.id),item=review.records[r.id],b=document.createElement('button');b.type='button';b.className='pattern-record-node '+(visibleEdges.some(e=>e.tone==='negative'&&(e.from===r.id||e.to===r.id))?'negative':'positive');if(r.id===selected)b.classList.add('selected');b.style.left=point.x/10+'%';b.style.top=point.y/10+'%';b.title=r.id+' · '+(r.date||'Date needs review')+' · '+description(r.id);b.setAttribute('aria-label',b.title);b.onclick=()=>open(r.id);nodes.append(b);
+  for(const r of tagged){const point=points.get(r.id),item=review.records[r.id],b=document.createElement('button');b.type='button';b.dataset.recordId=r.id;b.className='pattern-record-node '+(visibleEdges.some(e=>e.tone==='negative'&&(e.from===r.id||e.to===r.id))?'negative':'positive');if(r.id===selected)b.classList.add('selected');b.style.left=point.x/10+'%';b.style.top=point.y/10+'%';b.title=r.id+' · '+(r.date||'Date needs review')+' · '+description(r.id);b.setAttribute('aria-label',b.title);b.onclick=()=>open(r.id);nodes.append(b);
    const chip=document.createElement('button');chip.type='button';chip.className='pattern-record-chip';chip.textContent=r.id+' · '+(r.date||'Undated');chip.title=description(r.id);chip.setAttribute('aria-pressed',String(r.id===selected));chip.onclick=()=>open(r.id);list.append(chip);
   }
   key.querySelector('#patternSelection').textContent=selected?selected+' · '+description(selected)+' — '+(review.records[selected]?.tags?.map(t=>review.records[selected].reasons[t]).join(' ')||review.records[selected]?.note||'Not reviewed')+(review.records[selected]?.duplicateOf?' Duplicate content of '+review.records[selected].duplicateOf+'; not independent corroboration.':''):active?categories.find(c=>c[0]===active)[1]+' · '+tagged.length+' connected records':'Select a KEY pattern or a connected record.';
   if(selected&&selectedEdges.length){const p=document.createElement('p');p.className='pattern-connection-reason';p.textContent=selectedEdges.map(e=>e.from+' ↔ '+e.to+': '+e.reason).join(' ');key.querySelector('#patternSelection').append(document.createElement('br'),p);}
+  maskPrivateSelection();
+  window.dispatchEvent(new CustomEvent('eota-pattern-state'));
   if(!tagged.length){const p=document.createElement('p');p.textContent='No supported document-to-document connection for this selection.';list.append(p);}
  }
  window.addEventListener('eota-pattern-document',e=>{selected=e.detail.id;draw();});
@@ -16833,3 +16896,26 @@ function init(){
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
+
+<style id="tracker-separated-orbits">
+body.legal-mode #legalDial #legalSocialSources .legal-social-source[data-platform]{width:8%!important;height:8%!important;box-sizing:border-box!important;gap:0!important;padding:1px!important}
+body.legal-mode #legalDial #legalSocialSources .legal-social-source[data-platform] .legal-platform-icon{height:45%!important;width:72%!important;flex-shrink:0;min-height:0!important}
+body.legal-mode #legalDial #legalSocialSources .legal-social-source[data-platform] small{box-sizing:border-box!important;max-width:100%!important;width:100%;white-space:normal!important;overflow-wrap:normal;line-height:1.05!important;font-size:clamp(5px,1.05vw,9px)!important;padding:0 1px!important;text-align:center}
+body.legal-mode #legalDial #legalSocialSources .legal-social-source[data-platform] .legal-source-count{white-space:nowrap!important;font-size:clamp(5px,.95vw,8px)!important}
+</style>
+
+<style id="eota-live-pattern-logo">#eotaWhistleScanView[hidden]{display:none!important}#eotaWhistleScanView{width:min(100%,1200px);margin:20px auto;overflow-x:auto}#eotaWhistleScanView img{display:block;width:100%;min-width:1000px;height:auto;border:0}#eotaWhistleScanView p{color:#d9edf3}body:not(.legal-mode) #eotaWhistleScanView{display:none!important}</style>
+
+<style id="pattern-private-musical-details">#patternSelection .pattern-private-word{display:inline-block;white-space:nowrap;vertical-align:baseline}#patternSelection .pattern-private-cell{display:inline-block;position:relative;vertical-align:-.15em;overflow:hidden;line-height:1}#patternSelection .pattern-private-cell>span{position:absolute;left:0;top:0;display:block;transform-origin:left center;font-size:inherit;line-height:1;white-space:nowrap}#patternSelection .pattern-private-word,#patternSelection .pattern-private-cell{font-size:inherit;letter-spacing:0}</style>
+
+<style id="eota-reference-spiral-only">
+/* The reference is the QR particle spiral, not the document-edge overlay. */
+body.legal-mode #eotaPatternLines{display:block!important}
+body.legal-mode #legalArtwork{width:25%!important;aspect-ratio:1;z-index:9!important;visibility:visible!important;opacity:1!important}
+body.legal-mode #legalArtwork #eyeota-qr,body.legal-mode #legalArtwork .qr-art,body.legal-mode #legalArtwork canvas{visibility:visible!important;opacity:1!important}
+body.legal-mode #legalArtwork .qr-art{aspect-ratio:1}
+body.legal-mode #legalArtwork canvas{width:100%!important;height:auto!important;aspect-ratio:1;display:block!important}
+</style>
+
+
+
