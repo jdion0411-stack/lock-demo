@@ -12174,6 +12174,14 @@ if(music&&!music.paused) music.pause();
 .eota-musical-word{display:inline-block;vertical-align:middle;background-repeat:no-repeat;background-size:100% 100%;height:2.3rem;max-width:100%;margin:0 .12rem .15rem 0;}
 .eota-musical-text[data-empty="true"]{display:none!important}
 </style>
+<style id="eota-dial-label-alternation">
+.eota-musical-text{position:relative;display:inline-block;}
+.eota-musical-text::before{content:attr(aria-label);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 12px/1.2 Arial,sans-serif;letter-spacing:.04em;color:inherit;pointer-events:none;animation:eota-label-english 4s steps(1,end) infinite;}
+.eota-musical-word{animation:eota-label-notes 4s steps(1,end) infinite;}
+@keyframes eota-label-english{0%,49.99%{opacity:1}50%,100%{opacity:0}}
+@keyframes eota-label-notes{0%,49.99%{opacity:0}50%,100%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.eota-musical-text::before{animation:none;opacity:1}.eota-musical-word{animation:none;opacity:0}}
+</style>
 <script id="eota-all-musical-text">
 (()=>{
  const extraCharacters=new Map();
