@@ -12175,12 +12175,24 @@ if(music&&!music.paused) music.pause();
 .eota-musical-text[data-empty="true"]{display:none!important}
 </style>
 <style id="eota-dial-label-alternation">
-.eota-musical-text{position:relative;display:inline-block;}
-.eota-musical-text::before{content:attr(aria-label);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 12px/1.2 Arial,sans-serif;letter-spacing:.04em;color:inherit;pointer-events:none;animation:eota-label-english 4s steps(1,end) infinite;}
-.eota-musical-word{animation:eota-label-notes 4s steps(1,end) infinite;}
-@keyframes eota-label-english{0%,49.99%{opacity:1}50%,100%{opacity:0}}
-@keyframes eota-label-notes{0%,49.99%{opacity:0}50%,100%{opacity:1}}
-@media(prefers-reduced-motion:reduce){.eota-musical-text::before{animation:none;opacity:1}.eota-musical-word{animation:none;opacity:0}}
+.eota-musical-text{display:inline-block;vertical-align:middle;overflow:visible;transition:width .55s ease,height .55s ease;position:relative;}
+.eota-musical-text .eota-label-english{font-size:var(--eota-original-font-size);line-height:var(--eota-original-line-height);position:absolute;left:0;top:0;white-space:nowrap;opacity:1;transition:opacity .4s ease;}
+.eota-musical-text .eota-label-notes{font-size:var(--eota-original-font-size);display:block;white-space:nowrap;position:absolute;left:0;top:0;opacity:0;transition:opacity .4s ease;}
+.eota-musical-text[data-phase="notes"] .eota-label-english{opacity:0}
+.eota-musical-text[data-phase="notes"] .eota-label-notes{opacity:1}
+.eota-musical-word{margin:0!important;height:1.6em!important;vertical-align:middle;}
+@media(prefers-reduced-motion:reduce){.eota-musical-text,.eota-label-english,.eota-label-notes{transition:none!important}}
+
+/* Label spans must not inherit the navigation's decorative separator rules. */
+.eyeota-feature-line button .eota-musical-text,
+.eyeota-feature-line button .eota-musical-text span{margin:0!important;color:inherit;letter-spacing:inherit;text-shadow:inherit;}
+.eyeota-feature-line button .eota-label-english,
+.eyeota-feature-line button .eota-label-notes{width:max-content;max-width:none;box-sizing:content-box;}
+.eyeota-feature-line button .eota-label-english{padding:0 1px;}
+.eyeota-feature-line button .eota-label-notes{line-height:0;}
+.eyeota-feature-line button .eota-musical-word{max-width:none;}
+.eyeota-feature-line button{flex-shrink:0;max-width:100%;overflow:visible;}
+.eyeota-feature-line #dreamPortalButton{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:600;letter-spacing:.8px;color:#edf6ff;text-shadow:0 0 5px #eef8ff99,0 0 13px #bfdcff77,0 0 22px #c3cfff55;background:radial-gradient(ellipse at 35% 25%,#dceeff25,transparent 70%),#061a2dcc;}
 </style>
 <script id="eota-all-musical-text">
 (()=>{
@@ -12212,17 +12224,22 @@ if(music&&!music.paused) music.pause();
   chunks.forEach((c,i)=>{const drawing=noteDrawing(c);body+='<g transform="translate('+i*40+' 0)">'+drawing.replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'')+'</g>'});
   return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="'+chunks.length*40+'" height="76" viewBox="0 0 '+chunks.length*40+' 76">'+body+'</svg>');
  }
+ let notePhase=false;
+ function sizeLabel(span){
+  const english=span.querySelector('.eota-label-english'),music=span.querySelector('.eota-label-notes');if(!english||!music)return;
+  const notes=notePhase&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
+  span.dataset.phase=notes?'notes':'english';
+  const target=notes?music:english;const rect=target.getBoundingClientRect();span.style.width=Math.ceil(rect.width)+'px';span.style.height=Math.ceil(rect.height)+'px';
+ }
  function redraw(span){
   const value=span.firstChild?.nodeType===3?span.firstChild.nodeValue:'';
-  span.querySelectorAll('.eota-musical-word').forEach(n=>n.remove());
+  span.querySelectorAll('.eota-label-english,.eota-label-notes,.eota-musical-word').forEach(n=>n.remove());
   span.setAttribute('aria-label',value);span.dataset.empty=String(!value.trim());
-  for(const word of value.match(/\S+\s*|\s+/g)||[]){
-   for(let offset=0;offset<word.length;offset+=32){
-    const part=word.slice(offset,offset+32),visual=document.createElement('span');
-    visual.className='eota-musical-word';visual.setAttribute('aria-hidden','true');
-    visual.style.width=(Array.from(part).length*1.08)+'rem';visual.style.backgroundImage='url("'+notes(part)+'")';span.appendChild(visual);
-   }
-  }
+  const english=document.createElement('span');english.className='eota-label-english';english.textContent=value;english.setAttribute('aria-hidden','true');
+  const music=document.createElement('span');music.className='eota-label-notes';music.setAttribute('aria-hidden','true');
+  span.append(english,music);
+  for(const c of value){const visual=document.createElement('span');visual.className='eota-musical-word';visual.style.width='.82em';if(c==='✝'){visual.textContent=c;visual.style.fontSize='var(--eota-original-font-size)';visual.style.lineHeight='1.6';}else{visual.style.backgroundImage='url("'+notes(c)+'")';}music.appendChild(visual);}
+  sizeLabel(span);
  }
  function scan(root){
   if(!root||!root.isConnected)return;
@@ -12234,8 +12251,11 @@ if(music&&!music.paused) music.pause();
  }
  function convert(node){
   if(!node.isConnected||!/[A-Za-z]/.test(node.nodeValue)||node.parentElement?.closest(skip))return;
-  if(!node.parentElement?.closest('.eyeota-feature-line button[data-eyeota-mode],.eyeota-feature-line #eotaSkinnsButton'))return;
+  if(!node.parentElement?.closest('.eyeota-feature-line button[data-eyeota-mode],.eyeota-feature-line #eotaSkinnsButton,.eyeota-feature-line #dreamPortalButton'))return;
+  const originalStyle=getComputedStyle(node.parentElement);
   const span=document.createElement('span');span.className='eota-musical-text';
+  span.style.setProperty('--eota-original-font-size',originalStyle.fontSize);span.style.setProperty('--eota-original-line-height',originalStyle.lineHeight);
+  span.style.fontFamily=originalStyle.fontFamily;span.style.fontWeight=originalStyle.fontWeight;span.style.letterSpacing=originalStyle.letterSpacing;
   node.replaceWith(span);span.appendChild(node);redraw(span);
  }
  function flush(){scheduled=false;observer.disconnect();const list=Array.from(pending);pending.clear();list.forEach(scan);observe();}
@@ -12245,7 +12265,7 @@ if(music&&!music.paused) music.pause();
   else for(const node of r.addedNodes){if(node.nodeType===1&&node.matches?.('.eota-musical-word'))continue;queue(node);}
  }});
  function observe(){observer.observe(document.body,{subtree:true,childList:true,characterData:true});}
- function start(){scan(document.body);observe();}
+ function start(){scan(document.body);observe();setInterval(()=>{observer.disconnect();notePhase=!notePhase;document.querySelectorAll('.eota-musical-text').forEach(sizeLabel);observe();},2500);window.addEventListener('resize',()=>{document.querySelectorAll('.eota-musical-text').forEach(sizeLabel);});}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(start,0));else start();
 })();
 </script>
