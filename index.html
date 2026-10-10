@@ -12245,10 +12245,10 @@ if(music&&!music.paused) music.pause();
    if(!span.isConnected)return;
    if(document.hidden||matchMedia('(prefers-reduced-motion: reduce)').matches){span._letterTimer=setTimeout(flicker,20000);return;}
    const letter=letters[Math.floor(Math.random()*letters.length)];if(!letter)return;
-   letter.text.style.opacity='0';letter.symbol.style.opacity='1';
-   span._letterTimer=setTimeout(()=>{letter.text.style.opacity='1';letter.symbol.style.opacity='0';span._letterTimer=setTimeout(flicker,20000+Math.random()*20000);},1200);
+   letter.text.style.opacity='.55';letter.symbol.style.opacity='1';letter.symbol.style.filter='drop-shadow(0 0 4px #8debe7)';
+   span._letterTimer=setTimeout(()=>{letter.text.style.opacity='1';letter.symbol.style.opacity='0';span._letterTimer=setTimeout(flicker,3500+Math.random()*6500);},1800);
   }
-  span._letterTimer=setTimeout(flicker,1500+Math.random()*4500);
+  span._letterTimer=setTimeout(flicker,800+Math.random()*4000);
  }
  function scan(root){
   if(!root||!root.isConnected)return;
@@ -12295,6 +12295,10 @@ function start(){animateDocumentSolutions();scan(document.body);observe();}
 })();
 </script>
 
+<style id="eota-readable-button-sparkle">
+.eyeota-feature-line button{transition:box-shadow .8s ease,border-color .8s ease;}
+.eyeota-feature-line button:has(.eota-label-english span[style*="drop-shadow"]){box-shadow:0 0 8px #8debe72b;}
+</style>
 </body>
 </html>
 
