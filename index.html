@@ -12265,7 +12265,7 @@ if(music&&!music.paused) music.pause();
   else for(const node of r.addedNodes){if(node.nodeType===1&&node.matches?.('.eota-musical-word'))continue;queue(node);}
  }});
  function observe(){observer.observe(document.body,{subtree:true,childList:true,characterData:true});}
- function start(){scan(document.body);observe();setInterval(()=>{observer.disconnect();notePhase=!notePhase;document.querySelectorAll('.eota-musical-text').forEach(sizeLabel);observe();},2500);window.addEventListener('resize',()=>{document.querySelectorAll('.eota-musical-text').forEach(sizeLabel);});}
+ function start(){scan(document.body);observe();function switchLabels(){observer.disconnect();notePhase=!notePhase;document.querySelectorAll('.eota-musical-text').forEach(sizeLabel);observe();setTimeout(switchLabels,notePhase?2500:20000);}setTimeout(switchLabels,20000);window.addEventListener('resize',()=>{document.querySelectorAll('.eota-musical-text').forEach(sizeLabel);});}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(start,0));else start();
 })();
 </script>
