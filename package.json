@@ -1,14 +1,16 @@
 {
-  "name": "eyeota-lock-demo",
+  "name": "eyeota-cloudflare-access",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "build": "node prepare-assets.mjs",
+    "test": "node test-gate.mjs && node test-api.mjs"
   },
   "dependencies": {
-    "express": "^5.1.0",
-    "multer": "^2.0.2",
-    "geoip-lite": "2.0.3"
+    "@noble/hashes": "2.0.1"
+  },
+  "devDependencies": {
+    "wrangler": "4.149.0"
   }
 }
