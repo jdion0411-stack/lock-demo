@@ -1,0 +1,16 @@
+{
+  "name": "eyeota-cloudflare-access",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node prepare-assets.mjs",
+    "test": "node test-gate.mjs && node test-api.mjs"
+  },
+  "dependencies": {
+    "@noble/hashes": "2.0.1"
+  },
+  "devDependencies": {
+    "wrangler": "4.149.0"
+  }
+}
