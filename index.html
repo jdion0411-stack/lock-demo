@@ -3248,12 +3248,12 @@ html body.legal-mode #legalDial #legalSocialSources [data-platform=insurance] sm
 <style id="visible-background-layer">
 html body{background:transparent!important;isolation:isolate!important}
 html body::before,html body::after{display:none!important;content:none!important}
-html body #eyeotaSiteBackground{display:block!important;position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:center!important;z-index:0!important;opacity:1!important;visibility:visible!important;filter:none!important;pointer-events:none!important;margin:0!important;padding:0!important;border:0!important}
+html body #eyeotaSiteBackground{display:block!important;position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;max-width:none!important;max-height:none!important;object-fit:contain!important;object-position:center top!important;background:#07101f!important;z-index:0!important;opacity:1!important;visibility:visible!important;filter:none!important;pointer-events:none!important;margin:0!important;padding:0!important;border:0!important}
 html body .app{position:relative!important;z-index:2!important;background:transparent!important}
 html body #eyeotaPubgShade{background:transparent!important;pointer-events:none!important}
 html body.legal-mode #legalDial{background:radial-gradient(circle at center,rgba(8,22,38,.20),rgba(3,9,23,.40) 72%)!important}
 html body.legal-mode #dial{background-color:transparent!important}
-@media(max-width:700px){html body #eyeotaSiteBackground{object-position:70% center!important}}
+@media(max-width:700px){html body #eyeotaSiteBackground{object-position:center top!important}}
 </style>
 </head>
 
@@ -16875,3 +16875,11 @@ html body.legal-mode #legalDial #eotaPatternNodes .pattern-record-node.selected{
 </style>
 
 <style id="dense-pattern-reference">html body.legal-mode #legalDial #eotaPatternNodes .pattern-record-node{width:10px!important;height:10px!important;box-shadow:0 0 6px var(--pattern-color)!important}html body.legal-mode #legalDial #eotaPatternLines .pattern-link{stroke-width:2!important;stroke-dasharray:1 10!important;opacity:.8!important}</style>
+
+<style id="full-background-and-visible-eota">
+html body #eyeotaBrandNavigation,html body #eyeotaColorLogo{visibility:visible!important;opacity:1!important}
+html body #eyeotaColorLogo{display:block!important;position:relative!important;z-index:5!important}
+html body #eyeotaColorLogo [data-logo-letter]{visibility:visible!important;opacity:1!important;text-shadow:0 0 5px currentColor,0 2px 4px #000!important}
+html body.legal-mode #legalArtwork .qr-center-logo{display:flex!important;visibility:visible!important;opacity:1!important;z-index:30!important;font-size:clamp(16px,3vw,30px)!important;font-weight:900!important;text-shadow:0 0 6px currentColor,0 2px 5px #000!important}
+html body.legal-mode #legalArtwork .qr-center-logo span{visibility:visible!important;opacity:1!important}
+</style>
