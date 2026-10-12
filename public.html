@@ -3,16 +3,659 @@
 body{display:flex;flex-direction:column;justify-content:space-between;padding:16px 16px 0}
 #publicEotaSun{position:fixed;left:24px;top:24px;width:104px;height:104px;padding:0;border:0;border-radius:50%;background:transparent;z-index:20;touch-action:none;user-select:none;cursor:grab;color:#442400;filter:drop-shadow(0 0 12px #ffba3388)}#publicEotaSun:active{cursor:grabbing}#publicEotaSun:focus-visible{outline:3px solid #fff;outline-offset:8px}.sun-rays{position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(from 0deg,#ffb62e 0deg 5deg,transparent 5deg 20deg);animation:sunSpin 35s linear infinite}.sun-face{position:absolute;inset:15px;border-radius:50%;display:flex;flex-direction:column;justify-content:center;align-items:center;background:radial-gradient(circle at 36% 28%,#fffed0,#ffe66b 35%,#ffba30 72%,#e6810b);box-shadow:0 0 20px #ffd14f;border:1px solid #ffeb91;font:900 13px Georgia,serif;text-shadow:0 1px 0 #fff8}.sun-face small{font:700 8px Arial;margin-top:5px;letter-spacing:.7px}.sun-help{position:absolute;top:106px;left:0;width:104px;color:#fff4cc;font:700 10px/1.4 Arial;text-shadow:0 2px 4px #000}
 @keyframes sunSpin{to{transform:rotate(360deg)}}@media(max-width:600px){main{margin-top:145px;padding:20px}#publicEotaSun{left:16px;top:16px;width:88px;height:88px}.sun-face{inset:13px;font-size:11px}.sun-help{top:90px;width:88px}}@media(prefers-reduced-motion:reduce){.sun-rays{animation:none}}
+.music-lock-ring{position:absolute;inset:-20%;width:140%;height:140%;overflow:visible;pointer-events:none;animation:sunSpin 45s linear infinite}.music-lock-ring circle{fill:#07111b99;stroke:#f7cd6e;stroke-width:1}.music-lock-ring text{fill:#ffe69e;font:bold 12px Georgia,serif;letter-spacing:1px}.sun-face{z-index:1}.locked-label{font:900 9px Arial,sans-serif;letter-spacing:1px;margin-top:5px;color:#7d190b}.sun-help{top:130px}@media(max-width:600px){.sun-help{top:112px}.locked-label{font-size:8px}#publicEotaSun{left:28px;top:28px}}@media(prefers-reduced-motion:reduce){.music-lock-ring{animation:none}}
+#publicEotaSun{width:184px;height:184px;left:24px;top:24px;filter:drop-shadow(0 0 9px #00f2ff55)}
+#publicEotaSun .sun-rays{inset:57px;background:repeating-conic-gradient(#ffb62e 0deg 5deg,transparent 5deg 20deg);z-index:2}
+#publicEotaSun .sun-face{inset:62px;font-size:12px;z-index:3}
+#publicEotaSun .sun-face small{font-size:8px}
+#publicEotaSun .locked-label{font-size:8px;letter-spacing:.5px}
+.browser-lock-dial{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#132738 0%,#050d1b 60%,#172838 100%);border:2px solid #cbd5e177;box-shadow:inset 0 0 18px #00f2ff22,0 0 12px #00f2ff33;pointer-events:none}
+.lock-track{position:absolute;border:1px solid #cbd5e177;border-radius:50%}.lock-track.outer{inset:6%}.lock-track.inner{inset:16.25%}
+.lock-pointer{position:absolute;top:1px;left:50%;transform:translateX(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:8px solid #0284c7;z-index:4}
+.lock-letter,.lock-note{position:absolute;transform:translate(-50%,-50%);display:grid;place-items:center;border-radius:50%;color:white;font:bold 7px 'Courier New',monospace;text-shadow:0 1px 2px #000,0 0 3px #000}
+.lock-letter{width:12px;height:12px;border:1px solid #0f172a66;box-shadow:0 0 0 1px #030916,inset 0 0 0 1px #ffffff33}
+.lock-note{width:13px;height:13px;font:700 9px Georgia,serif;background:radial-gradient(circle at 35% 30%,#0c2442,#030916 72%);border:1px solid #ffffff66;box-shadow:0 0 0 1px #00f2ff22,0 0 5px #00f2ff33;text-shadow:0 0 3px #00f2ff88}
+#publicEotaSun .sun-help{top:191px;width:184px}
+@media(max-width:600px){#publicEotaSun{width:160px;height:160px;left:16px;top:16px}#publicEotaSun .sun-rays{inset:48px}#publicEotaSun .sun-face{inset:54px;font-size:10px}#publicEotaSun .sun-face small,#publicEotaSun .locked-label{font-size:7px}#publicEotaSun .sun-help{top:165px;width:160px}main{margin-top:200px}}
+.lock-container {
+    position: relative;
+
+    width: var(--dial-size);
+    height: var(--dial-size);
+
+    max-width: 480px;
+    max-height: 480px;
+
+    flex: 0 0 auto;
+
+    background: #01030b;
+
+    border: 7px solid #1e293b;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 45px rgba(0,242,255,.18),
+        0 0 90px rgba(0,242,255,.05),
+        inset 0 0 30px rgba(0,0,0,.08);
+
+    overflow: hidden;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    touch-action: manipulation;
+
+    cursor: pointer;
+}
+
+
+
+.space-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 50% 24%, rgba(0,213,255,.18) 0%, rgba(0,110,185,.06) 18%, transparent 42%),
+        linear-gradient(180deg, #07152a 0%, #10284a 35%, #172d42 55%, #090e19 100%);
+}
+
+
+.space-bg::before {
+    content: '';
+    position: absolute;
+    inset: -14%;
+    background:
+        radial-gradient(ellipse at 25% 40%, rgba(0,242,255,.15) 0%, transparent 34%),
+        radial-gradient(ellipse at 78% 36%, rgba(255,54,167,.13) 0%, transparent 31%),
+        radial-gradient(ellipse at 58% 76%, rgba(255,183,0,.12) 0%, transparent 30%);
+    filter: blur(15px);
+    animation: eyeotaCityHaze 16s ease-in-out infinite alternate;
+}
+
+
+.space-skyline-back {
+    position: absolute;
+    left: -4%;
+    bottom: 17%;
+    width: 108%;
+    height: 38%;
+    opacity: .94;
+    background:
+        linear-gradient(#07111f 0 0) 3% 35%/9% 65% no-repeat,
+        linear-gradient(#091422 0 0) 12% 20%/8% 80% no-repeat,
+        linear-gradient(#081321 0 0) 21% 42%/7% 58% no-repeat,
+        linear-gradient(#0a1726 0 0) 29% 10%/9% 90% no-repeat,
+        linear-gradient(#091321 0 0) 39% 30%/6% 70% no-repeat,
+        linear-gradient(#0a1624 0 0) 46% 14%/10% 86% no-repeat,
+        linear-gradient(#08121f 0 0) 58% 34%/8% 66% no-repeat,
+        linear-gradient(#091321 0 0) 67% 20%/7% 80% no-repeat,
+        linear-gradient(#07111f 0 0) 75% 3%/10% 97% no-repeat,
+        linear-gradient(#08121e 0 0) 86% 25%/7% 75% no-repeat,
+        linear-gradient(#07111d 0 0) 94% 42%/7% 58% no-repeat;
+    filter: drop-shadow(0 -5px 16px rgba(0,0,0,.28));
+    transform: translateX(0);
+    animation: eyeotaCityParallax 20s ease-in-out infinite alternate;
+}
+
+
+.space-tower {
+    position: absolute;
+    z-index: 2;
+    left: 43%;
+    bottom: 17%;
+    width: 11%;
+    height: 57%;
+    background: linear-gradient(90deg, #0b1727, #12263c 45%, #08121f);
+    clip-path: polygon(22% 100%, 31% 19%, 40% 10%, 47% 0, 54% 10%, 63% 19%, 72% 100%);
+    box-shadow: 0 0 20px rgba(0,0,0,.35);
+}
+
+.space-tower::before {
+    content: '';
+    position: absolute;
+    left: 46%;
+    top: -10%;
+    width: 8%;
+    height: 18%;
+    background: #102239;
+    transform: skewX(-18deg);
+    box-shadow: 0 0 12px rgba(0,242,255,.12);
+}
+
+
+.space-windows {
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    right: 0;
+    bottom: 21%;
+    height: 28%;
+    background-image:
+        radial-gradient(circle at 6% 23%, rgba(255,213,105,.85) 0 1.5px, transparent 2.4px),
+        radial-gradient(circle at 11% 58%, rgba(0,242,255,.55) 0 1.2px, transparent 2.2px),
+        radial-gradient(circle at 16% 35%, rgba(255,91,169,.72) 0 1.3px, transparent 2.2px),
+        radial-gradient(circle at 22% 68%, rgba(255,211,111,.82) 0 1.4px, transparent 2.4px),
+        radial-gradient(circle at 28% 26%, rgba(155,223,255,.72) 0 1.2px, transparent 2.1px),
+        radial-gradient(circle at 34% 50%, rgba(255,209,98,.92) 0 1.5px, transparent 2.4px),
+        radial-gradient(circle at 40% 73%, rgba(0,242,255,.60) 0 1.2px, transparent 2.2px),
+        radial-gradient(circle at 47% 30%, rgba(255,213,105,.86) 0 1.5px, transparent 2.4px),
+        radial-gradient(circle at 52% 63%, rgba(255,82,168,.75) 0 1.25px, transparent 2.2px),
+        radial-gradient(circle at 58% 39%, rgba(167,224,255,.72) 0 1.2px, transparent 2.1px),
+        radial-gradient(circle at 64% 72%, rgba(255,220,120,.86) 0 1.4px, transparent 2.3px),
+        radial-gradient(circle at 71% 27%, rgba(0,242,255,.62) 0 1.2px, transparent 2.1px),
+        radial-gradient(circle at 78% 56%, rgba(255,201,101,.90) 0 1.5px, transparent 2.4px),
+        radial-gradient(circle at 85% 34%, rgba(255,82,166,.68) 0 1.2px, transparent 2.1px),
+        radial-gradient(circle at 92% 65%, rgba(165,226,255,.76) 0 1.3px, transparent 2.2px);
+    opacity: .82;
+    animation: eyeotaWindowPulse 5s ease-in-out infinite alternate;
+}
+
+
+.space-rooftops {
+    position: absolute;
+    left: -10%;
+    bottom: 8%;
+    width: 120%;
+    height: 15%;
+    background:
+        linear-gradient(90deg, transparent 0 4%, #0a1019 4% 17%, transparent 17% 20%, #0c131e 20% 38%, transparent 38% 43%, #0a1018 43% 60%, transparent 60% 65%, #0c131d 65% 83%, transparent 83% 87%, #09111b 87% 100%);
+    opacity: .95;
+    box-shadow: inset 0 10px 14px rgba(0,0,0,.2);
+}
+
+
+.space-street {
+    position: absolute;
+    z-index: 5;
+    left: -15%;
+    bottom: -4%;
+    width: 130%;
+    height: 30%;
+    background:
+        linear-gradient(180deg, rgba(8,13,21,.05), rgba(3,7,12,.95)),
+        repeating-linear-gradient(90deg, rgba(0,242,255,.10) 0 1px, transparent 1px 13px),
+        linear-gradient(90deg, rgba(255,64,170,.18), transparent 24%, rgba(255,190,68,.13) 48%, transparent 75%, rgba(0,242,255,.14));
+    filter: blur(.4px);
+    transform: skewX(-10deg);
+    animation: eyeotaStreetFlow 7s ease-in-out infinite alternate;
+}
+
+
+.space-neon {
+    position: absolute;
+    z-index: 6;
+    left: 13%;
+    right: 13%;
+    bottom: 27%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0,242,255,.75), rgba(255,71,173,.7), rgba(255,201,84,.75), transparent);
+    filter: blur(.8px);
+    opacity: .75;
+    animation: eyeotaNeonPulse 3.8s ease-in-out infinite;
+}
+
+@keyframes eyeotaCityHaze {
+    0%   { transform: translate3d(-2%, 1%, 0) scale(1.05); }
+    100% { transform: translate3d(3%, -2%, 0) scale(1.12); }
+}
+
+@keyframes eyeotaCityParallax {
+    0%   { transform: translateX(-1.5%); }
+    100% { transform: translateX(1.5%); }
+}
+
+@keyframes eyeotaWindowPulse {
+    0%,100% { opacity: .62; }
+    50% { opacity: .94; }
+}
+
+@keyframes eyeotaStreetFlow {
+    0%   { transform: skewX(-10deg) translateX(-2%); opacity: .62; }
+    100% { transform: skewX(-10deg) translateX(3%); opacity: .82; }
+}
+
+@keyframes eyeotaNeonPulse {
+    0%,100% { opacity: .50; }
+    50% { opacity: .92; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .space-bg::before,
+    .space-skyline-back,
+    .space-windows,
+    .space-street,
+    .space-neon {
+        animation: none;
+    }
+}
+
+
+
+.dial-svg {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+
+
+.note-track {
+    position: absolute;
+    inset: 4%;
+    z-index: 25;
+    border: 2px solid rgba(203,213,225,.46);
+    border-radius: 50%;
+    box-shadow:
+        0 0 0 6px rgba(5,15,30,.10),
+        inset 0 0 0 1px rgba(0,242,255,.08);
+    pointer-events: none;
+}
+
+
+
+.top-pointer {
+    position: absolute;
+
+    top: 4px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 0;
+    height: 0;
+
+    border-left: clamp(7px, 2vw, 10px) solid transparent;
+    border-right: clamp(7px, 2vw, 10px) solid transparent;
+    border-top: clamp(10px, 2.8vw, 14px) solid #0284c7;
+
+    z-index: 50;
+
+    pointer-events: none;
+}
+
+
+
+.center-artwork {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 30%;
+    height: 42%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    z-index: 40;
+
+    pointer-events: none;
+}
+
+.center-artwork svg {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+}
+
+
+
+.vinyl-record {
+    transform-origin: 70px 100px;
+    transform-box: view-box;
+    transition: filter .16s ease;
+}
+
+.vinyl-surface {
+    filter: drop-shadow(0 0 5px rgba(0,0,0,.38));
+}
+
+.vinyl-groove {
+    fill: none;
+    stroke: rgba(255,255,255,.16);
+    stroke-width: 1.4;
+}
+
+.vinyl-label {
+    fill: url(#vinylLabelGradient);
+}
+
+
+.healing-audio-mark {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: healingPulse 3.6s ease-in-out infinite;
+    filter: drop-shadow(0 0 4px rgba(0,242,255,.28));
+}
+
+.healing-cross {
+    fill: rgba(226,232,240,.96);
+    stroke: rgba(0,242,255,.56);
+    stroke-width: .7;
+}
+
+.healing-bar {
+    fill: #e0f2fe;
+    opacity: .95;
+}
+
+.healing-bar-bright {
+    fill: #67e8f9;
+    opacity: 1;
+}
+
+.healing-wave {
+    fill: none;
+    stroke: #f8fafc;
+    stroke-width: 1.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.healing-wave-glow {
+    fill: none;
+    stroke: rgba(0,242,255,.44);
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+@keyframes healingPulse {
+    0%,100% { transform: scale(.98); opacity: .92; }
+    50% { transform: scale(1.035); opacity: 1; }
+}
+
+#dial.eyeota-healing-hit .healing-audio-mark {
+    animation: healingHit .28s cubic-bezier(.2,.9,.25,1);
+}
+
+@keyframes healingHit {
+    0% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(0,242,255,.30)); }
+    45% { transform: scale(1.14); filter: drop-shadow(0 0 11px rgba(0,242,255,.85)); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(0,242,255,.30)); }
+}
+
+.vinyl-highlight {
+    fill: none;
+    stroke: rgba(255,255,255,.30);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 24 160;
+    transform-origin: 70px 100px;
+    animation: vinylShimmer 4.5s linear infinite;
+}
+
+@keyframes vinylShimmer {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+#dial.eyeota-vinyl-hit .vinyl-record {
+    animation: vinylHit .22s cubic-bezier(.2,.9,.25,1);
+    filter: drop-shadow(0 0 9px rgba(0,242,255,.55));
+}
+
+@keyframes vinylHit {
+    0%   { transform: rotate(0deg) scale(1); }
+    45%  { transform: rotate(9deg) scale(1.025); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+
+
+
+.ring {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    transform-origin: 50% 50%;
+
+    will-change: transform;
+}
+
+.outer-ring {
+    z-index: 45;
+    
+    pointer-events: none;
+}
+
+.inner-ring {
+    z-index: 40;
+}
+
+
+
+.letter {
+    position: absolute;
+
+    
+    width: clamp(22px, 6.7%, 32px);
+    height: clamp(22px, 6.7%, 32px);
+
+    margin-left:
+        calc(clamp(22px, 6.7%, 32px) / -2);
+
+    margin-top:
+        calc(clamp(22px, 6.7%, 32px) / -2);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: #ffffff;
+
+    font-family: "Courier New", monospace;
+
+    font-weight: bold;
+
+    font-size: clamp(10px, 3.3%, 16px);
+
+    cursor: pointer;
+
+    border: 2px solid rgba(15,23,42,.35);
+
+    text-shadow:
+        0 2px 3px rgba(0,0,0,.98),
+        0 0 7px rgba(0,0,0,.95);
+
+    box-shadow:
+        0 0 0 3px rgba(3,9,22,.78),
+        0 3px 10px rgba(0,0,0,.65),
+        inset 0 0 0 1px rgba(255,255,255,.24);
+
+    transition:
+        background .4s ease,
+        color .2s ease,
+        box-shadow .2s ease;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    -webkit-tap-highlight-color: transparent;
+
+    touch-action: manipulation;
+
+}
+
+.letter.selected {
+    border: 3px solid #0f172a;
+
+    box-shadow:
+        0 0 0 3px rgba(255,255,255,.95),
+        0 0 18px rgba(0,242,255,.95);
+
+    z-index: 100;
+}
+
+
+
+.note {
+    position: absolute;
+
+    width: clamp(19px, 5.8%, 28px);
+    height: clamp(19px, 5.8%, 28px);
+
+    margin-left:
+        calc(clamp(19px, 5.8%, 28px) / -2);
+
+    margin-top:
+        calc(clamp(19px, 5.8%, 28px) / -2);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #ffffff;
+
+    font-size: clamp(12px, 3.7%, 18px);
+
+    font-weight: 700;
+
+    background:
+        radial-gradient(circle at 35% 30%, rgba(12, 36, 66, .96), rgba(3, 9, 22, .96) 72%);
+
+    border: 1px solid rgba(255,255,255,.42);
+
+    border-radius: 50%;
+
+    text-shadow:
+        0 0 4px rgba(0,0,0,.95),
+        0 1px 4px rgba(0,0,0,.95),
+        0 0 10px rgba(0,242,255,.55);
+
+    box-shadow:
+        0 0 0 2px rgba(0,242,255,.16),
+        0 0 10px rgba(0,242,255,.16),
+        0 3px 9px rgba(0,0,0,.55);
+
+    cursor: pointer;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.note:hover {
+    filter: brightness(1.25);
+    box-shadow:
+        0 0 0 2px rgba(0,242,255,.35),
+        0 0 16px rgba(0,242,255,.42),
+        0 3px 9px rgba(0,0,0,.55);
+}
+
+.note.eyeota-note-hit {
+    filter: brightness(1.35);
+    box-shadow:
+        0 0 0 3px rgba(255,255,255,.82),
+        0 0 18px rgba(0,242,255,.95),
+        0 3px 9px rgba(0,0,0,.55);
+    transform: scale(1.12);
+}
+
+#exactBrowserSun{position:relative!important;display:block!important;width:84px!important;height:84px!important;min-width:84px!important;min-height:84px!important;margin:0!important;padding:0!important;border:1px solid rgba(255,232,145,.9)!important;border-radius:50%!important;background:radial-gradient(circle at 42% 38%,#fff 0 8%,#fff6b7 13%,#ffd84f 31%,#ff9e24 58%,rgba(255,136,19,.78) 72%,rgba(255,159,33,.18) 100%)!important;box-shadow:0 0 18px #ffd84f,0 0 44px rgba(255,177,45,.85),0 0 85px rgba(255,141,24,.46)!important;overflow:visible!important;isolation:isolate;cursor:pointer!important;z-index:25!important;touch-action:manipulation}
+#exactBrowserSun:before{content:'';position:absolute;inset:-42px;border-radius:50%;background:repeating-conic-gradient(from 0deg,transparent 0deg 10deg,rgba(255,220,120,.05) 11deg,rgba(255,225,135,.9) 13deg,rgba(255,220,120,.05) 15deg,transparent 16deg 24deg);-webkit-mask:radial-gradient(circle,transparent 0 36%,#000 42%,#000 51%,transparent 71%);mask:radial-gradient(circle,transparent 0 36%,#000 42%,#000 51%,transparent 71%);pointer-events:none;z-index:-1;animation:ebSunRaysSpin 24s linear infinite,ebSunRaysGlow 2.6s ease-in-out infinite alternate}
+#exactBrowserSun:after{content:'';position:absolute;inset:-17px;border-radius:50%;background:radial-gradient(circle,transparent 42%,rgba(255,210,91,.22) 60%,transparent 72%);pointer-events:none;z-index:-1;animation:ebSunHalo 2.6s ease-in-out infinite alternate}
+#exactBrowserSun:hover{filter:brightness(1.15)}#exactBrowserSun:focus-visible{outline:3px solid #fff3c6;outline-offset:9px}
+@keyframes ebSunRaysSpin{to{transform:rotate(360deg)}}@keyframes ebSunRaysGlow{from{opacity:.6}to{opacity:1}}@keyframes ebSunHalo{from{opacity:.55;transform:scale(.96)}to{opacity:1;transform:scale(1.1)}}
+@media(prefers-reduced-motion:reduce){#exactBrowserSun:before,#exactBrowserSun:after{animation:none!important}}
+
+#exactBrowserWordmark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:0;pointer-events:none;z-index:4;background:none!important;transform:none!important;opacity:1!important}#exactBrowserWordmark [data-logo-letter]{font:900 13px/1 Arial,sans-serif!important;letter-spacing:0!important;margin:0!important;padding:0!important;display:inline!important;background:none!important;text-shadow:0 1px 2px #000,0 0 2px #000!important;transform:none!important;-webkit-text-stroke:.3px #0005;transition:color 1.2s ease}
+
+#publicEotaSun{width:288px!important;height:288px!important;left:16px;top:16px;background:transparent!important;filter:none!important;box-shadow:none!important;border:0!important;padding:0!important}
+.exact-design-scale{position:absolute;left:0;top:0;width:480px;height:480px;transform:scale(.6);transform-origin:top left;pointer-events:none}
+.lock-container{--dial-size:480px;display:block;width:480px;height:480px;cursor:inherit}
+#exactBrowserSun{position:absolute!important;left:50%;top:50%;transform:translate(-50%,-50%);display:block!important;pointer-events:none}
+.exact-browser-caption{position:absolute;left:50%;top:65%;transform:translateX(-50%);z-index:50;color:#fff4c6;font:700 13px/1.5 Arial,sans-serif;letter-spacing:1.5px;text-shadow:0 2px 4px #000;text-align:center;white-space:nowrap}
+.exact-browser-caption b{color:#ffce61}
+@media(max-width:600px){#publicEotaSun{width:240px!important;height:240px!important;left:12px;top:12px}.exact-design-scale{transform:scale(.5)}main{margin-top:265px!important}}
+
+#publicEotaSun .space-bg{display:none!important}
+#publicEotaSun .lock-container{background:transparent!important;border-color:rgba(255,232,145,.5);isolation:isolate}
+#publicEotaSun #exactBrowserSun{width:466px!important;height:466px!important;min-width:466px!important;min-height:466px!important;z-index:0!important}
+#publicEotaSun #exactBrowserWordmark{z-index:4!important}
+#publicEotaSun #exactBrowserWordmark [data-logo-letter]{font-size:38px!important}
+#publicEotaSun .exact-browser-caption{top:59%;font-size:19px;color:#442400;text-shadow:0 1px 1px #fff8}
+#publicEotaSun .exact-browser-caption b{color:#791e0e}
+#publicEotaSun .note-track{z-index:25}
+#publicEotaSun .dial-svg{z-index:1}
+
+/* Scale the original 84px minimized sun as one complete object. */
+#publicEotaSun #exactBrowserSun{width:84px!important;height:84px!important;min-width:84px!important;min-height:84px!important;transform:translate(-50%,-50%) scale(5.547619)!important;transform-origin:center center!important}
+#publicEotaSun #exactBrowserWordmark [data-logo-letter]{font-size:13px!important}
+/* The original halo and rays now scale together with the sun face. */
+
+#publicEotaSun .lock-container{overflow:visible!important}
+
+#publicEotaSun .note-track,#publicEotaSun .top-pointer,#publicEotaSun .dial-svg,#publicEotaSun .ring,#publicEotaSun .exact-browser-caption{visibility:hidden;opacity:0}
+#publicEotaSun .lock-container{border-color:transparent!important;box-shadow:none!important}
+#publicEotaSun.is-dragging .note-track,#publicEotaSun.is-dragging .top-pointer,#publicEotaSun.is-dragging .dial-svg,#publicEotaSun.is-dragging .ring,#publicEotaSun.is-dragging .exact-browser-caption{visibility:visible;opacity:1}
+#publicEotaSun.is-dragging .lock-container{border-color:rgba(255,232,145,.5)!important}
+
+#publicEotaSun{border-radius:50%!important;user-select:none!important;-webkit-user-select:none!important;-webkit-tap-highlight-color:transparent;outline:none}
+#publicEotaSun *{user-select:none!important;-webkit-user-select:none!important}
+#publicEotaSun:focus:not(:focus-visible),#publicEotaSun.is-dragging{outline:none!important}
+#publicEotaSun:focus-visible{outline:2px solid #ffdc81;outline-offset:8px;border-radius:50%!important}
+
+/* Suppress preview-host frame styling on the circular SVG layer. */
+#publicEotaSun .dial-svg{border:none!important;outline:none!important;box-shadow:none!important;background:transparent!important;border-radius:50%!important}
+#publicEotaSun .exact-design-scale{border:none!important;outline:none!important;box-shadow:none!important;background:transparent!important}
+#publicEotaSun{border:none!important;box-shadow:none!important;background:transparent!important}
+#publicEotaSun.is-dragging .dial-svg{border:none!important;outline:none!important}
+
+#publicEotaSun .original-track{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:2px solid #cbd5e1;border-radius:50%;box-sizing:border-box;z-index:1;pointer-events:none;visibility:hidden;opacity:0;background:transparent}
+#publicEotaSun .original-track.outside{width:90%;height:90%}
+#publicEotaSun .original-track.inside{width:67.5%;height:67.5%}
+#publicEotaSun.is-dragging .original-track{visibility:visible;opacity:1}
+#publicEotaSun,#publicEotaSun *{outline:none!important}
+
+#publicEotaSun{width:184px!important;height:184px!important}
+#publicEotaSun .exact-design-scale{transform:scale(.383333)!important}
+@media(max-width:600px){#publicEotaSun{width:144px!important;height:144px!important}#publicEotaSun .exact-design-scale{transform:scale(.3)!important}main{margin-top:175px!important}}
+
+#publicEotaSun{width:120px!important;height:120px!important}
+#publicEotaSun .exact-design-scale{transform:scale(.25)!important}
+@media(max-width:600px){#publicEotaSun{width:100px!important;height:100px!important}#publicEotaSun .exact-design-scale{transform:scale(.208333)!important}main{margin-top:135px!important}}
 </style></head><body><img id="background" src="/public-background.webp" alt=""><main><blockquote>The diseased have ye not strengthened, neither have ye healed that which was sick, neither have ye bound up that which was broken, neither have ye brought again that which was driven away, neither have ye sought that which was lost; but with force and with cruelty have ye ruled them.<cite>Ezekiel 34:4 · King James Version</cite></blockquote><p class="access-notice">Access to this site is only granted through the <strong>Official EOTA Browser</strong>.</p><div class="video-wrap"><iframe src="https://www.youtube.com/embed/foKD1-nz9Ns" title="YouTube video selected by EOTA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><a class="youtube-link" href="https://www.youtube.com/watch?v=foKD1-nz9Ns" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a></main><footer class="copyright"><p>© 2026 E<span class="eota-ye-shield" aria-label="YE"><span class="eota-ye-letters" aria-hidden="true">YE</span><svg class="eota-ye-armor" viewBox="0 0 36 42" aria-hidden="true"><path d="M18 2L33 8V21C33 30 26 36 18 40C10 36 3 30 3 21V8Z" fill="#172b3b" stroke="#9dc7d8" stroke-width="2"/><path d="M18 5L29 10V21C29 27 24 32 18 36C12 32 7 27 7 21V10Z" fill="none" stroke="#d4e7ee" stroke-opacity=".35"/><path d="M18 5V36" stroke="#a2bac6" stroke-opacity=".22"/></svg></span>OTA DOCUMENT SOLLUTIONS LLC · EOTA Document Solutions</p></footer>
-<button type="button" id="publicEotaSun" aria-label="Draggable EOTA sun. Drag to move, or use arrow keys."><span class="sun-rays" aria-hidden="true"></span><span class="sun-face">EOTA<small>BROWSER</small></span><span class="sun-help">Drag the sun</span></button>
+<button type="button" id="publicEotaSun" aria-label="Locked EOTA Browser, draggable minimized sun surrounded by Music Lock"><span class="exact-design-scale"><span class="lock-container"><span class="space-bg"><span class="space-skyline-back"></span><span class="space-tower"></span><span class="space-windows"></span><span class="space-rooftops"></span><span class="space-street"></span><span class="space-neon"></span></span><span class="note-track"></span><span class="top-pointer"></span><span class="original-track outside"></span><span class="original-track inside"></span><span class="ring outer-ring"><span class="note" style="left:50.000000%;top:8.958333%;">♩</span><span class="note" style="left:65.705966%;top:12.082444%;">♪</span><span class="note" style="left:79.020841%;top:20.979159%;">♫</span><span class="note" style="left:87.917556%;top:34.294034%;">♬</span><span class="note" style="left:91.041667%;top:50.000000%;">♭</span><span class="note" style="left:87.917556%;top:65.705966%;">♮</span><span class="note" style="left:79.020841%;top:79.020841%;">♯</span><span class="note" style="left:65.705966%;top:87.917556%;">𝄞</span><span class="note" style="left:50.000000%;top:91.041667%;">𝄢</span><span class="note" style="left:34.294034%;top:87.917556%;">𝄡</span><span class="note" style="left:20.979159%;top:79.020841%;">𝄪</span><span class="note" style="left:12.082444%;top:65.705966%;">𝄫</span><span class="note" style="left:8.958333%;top:50.000000%;">𝄐</span><span class="note" style="left:12.082444%;top:34.294034%;">𝄑</span><span class="note" style="left:20.979159%;top:20.979159%;">𝄒</span><span class="note" style="left:34.294034%;top:12.082444%;">𝄓</span></span><span class="ring inner-ring"><span class="letter" style="left:50.000000%;top:16.250000%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#FF1744;">A</span><span class="letter" style="left:58.076904%;top:17.230714%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#FF6D00;">B</span><span class="letter" style="left:65.684407%;top:20.115859%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#FFC400;">C</span><span class="letter" style="left:72.380390%;top:24.737762%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#E6FF00;">D</span><span class="letter" style="left:77.775705%;top:30.827815%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#76FF03;">E</span><span class="letter" style="left:81.556798%;top:38.032085%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#00C853;">F</span><span class="letter" style="left:83.503925%;top:45.931887%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#00BFA5;">G</span><span class="letter" style="left:83.503925%;top:54.068113%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#00E5FF;">H</span><span class="letter" style="left:81.556798%;top:61.967915%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#0091EA;">I</span><span class="letter" style="left:77.775705%;top:69.172185%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#304FFE;">J</span><span class="letter" style="left:72.380390%;top:75.262238%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#6200EA;">K</span><span class="letter" style="left:65.684407%;top:79.884141%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#0066FF;">L</span><span class="letter" style="left:58.076904%;top:82.769286%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#AA00FF;">M</span><span class="letter" style="left:50.000000%;top:83.750000%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#D500F9;">N</span><span class="letter" style="left:41.923096%;top:82.769286%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#FF00CC;">O</span><span class="letter" style="left:34.315593%;top:79.884141%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#FF4081;">P</span><span class="letter" style="left:27.619610%;top:75.262238%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#F50057;">Q</span><span class="letter" style="left:22.224295%;top:69.172185%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#FF5252;">R</span><span class="letter" style="left:18.443202%;top:61.967915%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#795548;">S</span><span class="letter" style="left:16.496075%;top:54.068113%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#607D8B;">T</span><span class="letter" style="left:16.496075%;top:45.931887%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#37474F;">U</span><span class="letter" style="left:18.443202%;top:38.032085%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#8D6E63;">V</span><span class="letter" style="left:22.224295%;top:30.827815%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#9E9D24;">W</span><span class="letter" style="left:27.619610%;top:24.737762%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#827717;">X</span><span class="letter" style="left:34.315593%;top:20.115859%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#00897B;">Y</span><span class="letter" style="left:41.923096%;top:17.230714%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#5E35B1;">Z</span></span><span id="exactBrowserSun"><span id="exactBrowserWordmark" aria-hidden="true"><span data-logo-letter style="color:#46D879">E</span><span data-logo-letter style="color:#50DFFF">O</span><span data-logo-letter style="color:#C38BFF">T</span><span data-logo-letter style="color:#FF9966">A</span></span></span><span class="exact-browser-caption">EOTA BROWSER<br><b>LOCKED</b></span></span></span></button>
 <script>
 (()=>{const sun=document.getElementById('publicEotaSun');let drag=null;
-function place(x,y){const size=sun.getBoundingClientRect();sun.style.left=Math.max(8,Math.min(innerWidth-size.width-8,x))+'px';sun.style.top=Math.max(8,Math.min(innerHeight-size.height-28,y))+'px'}
-sun.addEventListener('pointerdown',e=>{if(e.button!==0)return;const r=sun.getBoundingClientRect();drag={id:e.pointerId,x:e.clientX-r.left,y:e.clientY-r.top};sun.setPointerCapture(e.pointerId)});
+function place(x,y){const size=sun.getBoundingClientRect();sun.style.left=Math.max(24,Math.min(innerWidth-size.width-24,x))+'px';sun.style.top=Math.max(24,Math.min(innerHeight-size.height-48,y))+'px'}
+sun.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();const r=sun.getBoundingClientRect();drag={id:e.pointerId,x:e.clientX-r.left,y:e.clientY-r.top};sun.classList.add('is-dragging');sun.setPointerCapture(e.pointerId)});
 sun.addEventListener('pointermove',e=>{if(drag&&drag.id===e.pointerId)place(e.clientX-drag.x,e.clientY-drag.y)});
-for(const event of ['pointerup','pointercancel','lostpointercapture'])sun.addEventListener(event,()=>{drag=null});
+for(const event of ['pointerup','pointercancel','lostpointercapture'])sun.addEventListener(event,()=>{drag=null;sun.classList.remove('is-dragging')});
 sun.addEventListener('keydown',e=>{const directions={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};if(!directions[e.key])return;e.preventDefault();const r=sun.getBoundingClientRect(),[dx,dy]=directions[e.key],step=e.shiftKey?30:10;place(r.left+dx*step,r.top+dy*step)});
 window.addEventListener('resize',()=>{const r=sun.getBoundingClientRect();place(r.left,r.top)});
+window.addEventListener('blur',()=>{drag=null;sun.classList.remove('is-dragging')});
 // This sun has no click navigation, browser expansion, or access-unlock action.
 })();
-</script></body></html>
+</script>
+<script>
+(()=>{const sun=document.getElementById('publicEotaSun');if(!sun)return;const letters=sun.querySelectorAll('#exactBrowserWordmark [data-logo-letter]');const palette=['#4C8DFF','#FFD700','#46D879','#FF74B8','#C38BFF','#50DFFF','#FF9966','#F5F7FF'];function recolor(){if(document.hidden)return;letters.forEach(letter=>{const choices=palette.filter(color=>color!==letter.dataset.lastColor);const next=choices[Math.floor(Math.random()*choices.length)];letter.style.color=next;letter.dataset.lastColor=next})}recolor();setInterval(recolor,2400)})();
+</script>
+</body></html>
