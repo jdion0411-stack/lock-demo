@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 const root=path.dirname(fileURLToPath(import.meta.url));
 const destination=path.join(root,'assets');
 const limit=25*1024*1024;
-const extensions=new Set(['.html','.css','.png','.jpg','.jpeg','.gif','.svg','.webp','.avif','.ico','.mp3','.wav','.ogg','.m4a','.mp4','.webm','.woff','.woff2','.ttf']);
+const extensions=new Set(['.html','.css','.png','.jpg','.jpeg','.gif','.svg','.webp','.avif','.ico','.mp3','.wav','.ogg','.m4a','.mp4','.webm','.vtt','.woff','.woff2','.ttf']);
 const ignored=new Set(['assets','node_modules','.git','Browser-update']);
 const files=[];
 async function walk(directory){
