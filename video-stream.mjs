@@ -1,0 +1,92 @@
+// One seekable MP4 backed by the existing 13 static asset pieces.
+export const VIDEO_PATH = '/eota-gameplay-stream.mp4';
+const PART_SIZE = 20971520;
+const TOTAL = 266273513;
+const MAX_RANGE = 2 * 1024 * 1024;
+export async function videoResponse(request, env) {
+ const headers = new Headers({
+  'Content-Type':'video/mp4', 'Accept-Ranges':'bytes',
+  'Cache-Control':'public, max-age=3600',
+  'X-Content-Type-Options':'nosniff'
+ });
+ if (!['GET','HEAD'].includes(request.method)) return new Response(null,{status:405,headers:{Allow:'GET, HEAD'}});
+ if (request.method === 'HEAD') {
+  headers.set('Content-Length',String(TOTAL));
+  return new Response(null,{headers});
+ }
+ const range=request.headers.get('Range');
+ let start=0,end=TOTAL-1;
+ if(range) {
+  const match=/^bytes=(\d*)-(\d*)$/.exec(range.trim());
+  if(!match || (!match[1]&&!match[2])) return invalid();
+  if(!match[1]) {
+   const suffix=Number(match[2]);
+   if(!Number.isSafeInteger(suffix)||suffix<=0) return invalid();
+   start=Math.max(0,TOTAL-suffix);
+  } else {
+   start=Number(match[1]);
+   end=match[2]?Math.min(Number(match[2]),TOTAL-1):TOTAL-1;
+  }
+  if(!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||start>=TOTAL||end<start) return invalid();
+  // Bound each browser request; native media requests the next range as needed.
+  end=Math.min(end,start+MAX_RANGE-1);
+ }
+ function invalid(){
+  headers.set('Content-Range','bytes */'+TOTAL);
+  return new Response(null,{status:416,headers});
+ }
+ const first=Math.floor(start/PART_SIZE),last=Math.floor(end/PART_SIZE);
+ const slices=[];
+ // Validate and fetch only the requested pieces before sending headers.
+ for(let i=first;i<=last;i++){
+  const base=i*PART_SIZE,partLength=Math.min(PART_SIZE,TOTAL-base);
+  const localStart=Math.max(start-base,0),localEnd=Math.min(end-base,partLength-1);
+  const url=new URL(request.url);
+  url.pathname='/eota-demo-hq-'+String(i+1).padStart(2,'0')+'.mp4';url.search='';
+  const response=await env.ASSETS.fetch(new Request(url,{headers:{Range:'bytes='+localStart+'-'+localEnd}}));
+  if(![200,206].includes(response.status)||!response.body) return new Response('Video part unavailable',{status:502});
+  let skip=localStart;
+  if(response.status===206){
+   const match=/^bytes (\d+)-(\d+)\/(\d+)$/.exec(response.headers.get('Content-Range')||'');
+   if(!match||Number(match[1])!==localStart||Number(match[2])!==localEnd||Number(match[3])!==partLength){
+    await response.body.cancel();return new Response('Invalid video part range',{status:502});
+   }
+   skip=0;
+  }
+  slices.push({body:response.body,skip,length:localEnd-localStart+1});
+ }
+ headers.set('Content-Length',String(end-start+1));
+ if(range) headers.set('Content-Range','bytes '+start+'-'+end+'/'+TOTAL);
+ let index=0,reader=null,current=null,cancelled=false;
+ const stream=new ReadableStream({
+  async pull(controller){
+   try{
+    while(!cancelled){
+     if(!reader){
+      if(index===slices.length){controller.close();return;}
+      current=slices[index++];reader=current.body.getReader();
+     }
+     const {value,done}=await reader.read();
+     if(cancelled)return;
+     if(done)throw new Error('Truncated video asset');
+     const offset=Math.min(current.skip,value.length);current.skip-=offset;
+     if(offset===value.length)continue;
+     const bytes=value.subarray(offset,offset+Math.min(current.length,value.length-offset));
+     current.length-=bytes.length;controller.enqueue(bytes);
+     if(current.length===0){await reader.cancel();reader=null;}
+     return;
+    }
+   }catch(error){
+    if(reader)await reader.cancel().catch(()=>{});
+    for(const slice of slices.slice(index))await slice.body.cancel().catch(()=>{});
+    controller.error(error);
+   }
+  },
+  async cancel(){
+   cancelled=true;
+   if(reader)await reader.cancel().catch(()=>{});
+   for(const slice of slices.slice(index))await slice.body.cancel().catch(()=>{});
+  }
+ });
+ return new Response(stream,{status:range?206:200,headers});
+}

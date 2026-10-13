@@ -818,40 +818,28 @@ new IntersectionObserver(es=>{visible=es[0].isIntersecting;start()}).observe(roo
 (()=>{const mobile=matchMedia('(max-width:767px)'),svg=document.getElementById('ndPatternLines'),dots=document.getElementById('ndPatternDots');if(!svg||!dots)return;const paths=[...svg.querySelectorAll('path')],buttons=[...dots.children],colors=['#ff697e','#64baff','#efb749'];const originals=paths.map(p=>p.getAttribute('stroke'));function apply(){paths.forEach((p,i)=>{p.style.display=mobile.matches&&i%4!==0?'none':'';p.setAttribute('stroke',mobile.matches?colors[i%3]:originals[i])});buttons.forEach((b,i)=>b.style.display=mobile.matches&&i%4!==0?'none':'')}apply();mobile.addEventListener('change',apply)})();
 </script><script>
 (()=>{
-const video=document.getElementById('eotaDemo'),button=document.getElementById('eotaDemoPlay'),status=document.getElementById('eotaDemoStatus'),seek=document.getElementById('eotaDemoSeek'),time=document.getElementById('eotaDemoTime');
-const parts=["eota-demo-hq-01.mp4", "eota-demo-hq-02.mp4", "eota-demo-hq-03.mp4", "eota-demo-hq-04.mp4", "eota-demo-hq-05.mp4", "eota-demo-hq-06.mp4", "eota-demo-hq-07.mp4", "eota-demo-hq-08.mp4", "eota-demo-hq-09.mp4", "eota-demo-hq-10.mp4", "eota-demo-hq-11.mp4", "eota-demo-hq-12.mp4", "eota-demo-hq-13.mp4"]; const download=document.getElementById('eotaDemoDownload');
-let loading=null,ready=false,dragging=false,pending=null,objectUrl=null;
+const video=document.getElementById('eotaDemo'),button=document.getElementById('eotaDemoPlay'),status=document.getElementById('eotaDemoStatus'),seek=document.getElementById('eotaDemoSeek'),time=document.getElementById('eotaDemoTime'),download=document.getElementById('eotaDemoDownload');
+const source='/eota-gameplay-stream.mp4?v=2';
+let dragging=false;
 const clock=n=>Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0');
 function update(){if(Number.isFinite(video.duration)){seek.max=video.duration;if(!dragging)seek.value=video.currentTime;time.textContent=clock(dragging?Number(seek.value):video.currentTime)+' / '+clock(video.duration);}}
-function loadSeekable(){
- if(loading)return loading;
- status.textContent='Loading full-quality video…';
- loading=(async()=>{
-  const buffers=new Array(parts.length);let next=0,done=0;
-  async function transfer(){while(next<parts.length){const index=next++;const response=await fetch(new URL(parts[index],location.href),{cache:'no-store'});if(!response.ok)throw new Error('Video download failed');buffers[index]=await response.blob();if(!buffers[index].size)throw new Error('Empty video part');done++;status.textContent='Loading full-quality video… '+Math.round(done/parts.length*100)+'%';}}
-  await Promise.all([transfer(),transfer()]);
-  const blob=new Blob(buffers,{type:'video/mp4'});buffers.length=0;
-  const position=pending===null?video.currentTime:pending,playing=!video.paused;
-  objectUrl=URL.createObjectURL(new Blob([blob],{type:'video/mp4'}));
-  await new Promise((resolve,reject)=>{
-   video.addEventListener('loadedmetadata',resolve,{once:true});
-   video.addEventListener('error',reject,{once:true});
-   video.src=objectUrl;video.load();
-  });
-  ready=true;video.currentTime=Math.min(pending===null?position:pending,video.duration);pending=null;
-  status.textContent='';update();if(playing)video.play().catch(()=>{button.hidden=false;});
- })().catch(()=>{loading=null;status.textContent='Video could not finish loading. Tap Play to retry.';});
- return loading;
-}
-button.addEventListener('click',async()=>{button.disabled=true;await loadSeekable();button.disabled=false;if(ready)video.play().catch(()=>{button.hidden=false;status.textContent='Video ready. Tap Play to start.';});});
-download.addEventListener('click',async event=>{event.preventDefault();await loadSeekable();if(ready){const link=document.createElement('a');link.href=objectUrl;link.download='EOTA-Gameplay-Highlights.mp4';link.click();}});
-video.addEventListener('play',()=>{loadSeekable();});
-video.addEventListener('playing',()=>{button.hidden=true;if(ready)status.textContent='';});
-video.addEventListener('pause',()=>{button.hidden=false;});
-video.addEventListener('error',()=>{if(!loading)status.textContent='Video could not load. Tap Play to retry.';});
+video.preload='metadata';video.src=source;
+download.href=source;download.download='EOTA-Gameplay-Highlights.mp4';
+button.addEventListener('click',()=>{
+ video.muted=false;
+ if(video.error){video.load();}
+ status.textContent='Starting video…';
+ // Call play in the click handler so the browser permits audio immediately.
+ const attempt=video.play();
+ if(attempt)attempt.catch(()=>{button.hidden=false;status.textContent=video.error?'Video could not load. Tap Play to retry.':'Tap Play to start the video.';});
+});
+video.addEventListener('playing',()=>{button.hidden=true;status.textContent='';});
+video.addEventListener('pause',()=>{button.hidden=false;button.textContent='▶ Play demonstration';});
+video.addEventListener('waiting',()=>{if(!video.paused)status.textContent='Buffering…';});
+video.addEventListener('stalled',()=>{if(!video.paused)status.textContent='Waiting for video data…';});
+video.addEventListener('error',()=>{button.hidden=false;status.textContent='Video could not load. Tap Play to retry.';});
 for(const event of ['timeupdate','loadedmetadata','durationchange','seeked'])video.addEventListener(event,update);
-seek.addEventListener('input',()=>{dragging=true;pending=Number(seek.value);update();if(ready){video.currentTime=pending;pending=null;}else loadSeekable();});
-seek.addEventListener('change',async()=>{const target=Number(seek.value);pending=target;await loadSeekable();if(ready){video.currentTime=Math.min(target,video.duration);pending=null;}dragging=false;update();});
-if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){loadSeekable();observer.disconnect();}},{rootMargin:'300px'});observer.observe(video);}
+seek.addEventListener('input',()=>{dragging=true;update();});
+seek.addEventListener('change',()=>{if(Number.isFinite(video.duration))video.currentTime=Math.min(Number(seek.value),video.duration);dragging=false;update();});
 })();
 </script></body></html>

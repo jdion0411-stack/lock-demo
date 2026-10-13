@@ -1,3 +1,4 @@
+import { VIDEO_PATH, videoResponse } from './video-stream.mjs';
 export { EotaApi } from './api.mjs';
 // All requests pass through this handler before static assets.
 const publicPaths = new Map([['/', '/public.html'], ['/index.html', '/public.html'], ['/public.html', '/public.html'], ['/public-background.webp', '/public-background.webp']]);
@@ -67,6 +68,7 @@ async function assetResponse(request, env) {
 export default {
  async fetch(request, env, ctx) {
   const url = new URL(request.url);
+  if (url.pathname === VIDEO_PATH) return videoResponse(request, env);
   const access = authorized(request, env);
   if (!access) {
    const target = publicPaths.get(url.pathname);
