@@ -14,6 +14,7 @@ export async function videoResponse(request, env) {
   headers.set('Content-Length',String(TOTAL));
   return new Response(null,{headers});
  }
+ const mobileStream=new URL(request.url).searchParams.get('mobile')==='1';
  const range=request.headers.get('Range');
  let start=0,end=TOTAL-1;
  if(range) {
@@ -29,42 +30,45 @@ export async function videoResponse(request, env) {
   }
   if(!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||start>=TOTAL||end<start) return invalid();
   // Bound each browser request; native media requests the next range as needed.
-  end=Math.min(end,start+MAX_RANGE-1);
+  if(!mobileStream) end=Math.min(end,start+MAX_RANGE-1);
  }
  function invalid(){
   headers.set('Content-Range','bytes */'+TOTAL);
   return new Response(null,{status:416,headers});
  }
  const first=Math.floor(start/PART_SIZE),last=Math.floor(end/PART_SIZE);
- const slices=[];
- // Validate and fetch only the requested pieces before sending headers.
- for(let i=first;i<=last;i++){
+ // Fetch one asset at a time, including for open-ended mobile requests.
+ async function fetchSlice(i){
   const base=i*PART_SIZE,partLength=Math.min(PART_SIZE,TOTAL-base);
   const localStart=Math.max(start-base,0),localEnd=Math.min(end-base,partLength-1);
   const url=new URL(request.url);
   url.pathname='/eota-demo-hq-'+String(i+1).padStart(2,'0')+'.mp4';url.search='';
   const response=await env.ASSETS.fetch(new Request(url,{headers:{Range:'bytes='+localStart+'-'+localEnd}}));
-  if(![200,206].includes(response.status)||!response.body) return new Response('Video part unavailable',{status:502});
+  if(![200,206].includes(response.status)||!response.body) throw new Error('Video part unavailable');
   let skip=localStart;
   if(response.status===206){
    const match=/^bytes (\d+)-(\d+)\/(\d+)$/.exec(response.headers.get('Content-Range')||'');
    if(!match||Number(match[1])!==localStart||Number(match[2])!==localEnd||Number(match[3])!==partLength){
-    await response.body.cancel();return new Response('Invalid video part range',{status:502});
+    await response.body.cancel();throw new Error('Invalid video part range');
    }
    skip=0;
   }
-  slices.push({body:response.body,skip,length:localEnd-localStart+1});
+  return {body:response.body,skip,length:localEnd-localStart+1};
  }
+ let initial;
+ try{initial=await fetchSlice(first);}catch{ return new Response('Video part unavailable',{status:502}); }
  headers.set('Content-Length',String(end-start+1));
  if(range) headers.set('Content-Range','bytes '+start+'-'+end+'/'+TOTAL);
- let index=0,reader=null,current=null,cancelled=false;
+ let index=first,reader=null,current=null,cancelled=false;
  const stream=new ReadableStream({
   async pull(controller){
    try{
     while(!cancelled){
      if(!reader){
-      if(index===slices.length){controller.close();return;}
-      current=slices[index++];reader=current.body.getReader();
+      if(index>last){controller.close();return;}
+      current=index===first?initial:await fetchSlice(index);index++;
+      reader=current.body.getReader();
+      if(cancelled){await reader.cancel();return;}
      }
      const {value,done}=await reader.read();
      if(cancelled)return;
@@ -78,14 +82,14 @@ export async function videoResponse(request, env) {
     }
    }catch(error){
     if(reader)await reader.cancel().catch(()=>{});
-    for(const slice of slices.slice(index))await slice.body.cancel().catch(()=>{});
+    if(index===first)await initial.body.cancel().catch(()=>{});
     controller.error(error);
    }
   },
   async cancel(){
    cancelled=true;
    if(reader)await reader.cancel().catch(()=>{});
-   for(const slice of slices.slice(index))await slice.body.cancel().catch(()=>{});
+   if(index===first)await initial.body.cancel().catch(()=>{});
   }
  });
  return new Response(stream,{status:range?206:200,headers});
