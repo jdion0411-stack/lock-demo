@@ -2,6 +2,19 @@ export { EotaApi } from './api.mjs';
 // All requests pass through this handler before static assets.
 const publicPaths = new Map([['/', '/public.html'], ['/index.html', '/public.html'], ['/public.html', '/public.html'], ['/public-background.webp', '/public-background.webp']]);
 for (const filename of ['eota-browser-demo-mobile.mp4', 'eota-browser-demo.mp4', 'eota-browser-demo-poster.jpg', 'eota-browser-demo.vtt']) publicPaths.set('/' + filename, '/' + filename);
+publicPaths.set('/eota-demo-hq-01.mp4', '/eota-demo-hq-01.mp4');
+publicPaths.set('/eota-demo-hq-02.mp4', '/eota-demo-hq-02.mp4');
+publicPaths.set('/eota-demo-hq-03.mp4', '/eota-demo-hq-03.mp4');
+publicPaths.set('/eota-demo-hq-04.mp4', '/eota-demo-hq-04.mp4');
+publicPaths.set('/eota-demo-hq-05.mp4', '/eota-demo-hq-05.mp4');
+publicPaths.set('/eota-demo-hq-06.mp4', '/eota-demo-hq-06.mp4');
+publicPaths.set('/eota-demo-hq-07.mp4', '/eota-demo-hq-07.mp4');
+publicPaths.set('/eota-demo-hq-08.mp4', '/eota-demo-hq-08.mp4');
+publicPaths.set('/eota-demo-hq-09.mp4', '/eota-demo-hq-09.mp4');
+publicPaths.set('/eota-demo-hq-10.mp4', '/eota-demo-hq-10.mp4');
+publicPaths.set('/eota-demo-hq-11.mp4', '/eota-demo-hq-11.mp4');
+publicPaths.set('/eota-demo-hq-12.mp4', '/eota-demo-hq-12.mp4');
+publicPaths.set('/eota-demo-hq-13.mp4', '/eota-demo-hq-13.mp4');
 const mediaExtensions = /\.(css|png|jpe?g|gif|svg|webp|avif|ico|mp3|wav|ogg|m4a|mp4|webm|woff2?|ttf)$/i;
 function authorized(request, env) {
  const expected = env.EOTA_BROWSER_ACCESS_KEY;
