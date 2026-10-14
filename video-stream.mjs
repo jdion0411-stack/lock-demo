@@ -1,9 +1,12 @@
 // One seekable MP4 backed by the existing 13 static asset pieces.
 export const VIDEO_PATH = '/eota-gameplay-stream.mp4';
 const PART_SIZE = 20971520;
-const TOTAL = 266273513;
+const PROFILES = {"desktop": {"total": 235816032, "prefix": "eota-expanded-hq", "parts": 12}, "mobile": {"total": 87697829, "prefix": "eota-expanded-mobile", "parts": 5}};
 const MAX_RANGE = 2 * 1024 * 1024;
 export async function videoResponse(request, env) {
+ const mobileStream=new URL(request.url).searchParams.get('mobile')==='1';
+ const profile=PROFILES[mobileStream?'mobile':'desktop'];
+ const TOTAL=profile.total;
  const headers = new Headers({
   'Content-Type':'video/mp4', 'Accept-Ranges':'bytes',
   'Cache-Control':'public, max-age=3600',
@@ -14,7 +17,6 @@ export async function videoResponse(request, env) {
   headers.set('Content-Length',String(TOTAL));
   return new Response(null,{headers});
  }
- const mobileStream=new URL(request.url).searchParams.get('mobile')==='1';
  const range=request.headers.get('Range');
  let start=0,end=TOTAL-1;
  if(range) {
@@ -42,7 +44,7 @@ export async function videoResponse(request, env) {
   const base=i*PART_SIZE,partLength=Math.min(PART_SIZE,TOTAL-base);
   const localStart=Math.max(start-base,0),localEnd=Math.min(end-base,partLength-1);
   const url=new URL(request.url);
-  url.pathname='/eota-demo-hq-'+String(i+1).padStart(2,'0')+'.mp4';url.search='';
+  url.pathname='/'+profile.prefix+'-'+String(i+1).padStart(2,'0')+'.mp4';url.search='';
   const response=await env.ASSETS.fetch(new Request(url,{headers:{Range:'bytes='+localStart+'-'+localEnd}}));
   if(![200,206].includes(response.status)||!response.body) throw new Error('Video part unavailable');
   let skip=localStart;

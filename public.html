@@ -820,7 +820,7 @@ new IntersectionObserver(es=>{visible=es[0].isIntersecting;start()}).observe(roo
 (()=>{
 const video=document.getElementById('eotaDemo'),button=document.getElementById('eotaDemoPlay'),status=document.getElementById('eotaDemoStatus'),seek=document.getElementById('eotaDemoSeek'),time=document.getElementById('eotaDemoTime'),download=document.getElementById('eotaDemoDownload');
 const mobileVideo=matchMedia('(max-width:767px)').matches || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
-const source=mobileVideo?'/eota-gameplay-stream.mp4?mobile=1&v=3':'/eota-gameplay-stream.mp4?v=2';
+const source=mobileVideo?'/eota-gameplay-stream.mp4?mobile=1&v=4':'/eota-gameplay-stream.mp4?v=4';
 let dragging=false;
 const clock=n=>Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0');
 function update(){if(Number.isFinite(video.duration)){seek.max=video.duration;if(!dragging)seek.value=video.currentTime;time.textContent=clock(dragging?Number(seek.value):video.currentTime)+' / '+clock(video.duration);}}

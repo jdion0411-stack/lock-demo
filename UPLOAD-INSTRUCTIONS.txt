@@ -1,0 +1,6 @@
+1. Extract this ZIP.
+2. Upload ALL files inside website-update to the ROOT of your existing GitHub website repository. Replace public.html, worker.mjs, video-stream.mjs and eota-browser-demo.vtt. The eota-expanded numbered files are NEW video pieces.
+3. Commit all files together and wait for Cloudflare deployment.
+4. Close the old tab, reopen the site and tap Play demonstration. Check the 6:04 duration and seek forward/backward.
+
+Keep every other site file. The old 13 eota-demo-hq video pieces do not need reuploading or deleting. This new montage uses new filenames to avoid stale video cache. Desktop uses the full-resolution version; phones use a separate lighter version with audio. Mobile streaming uses continuous ranges and fetches one asset at a time.
