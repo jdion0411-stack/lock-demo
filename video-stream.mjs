@@ -32,7 +32,7 @@ export async function videoResponse(request, env) {
   }
   if(!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||start>=TOTAL||end<start) return invalid();
   // Bound each browser request; native media requests the next range as needed.
-  if(!mobileStream) end=Math.min(end,start+MAX_RANGE-1);
+  end=Math.min(end,start+MAX_RANGE-1);
  }
  function invalid(){
   headers.set('Content-Range','bytes */'+TOTAL);

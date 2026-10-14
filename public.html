@@ -820,15 +820,20 @@ new IntersectionObserver(es=>{visible=es[0].isIntersecting;start()}).observe(roo
 (()=>{
 const video=document.getElementById('eotaDemo'),button=document.getElementById('eotaDemoPlay'),status=document.getElementById('eotaDemoStatus'),seek=document.getElementById('eotaDemoSeek'),time=document.getElementById('eotaDemoTime'),download=document.getElementById('eotaDemoDownload');
 const mobileVideo=matchMedia('(max-width:767px)').matches || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
-const source=mobileVideo?'/eota-gameplay-stream.mp4?mobile=1&v=4':'/eota-gameplay-stream.mp4?v=4';
-let dragging=false;
+const source=mobileVideo?'/eota-gameplay-stream.mp4?mobile=1&v=5':'/eota-gameplay-stream.mp4?v=5';
+let dragging=false,resumeTime=0;
+video.addEventListener("timeupdate",()=>{if(video.currentTime>0)resumeTime=video.currentTime;});
 const clock=n=>Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0');
 function update(){if(Number.isFinite(video.duration)){seek.max=video.duration;if(!dragging)seek.value=video.currentTime;time.textContent=clock(dragging?Number(seek.value):video.currentTime)+' / '+clock(video.duration);}}
 video.preload='metadata';video.src=source;
 download.href=source;download.download='EOTA-Gameplay-Highlights.mp4';
 button.addEventListener('click',()=>{
  video.muted=false;
- if(video.error){video.load();}
+ if(video.error){
+  const target=resumeTime;
+  video.addEventListener("loadedmetadata",()=>{video.currentTime=Math.min(target,video.duration||target);video.play().catch(()=>{button.hidden=false;});},{once:true});
+  video.load();
+ }
  status.textContent='Starting video…';
  // Call play in the click handler so the browser permits audio immediately.
  const attempt=video.play();
