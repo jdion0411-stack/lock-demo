@@ -84,7 +84,7 @@ async function assetResponse(request, env) {
 }
 
 
-for(const filename of ['eota-gameplay-safe-v13.mp4','eota-privacy-browser-demo.mp4','eota-privacy-browser-demo-mobile.mp4','eota-privacy-browser-demo-poster.jpg'])publicPaths.set('/'+filename,'/'+filename);
+for(const filename of ['eota-gameplay-safe-v14.mp4','eota-browser-framed-v3.mp4','eota-browser-framed-v3.jpg','eota-browser-framed-v3.vtt'])publicPaths.set('/'+filename,'/'+filename);
 export default {
  async fetch(request, env, ctx) {
   const url = new URL(request.url);
