@@ -45,17 +45,14 @@ export async function videoResponse(request, env) {
   const localStart=Math.max(start-base,0),localEnd=Math.min(end-base,partLength-1);
   const url=new URL(request.url);
   url.pathname='/'+profile.prefix+'-'+String(i+1).padStart(2,'0')+'.mp4';url.search='';
-  const response=await env.ASSETS.fetch(new Request(url,{headers:{Range:'bytes='+localStart+'-'+localEnd}}));
-  if(![200,206].includes(response.status)||!response.body) throw new Error('Video part unavailable');
-  let skip=localStart;
-  if(response.status===206){
-   const match=/^bytes (\d+)-(\d+)\/(\d+)$/.exec(response.headers.get('Content-Range')||'');
-   if(!match||Number(match[1])!==localStart||Number(match[2])!==localEnd||Number(match[3])!==partLength){
-    await response.body.cancel();throw new Error('Invalid video part range');
-   }
-   skip=0;
-  }
-  return {body:response.body,skip,length:localEnd-localStart+1};
+  // Read a complete static part before slicing. Asset-service partial bodies
+  // and cancellation must never truncate the browser response silently.
+  const response=await env.ASSETS.fetch(new Request(url));
+  if(response.status!==200)throw new Error('Video part unavailable');
+  const bytes=new Uint8Array(await response.arrayBuffer());
+  if(bytes.byteLength!==partLength)throw new Error('Video part is incomplete');
+  const slice=bytes.slice(localStart,localEnd+1);
+  return {body:new Response(slice).body,skip:0,length:slice.byteLength};
  }
  let initial;
  try{initial=await fetchSlice(first);}catch{ return new Response('Video part unavailable',{status:502}); }
