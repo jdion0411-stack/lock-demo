@@ -1,1 +1,19 @@
-Use this update instead of the earlier circular-artwork update. Copy ALL extracted files into the cloned WEBSITE folder, replacing files when asked. Commit and Push origin once. Wait for Cloudflare deployment, then close and reopen the website tab. This replaces the recorded YouTube rectangle with the gold and pale-blue musical-symbol pattern from the approved app design, including the shrinking player and video poster. This is a website video update, not an app installation.
+WEBSITE UPDATE — EOTA Browser demonstration
+
+1. Extract this ZIP.
+2. Copy its files into the SAME cloned website folder you already use with GitHub Desktop.
+3. Replace public.html and worker.mjs when asked. Keep all other existing website files.
+4. In GitHub Desktop, commit the changes and Push origin once.
+5. Wait for Cloudflare to deploy, then reopen or refresh the website.
+
+The new browser demonstration appears directly BELOW your current gameplay video.
+No existing gameplay video, clip pieces, HLS files, artwork or app downloads are replaced.
+The public asset allowlist includes the new video, poster and captions. Native MP4 range
+requests and seeking continue through the existing worker handler.
+
+The demonstration uses your actual recording, cuts waiting time, and adds feature titles
+and explanatory captions. Source audio is removed. The MP4 is optimized for progressive
+playback, with a smaller mobile version. New video loading waits until a visitor plays it.
+The page has chapter buttons and a download fallback. This package is not an app installer.
+
+Prepared and checked locally. This package has not been deployed to your live website.
