@@ -788,7 +788,7 @@ blockquote.verse-drip .verse-word:nth-of-type(6n) .color-drip:first-child{displa
 <h2 id="eota-showcase-title">EOTA Browser &amp; Screen Recorder</h2>
 <p class="eota-showcase-intro">Browse and listen to music while you play. This demonstration records game audio only, so the browser music is excluded.</p>
 <button id="eotaDemoPlay" type="button" style="margin:0 0 16px;padding:12px 20px;border:1px solid #d9b75c;border-radius:24px;background:#142336;color:#fff2ce;font:700 15px Arial;cursor:pointer">▶ Play demonstration</button>
-<video id="eotaDemo" controls playsinline webkit-playsinline preload="metadata" poster="/eota-browser-demo-poster.jpg?v=9" aria-label="EOTA browser demonstration with gameplay highlights">
+<video id="eotaDemo" controls playsinline webkit-playsinline preload="metadata" poster="/eota-browser-demo-poster.jpg?v=12" aria-label="EOTA browser demonstration with gameplay highlights">
 
 <track kind="captions" src="eota-browser-demo.vtt" srclang="en" label="Feature highlights">
 Your browser does not support this video. 
@@ -852,7 +852,7 @@ new IntersectionObserver(es=>{visible=es[0].isIntersecting;start()}).observe(roo
 (()=>{
 const video=document.getElementById('eotaDemo'),button=document.getElementById('eotaDemoPlay'),status=document.getElementById('eotaDemoStatus'),seek=document.getElementById('eotaDemoSeek'),time=document.getElementById('eotaDemoTime'),download=document.getElementById('eotaDemoDownload');
 const mobileVideo=matchMedia('(max-width:767px)').matches || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
-const source=mobileVideo?'/eota-mobile.m3u8?v=9':'/eota-gameplay-stream.mp4?v=9';
+const source=mobileVideo?'/eota-mobile.m3u8?v=12':'/eota-gameplay-stream.mp4?v=12';
 let hlsPlayer=null,networkRetries=0;
 let dragging=false,resumeTime=0;
 video.addEventListener("timeupdate",()=>{if(video.currentTime>0)resumeTime=video.currentTime;});

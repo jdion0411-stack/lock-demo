@@ -1,7 +1,7 @@
 // One seekable MP4 backed by the existing 13 static asset pieces.
 export const VIDEO_PATH = '/eota-gameplay-stream.mp4';
 const PART_SIZE = 20971520;
-const PROFILES = {"desktop": {"total": 268083290, "prefix": "eota-expanded-hq", "parts": 13}, "mobile": {"total": 115412783, "prefix": "eota-expanded-mobile", "parts": 6}};
+const PROFILES = {"desktop": {"total": 453852348, "prefix": "eota-expanded-hq", "parts": 22}, "mobile": {"total": 115932477, "prefix": "eota-expanded-mobile", "parts": 6}};
 const MAX_RANGE = 2 * 1024 * 1024;
 export async function videoResponse(request, env) {
  const mobileStream=new URL(request.url).searchParams.get('mobile')==='1';
