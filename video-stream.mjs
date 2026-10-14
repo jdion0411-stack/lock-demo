@@ -1,7 +1,7 @@
 // One seekable MP4 backed by the existing 13 static asset pieces.
 export const VIDEO_PATH = '/eota-gameplay-stream.mp4';
 const PART_SIZE = 20971520;
-const PROFILES = {"desktop": {"total": 235816032, "prefix": "eota-expanded-hq", "parts": 12}, "mobile": {"total": 87697829, "prefix": "eota-expanded-mobile", "parts": 5}};
+const PROFILES = {"desktop": {"total": 268083290, "prefix": "eota-expanded-hq", "parts": 13}, "mobile": {"total": 115412783, "prefix": "eota-expanded-mobile", "parts": 6}};
 const MAX_RANGE = 2 * 1024 * 1024;
 export async function videoResponse(request, env) {
  const mobileStream=new URL(request.url).searchParams.get('mobile')==='1';
@@ -45,8 +45,6 @@ export async function videoResponse(request, env) {
   const localStart=Math.max(start-base,0),localEnd=Math.min(end-base,partLength-1);
   const url=new URL(request.url);
   url.pathname='/'+profile.prefix+'-'+String(i+1).padStart(2,'0')+'.mp4';url.search='';
-  // Read a complete static part before slicing. Asset-service partial bodies
-  // and cancellation must never truncate the browser response silently.
   const response=await env.ASSETS.fetch(new Request(url));
   if(response.status!==200)throw new Error('Video part unavailable');
   const bytes=new Uint8Array(await response.arrayBuffer());
