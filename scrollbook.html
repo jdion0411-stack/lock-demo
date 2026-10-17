@@ -1258,7 +1258,10 @@ svg.lucide {
 
 
 html&gt;body{padding:0}&lt;/style&gt;
-&lt;/head&gt;
+&lt;style&gt;
+#eota-circle-reader[data-resting] .water-flow,#eota-circle-reader[data-resting] .water-flow-back{animation-play-state:paused}
+@media(max-width:768px){#eota-circle-reader .water-flow,#eota-circle-reader .water-flow-back{animation-duration:40s;will-change:transform}#eota-circle-reader .spiral-ink{filter:none;stroke-width:.2px}#eota-circle-reader .eota-paper{filter:none}}
+&lt;/style&gt;&lt;/head&gt;
 &lt;body&gt;
 &lt;script type=&quot;application/json&quot; id=&quot;codex-visualization-widget-state&quot;&gt;__CODEX_VISUALIZATION_WIDGET_STATE__&lt;/script&gt;
 &lt;script&gt;(() =&gt; {
@@ -1594,13 +1597,13 @@ html&gt;body{padding:0}&lt;/style&gt;
   &lt;defs&gt;
    &lt;pattern id=&quot;eota-bandanna&quot; width=&quot;180&quot; height=&quot;180&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;g fill=&quot;none&quot; stroke=&quot;white&quot; stroke-width=&quot;1.7&quot; opacity=&quot;.85&quot;&gt;&lt;path d=&quot;M38 18C5 35 10 79 39 86C69 93 80 61 60 47C47 38 42 29 49 17C46 17 42 17 38 18Z&quot;/&gt;&lt;path d=&quot;M37 29C19 42 21 68 39 75C57 80 66 62 52 55C39 49 37 39 41 29Z&quot; stroke-dasharray=&quot;2 4&quot;/&gt;&lt;path d=&quot;M128 103C95 120 100 164 129 171C159 178 170 146 150 132C137 123 132 114 139 102C136 102 132 102 128 103Z&quot;/&gt;&lt;path d=&quot;M127 114C109 127 111 153 129 160C147 165 156 147 142 140C129 134 127 124 131 114Z&quot; stroke-dasharray=&quot;2 4&quot;/&gt;&lt;path d=&quot;M130 25L138 40L153 48L138 56L130 71L122 56L107 48L122 40Z&quot;/&gt;&lt;circle cx=&quot;130&quot; cy=&quot;48&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;M40 110L48 125L63 133L48 141L40 156L32 141L17 133L32 125Z&quot;/&gt;&lt;circle cx=&quot;40&quot; cy=&quot;133&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;M90 0V180M0 90H180&quot; stroke-dasharray=&quot;1 9&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;/g&gt;&lt;/pattern&gt;&lt;linearGradient id=&quot;eota-water-color&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;1&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#073e5e&quot;/&gt;&lt;stop offset=&quot;.25&quot; stop-color=&quot;#087b87&quot;/&gt;&lt;stop offset=&quot;.5&quot; stop-color=&quot;#29477e&quot;/&gt;&lt;stop offset=&quot;.72&quot; stop-color=&quot;#603a78&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#ad7654&quot;/&gt;&lt;/linearGradient&gt;
    &lt;linearGradient id=&quot;eota-water-light&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;0&quot; y2=&quot;1&quot;&gt;&lt;stop stop-color=&quot;#99f2e2&quot; stop-opacity=&quot;.7&quot;/&gt;&lt;stop offset=&quot;.5&quot; stop-color=&quot;#94b6ff&quot; stop-opacity=&quot;.32&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#ffd3a0&quot; stop-opacity=&quot;.5&quot;/&gt;&lt;/linearGradient&gt;
-   &lt;filter id=&quot;eota-water-warp&quot; x=&quot;-20%&quot; y=&quot;-20%&quot; width=&quot;140%&quot; height=&quot;140%&quot;&gt;&lt;feTurbulence type=&quot;fractalNoise&quot; baseFrequency=&quot;.009 .032&quot; numOctaves=&quot;2&quot; seed=&quot;7&quot; result=&quot;noise&quot;&gt;&lt;animate attributeName=&quot;baseFrequency&quot; dur=&quot;30s&quot; values=&quot;.009 .032;.012 .025;.009 .032&quot; repeatCount=&quot;indefinite&quot;/&gt;&lt;/feTurbulence&gt;&lt;feDisplacementMap in=&quot;SourceGraphic&quot; in2=&quot;noise&quot; scale=&quot;38&quot; xChannelSelector=&quot;R&quot; yChannelSelector=&quot;G&quot;/&gt;&lt;/filter&gt;
+   
   &lt;/defs&gt;
   &lt;rect width=&quot;1000&quot; height=&quot;1200&quot; fill=&quot;url(#eota-water-color)&quot;/&gt;
-  &lt;g class=&quot;water-flow&quot; filter=&quot;url(#eota-water-warp)&quot; fill=&quot;none&quot; stroke=&quot;url(#eota-water-light)&quot; stroke-width=&quot;3&quot;&gt;
+  &lt;g class=&quot;water-flow&quot; fill=&quot;none&quot; stroke=&quot;url(#eota-water-light)&quot; stroke-width=&quot;3&quot;&gt;
    &lt;path d=&quot;M-150 90Q150 25 400 100T1100 80M-150 120Q200 50 500 130T1150 100M-100 250Q150 185 400 260T1100 230M-120 290Q200 215 500 300T1150 270M-150 430Q150 355 400 440T1100 410M-100 475Q200 400 500 485T1150 455M-150 620Q150 545 400 630T1100 600M-120 665Q200 590 500 675T1150 645M-150 810Q150 735 400 820T1100 790M-100 860Q200 785 500 870T1150 840M-150 1010Q150 935 400 1020T1100 990M-100 1060Q200 985 500 1070T1150 1040M-150 1190Q150 1115 400 1200T1100 1170&quot;/&gt;
   &lt;/g&gt;
-  &lt;g class=&quot;water-flow-back&quot; filter=&quot;url(#eota-water-warp)&quot; fill=&quot;none&quot; stroke=&quot;url(#eota-water-light)&quot; stroke-width=&quot;15&quot; opacity=&quot;.18&quot;&gt;&lt;path d=&quot;M-150 185Q100 120 450 195T1150 170M-150 365Q100 300 450 375T1150 350M-150 555Q100 490 450 565T1150 540M-150 745Q100 680 450 755T1150 730M-150 935Q100 870 450 945T1150 920M-150 1125Q100 1060 450 1135T1150 1110&quot;/&gt;&lt;/g&gt;
+  &lt;g class=&quot;water-flow-back&quot; fill=&quot;none&quot; stroke=&quot;url(#eota-water-light)&quot; stroke-width=&quot;15&quot; opacity=&quot;.18&quot;&gt;&lt;path d=&quot;M-150 185Q100 120 450 195T1150 170M-150 365Q100 300 450 375T1150 350M-150 555Q100 490 450 565T1150 540M-150 745Q100 680 450 755T1150 730M-150 935Q100 870 450 945T1150 920M-150 1125Q100 1060 450 1135T1150 1110&quot;/&gt;&lt;/g&gt;
   &lt;g class=&quot;water-flow&quot;&gt;&lt;rect x=&quot;-180&quot; y=&quot;-180&quot; width=&quot;1360&quot; height=&quot;1560&quot; fill=&quot;url(#eota-bandanna)&quot;/&gt;&lt;/g&gt;&lt;rect width=&quot;1000&quot; height=&quot;1200&quot; fill=&quot;#031426&quot; opacity=&quot;.15&quot;/&gt;
  &lt;/svg&gt;
  &lt;section class=&quot;eota-reader&quot; aria-label=&quot;EOTA Genesis Scrollbook&quot;&gt;
@@ -2310,7 +2313,11 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;/script&gt;
 
 
-&lt;/body&gt;
+&lt;script&gt;
+(()=&gt;{const root=document.getElementById(&#x27;eota-circle-reader&#x27;);const rest=value=&gt;root.toggleAttribute(&#x27;data-resting&#x27;,value);
+addEventListener(&#x27;message&#x27;,e=&gt;{if(e.source===parent&amp;&amp;e.data?.type===&#x27;eota-reader-rest&#x27;)rest(!!e.data.rest)});
+document.addEventListener(&#x27;visibilitychange&#x27;,()=&gt;rest(document.hidden));})();
+&lt;/script&gt;&lt;/body&gt;
 &lt;/html&gt;
 "></iframe>
 <script>(() => {
@@ -2537,7 +2544,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 
 <section aria-label="YouTube video below the Scrollbook" style="max-width:1000px;margin:32px auto;padding:24px;background:#092534;border:1px solid #416b79;border-radius:20px;color:#fff;box-sizing:border-box">
 <h2 style="margin:0 0 16px;font:600 24px Georgia,serif;color:#fff">Watch below the Scrollbook</h2><div style="position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden">
-<iframe src="https://www.youtube.com/embed/ll6S032PHNs" title="YouTube video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>
+<button id="eota-load-video" type="button" style="position:absolute;inset:0;z-index:1;width:100%;border:0;background:linear-gradient(135deg,#0c3349,#111c31);color:#fff;font:600 22px system-ui;cursor:pointer" aria-label="Load and play YouTube video">▶ Play YouTube video</button><iframe id="eota-youtube" data-src="https://www.youtube.com/embed/ll6S032PHNs?autoplay=1&amp;playsinline=1" title="YouTube video" loading="eager" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>
 </div>
 </section>
 <style>
@@ -2554,4 +2561,11 @@ html&gt;body{padding:0}&lt;/style&gt;
 </style><div style="max-width:1000px;margin:0 auto 24px"><footer class="scrollbook-brand-footer" aria-label="Scrollbook creator and copyright">
  <div class="scrollbook-brand-line"><span>Made by</span><span class="scrollbook-wordmark" aria-label="EYEOTA DOCUMENT SOLUTIONS">E<span class="scrollbook-shield" aria-hidden="true"><span class="scrollbook-fire"><i style="--x:1px;--h:35px;--t:1.5s;--d:-.2s"></i><i style="--x:6px;--h:42px;--t:1.7s;--d:-.7s"></i><i style="--x:11px;--h:34px;--t:1.4s;--d:-.4s"></i></span><svg viewBox="0 0 36 42"><path d="M18 2L33 8V21C33 30 26 36 18 40C10 36 3 30 3 21V8Z" fill="#142a3b" stroke="#fff" stroke-width="2.2"/><path d="M18 5L29 10V21C29 27 24 32 18 36C12 32 7 27 7 21V10Z" fill="none" stroke="#effaff" stroke-opacity=".6"/><path d="M18 5V36" stroke="#effaff" stroke-opacity=".2"/></svg><span class="scrollbook-cross">✝</span></span>OTA<span class="scrollbook-documents">DOCUMENT SOLUTIONS</span></span></div>
  <div style="margin-top:8px">© 2026 EOTA DOCUMENT SOLUTIONS.</div>
-</footer></div></body></html>
+</footer></div><script>
+(()=>{const reader=document.getElementById('codex-visualization'),video=document.getElementById('eota-youtube'),button=document.getElementById('eota-load-video');
+const rest=value=>reader.contentWindow?.postMessage({type:'eota-reader-rest',rest:value},'*');
+button.addEventListener('click',()=>{rest(true);video.src=video.dataset.src;button.remove()},{once:true});
+const observer=new IntersectionObserver(entries=>entries.forEach(e=>{rest(!e.isIntersecting||document.hidden)}),{threshold:0});observer.observe(reader);
+document.addEventListener('visibilitychange',()=>rest(document.hidden||reader.getBoundingClientRect().bottom<0));
+})();
+</script></body></html>
