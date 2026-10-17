@@ -1,3 +1,0 @@
-Extract all three ZIP files into the same folder. Copy ALL extracted files into your cloned website folder, choose Replace files, then Commit and Push origin once in GitHub Desktop. After deployment, refresh the website.
-
-Includes the full 6-minute 4-second gameplay demonstration with musical-symbol covers for player names, existing music-artwork covers, mobile streaming, and the separate browser demonstration.
