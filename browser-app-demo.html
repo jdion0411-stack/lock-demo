@@ -1,0 +1,516 @@
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EOTA Browser</title><style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;font-family:Arial,sans-serif;color:#edf4ff}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid #fff3c6;outline-offset:4px}#dialStage{position:absolute;inset:0}#dial{position:absolute;inset:0;overflow:hidden;border:6px solid #202b40;border-radius:50%;background:radial-gradient(circle at 45% 35%,#242b52,#11182f 70%,#080e1d)}.space-bg{position:absolute;inset:0;pointer-events:none}.space-bg:before{content:'';position:absolute;inset:5%;border:2px solid #bbc9dd;border-radius:50%;opacity:.9}.eyeota-space-orbits{position:absolute;inset:16%;border:1px solid #52628199;border-radius:50%}.eyeota-orbit-stars{position:absolute;inset:-15%;background-image:radial-gradient(circle,#fff 1px,transparent 2px),radial-gradient(circle,#aecfee 1px,transparent 2px);background-size:83px 119px,139px 73px;opacity:.7}.eyeota-planet-orbit{position:absolute;inset:11%;border:1px solid #63749266;border-radius:50%;animation:orbit 70s linear infinite}.orbit-middle{inset:22%;animation-duration:95s;animation-direction:reverse}.orbit-far{inset:-8%;animation-duration:120s}.eyeota-orbit-planet{position:absolute;left:50%;top:-5px;width:9px;height:9px;border-radius:50%;background:#d6f6ff;box-shadow:0 0 6px #cdefff}.planet-ringed{background:#dfbf76}.planet-rust{background:#b77963}.eyeota-sun-clouds{position:absolute;left:0;width:200%;height:24%;top:59%;opacity:.83;filter:blur(1px);animation:cloudDrift 65s linear infinite reverse}.cloud-depth-0{top:50%;height:20%;opacity:.58;animation-duration:90s;animation-direction:normal}.cloud-depth-2{top:71%;height:29%;opacity:.95;animation-duration:45s;animation-direction:normal}@keyframes cloudDrift{to{transform:translateX(-50%)}}@keyframes orbit{to{transform:rotate(360deg)}}
+#ebRestore{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:84px;height:84px;margin:0;padding:0;border:1px solid #ffe891;border-radius:50%;background:radial-gradient(circle at 42% 38%,#fff 0 8%,#fff6b7 13%,#ffd84f 31%,#ff9e24 58%,#ff8813c7 72%,#ff9f212e 100%);box-shadow:0 0 18px #ffd84f,0 0 44px #ffb12dd9,0 0 85px #ff8d2475;overflow:visible;isolation:isolate;z-index:20;touch-action:none;cursor:grab}#ebRestore:before{content:'';position:absolute;inset:-42px;border-radius:50%;background:repeating-conic-gradient(transparent 0deg 10deg,#ffdc780d 11deg,#ffe187e6 13deg,#ffdc780d 15deg,transparent 16deg 24deg);mask:radial-gradient(circle,transparent 0 36%,#000 42%,#000 51%,transparent 71%);z-index:-1;pointer-events:none;animation:orbit 24s linear infinite}#ebRestore:after{content:'';position:absolute;inset:-17px;border-radius:50%;background:radial-gradient(circle,transparent 42%,#ffd25b38 60%,transparent 72%);z-index:-1;pointer-events:none}#ebSunWordmark{display:flex;justify-content:center;align-items:center;font:bold 17px Arial;text-shadow:0 0 4px currentColor;letter-spacing:.5px}#ebSunMoveHint{display:none}
+#appMenu{position:absolute;inset:0;pointer-events:none;z-index:30}.app-feature{position:absolute;left:50%;top:50%;width:min(27vw,170px);height:min(10vw,64px);border:0;padding:0;background:transparent;pointer-events:auto;transition:filter .15s}.app-feature:hover{filter:brightness(1.2)}.app-feature svg{width:100%;height:100%;overflow:visible}.app-feature use{fill:none;stroke:#d7be74;stroke-width:36;stroke-linecap:round}.app-feature text{fill:#fff;font:bold 11px Arial;text-shadow:0 1px 2px #000}.app-feature use+text{paint-order:stroke;stroke:#07172b;stroke-width:.2}.app-feature svg>use{stroke:#d7be74}.app-feature svg>use{filter:drop-shadow(0 1px 2px #000)}
+#ebControls{position:absolute;inset:0;pointer-events:none;z-index:60}#ebControls button{position:absolute;left:50%;top:50%;width:22px;height:22px;border:1px solid #a5dbe4;border-radius:50%;padding:0;background:#071624ed;color:#eefaff;font:bold 15px Arial;display:grid;place-items:center;pointer-events:auto}#ebControls button:hover{background:#234c61}#ebClose:hover{background:#b02c35}#appMenuReturn{position:absolute;bottom:8%;left:50%;transform:translateX(-50%);padding:7px 13px;border:1px solid #74bfc6;border-radius:18px;background:#071624;color:#eaffff;z-index:55}body[data-view=menu] #appMenuReturn{display:none}
+#ebOrbitSearch{position:absolute;inset:0;z-index:40;pointer-events:none}#ebOrbitSearch svg{width:100%;height:100%;overflow:visible}#ebCurveBorder{fill:none;stroke:#8ed1dd;stroke-width:33;stroke-linecap:round}#ebCurveSurface{fill:none;stroke:#e8f3f7;stroke-width:30;stroke-linecap:round;pointer-events:stroke}#ebCurveText,#ebAddressText{font:17px Arial;fill:#243e50;pointer-events:none}#ebCurveCaret{stroke:#243e50;stroke-width:1;opacity:0}#ebOrbitSearch:focus-within #ebCurveCaret{opacity:1}#ebOrbitSearch input{position:absolute;left:15%;top:12%;width:70%;height:35px;opacity:0;pointer-events:auto}#ebOrbitSearch button{position:absolute;left:81%;top:20%;width:30px;height:30px;border-radius:50%;border:0;background:#176a9a;color:#fff;pointer-events:auto}.ebCurveHint{font:17px Arial;fill:#627b8d}
+#ebAddressBar{display:none}#ebEdge{position:absolute;inset:0;z-index:35;pointer-events:none}#ebContentArea{position:absolute;inset:29% 10% auto;height:47%;pointer-events:auto;overflow:hidden}#ebPage{width:100%;height:100%;display:flex;background:white}#ebCircleNav{position:absolute;left:25%;width:50%;bottom:14%;display:flex;justify-content:center;gap:5px;pointer-events:auto}#ebCircleNav button{border:1px solid #74bfc6;border-radius:50%;width:26px;height:26px;background:#071624;color:#eaffff}#ebFooter{position:absolute;bottom:3%;left:25%;width:50%;font:10px Arial;text-align:center;color:#b9d9eb}body:not(.ebHasPage) #ebContentArea{visibility:hidden}body:not(.ebHasPage) #ebCircleNav{display:none}body[data-view=browser].ebHasPage #ebRestore{display:none}body[data-view=menu] #ebEdge,body[data-view=menu] #ebOrbitSearch,body[data-view=portal] #ebEdge,body[data-view=portal] #ebOrbitSearch,body[data-view=portal] #ebRestore,body:not([data-view=menu]) #appMenu{display:none}
+#nativeToolsFrame{position:absolute;inset:7%;width:86%;height:86%;border:0;border-radius:50%;background:#071226;z-index:45}#nativeToolsFrame[hidden]{display:none}body[data-view=portal] #appMenuReturn{display:none}#tinyDot{display:none}#ebSunPlanetSystem{display:none}
+body.ebMinimized #appMenu,body.ebMinimized #ebOrbitSearch,body.ebMinimized #ebEdge,body.ebMinimized #nativeToolsFrame,body.ebMinimized #appMenuReturn{display:none}body.ebMinimized #ebRestore{display:block;width:84px;height:84px}body.dot-mode #dialStage{display:none}body.dot-mode #tinyDot{display:block;position:fixed;inset:0;width:24px;height:24px;padding:0;border:1px solid #ffe891;border-radius:50%;background:radial-gradient(circle,#fff6b7,#ffd84f,#ff9e24);color:#38200a;cursor:grab}
+body.ebRect:not(.ebMinimized) #dial{border-radius:0;border-width:1px}body.ebRect:not(.ebMinimized) #ebOrbitSearch,body.ebRect:not(.ebMinimized) #ebRestore,body.ebRect:not(.ebMinimized) #appMenu{display:none}body.ebRect:not(.ebMinimized) #ebAddressBar{display:flex;position:absolute;left:12px;right:12px;top:50px;height:36px;z-index:40;background:#fff;border-radius:18px;padding:0 12px;gap:8px}#ebAddressBar input{flex:1;min-width:0;border:0;background:transparent;color:#172936;font:14px Arial}#ebAddressBar button{background:#176a9a;color:white;border:0;border-radius:14px}body.ebRect:not(.ebMinimized) #ebContentArea{inset:96px 0 32px;height:auto}body.ebRect:not(.ebMinimized) #ebCircleNav{top:6px;left:10px;bottom:auto;width:auto}body.ebRect:not(.ebMinimized) #ebControls button{left:auto;top:6px;right:calc(8px + var(--eb-index)*36px);transform:none!important;width:28px;height:28px}body.ebRect:not(.ebMinimized) #appMenuReturn{left:310px;top:7px;bottom:auto;transform:none}body.ebRect:not(.ebMinimized) #ebFooter{bottom:4px}body.ebRect:not(.ebMinimized) #nativeToolsFrame{inset:48px 0 0;width:100%;height:calc(100% - 48px);border-radius:0}
+@media(prefers-reduced-motion:reduce){.eyeota-planet-orbit,.eyeota-sun-clouds,#ebRestore:before{animation:none}}
+
+.app-feature svg>use.menu-face{stroke:#07172b;stroke-width:32}
+
+body.ebMinimized #ebSunPlanetSystem[data-has-site=true]{display:block;position:absolute;inset:0;pointer-events:none;z-index:25}#ebPlanetTrack{position:absolute;left:50%;top:50%;width:220px;height:220px;margin:-110px;animation:orbit 16s linear infinite;pointer-events:none}#ebSitePlanet{position:absolute;right:0;top:50%;transform:translateY(-50%);width:52px;height:52px;padding:0;border:0;border-radius:50%;background:transparent;pointer-events:auto}#ebPlanetFace{display:grid;place-items:center;width:52px;height:52px;background:radial-gradient(circle at 30% 22%,#b2f4ff,#478bac 24%,#112940 72%,#030c16);border:1px solid #b5eaff;border-radius:50%;color:#fff;box-shadow:0 0 10px #6edcff55;animation:orbit 16s linear infinite reverse}#ebPlanetLogo{font:bold 18px Arial}#ebPlanetName{position:absolute;inset:-10px;width:72px;height:72px;overflow:visible;font:8px Arial;fill:#eaffff}
+
+/* Curved desktop navigation follows the rim, with upright text. */
+#appMenuReturn{position:absolute;left:50%;top:50%;bottom:auto;width:106px;height:40px;margin:0;padding:0;border:0;background:transparent;z-index:58}
+#appMenuReturn svg{width:100%;height:100%;overflow:visible}
+#appMenuReturn use{fill:none;stroke:#d7be74;stroke-width:30;stroke-linecap:round}
+#appMenuReturn use.menu-face{stroke:#07172b;stroke-width:27}
+#appMenuReturn text{fill:#fff;font:bold 11px Arial}
+body[data-view=portal] #appMenuReturn{display:block}
+#nativeToolsFrame{inset:9%;width:82%;height:82%}
+body.ebRect:not(.ebMinimized) #appMenuReturn{left:365px;top:23px;bottom:auto;width:120px;height:40px;transform:translate(-50%,-50%)!important}
+body.ebRect:not(.ebMinimized) #desktopReturnArc{d:path('M12 45 A400 400 0 0 1 148 45')}
+
+#nativeToolsFrame{inset:11%;width:78%;height:78%}
+body.ebRect:not(.ebMinimized) #nativeToolsFrame{inset:48px 0 0;width:100%;height:calc(100% - 48px)}
+
+/* Minimized view contains only the sun and its website planet. */
+body.ebMinimized #dial{background:transparent;border:0;box-shadow:none;overflow:visible}
+body.ebMinimized .space-bg,body.ebMinimized #ebControls{display:none}
+body.ebMinimized #ebPlanetTrack{width:160px;height:160px;margin:-80px}
+body.ebMinimized #ebSitePlanet,body.ebMinimized #ebPlanetFace{width:30px;height:30px}
+body.ebMinimized #ebPlanetLogo{font-size:12px}
+body.ebMinimized #ebPlanetName{inset:-7px;width:44px;height:44px;font-size:8px}
+#ebPlanetLogo svg{width:18px;height:14px;display:block}
+
+/* Minimized controls stay outside the sun and planet orbit. */
+#sunDot{display:none}body.ebMinimized:not(.dot-mode) #sunDot{display:block;position:fixed;left:calc(50% - 10px);top:calc(50% + 108px);width:20px;height:20px;border:1px solid #ffe891;border-radius:50%;background:#34250a;color:#ffe891;font:20px Arial;line-height:14px;padding:0;z-index:60;cursor:pointer}body.dot-mode #tinyDot{width:12px;height:12px;border:0;box-shadow:inset 0 0 2px #fff}
+
+/* Rectangular browser has a solid toolbar and no circular desktop decoration. */
+body.ebRect:not(.ebMinimized) #dial{background:#11182f;border-radius:0}
+body.ebRect:not(.ebMinimized) .space-bg,body.ebRect:not(.ebMinimized) #appMenuReturn,body.ebRect:not(.ebMinimized) #ebSunPlanetSystem{display:none}
+
+body.ebMinimized #ebRestore{display:block}
+
+/* Clip the embedded portal surface, including its composited content. */
+body:not(.ebRect) #nativeToolsFrame{clip-path:circle(50% at 50% 50%);overflow:hidden;isolation:isolate}
+body.ebRect:not(.ebMinimized) #nativeToolsFrame{clip-path:none}
+
+/* Minimized sun overrides browser and portal visibility rules. */
+body.ebMinimized:not(.dot-mode) #ebRestore{display:block!important;left:50%;top:50%;transform:translate(-50%,-50%);z-index:70}
+/* A transparent margin protects the bright 12px dot from window clipping. */
+body.dot-mode #tinyDot{inset:0;width:28px;height:28px;border:0;border-radius:0;background:transparent;box-shadow:none}
+body.dot-mode #tinyDot::before{content:'';position:absolute;left:8px;top:8px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle,#fff 0 45%,#fff86a 65%,#ffd500 100%);box-shadow:0 0 4px 2px #fff,0 0 7px 3px #ffe600;pointer-events:none}
+#dial{touch-action:none}#ebRestore,#tinyDot{touch-action:none}
+/* Recording controls remain inside the circular dial. */
+#recordOpen{position:absolute;left:50%;bottom:7%;transform:translateX(-50%);z-index:75;padding:6px 12px;border:1px solid #99ddea;border-radius:24px;background:#0b223a;color:#eaffff;font:bold 12px Arial}
+body.recording #recordOpen{border-color:#ff6675;color:#ff929c}body.recording #dial{border-color:#d84153}body.recording #ebRestore{outline:2px solid #ff4c65;outline-offset:6px}body.recording #tinyDot::before{background:#ff4c65}
+#recordPanel{position:absolute;inset:16%;z-index:90;border-radius:30px;background:#0b1429f5;border:1px solid #8acbd2;padding:20px 24px;overflow:auto;font:12px Arial;color:#edf4ff}
+#recordPanel[hidden]{display:none}#recordPanel h2{font-size:17px;margin:0 0 12px}#recordPanel>label{display:block;margin:9px 0}#recordPanel select{display:block;width:100%;margin-top:5px;border:1px solid #668a9b;background:#142b42;color:#fff;border-radius:8px;padding:6px;font:12px Arial}#recordPanel button{padding:6px 10px;border:1px solid #74bfc6;border-radius:16px;background:#132b42;color:#fff}#recordPanel button:disabled{opacity:.45;cursor:default}#recordClose{position:absolute;top:8px;right:10px}#recordPanel .record-audio{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0}#recordPanel .record-actions{display:flex;gap:8px;margin-top:12px}#recordStatus{overflow-wrap:anywhere;line-height:1.4}#recordPanel .record-hint{color:#a9c0d1;font-size:10px;line-height:1.5}body.ebMinimized #recordPanel,body.dot-mode #recordPanel{display:none}body.ebMinimized #recordOpen{bottom:4%;font-size:10px;padding:4px 9px}body.dot-mode #recordOpen{display:none}body.ebRect:not(.ebMinimized) #recordOpen{left:auto;right:245px;top:8px;bottom:auto;transform:none}body.ebRect:not(.ebMinimized) #recordPanel{inset:15% 25%;max-width:480px;margin:auto}
+@media(max-width:440px){#recordPanel{inset:12%;padding:16px;font-size:11px}#recordPanel h2{font-size:14px}#recordPanel .record-hint{display:none}}
+#recordPreview{position:absolute;inset:9%;border-radius:50%;overflow:hidden;background:#050b14;z-index:74;pointer-events:auto}#recordPreview[hidden]{display:none}#recordPreviewVideo{width:100%;height:100%;object-fit:contain;display:block}#recordPreviewClose{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);border:1px solid #9ddce8;border-radius:20px;padding:6px 10px;background:#0c2036;color:white}#recordPreview>span{position:absolute;top:9%;left:25%;width:50%;text-align:center;color:#ff8899;font:bold 10px Arial}#recordPreviewOpen{display:none;position:absolute;left:28%;bottom:7%;z-index:76;border:1px solid #99ddea;border-radius:20px;padding:6px 10px;background:#0b223a;color:white;font:12px Arial}body.recording #recordPreviewOpen{display:block}body.record-preview #ebRestore{display:none}body.ebMinimized #recordPreview,body.ebMinimized #recordPreviewOpen,body.dot-mode #recordPreview,body.dot-mode #recordPreviewOpen{display:none}body.ebRect:not(.ebMinimized) #recordPreview{inset:96px 0 32px;border-radius:0}body.ebRect:not(.ebMinimized) #recordPreviewOpen{left:auto;right:360px;top:8px;bottom:auto}
+#recordPreviewOpen{display:block!important}#recordPreviewOpen[hidden]{display:none!important}#keybindOpen{position:absolute;left:65%;bottom:7%;z-index:77;background:#0b223a;color:#eaffff;border:1px solid #99ddea;border-radius:20px;padding:6px 10px;font:12px Arial}#keybindPanel{position:absolute;inset:16%;z-index:95;background:#0b1429fa;border:1px solid #8acbd2;border-radius:30px;padding:20px 24px;overflow:auto;font:12px Arial}#keybindPanel[hidden]{display:none}#keybindPanel h2{font-size:17px;margin:0 0 10px}#keybindPanel label{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0}#keybindPanel input{width:125px;min-width:0;background:#142b42;color:white;border:1px solid #668a9b;border-radius:8px;padding:8px}#keybindPanel button{background:#132b42;color:white;border:1px solid #74bfc6;border-radius:16px;padding:6px 10px}#keybindClose{position:absolute;right:10px;top:8px}#keybindStatus{line-height:1.4;overflow-wrap:anywhere}body.ebMinimized #keybindPanel,body.dot-mode #keybindPanel,body.ebMinimized #keybindOpen,body.dot-mode #keybindOpen,body.ebMinimized #recordPreviewOpen,body.dot-mode #recordPreviewOpen{display:none!important}body.ebRect:not(.ebMinimized) #keybindOpen{left:auto;right:435px;top:8px;bottom:auto}body.ebRect:not(.ebMinimized) #keybindPanel{inset:15% 25%;max-width:480px;margin:auto}
+/* Preserve the complete game frame in the upper portion of the dial. */
+#recordPreview{inset:auto;left:23%;top:23%;width:54%;height:auto;overflow:visible;border-radius:0;background:transparent;z-index:74;isolation:isolate}
+#recordPreviewVideo{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;background:#000;border:1px solid #8bc6d7;border-radius:4px;overflow:hidden}
+#previewControls{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:5px;padding:7px 0;font:10px Arial;color:#b8cfdd}#previewControls button,#recordPreviewClose{border:1px solid #80bfcf;background:#0d2037;color:#eaffff;border-radius:16px;padding:4px 8px;font:10px Arial}#previewLabel{width:100%;text-align:center;font:10px Arial;color:#bdd0dc}#recordPreviewClose{position:static;display:block;margin:5px auto;transform:none;left:auto;bottom:auto}
+body.record-preview #ebContentArea{visibility:hidden;pointer-events:none}body.record-preview #ebCircleNav{visibility:hidden}body.record-preview #appMenu{visibility:hidden}
+#clipCapture,#clipReady,#clipBrowse{position:absolute;z-index:78;border:1px solid #d8bf72;border-radius:20px;padding:6px 10px;background:#142139;color:#fff3c9;font:11px Arial}#clipCapture{left:50%;top:72%;transform:translateX(-50%)}#clipCapture:disabled{opacity:.55;cursor:default}#clipBrowse{left:50%;top:79%;transform:translateX(-50%)}#clipReady{left:50%;top:65%;transform:translateX(-50%)}#clipReady[hidden]{display:none}body.ebMinimized #clipCapture,body.ebMinimized #clipBrowse,body.dot-mode #clipCapture,body.dot-mode #clipBrowse,body.dot-mode #clipReady{display:none}body.ebMinimized #clipReady{top:74%;font-size:10px;padding:4px 8px}body.ebRect:not(.ebMinimized) #recordPreview{inset:auto;top:110px;left:25%;width:50%;border-radius:0}body.ebRect:not(.ebMinimized) #clipCapture{left:50%;top:auto;bottom:70px}body.ebRect:not(.ebMinimized) #clipBrowse{left:50%;top:auto;bottom:36px}body.ebRect:not(.ebMinimized) #clipReady{left:50%;top:auto;bottom:105px}
+/* Separate the original live rectangle from the additional clip rectangle. */
+#recordPreview{inset:auto;left:10%;top:29%;width:80%;height:47%;overflow:hidden;z-index:74}#recordPreviewVideo{width:100%;height:100%;aspect-ratio:auto;object-fit:contain;border-radius:0}
+#clipPreview{position:absolute;left:37%;top:10%;width:26%;z-index:76;pointer-events:auto;background:transparent}#clipPreview[hidden]{display:none}#clipPreviewVideo{display:block;width:100%;aspect-ratio:16/9;object-fit:contain;background:#000;border:1px solid #8bc6d7;border-radius:3px}#clipPreviewLabel{display:block;text-align:center;color:#d5e8f2;font:9px Arial;margin-top:4px}
+#previewControls{position:absolute;left:18%;top:77%;width:64%;z-index:79;display:flex;flex-wrap:wrap;justify-content:center;gap:4px;padding:0}#previewControls[hidden]{display:none}#previewLabel{font-size:9px}#previewControls button{font-size:9px;padding:3px 6px}#recordPreviewClose{margin:0}#clipCapture{top:85%;padding:4px 8px}#clipBrowse{top:89%;padding:3px 8px;font-size:9px}#recordPreviewOpen{left:15%;bottom:6%;font-size:10px}#keybindOpen{left:auto;right:15%;bottom:6%;font-size:10px}#recordOpen{bottom:5%;font-size:10px}#clipReady{top:84%}
+body.ebMinimized #clipPreview,body.dot-mode #clipPreview,body.ebMinimized #previewControls,body.dot-mode #previewControls{display:none}body.ebRect:not(.ebMinimized) #recordPreview{left:10%;top:29%;width:80%;height:47%;inset:auto 10% auto}body.ebRect:not(.ebMinimized) #clipPreview{left:37%;top:8%;width:26%}body.ebRect:not(.ebMinimized) #previewControls{top:77%}
+body.ebRect:not(.ebMinimized) #recordPreview{inset:auto;left:10%;top:29%;width:80%;height:47%}
+#gameAudioStatus{font-size:10px;line-height:1.4;color:#b8dfd0;margin:8px 0 4px}#gameAudioMeter{display:block;width:100%;height:10px;margin:0 0 8px}
+#recordPanel{inset:12% 14%;padding:16px 20px}#recordPanel h2{font-size:15px;margin-bottom:8px}#recordPanel>label{margin:6px 0}#recordPanel select{padding:4px 6px}#recordPanel .record-hint{display:none}#recordPanel .record-audio{gap:8px;margin:8px 0}body.ebRect:not(.ebMinimized) #recordPanel{inset:10% 25%;max-width:480px;margin:auto}
+
+/* The compact sun remains visible after leaving the live recording view. */
+body.ebMinimized.record-preview #ebRestore{display:block}
+
+/* Current front-page dial artwork, scoped to the app visual layer. */
+#appFrontArtwork .lock-container{
+    position: relative;
+
+    width: var(--dial-size);
+    height: var(--dial-size);
+
+    max-width: 480px;
+    max-height: 480px;
+
+    flex: 0 0 auto;
+
+    background: #01030b;
+
+    border: 7px solid #1e293b;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 45px rgba(0,242,255,.18),
+        0 0 90px rgba(0,242,255,.05),
+        inset 0 0 30px rgba(0,0,0,.08);
+
+    overflow: hidden;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    touch-action: manipulation;
+
+    cursor: pointer;
+}
+#appFrontArtwork .space-bg{
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 50% 24%, rgba(0,213,255,.18) 0%, rgba(0,110,185,.06) 18%, transparent 42%),
+        linear-gradient(180deg, #07152a 0%, #10284a 35%, #172d42 55%, #090e19 100%);
+}
+#appFrontArtwork .space-bg::before{
+    content: '';
+    position: absolute;
+    inset: -14%;
+    background:
+        radial-gradient(ellipse at 25% 40%, rgba(0,242,255,.15) 0%, transparent 34%),
+        radial-gradient(ellipse at 78% 36%, rgba(255,54,167,.13) 0%, transparent 31%),
+        radial-gradient(ellipse at 58% 76%, rgba(255,183,0,.12) 0%, transparent 30%);
+    filter: blur(15px);
+    animation: eyeotaCityHaze 16s ease-in-out infinite alternate;
+}
+#appFrontArtwork .space-skyline-back{
+    position: absolute;
+    left: -4%;
+    bottom: 17%;
+    width: 108%;
+    height: 38%;
+    opacity: .94;
+    background:
+        linear-gradient(#07111f 0 0) 3% 35%/9% 65% no-repeat,
+        linear-gradient(#091422 0 0) 12% 20%/8% 80% no-repeat,
+        linear-gradient(#081321 0 0) 21% 42%/7% 58% no-repeat,
+        linear-gradient(#0a1726 0 0) 29% 10%/9% 90% no-repeat,
+        linear-gradient(#091321 0 0) 39% 30%/6% 70% no-repeat,
+        linear-gradient(#0a1624 0 0) 46% 14%/10% 86% no-repeat,
+        linear-gradient(#08121f 0 0) 58% 34%/8% 66% no-repeat,
+        linear-gradient(#091321 0 0) 67% 20%/7% 80% no-repeat,
+        linear-gradient(#07111f 0 0) 75% 3%/10% 97% no-repeat,
+        linear-gradient(#08121e 0 0) 86% 25%/7% 75% no-repeat,
+        linear-gradient(#07111d 0 0) 94% 42%/7% 58% no-repeat;
+    filter: drop-shadow(0 -5px 16px rgba(0,0,0,.28));
+    transform: translateX(0);
+    animation: eyeotaCityParallax 20s ease-in-out infinite alternate;
+}
+#appFrontArtwork .space-tower{
+    position: absolute;
+    z-index: 2;
+    left: 43%;
+    bottom: 17%;
+    width: 11%;
+    height: 57%;
+    background: linear-gradient(90deg, #0b1727, #12263c 45%, #08121f);
+    clip-path: polygon(22% 100%, 31% 19%, 40% 10%, 47% 0, 54% 10%, 63% 19%, 72% 100%);
+    box-shadow: 0 0 20px rgba(0,0,0,.35);
+}
+#appFrontArtwork .space-tower::before{
+    content: '';
+    position: absolute;
+    left: 46%;
+    top: -10%;
+    width: 8%;
+    height: 18%;
+    background: #102239;
+    transform: skewX(-18deg);
+    box-shadow: 0 0 12px rgba(0,242,255,.12);
+}
+#appFrontArtwork .space-windows{
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    right: 0;
+    bottom: 21%;
+    height: 28%;
+    background-image:
+        radial-gradient(circle at 6% 23%, rgba(255,213,105,.85) 0 1.5px, transparent 2.4px),
+        radial-gradient(circle at 11% 58%, rgba(0,242,255,.55) 0 1.2px, transparent 2.2px),
+        radial-gradient(circle at 16% 35%, rgba(255,91,169,.72) 0 1.3px, transparent 2.2px),
+        radial-gradient(circle at 22% 68%, rgba(255,211,111,.82) 0 1.4px, transparent 2.4px),
+        radial-gradient(circle at 28% 26%, rgba(155,223,255,.72) 0 1.2px, transparent 2.1px),
+        radial-gradient(circle at 34% 50%, rgba(255,209,98,.92) 0 1.5px, transparent 2.4px),
+        radial-gradient(circle at 40% 73%, rgba(0,242,255,.60) 0 1.2px, transparent 2.2px),
+        radial-gradient(circle at 47% 30%, rgba(255,213,105,.86) 0 1.5px, transparent 2.4px),
+        radial-gradient(circle at 52% 63%, rgba(255,82,168,.75) 0 1.25px, transparent 2.2px),
+        radial-gradient(circle at 58% 39%, rgba(167,224,255,.72) 0 1.2px, transparent 2.1px),
+        radial-gradient(circle at 64% 72%, rgba(255,220,120,.86) 0 1.4px, transparent 2.3px),
+        radial-gradient(circle at 71% 27%, rgba(0,242,255,.62) 0 1.2px, transparent 2.1px),
+        radial-gradient(circle at 78% 56%, rgba(255,201,101,.90) 0 1.5px, transparent 2.4px),
+        radial-gradient(circle at 85% 34%, rgba(255,82,166,.68) 0 1.2px, transparent 2.1px),
+        radial-gradient(circle at 92% 65%, rgba(165,226,255,.76) 0 1.3px, transparent 2.2px);
+    opacity: .82;
+    animation: eyeotaWindowPulse 5s ease-in-out infinite alternate;
+}
+#appFrontArtwork .space-rooftops{
+    position: absolute;
+    left: -10%;
+    bottom: 8%;
+    width: 120%;
+    height: 15%;
+    background:
+        linear-gradient(90deg, transparent 0 4%, #0a1019 4% 17%, transparent 17% 20%, #0c131e 20% 38%, transparent 38% 43%, #0a1018 43% 60%, transparent 60% 65%, #0c131d 65% 83%, transparent 83% 87%, #09111b 87% 100%);
+    opacity: .95;
+    box-shadow: inset 0 10px 14px rgba(0,0,0,.2);
+}
+#appFrontArtwork .space-street{
+    position: absolute;
+    z-index: 5;
+    left: -15%;
+    bottom: -4%;
+    width: 130%;
+    height: 30%;
+    background:
+        linear-gradient(180deg, rgba(8,13,21,.05), rgba(3,7,12,.95)),
+        repeating-linear-gradient(90deg, rgba(0,242,255,.10) 0 1px, transparent 1px 13px),
+        linear-gradient(90deg, rgba(255,64,170,.18), transparent 24%, rgba(255,190,68,.13) 48%, transparent 75%, rgba(0,242,255,.14));
+    filter: blur(.4px);
+    transform: skewX(-10deg);
+    animation: eyeotaStreetFlow 7s ease-in-out infinite alternate;
+}
+#appFrontArtwork .space-neon{
+    position: absolute;
+    z-index: 6;
+    left: 13%;
+    right: 13%;
+    bottom: 27%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0,242,255,.75), rgba(255,71,173,.7), rgba(255,201,84,.75), transparent);
+    filter: blur(.8px);
+    opacity: .75;
+    animation: eyeotaNeonPulse 3.8s ease-in-out infinite;
+}
+#appFrontArtwork .space-bg::before,#appFrontArtwork .space-skyline-back,#appFrontArtwork .space-windows,#appFrontArtwork .space-street,#appFrontArtwork .space-neon{
+        animation: none;
+    }
+#appFrontArtwork .note-track{
+    position: absolute;
+    inset: 4%;
+    z-index: 25;
+    border: 2px solid rgba(203,213,225,.46);
+    border-radius: 50%;
+    box-shadow:
+        0 0 0 6px rgba(5,15,30,.10),
+        inset 0 0 0 1px rgba(0,242,255,.08);
+    pointer-events: none;
+}
+#appFrontArtwork .top-pointer{
+    position: absolute;
+
+    top: 4px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 0;
+    height: 0;
+
+    border-left: clamp(7px, 2vw, 10px) solid transparent;
+    border-right: clamp(7px, 2vw, 10px) solid transparent;
+    border-top: clamp(10px, 2.8vw, 14px) solid #0284c7;
+
+    z-index: 50;
+
+    pointer-events: none;
+}
+#appFrontArtwork .outer-ring{
+    z-index: 45;
+    
+    pointer-events: none;
+}
+#appFrontArtwork .inner-ring{
+    z-index: 40;
+}
+#appFrontArtwork #appFrontSun{position:relative!important;display:block!important;width:84px!important;height:84px!important;min-width:84px!important;min-height:84px!important;margin:0!important;padding:0!important;border:1px solid rgba(255,232,145,.9)!important;border-radius:50%!important;background:radial-gradient(circle at 42% 38%,#fff 0 8%,#fff6b7 13%,#ffd84f 31%,#ff9e24 58%,rgba(255,136,19,.78) 72%,rgba(255,159,33,.18) 100%)!important;box-shadow:0 0 18px #ffd84f,0 0 44px rgba(255,177,45,.85),0 0 85px rgba(255,141,24,.46)!important;overflow:visible!important;isolation:isolate;cursor:pointer!important;z-index:25!important;touch-action:manipulation}
+#appFrontArtwork #appFrontSun:before{content:'';position:absolute;inset:-42px;border-radius:50%;background:repeating-conic-gradient(from 0deg,transparent 0deg 10deg,rgba(255,220,120,.05) 11deg,rgba(255,225,135,.9) 13deg,rgba(255,220,120,.05) 15deg,transparent 16deg 24deg);-webkit-mask:radial-gradient(circle,transparent 0 36%,#000 42%,#000 51%,transparent 71%);mask:radial-gradient(circle,transparent 0 36%,#000 42%,#000 51%,transparent 71%);pointer-events:none;z-index:-1;animation:ebSunRaysSpin 24s linear infinite,ebSunRaysGlow 2.6s ease-in-out infinite alternate}
+#appFrontArtwork #appFrontSun:after{content:'';position:absolute;inset:-17px;border-radius:50%;background:radial-gradient(circle,transparent 42%,rgba(255,210,91,.22) 60%,transparent 72%);pointer-events:none;z-index:-1;animation:ebSunHalo 2.6s ease-in-out infinite alternate}
+#appFrontArtwork #appFrontSun:hover{filter:brightness(1.15)}
+#appFrontArtwork #appFrontSun:focus-visible{outline:3px solid #fff3c6;outline-offset:9px}
+#appFrontArtwork #appFrontSun:before,#appFrontArtwork #appFrontSun:after{animation:none!important}
+#appFrontArtwork #appFrontWordmark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:0;pointer-events:none;z-index:4;background:none!important;transform:none!important;opacity:1!important}
+#appFrontArtwork #appFrontWordmark [data-logo-letter]{font:900 13px/1 Arial,sans-serif!important;letter-spacing:0!important;margin:0!important;padding:0!important;display:inline!important;background:none!important;text-shadow:0 1px 2px #000,0 0 2px #000!important;transform:none!important;-webkit-text-stroke:.3px #0005;transition:color 1.2s ease}
+#appFrontArtwork .exact-design-scale{position:absolute;left:0;top:0;width:480px;height:480px;transform:scale(.6);transform-origin:top left;pointer-events:none}
+#appFrontArtwork .lock-container{--dial-size:480px;display:block;width:480px;height:480px;cursor:inherit}
+#appFrontArtwork #appFrontSun{position:absolute!important;left:50%;top:50%;transform:translate(-50%,-50%);display:block!important;pointer-events:none}
+#appFrontArtwork .exact-browser-caption{position:absolute;left:50%;top:65%;transform:translateX(-50%);z-index:50;color:#fff4c6;font:700 13px/1.5 Arial,sans-serif;letter-spacing:1.5px;text-shadow:0 2px 4px #000;text-align:center;white-space:nowrap}
+#appFrontArtwork .exact-browser-caption b{color:#ffce61}
+#appFrontArtwork .exact-design-scale{transform:scale(.5)}
+
+#appFrontArtwork{position:absolute;inset:0;pointer-events:none;z-index:1;display:block}
+#appFrontArtwork .exact-design-scale{position:absolute;left:50%;top:50%;width:480px;height:480px;transform:translate(-50%,-50%) scale(var(--front-scale,1));transform-origin:center}
+#appFrontArtwork .lock-container{display:block;width:480px;height:480px;max-width:none;max-height:none;background:transparent;border:0;overflow:visible;box-shadow:none}
+#appFrontArtwork #appFrontSun{position:absolute!important;left:50%;top:50%;width:84px!important;height:84px!important;min-width:84px!important;min-height:84px!important;transform:translate(-50%,-50%) scale(5.547619)!important;background:radial-gradient(ellipse at 25% 25%,#f6f7ff,transparent 65%),radial-gradient(ellipse at 80% 30%,#0050e9,transparent 60%),radial-gradient(ellipse at 30% 80%,#ed2636,#a74696)!important;z-index:0!important}
+#appFrontArtwork #appFrontWordmark{position:absolute;inset:0;display:flex;justify-content:center;align-items:center}
+#appFrontArtwork #appFrontWordmark [data-logo-letter]{font:bold 13px Arial;transition:color 1.2s}
+#appFrontArtwork .ring,#appFrontArtwork .note-track,#appFrontArtwork .top-pointer,#appFrontArtwork .original-track,#appFrontArtwork .exact-browser-caption{opacity:0;visibility:hidden;transition:opacity .5s}
+body.dial-lock-visible #appFrontArtwork .ring,body.dial-lock-visible #appFrontArtwork .note-track,body.dial-lock-visible #appFrontArtwork .top-pointer,body.dial-lock-visible #appFrontArtwork .original-track,body.dial-lock-visible #appFrontArtwork .exact-browser-caption{opacity:1;visibility:visible}
+#appFrontArtwork .exact-browser-caption{top:59%;color:#111827;font:900 14px Arial;text-shadow:0 0 2px #fff}
+#appFrontArtwork .exact-browser-caption b{color:#111827}
+#dial>.space-bg{display:none}#dial{background:transparent;border:0;overflow:visible}
+#ebRestore{background:transparent!important;border:0;box-shadow:none;z-index:20;width:25%;height:25%}#ebRestore:before,#ebRestore:after,#ebSunWordmark{display:none}
+body[data-view=browser]:not(.ebMinimized) #appFrontArtwork{opacity:.18}
+body.ebRect:not(.ebMinimized) #appFrontArtwork{display:none}
+body.ebMinimized #appFrontArtwork{opacity:1}
+body.ebMinimized #ebRestore{width:70%;height:70%}
+body.dot-mode #appFrontArtwork{display:none}
+#teamPanel{position:absolute;inset:13%;z-index:100;background:#081526f5;border:1px solid #dfc775;border-radius:50px;padding:25px 30px;overflow:auto;font:12px Arial;color:#eaf5ff}#teamPanel[hidden]{display:none}#teamPanel h2{text-align:center;font:700 20px Georgia;color:#ffe3a0;margin:0 0 12px}#teamPanel label{display:block;margin:8px 0}#teamPanel input:not([type=checkbox]):not([type=range]){display:block;width:100%;padding:8px;border:1px solid #4f7886;border-radius:12px;background:#10253b;color:white}#teamPanel button{background:#132d46;color:#fff3cc;border:1px solid #a89966;border-radius:16px;padding:6px 10px;cursor:pointer}#teamClose{position:absolute;right:20px;top:14px}.team-actions{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}#teamMessages{height:100px;overflow:auto;overflow-wrap:anywhere;border-top:1px solid #3e5967;padding:6px 0}#teamMessages p{margin:5px 0}#teamSend{display:flex;gap:4px}#teamSend input{min-width:0}#teamStatus{color:#b7d5e5;line-height:1.4}#teamMembers{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}.team-member{width:92px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px}.team-face{display:grid;place-items:center;width:35px;height:35px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#d5f4ff,#395d88,#10233c);border:1px solid #d4c176;color:#fff;font:700 17px Georgia}.team-member.speaking .team-face{box-shadow:0 0 18px #6dffa3;border-color:#6dffa3}.team-member input{width:65px}body.ebMinimized #teamPanel,body.dot-mode #teamPanel{display:none}body.ebRect:not(.ebMinimized) #teamPanel{inset:12% 25%;max-width:550px;margin:auto}body.ebRect:not(.ebMinimized) #newDial{left:120px;top:19px;transform:none!important}body.ebRect:not(.ebMinimized) #teamOpen{left:155px;top:19px;transform:none!important}
+
+#appFrontArtwork .ring{
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    transform-origin: 50% 50%;
+
+    will-change: transform;
+}
+#appFrontArtwork .letter{
+    position: absolute;
+
+    
+    width: clamp(22px, 6.7%, 32px);
+    height: clamp(22px, 6.7%, 32px);
+
+    margin-left:
+        calc(clamp(22px, 6.7%, 32px) / -2);
+
+    margin-top:
+        calc(clamp(22px, 6.7%, 32px) / -2);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: #ffffff;
+
+    font-family: "Courier New", monospace;
+
+    font-weight: bold;
+
+    font-size: clamp(10px, 3.3%, 16px);
+
+    cursor: pointer;
+
+    border: 2px solid rgba(15,23,42,.35);
+
+    text-shadow:
+        0 2px 3px rgba(0,0,0,.98),
+        0 0 7px rgba(0,0,0,.95);
+
+    box-shadow:
+        0 0 0 3px rgba(3,9,22,.78),
+        0 3px 10px rgba(0,0,0,.65),
+        inset 0 0 0 1px rgba(255,255,255,.24);
+
+    transition:
+        background .4s ease,
+        color .2s ease,
+        box-shadow .2s ease;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    -webkit-tap-highlight-color: transparent;
+
+    touch-action: manipulation;
+
+}
+#appFrontArtwork .letter.selected{
+    border: 3px solid #0f172a;
+
+    box-shadow:
+        0 0 0 3px rgba(255,255,255,.95),
+        0 0 18px rgba(0,242,255,.95);
+
+    z-index: 100;
+}
+#appFrontArtwork .note{
+    position: absolute;
+
+    width: clamp(19px, 5.8%, 28px);
+    height: clamp(19px, 5.8%, 28px);
+
+    margin-left:
+        calc(clamp(19px, 5.8%, 28px) / -2);
+
+    margin-top:
+        calc(clamp(19px, 5.8%, 28px) / -2);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #ffffff;
+
+    font-size: clamp(12px, 3.7%, 18px);
+
+    font-weight: 700;
+
+    background:
+        radial-gradient(circle at 35% 30%, rgba(12, 36, 66, .96), rgba(3, 9, 22, .96) 72%);
+
+    border: 1px solid rgba(255,255,255,.42);
+
+    border-radius: 50%;
+
+    text-shadow:
+        0 0 4px rgba(0,0,0,.95),
+        0 1px 4px rgba(0,0,0,.95),
+        0 0 10px rgba(0,242,255,.55);
+
+    box-shadow:
+        0 0 0 2px rgba(0,242,255,.16),
+        0 0 10px rgba(0,242,255,.16),
+        0 3px 9px rgba(0,0,0,.55);
+
+    cursor: pointer;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+#appFrontArtwork .note:hover{
+    filter: brightness(1.25);
+    box-shadow:
+        0 0 0 2px rgba(0,242,255,.35),
+        0 0 16px rgba(0,242,255,.42),
+        0 3px 9px rgba(0,0,0,.55);
+}
+#appFrontArtwork .note.eyeota-note-hit{
+    filter: brightness(1.35);
+    box-shadow:
+        0 0 0 3px rgba(255,255,255,.82),
+        0 0 18px rgba(0,242,255,.95),
+        0 3px 9px rgba(0,0,0,.55);
+    transform: scale(1.12);
+}
+#teamOrbit{position:absolute;inset:0;pointer-events:none;z-index:58}.orbit-teammate{position:absolute;transform:translate(-50%,-50%);width:23px;height:23px;display:grid;place-items:center;background:radial-gradient(circle at 30% 25%,#d5f4ff,#395d88,#10233c);border:1px solid #d4c176;border-radius:50%;font:700 11px Arial;color:white}.orbit-teammate.speaking{box-shadow:0 0 15px #6dffa3;border-color:#6dffa3}body.dot-mode #teamOrbit{display:none}
+
+/* Restore the original compact 84px sun and its 168px ray span. */
+body.ebMinimized #appFrontArtwork .exact-design-scale{transform:translate(-50%,-50%) scale(0.1802575107)!important}
+body.ebMinimized #appFrontArtwork #appFrontSun:before{display:block!important;opacity:1!important;background:repeating-conic-gradient(transparent 0deg 10deg,#ffdc780d 11deg,#ffe187e6 13deg,#ffdc780d 15deg,transparent 16deg 24deg)!important;mask:radial-gradient(circle,transparent 0 36%,#000 42%,#000 51%,transparent 71%)!important;-webkit-mask:radial-gradient(circle,transparent 0 36%,#000 42%,#000 51%,transparent 71%)!important;animation:orbit 24s linear infinite!important}
+body.ebMinimized #ebRestore{width:84px!important;height:84px!important}
+@media(prefers-reduced-motion:reduce){body.ebMinimized #appFrontArtwork #appFrontSun:before{animation:none!important}}
+
+/* Solid expanded dial; compact sun and ray geometry remain unchanged. */
+body:not(.ebMinimized):not(.dot-mode) #dial{background:radial-gradient(circle at 45% 35%,#242b52,#11182f 70%,#080e1d)!important;opacity:1!important}
+body.ebRect:not(.ebMinimized):not(.dot-mode) #dial{background:#0b1424!important}
+
+/* Fixed page controls: separate from audio and website content. */
+#pagePrivacyControls{position:absolute;z-index:80;top:20%;left:20%;right:20%;display:flex;flex-wrap:wrap;justify-content:center;gap:5px;pointer-events:auto;background:#0b1424;padding:6px;border-radius:12px;font:12px Arial;color:white}
+#pagePrivacyControls button{position:static!important;transform:none!important;border:1px solid #d8bf72;border-radius:12px;padding:7px 10px;background:#142139;color:#fff3c9;cursor:pointer;font:bold 12px Arial}
+#pagePrivacyControls button[aria-pressed=true]{background:#285d50;border-color:#9fffcf}
+#pagePrivacyState{flex-basis:100%;text-align:center;font-size:11px}
+body:not(.ebRect) #ebContentArea{top:33%;height:43%}
+body.ebRect:not(.ebMinimized) #pagePrivacyControls{top:90px;left:12px;right:12px;min-height:40px;align-items:center}
+body.ebRect:not(.ebMinimized) #pagePrivacyState{flex-basis:auto;margin-left:12px}
+body.ebRect:not(.ebMinimized) #ebContentArea{top:150px}
+body.record-preview #pagePrivacyControls{display:none}
+
+#pagePrivacyControls{top:17%;left:17%;right:17%}#pagePrivacyState{max-height:34px;overflow:auto;line-height:15px}body:not(.ebRect) #ebContentArea{top:34%;height:42%}body.ebRect:not(.ebMinimized) #pagePrivacyState{flex-basis:100%;margin-left:0}body.ebRect:not(.ebMinimized) #ebContentArea{top:175px}
+
+#pagePrivacyControls{top:16%;gap:4px}#pagePrivacyControls button{padding:5px 8px;font-size:11px}body:not(.ebRect) #ebContentArea{top:38%;height:38%}body.ebRect:not(.ebMinimized) #ebContentArea{top:190px}
+
+/* Keep diagnostic text and website controls off the starting artwork. */
+body[data-view=menu] #nativeStatus,body[data-view=menu] #ebStatus{display:none!important}
+script,style,link,meta{display:none!important}
+#pagePrivacyState{overflow-wrap:anywhere;max-height:45px}#nativeStatus{display:block;max-height:30px;overflow:hidden;overflow-wrap:anywhere}
+
+#appFrontArtwork #appFrontWordmark [data-logo-letter]{font-size:8px!important}#ebSunWordmark{font-size:10px!important;letter-spacing:0}
+</style><style>#appMenuReturn{display:block!important}#dialStage{width:620px;height:620px;inset:0 auto auto 0;transform-origin:0 0}body:not(.ebMinimized):not(.dot-mode) #dial{background:radial-gradient(ellipse at 50% 100%,#4e657e 0,transparent 52%),radial-gradient(circle at 40% 25%,#1b2c48,#030916 75%)!important}.space-bg{display:block!important}.space-bg .eyeota-sun-clouds{display:block!important;opacity:.35!important}.space-bg .eyeota-space-orbits{display:block!important}#ebRestore{display:none!important}#appFrontArtwork{display:none!important}button[aria-pressed=true]{filter:brightness(1.5);outline:1px solid #ffe3a8}#appMenuReturn{bottom:12%!important}#ebContentArea{background:transparent}input{cursor:default}#ebOrbitSearch input{pointer-events:none}#ebOrbitSearch button{pointer-events:auto}</style></head><body class="eb-browser-mode" data-view="browser"><div id="dialStage"><main id="dial"><span id="appFrontArtwork" aria-hidden="true"><span class="exact-design-scale"><span class="lock-container"><span class="space-bg"><span class="space-skyline-back"></span><span class="space-tower"></span><span class="space-windows"></span><span class="space-rooftops"></span><span class="space-street"></span><span class="space-neon"></span></span><span class="note-track"></span><span class="top-pointer"></span><span class="original-track outside"></span><span class="original-track inside"></span><span class="ring outer-ring"><span class="note" style="left:50.000000%;top:8.958333%;">♩</span><span class="note" style="left:65.705966%;top:12.082444%;">♪</span><span class="note" style="left:79.020841%;top:20.979159%;">♫</span><span class="note" style="left:87.917556%;top:34.294034%;">♬</span><span class="note" style="left:91.041667%;top:50.000000%;">♭</span><span class="note" style="left:87.917556%;top:65.705966%;">♮</span><span class="note" style="left:79.020841%;top:79.020841%;">♯</span><span class="note" style="left:65.705966%;top:87.917556%;">𝄞</span><span class="note" style="left:50.000000%;top:91.041667%;">𝄢</span><span class="note" style="left:34.294034%;top:87.917556%;">𝄡</span><span class="note" style="left:20.979159%;top:79.020841%;">𝄪</span><span class="note" style="left:12.082444%;top:65.705966%;">𝄫</span><span class="note" style="left:8.958333%;top:50.000000%;">𝄐</span><span class="note" style="left:12.082444%;top:34.294034%;">𝄑</span><span class="note" style="left:20.979159%;top:20.979159%;">𝄒</span><span class="note" style="left:34.294034%;top:12.082444%;">𝄓</span></span><span class="ring inner-ring"><span class="letter" style="left:50.000000%;top:16.250000%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#FF1744;">A</span><span class="letter" style="left:58.076904%;top:17.230714%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#FF6D00;">B</span><span class="letter" style="left:65.684407%;top:20.115859%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#FFC400;">C</span><span class="letter" style="left:72.380390%;top:24.737762%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#E6FF00;">D</span><span class="letter" style="left:77.775705%;top:30.827815%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#76FF03;">E</span><span class="letter" style="left:81.556798%;top:38.032085%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#00C853;">F</span><span class="letter" style="left:83.503925%;top:45.931887%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#00BFA5;">G</span><span class="letter" style="left:83.503925%;top:54.068113%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#00E5FF;">H</span><span class="letter" style="left:81.556798%;top:61.967915%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#0091EA;">I</span><span class="letter" style="left:77.775705%;top:69.172185%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#304FFE;">J</span><span class="letter" style="left:72.380390%;top:75.262238%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#6200EA;">K</span><span class="letter" style="left:65.684407%;top:79.884141%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#0066FF;">L</span><span class="letter" style="left:58.076904%;top:82.769286%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#AA00FF;">M</span><span class="letter" style="left:50.000000%;top:83.750000%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#D500F9;">N</span><span class="letter" style="left:41.923096%;top:82.769286%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#FF00CC;">O</span><span class="letter" style="left:34.315593%;top:79.884141%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#FF4081;">P</span><span class="letter" style="left:27.619610%;top:75.262238%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#F50057;">Q</span><span class="letter" style="left:22.224295%;top:69.172185%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#FF5252;">R</span><span class="letter" style="left:18.443202%;top:61.967915%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#795548;">S</span><span class="letter" style="left:16.496075%;top:54.068113%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#607D8B;">T</span><span class="letter" style="left:16.496075%;top:45.931887%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#37474F;">U</span><span class="letter" style="left:18.443202%;top:38.032085%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#8D6E63;">V</span><span class="letter" style="left:22.224295%;top:30.827815%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#9E9D24;">W</span><span class="letter" style="left:27.619610%;top:24.737762%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#827717;">X</span><span class="letter" style="left:34.315593%;top:20.115859%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#00897B;">Y</span><span class="letter" style="left:41.923096%;top:17.230714%;background:linear-gradient(rgba(3,9,22,.34),rgba(3,9,22,.34)),#5E35B1;">Z</span></span><span id="appFrontSun"><span id="appFrontWordmark" aria-hidden="true"><span data-logo-letter style="color:#46D879">s</span><span data-logo-letter style="color:#50DFFF">u</span><span data-logo-letter style="color:#C38BFF">f</span><span data-logo-letter style="color:#FF9966">f</span><span data-logo-letter style="color:#FFD700">e</span><span data-logo-letter style="color:#FF74B8">r</span><span data-logo-letter style="color:#46D879">x</span><span data-logo-letter style="color:#50DFFF">i</span></span></span><span class="exact-browser-caption">EOTA INTERNET BROWSER<br><b>LOCKED</b></span></span></span></span><div class="space-bg" aria-hidden="true">
+<div class="eyeota-space-orbits" aria-hidden="true">
+ <div class="eyeota-orbit-stars"></div>
+ <div class="eyeota-planet-orbit orbit-near"><span class="eyeota-orbit-planet planet-blue"></span></div>
+ <div class="eyeota-planet-orbit orbit-middle"><span class="eyeota-orbit-planet planet-ringed"></span></div>
+ <div class="eyeota-planet-orbit orbit-far"><span class="eyeota-orbit-planet planet-rust"></span></div>
+</div>
+<svg class="eyeota-sun-clouds cloud-depth-0" viewbox="0 0 1200 150" preserveaspectratio="none" aria-hidden="true"><defs><lineargradient id="eyeotaCloudShade0" x2="0" y2="1"><stop stop-color="#fff9e7"></stop><stop offset=".36" stop-color="#eef2f5"></stop><stop offset="1" stop-color="#8196b0"></stop></lineargradient></defs><g fill="url(#eyeotaCloudShade0)"><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(-100 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(100 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(300 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(500 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(700 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(900 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(1100 0)"></path></g></svg>
+<svg class="eyeota-sun-clouds cloud-depth-1" viewbox="0 0 1200 150" preserveaspectratio="none" aria-hidden="true"><defs><lineargradient id="eyeotaCloudShade1" x2="0" y2="1"><stop stop-color="#fff9e7"></stop><stop offset=".36" stop-color="#eef2f5"></stop><stop offset="1" stop-color="#8196b0"></stop></lineargradient></defs><g fill="url(#eyeotaCloudShade1)"><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(-100 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(100 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(300 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(500 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(700 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(900 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(1100 0)"></path></g></svg>
+<svg class="eyeota-sun-clouds cloud-depth-2" viewbox="0 0 1200 150" preserveaspectratio="none" aria-hidden="true"><defs><lineargradient id="eyeotaCloudShade2" x2="0" y2="1"><stop stop-color="#fff9e7"></stop><stop offset=".36" stop-color="#eef2f5"></stop><stop offset="1" stop-color="#8196b0"></stop></lineargradient></defs><g fill="url(#eyeotaCloudShade2)"><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(-100 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(100 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(300 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(500 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(700 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(900 0)"></path><path d="M-25 105 C-16 81 4 76 24 85 C19 57 48 42 68 59 C78 20 127 17 143 56 C170 35 203 50 205 79 C230 68 258 80 266 105 L266 145 L-25 145 Z" transform="translate(1100 0)"></path></g></svg>
+<div class="mountain-scene" aria-hidden="true"></div>
+                <div class="space-skyline-back"></div>
+                <div class="space-tower"></div>
+                <div class="space-windows"></div>
+                <div class="space-rooftops"></div>
+                <div class="space-street"></div>
+                <div class="space-neon"></div>
+            </div>
+
+            
+
+            <form id="ebOrbitSearch" role="search" aria-label="EOTA Browser website search"><svg viewbox="0 0 600 600" aria-hidden="true"><defs><path id="ebAddressCurve" d="M 80 146 A 268 268 0 0 1 520 146"></path></defs><use href="#ebAddressCurve" id="ebCurveBorder"></use><use href="#ebAddressCurve" id="ebCurveSurface"></use><text class="ebCurveHint"><textpath href="#ebAddressCurve" startoffset="1%">⌕</textpath></text><text id="ebCurveText" style="fill: rgb(98, 123, 141);"><textpath id="ebAddressText" href="#ebAddressCurve" startoffset="7%">Search or enter website address</textpath></text><line id="ebCurveCaret" x1="91.51417808233904" y1="107.67403431981229" x2="105.51218851804943" y2="120.52143498460605"></line></svg><input type="text" aria-label="Search or enter website address" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="url" style=""><button type="submit" aria-label="Open website or search" title="Open website or search">→</button></form>
+
+<div id="ebControls"><button id="newDial" type="button" aria-label="New browser dial" title="New dial · Ctrl+T">＋</button><button id="teamOpen" type="button" aria-label="Team chat" title="Team chat">☏</button><button id="ebMin" type="button" aria-label="Minimize EOTA Browser" title="Minimize" style="--eb-index: 2;">−</button><button id="ebMax" type="button" aria-label="Maximize EOTA Browser" title="Maximize or return to circle" style="--eb-index: 1;">□</button><button id="appDot" type="button" aria-label="Shrink to draggable dot" title="Shrink to dot" style="--eb-index:5">•</button><button id="appMusicPlay" type="button" aria-label="Play music" title="Play music" style="--eb-index:4">▶</button><button id="appMusicPause" type="button" aria-label="Pause music" title="Pause music" style="--eb-index:3">Ⅱ</button><button id="ebClose" type="button" aria-label="Close EOTA Browser" title="Close browser" style="--eb-index: 0;">×</button></div><form id="ebAddressBar"><input aria-label="Website address" placeholder="Enter website address" style=""><button type="submit">Open ↗</button><span id="ebStatus" role="status"></span></form><section id="ebEdge" aria-label="Circular browser page"><nav id="ebCircleNav" aria-label="Website navigation"><button id="ebBack" aria-label="Back" disabled>←</button><button id="ebForward" aria-label="Forward" disabled>→</button><button id="ebReload" aria-label="Reload">↻</button><button id="ebHomeButton" aria-label="Return to dial">⌂</button><button id="ebZoomOut" type="button" aria-label="Zoom website out" title="Zoom out">−</button><button id="ebZoomIn" type="button" aria-label="Zoom website in" title="Zoom in">+</button></nav><div id="pagePrivacyControls" aria-label="Page visibility"><button id="pageReveal" type="button">Reveal page</button><button id="pageLock" type="button">Lock page</button><button id="audioAllow" type="button">Allow audio</button><button id="audioBlock" type="button">Block audio</button><button id="cleanAudio" type="button" aria-pressed="false">Clean audio: OFF</button><span id="pagePrivacyState" role="status">Page locked</span></div><main id="ebContentArea"><div id="ebPage" aria-hidden="true"></div></main><footer id="ebFooter" role="status"><span id="nativeStatus" role="status"></span></footer></section><button id="ebRestore" type="button" aria-label="Restore EOTA Browser dial" title="F8 to summon · Drag to move · Click to restore browser dial" aria-describedby="ebSunMoveHint"><span id="ebSunWordmark" aria-hidden="true"><span data-logo-letter style="color:#46D879">s</span><span data-logo-letter style="color:#50DFFF">u</span><span data-logo-letter style="color:#C38BFF">f</span><span data-logo-letter style="color:#FF9966">f</span><span data-logo-letter style="color:#FFD700">e</span><span data-logo-letter style="color:#FF74B8">r</span><span data-logo-letter style="color:#46D879">x</span><span data-logo-letter style="color:#50DFFF">i</span></span><span id="ebSunMoveHint">Drag the sun to move it</span></button><div id="ebSunPlanetSystem" data-has-site="false" style="--eb-sun-x: 50vw; --eb-sun-y: 45vh;"><div id="ebPlanetTrack"><button id="ebSitePlanet" type="button"><span id="ebPlanetFace"><span id="ebPlanetLogo"></span><svg id="ebPlanetName" viewbox="0 0 80 80" aria-hidden="true"><defs><path id="ebPlanetNamePath" d="M 40,40 m -32,0 a 32,32 0 1,1 64,0 a 32,32 0 1,1 -64,0"></path></defs><text><textpath href="#ebPlanetNamePath" startoffset="50%" text-anchor="middle"></textpath></text></svg></span></button></div></div><nav id="appMenu" aria-label="EOTA app tools"><button class="app-feature" data-tool="browser" type="button" aria-label="EOTA Browser"><svg viewbox="0 0 160 60" aria-hidden="true"><defs><path id="menuArc0" d="M12 45 A127 127 0 0 1 148 45"></path></defs><use href="#menuArc0"></use><use href="#menuArc0" class="menu-face"></use><text><textpath href="#menuArc0" startoffset="50%" text-anchor="middle">EOTA Browser</textpath></text></svg></button></nav><button id="appMenuReturn" type="button" aria-label="Return to Desktop"><svg viewbox="0 0 160 60" aria-hidden="true"><defs><path id="desktopReturnArc" d="M12 45 A400 400 0 0 1 148 45"></path></defs><use href="#desktopReturnArc"></use><use href="#desktopReturnArc" class="menu-face"></use><text><textpath href="#desktopReturnArc" startoffset="50%" text-anchor="middle">Return to Desktop</textpath></text></svg></button><section id="recordPreview" hidden aria-label="Live game recording"><video id="recordPreviewVideo" autoplay muted playsinline></video></section><section id="clipPreview" hidden aria-label="Secondary clip preview"><video id="clipPreviewVideo" autoplay muted playsinline></video><span id="clipPreviewLabel">59-second clip</span></section><div id="previewControls" hidden><span id="previewLabel">Live recording view · sound off</span><button id="recordPreviewClose">Back to browser</button><button id="clipReplay" hidden>Replay clip</button><button id="clipDelete" hidden>Delete clip</button><button id="clipLive" hidden>Hide clip</button></div><button id="clipCapture" type="button" disabled>59s clip</button><button id="clipReady" type="button" hidden>Clip ready</button><button id="clipBrowse" type="button">Saved clips</button><button id="recordPreviewOpen" type="button">Back to recording</button><button id="keybindOpen" type="button">Keybinds</button><section id="keybindPanel" hidden aria-label="Keybind settings"><button id="keybindClose" aria-label="Close keybind settings">×</button><h2>Keybinds · v2.22</h2><p>Click a field and press your new key combination.</p><label>Minimize / restore<input id="keybind-minimize" autocomplete="off" aria-label="Minimize / restore keybind"></label><label>Tiny dot / restore<input id="keybind-dot" autocomplete="off" aria-label="Tiny dot / restore keybind"></label><label>Bring EOTA back<input id="keybind-summon" autocomplete="off" aria-label="Bring EOTA back keybind"></label><label>Recording controls / stop<input id="keybind-record" autocomplete="off" aria-label="Recording controls / stop keybind"></label><label>Capture next 59 seconds<input id="keybind-clip" autocomplete="off" aria-label="Clip capture keybind"></label><button id="keybindApply">Apply</button><button id="keybindReset">Defaults</button><p id="keybindStatus" role="status"></p><p>F10 captures the next 59 seconds while full recording continues.</p></section><button id="recordOpen" type="button" title="Recording controls · F9" aria-label="Recording controls">● <span id="recordTimer">REC</span></button>
+<section id="recordPanel" hidden aria-label="Gameplay recording"><button id="recordClose" aria-label="Close recording controls">×</button><h2>Record gameplay · v2.42</h2><label>Game / app window<select id="recordSource"></select></label><button id="recordRefresh">Refresh list</button><div class="record-audio"><label><input id="recordMic" type="checkbox" checked> Microphone</label><label>Playback audio<select id="recordAudioMode"><option value="game">Game audio only</option><option value="pc">Entire PC audio (includes music)</option><option value="none">No playback audio</option></select></label></div><label>Microphone device<select id="recordMicDevice"><option value="">System default microphone</option></select></label><button id="recordFindMics" type="button">Find microphones</button><label><input id="recordIncludeDial" type="checkbox" checked> Include EOTA dial in saved video</label><label>Video quality<select id="recordQuality"><option value="4000000">Smooth · 720p · 4 Mbps · 30 fps</option><option value="12000000" selected>High quality · up to 1080p · 12 Mbps · 30 fps</option><option value="16000000">High · 16 Mbps · 30 fps</option></select></label><p id="gameAudioStatus" role="status">Game audio follows the selected window.</p><meter id="gameAudioMeter" min="0" max="1" value="0" aria-label="Game audio level"></meter><div class="record-actions"><button id="recordStart">Start recording</button><button id="recordStop" disabled>Stop &amp; save</button></div><p id="recordStatus" role="status">Choose a screen or game window.</p><button id="recordFolder" hidden>Open recordings folder</button><p class="record-hint">F9 stops recording.<br>Saved on this PC · WebM video<br>Entire PC audio includes music and other apps.</p></section></main></div><button id="sunDot" type="button" aria-label="Shrink sun to tiny dot" title="Shrink sun to tiny dot">•</button><button id="tinyDot" type="button" aria-label="Restore EOTA" title="F8 to summon · Drag to move · Click to restore"></button><script>(()=>{const q=id=>document.getElementById(id);function layout(){q('dialStage').style.transform='scale('+Math.min(innerWidth,innerHeight)/620+')';const radius=620/2-19;[...q('ebControls').children].forEach((b,i)=>{const a=-Math.PI/4+(i-1)*30/radius;b.style.transform=`translate(-50%,-50%) translate(${Math.cos(a)*radius}px,${Math.sin(a)*radius}px)`});}addEventListener('resize',layout);layout();document.querySelectorAll('input').forEach(x=>x.readOnly=true);document.querySelectorAll('button').forEach(b=>b.disabled=false);document.addEventListener('submit',e=>e.preventDefault());document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;e.preventDefault();if(['ebClose','ebMin','appMenuReturn'].includes(b.id)){parent.postMessage({type:'eota-browser-demo-close'},'*');return;}b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'));});})();</script></body></html>
