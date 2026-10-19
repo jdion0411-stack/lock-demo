@@ -113,7 +113,7 @@ html,body{overflow:visible!important;color:#102335!important}
   q('eota-test-reading-mark').setAttribute('d',`M${c-4} 5L${c+4} 5L${c} 12Z`);
   ctx.font='600 '+textPixels+'px Georgia';let distance=0;words=[];starts=[];chapterStarts={};
   for(const ch of Object.keys(book)){chapterStarts[ch]=distance;for(const v of book[ch])for(const raw of (v.n+' '+v.text+' •').split(/\s+/)){const text=decorate(raw);starts.push(distance);words.push({text,chapter:ch,verse:v.n});distance+=ctx.measureText(text+' ').width;}}
-  maxOffset=starts[words.findIndex(w=>w.verse==='40:38')];const anchor=words.findIndex(w=>w.verse===saved);const keep=words[savedIndex]?.verse===saved?savedIndex:Math.max(0,anchor);offset=Math.min(maxOffset,(starts[keep]||0)+savedFraction*((starts[keep+1]||starts[keep]+1)-starts[keep]));
+  maxOffset=starts[starts.length-1]||0;const anchor=words.findIndex(w=>w.verse===saved);const keep=words[savedIndex]?.verse===saved?savedIndex:Math.max(0,anchor);offset=Math.min(maxOffset,(starts[keep]||0)+savedFraction*((starts[keep+1]||starts[keep]+1)-starts[keep]));
   state.textContent=scale<.995?'Reduced to fit — expand this preview for actual size':calibrated?size.value+'-inch diameter · calibrated for this zoom level':'Size is approximate until calibrated';paint();
  }
  cal.addEventListener('input',()=>{calibrated=false;lastKey='';build();});confirm.onclick=()=>{calibrated=true;lastKey='';build();};size.onchange=()=>{lastKey='';build();};font.onchange=()=>{lastKey='';build();};
