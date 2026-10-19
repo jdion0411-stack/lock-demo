@@ -51,7 +51,7 @@ html,body{overflow:visible!important;color:#102335!important}
 #desktop-shell::after,#bible-shell::after{display:none!important}
 #desktop-shell.tablet-shell .tablet-glass,#bible-shell.tablet-shell .tablet-glass{left:16.3%!important;top:13.5%!important;width:68.5%!important;height:68.5%!important;border-radius:50%!important;z-index:1!important;box-shadow:0 0 3px 2px #050609!important}
 #desktop-shell .tablet-glass::after,#bible-shell .tablet-glass::after{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,#ffffff12,transparent 45%,#00000008);box-shadow:inset 0 0 9px #0006;pointer-events:none;z-index:50}
-</style><link rel="icon" type="image/svg+xml" href="/assets/eota-altar-favicon.svg?v=altar-26"><style id="kingdom-case-final">#desktop-shell::before,#bible-shell::before{background-image:var(--real-case)!important;background-size:200% 100%!important;background-position:left center!important;background-repeat:no-repeat!important;filter:none!important;opacity:1!important}</style></head><body><div id="eota-monitor-test">
+</style><link rel="icon" type="image/png" href="/assets/eota-dove-favicon.png?v=exodus-dove-31"><style id="kingdom-case-final">#desktop-shell::before,#bible-shell::before{background-image:var(--real-case)!important;background-size:200% 100%!important;background-position:left center!important;background-repeat:no-repeat!important;filter:none!important;opacity:1!important}</style></head><body><div id="eota-monitor-test">
   <style>
     #eota-monitor-test .calibration-line{height:16px;border-left:2px solid var(--foreground);border-right:2px solid var(--foreground);position:relative;box-sizing:border-box;margin:14px 0}
     #eota-monitor-test .calibration-line::after{content:'';position:absolute;left:0;right:0;top:7px;border-top:2px solid var(--foreground)}
@@ -79,7 +79,7 @@ html,body{overflow:visible!important;color:#102335!important}
         <circle class="paper" id="eota-test-paper"></circle>
         <path id="reader-title-arc" fill="none" stroke="none"></path><text fill="#fff" font-family="Georgia,serif" font-size="9" letter-spacing="1.2" text-anchor="middle"><textPath href="#reader-title-arc" startOffset="50%">HOLY BIBLE JONATHAN VERSION</textPath></text><path id="reader-row-lines" fill="none" stroke="#9ab2cc" stroke-opacity=".4" stroke-width=".65" pointer-events="none"></path><text class="ink" id="eota-test-ink"><textPath id="eota-test-stream" href="#eota-test-path"></textPath></text>
         <circle class="seal" id="eota-test-seal"></circle>
-        <text class="sealtext" id="eota-test-seal-name">ËXØĎÜŠ</text><text class="sealtext" id="eota-test-seal-number">1</text>
+        <image id="eota-reader-dove" href="/assets/eota-dove.webp?v=exodus-dove-31" width="44" height="44" preserveAspectRatio="xMidYMid meet"/><text class="sealtext" id="eota-test-seal-name">ËXØĎÜŠ</text><text class="sealtext" id="eota-test-seal-number">1</text>
         <path class="reading-mark" id="eota-test-reading-mark"></path>
       </svg>
     </div></div></div>
@@ -104,11 +104,11 @@ html,body{overflow:visible!important;color:#102335!important}
   line.style.width=cal.value+'px';const ppm=3.78,desired=672,w=desired,scale=1;
   const key=[Math.round(w),size.value,font.value,ppm,calibrated].join(':');if(key===lastKey)return;lastKey=key;
   const savedIndex=words.length?wordAt(offset):0;const savedFraction=words.length?(offset-starts[savedIndex])/Math.max(1,(starts[savedIndex+1]||starts[savedIndex]+1)-starts[savedIndex]):0;const saved=words.length?words[savedIndex].verse:'1:1';screen.style.width=w+'px';screen.style.height=w+'px';svg.setAttribute('viewBox',`0 0 ${w} ${w}`);
-  const c=w/2,textPixels=Math.max(Number(font.value)*ppm*scale,Number(font.value)*3.2),r=c-Math.max(22,24*scale),inner=Math.max(36*scale,44),pitch=textPixels*2.15,turns=Math.max(0,(r-inner)*2*Math.PI/pitch);let d='';
+  const c=w/2,textPixels=Math.max(Number(font.value)*ppm*scale,Number(font.value)*3.2),r=c-Math.max(22,24*scale),inner=Math.max(52*scale,60),pitch=textPixels*2.15,turns=Math.max(0,(r-inner)*2*Math.PI/pitch);let d='';
   for(let t=0;t<=turns;t+=.02){const radius=r-pitch*t/(2*Math.PI);d+=(t===0?'M':'L')+(c+radius*Math.sin(t)).toFixed(2)+' '+(c-radius*Math.cos(t)).toFixed(2)+' ';}path.setAttribute('d',d);let separators='';for(let t=0;t<=turns;t+=.02){const radius=r-pitch/2-pitch*t/(2*Math.PI);if(radius<inner)break;separators+=(t===0?'M':'L')+(c+radius*Math.sin(t)).toFixed(2)+' '+(c-radius*Math.cos(t)).toFixed(2)+' ';}q('reader-row-lines').setAttribute('d',separators);const titleRadius=c-9;q('reader-title-arc').setAttribute('d',`M${c-titleRadius} ${c} A${titleRadius} ${titleRadius} 0 0 1 ${c+titleRadius} ${c}`);pathLength=Math.max(0,path.getTotalLength()-textPixels*2);ink.style.fontSize=textPixels+'px';
   q('eota-test-paper').setAttribute('cx',c);q('eota-test-paper').setAttribute('cy',c);q('eota-test-paper').setAttribute('r',c-2);
-  const seal=q('eota-test-seal');seal.setAttribute('cx',c);seal.setAttribute('cy',c);seal.setAttribute('r',Math.max(16,inner-8*scale));
-  for(const [id,y,px] of [['eota-test-seal-name',c-Math.max(8,5*scale),Math.max(10,11*scale)],['eota-test-seal-number',c+Math.max(16,14*scale),Math.max(17,19*scale)]]){const el=q(id);el.setAttribute('x',c);el.setAttribute('y',y);el.style.fontSize=px+'px';}
+  q('eota-reader-dove').setAttribute('x',c-22);q('eota-reader-dove').setAttribute('y',c-39);const seal=q('eota-test-seal');seal.setAttribute('cx',c);seal.setAttribute('cy',c);seal.setAttribute('r',Math.max(16,inner-8*scale));
+  for(const [id,y,px] of [['eota-test-seal-name',c+12,Math.max(10,11*scale)],['eota-test-seal-number',c+34,Math.max(17,19*scale)]]){const el=q(id);el.setAttribute('x',c);el.setAttribute('y',y);el.style.fontSize=px+'px';}
   q('eota-test-reading-mark').setAttribute('d',`M${c-4} 5L${c+4} 5L${c} 12Z`);
   ctx.font='600 '+textPixels+'px Georgia';let distance=0;words=[];starts=[];chapterStarts={};
   for(const ch of Object.keys(book)){chapterStarts[ch]=distance;for(const v of book[ch])for(const raw of (v.n+' '+v.text+' •').split(/\s+/)){const text=decorate(raw);starts.push(distance);words.push({text,chapter:ch,verse:v.n});distance+=ctx.measureText(text+' ').width;}}
