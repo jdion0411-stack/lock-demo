@@ -1,0 +1,3 @@
+Chinese candidates use CC-CEDICT from https://www.mdbg.net/chinese/dictionary?page=cc-cedict
+License: Creative Commons Attribution-ShareAlike 4.0 https://creativecommons.org/licenses/by-sa/4.0/
+Pinyin keys normalized and candidate lists shortened for this input tool.
