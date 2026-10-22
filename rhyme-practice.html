@@ -2412,10 +2412,14 @@ html,body{margin:0!important;padding:0!important;width:100%!important;height:100
  dial.append(positions);
  letters.forEach((node,i)=>{const a=(i*360/26-90)*Math.PI/180,c=Math.cos(a),n=Math.sin(a);node.style.left=(50+c*42)+'%';node.style.top=(50+n*42)+'%';node.style.setProperty('--rhyme-marker-x',`calc(${50-c*50}% - ${c*12}px)`);node.style.setProperty('--rhyme-marker-y',`calc(${50-n*50}% - ${n*12}px)`);node.style.setProperty('--rhyme-pair-x',`calc(${50-c*50}% - ${c*34}px)`);node.style.setProperty('--rhyme-pair-y',`calc(${50-n*50}% - ${n*34}px)`)});
  const prev=document.createElement('button'),next=document.createElement('button');prev.type=next.type='button';prev.id='rhymePrev';next.id='rhymeNext';prev.className=next.className='rhyme-step';prev.textContent='‹';next.textContent='›';prev.setAttribute('aria-label','Previous letter');next.setAttribute('aria-label','Next letter');prev.onclick=()=>choose(current-1);next.onclick=()=>choose(current+1);dial.append(prev,next);
- const caption=document.createElement('span');caption.id='positionCaption';caption.textContent='Tap a letter to lock its position';dial.append(caption);
+ const caption=document.createElement('span');caption.id='positionCaption';caption.textContent='Tap a letter to choose · lock letters below';dial.append(caption);
  function fitWord(){wordInput.style.fontSize=([...wordInput.value].length>24?'12px':'20px');wordInput.style.height='auto';wordInput.style.height=Math.min(46,Math.max(32,wordInput.scrollHeight))+'px'}
  addEventListener('resize',fitWord);
  let lockedPosition=0;
+ const lockedLetters=new Set();
+ const lockToggle=document.createElement('button');lockToggle.id='toggleLetterLock';lockToggle.type='button';dial.append(lockToggle);
+ lockToggle.onclick=()=>{if(lockedPosition===null)return;if(lockedLetters.has(lockedPosition))lockedLetters.delete(lockedPosition);else lockedLetters.add(lockedPosition);drawPositions()};
+
  function drawPositions(){
   fitWord();
   const count=[...wordInput.value].length;
@@ -2423,10 +2427,11 @@ html,body{margin:0!important;padding:0!important;width:100%!important;height:100
   const spacing=count>1?arc/(count-1):11;
   const cell=Math.min(28,Math.floor(2*161.2*Math.sin(spacing*Math.PI/360)-4));
   positions.style.setProperty('--cell',Math.max(8,cell)+'px');positions.style.setProperty('--letter-size',Math.min(20,Math.max(7,cell*.76))+'px');
+  const selected=[...wordInput.value][lockedPosition];lockToggle.disabled=lockedPosition===null||!selected;lockToggle.textContent=selected?(lockedLetters.has(lockedPosition)?'Unlock ':'Lock ')+selected+' · '+(lockedPosition+1):'Select a letter';lockToggle.setAttribute('aria-pressed',String(lockedLetters.has(lockedPosition)));
   positions.replaceChildren();
-  [...wordInput.value].forEach((char,i)=>{const button=document.createElement('button');button.type='button';button.textContent=char;const theta=(-90-arc/2+i*spacing)*Math.PI/180;button.style.left=(50+26*Math.cos(theta))+'%';button.style.top=(50+26*Math.sin(theta))+'%';button.disabled=!/^[a-z]$/i.test(char);button.setAttribute('aria-label',(i===lockedPosition?'Unlock':'Lock')+' position '+(i+1)+': '+char);button.setAttribute('aria-pressed',String(i===lockedPosition));button.onclick=()=>{lockedPosition=lockedPosition===i?null:i;if(lockedPosition!==null)choose(char.toUpperCase().charCodeAt(0)-65);else drawPositions()};positions.append(button)});
+  [...wordInput.value].forEach((char,i)=>{const button=document.createElement('button');button.type='button';button.textContent=char;const theta=(-90-arc/2+i*spacing)*Math.PI/180;button.style.left=(50+26*Math.cos(theta))+'%';button.style.top=(50+26*Math.sin(theta))+'%';button.disabled=!/^[a-z]$/i.test(char);button.setAttribute('aria-label','Select position '+(i+1)+': '+char+(lockedLetters.has(i)?', locked':''));button.setAttribute('aria-pressed',String(i===lockedPosition));button.classList.toggle('position-locked',lockedLetters.has(i));button.onclick=()=>{lockedPosition=i;choose(char.toUpperCase().charCodeAt(0)-65);drawPositions()};positions.append(button)});
  }
- function updateWord(letter){if(lockedPosition===null)return;const chars=[...wordInput.value];if(!chars[lockedPosition]||!/^[a-z]$/i.test(chars[lockedPosition]))return;const before=chars[lockedPosition];chars[lockedPosition]=before===before.toUpperCase()?letter:letter.toLowerCase();wordInput.value=chars.join('');drawPositions()}
+ function updateWord(letter){if(lockedPosition===null||lockedLetters.has(lockedPosition))return;const chars=[...wordInput.value];if(!chars[lockedPosition]||!/^[a-z]$/i.test(chars[lockedPosition]))return;const before=chars[lockedPosition];chars[lockedPosition]=before===before.toUpperCase()?letter:letter.toLowerCase();wordInput.value=chars.join('');drawPositions()}
  const wrap=n=>((n%26)+26)%26;
  function setAngle(value,snap=false){
   const index=wrap(Math.round(value/step));
@@ -2450,7 +2455,7 @@ html,body{margin:0!important;padding:0!important;width:100%!important;height:100
  knob.addEventListener('keydown',e=>{let target;if(['ArrowRight','ArrowUp'].includes(e.key))target=current+1;else if(['ArrowLeft','ArrowDown'].includes(e.key))target=current-1;else if(e.key==='Home')target=0;else if(e.key==='End')target=25;else return;e.preventDefault();choose(target)});
  letters.forEach((node,i)=>{node.onclick=()=>choose(i)});
  document.getElementById('rhymeBackOrbit')?.remove();
- wordInput.addEventListener('input',()=>{const chars=[...wordInput.value];if(lockedPosition!==null&&/^[a-z]$/i.test(chars[lockedPosition]||''))choose(chars[lockedPosition].toUpperCase().charCodeAt(0)-65);else{lockedPosition=null;drawPositions()}});
+ wordInput.addEventListener('input',()=>{lockedLetters.clear();const chars=[...wordInput.value];if(lockedPosition!==null&&/^[a-z]$/i.test(chars[lockedPosition]||''))choose(chars[lockedPosition].toUpperCase().charCodeAt(0)-65);else{lockedPosition=null;drawPositions()}});
  setAngle((wordInput.value.charAt(0).toUpperCase().charCodeAt(0)-65)*step,true);
  drawPositions();
 })();
@@ -2465,4 +2470,4 @@ html,body{margin:0!important;padding:0!important;width:100%!important;height:100
 #dial .letter-connector{height:34%}
 </style><script>
 (()=>{const hand=document.getElementById('rhyme-original-hellfire-hand'),knob=document.getElementById('letterKnob'),mac=document.getElementById('rhyme-mac10-doodle');knob.prepend(hand);document.getElementById('letterPointer').append(mac);const flag=mac.querySelector('g[transform]');if(flag){flag.setAttribute('transform','translate(35 76) rotate(8) scale(.7)');}const cord=mac.querySelector('svg > path:last-of-type');if(cord)cord.setAttribute('d','M45 65Q42 71 35 76');})();
-</script><style id="rhyme-click-navigation">#dial #wordControls .dial-help{order:2;margin-top:2px;font-size:11px;white-space:nowrap}#dial .rhyme-step{position:absolute;top:50%;transform:translate(-50%,-50%);width:42px;height:42px;padding:0;border:1px solid #e8d4a5;border-radius:50%;background:#0b1928;color:#ffe8a1;font:36px/36px Arial,sans-serif;cursor:pointer;z-index:125;touch-action:manipulation}#dial #rhymePrev{left:18%}#dial #rhymeNext{left:82%}#dial .rhyme-step:focus-visible{outline:3px solid #fff;outline-offset:3px}#dial .rhyme-step:active{background:#334b60}</style></body></html>
+</script><style id="rhyme-click-navigation">#dial #wordControls .dial-help{order:2;margin-top:2px;font-size:11px;white-space:nowrap}#dial .rhyme-step{position:absolute;top:50%;transform:translate(-50%,-50%);width:42px;height:42px;padding:0;border:1px solid #e8d4a5;border-radius:50%;background:#0b1928;color:#ffe8a1;font:36px/36px Arial,sans-serif;cursor:pointer;z-index:125;touch-action:manipulation}#dial #rhymePrev{left:18%}#dial #rhymeNext{left:82%}#dial .rhyme-step:focus-visible{outline:3px solid #fff;outline-offset:3px}#dial .rhyme-step:active{background:#334b60}</style><style>#dial #toggleLetterLock{position:absolute;left:50%;top:73%;transform:translate(-50%,-50%);z-index:125;min-height:30px;width:26%;border:1px solid #adc2cc;border-radius:8px;background:#102d4a;color:#fff;font:13px Arial,sans-serif;cursor:pointer}#dial #toggleLetterLock[aria-pressed=true]{border-color:#64dbff;color:#64dbff}#dial #wordPositions button.position-locked{border-color:#64dbff;box-shadow:0 0 0 2px #102d4a,inset 0 -3px #64dbff}#dial #wordPositions button.position-locked:after{content:'•';position:absolute;top:-8px;left:50%;transform:translateX(-50%);color:#64dbff;font-size:12px}#dial #wordPositions button[aria-pressed=true]{outline:2px solid #ffe8a1;outline-offset:2px}</style></body></html>
