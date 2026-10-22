@@ -2450,7 +2450,7 @@ html,body{margin:0!important;padding:0!important;width:100%!important;height:100
  letters.forEach((node,i)=>{node.onclick=()=>choose(i)});
  document.getElementById('rhymeBackOrbit')?.remove();
  wordInput.addEventListener('input',()=>{const chars=[...wordInput.value];if(lockedPosition!==null&&/^[a-z]$/i.test(chars[lockedPosition]||''))choose(chars[lockedPosition].toUpperCase().charCodeAt(0)-65);else{lockedPosition=null;drawPositions()}});
- setAngle(360/26,true);
+ setAngle((wordInput.value.charAt(0).toUpperCase().charCodeAt(0)-65)*step,true);
  drawPositions();
 })();
 </script><div id="rhyme-mac10-doodle" role="img" aria-label="MAC-10 doodle with Russian colors and hanging Puerto Rican flag"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 150"><title>MAC-10 doodle with Russian colors and a hanging Puerto Rican flag</title><g fill="#182939" stroke="#e8d4a5" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M14 34L114 31 119 64 49 68 43 57 16 58Z"/><path d="M114 40H140V54H117"/><path d="M62 66L72 68 70 103 51 104 54 69M27 58L26 77 48 77 53 67"/><path d="M75 29L77 22H98L100 31M24 31V24M17 26H32" fill="none"/><path d="M34 61V70M22 42L102 39M93 48H104" fill="none"/></g><path d="M77 45H97V50H77Z" fill="#fff"/><path d="M77 50H97V55H77Z" fill="#326acb"/><path d="M77 55H97V60H77Z" fill="#e14e52"/><path d="M109 62Q122 77 113 90" fill="none" stroke="#e8d4a5" stroke-width="2"/><g transform="translate(92 87) rotate(8)"><path d="M0 0H59V36H0Z" fill="#fff" stroke="#e8d4a5" stroke-width="2"/><path d="M0 0H59V7H0ZM0 14H59V22H0ZM0 29H59V36H0Z" fill="#db3545"/><path d="M0 0L29 18 0 36Z" fill="#2678c9"/><path d="M10 10L12 15 17 15 13 19 15 24 10 21 5 24 7 19 3 15 8 15Z" fill="#fff"/></g></svg>
