@@ -45,7 +45,7 @@ body {
     min-height: 100vh;
 
     /*
-       EOTA KNIGHT + DOVE BACKGROUND
+       Rhyme KNIGHT + DOVE BACKGROUND
        The supplied artwork is embedded directly into this HTML,
        so the background works without a separate image file.
     */
@@ -140,7 +140,7 @@ button {
 /* ==========================================================
    NYC AFTER-DARK URBAN CENTER
 
-   The original EOTA lock remains intact. This layer replaces
+   The original Rhyme lock remains intact. This layer replaces
    the flat white field with an original, stylized New York
    night scene: glowing skyline, lit windows, street-level
    color, soft haze, and slow city motion.
@@ -423,7 +423,7 @@ button {
 /* ==========================================================
    VINYL RECORD CENTER
    Replaces the old eye/fingerprint mark while keeping the
-   existing EOTA dial dimensions and placement.
+   existing Rhyme dial dimensions and placement.
 ========================================================== */
 
 .vinyl-record {
@@ -2184,7 +2184,7 @@ button:active {
 
 
 /* ==========================================================
-   EOTA RHYME DIAL MODE
+   Rhyme RHYME DIAL MODE
 ========================================================== */
 .dial-stage{position:relative;width:var(--dial-size);margin:0 auto;}
 .dial-mode-arrow{position:absolute;right:-58px;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid rgba(0,242,255,.75);background:rgba(5,15,30,.92);color:#e8fbff;font-size:29px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:180;box-shadow:0 0 18px rgba(0,242,255,.28);transition:.2s ease;}
@@ -2411,6 +2411,7 @@ html,body{margin:0!important;padding:0!important;width:100%!important;height:100
  const wordInput=document.getElementById('rhymeWord'),positions=document.getElementById('wordPositions');
  dial.append(positions);
  letters.forEach((node,i)=>{const a=(i*360/26-90)*Math.PI/180,c=Math.cos(a),n=Math.sin(a);node.style.left=(50+c*42)+'%';node.style.top=(50+n*42)+'%';node.style.setProperty('--rhyme-marker-x',`calc(${50-c*50}% - ${c*12}px)`);node.style.setProperty('--rhyme-marker-y',`calc(${50-n*50}% - ${n*12}px)`);node.style.setProperty('--rhyme-pair-x',`calc(${50-c*50}% - ${c*34}px)`);node.style.setProperty('--rhyme-pair-y',`calc(${50-n*50}% - ${n*34}px)`)});
+ const prev=document.createElement('button'),next=document.createElement('button');prev.type=next.type='button';prev.id='rhymePrev';next.id='rhymeNext';prev.className=next.className='rhyme-step';prev.textContent='‹';next.textContent='›';prev.setAttribute('aria-label','Previous letter');next.setAttribute('aria-label','Next letter');prev.onclick=()=>choose(current-1);next.onclick=()=>choose(current+1);dial.append(prev,next);
  const caption=document.createElement('span');caption.id='positionCaption';caption.textContent='Tap a letter to lock its position';dial.append(caption);
  function fitWord(){wordInput.style.fontSize=([...wordInput.value].length>24?'12px':'20px');wordInput.style.height='auto';wordInput.style.height=Math.min(46,Math.max(32,wordInput.scrollHeight))+'px'}
  addEventListener('resize',fitWord);
@@ -2464,4 +2465,4 @@ html,body{margin:0!important;padding:0!important;width:100%!important;height:100
 #dial .letter-connector{height:34%}
 </style><script>
 (()=>{const hand=document.getElementById('rhyme-original-hellfire-hand'),knob=document.getElementById('letterKnob'),mac=document.getElementById('rhyme-mac10-doodle');knob.prepend(hand);document.getElementById('letterPointer').append(mac);const flag=mac.querySelector('g[transform]');if(flag){flag.setAttribute('transform','translate(35 76) rotate(8) scale(.7)');}const cord=mac.querySelector('svg > path:last-of-type');if(cord)cord.setAttribute('d','M45 65Q42 71 35 76');})();
-</script></body></html>
+</script><style id="rhyme-click-navigation">#dial #wordControls .dial-help{order:2;margin-top:2px;font-size:11px;white-space:nowrap}#dial .rhyme-step{position:absolute;top:50%;transform:translate(-50%,-50%);width:42px;height:42px;padding:0;border:1px solid #e8d4a5;border-radius:50%;background:#0b1928;color:#ffe8a1;font:36px/36px Arial,sans-serif;cursor:pointer;z-index:125;touch-action:manipulation}#dial #rhymePrev{left:18%}#dial #rhymeNext{left:82%}#dial .rhyme-step:focus-visible{outline:3px solid #fff;outline-offset:3px}#dial .rhyme-step:active{background:#334b60}</style></body></html>
