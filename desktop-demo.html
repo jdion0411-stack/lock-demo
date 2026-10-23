@@ -382,4 +382,24 @@ html body .rhyme-phone-hardware{display:none!important}
  margin:18px auto 34px!important;
  }
 }
+</style><style id="rhyme-approved-product-shell-v4">/* The approved product front is the chassis. Interactive software occupies its recessed screen. */
+html body #desktop-shell.tablet-shell,html body #bible-shell.tablet-shell{
+ width:min(500px,calc(100vw - 32px),calc(var(--host-height,100svh) - 110px))!important;
+ height:auto!important;aspect-ratio:1265/1244!important;padding:0!important;border:0!important;
+ border-radius:0!important;background:transparent url('/assets/rhyme-duo-live-shell-v1.webp') center/100% 100% no-repeat!important;
+ box-shadow:none!important;filter:drop-shadow(5px 10px 8px #0005)!important;
+ transform:none!important;animation:none!important;clip-path:none!important;mask:none!important;-webkit-mask:none!important;
+ margin:12px auto 24px!important;overflow:visible!important;
+}
+html body #desktop-shell.tablet-shell::before,html body #desktop-shell.tablet-shell::after,html body #bible-shell.tablet-shell::before,html body #bible-shell.tablet-shell::after{display:none!important;content:none!important}
+html body #desktop-shell.tablet-shell .pc-bandanna-case-wrap,html body #bible-shell.tablet-shell .pc-bandanna-case-wrap{background:none!important;box-shadow:none!important;animation:none!important}
+html body #desktop-shell.tablet-shell .tablet-glass,html body #bible-shell.tablet-shell .tablet-glass{
+ position:absolute!important;left:14.1%!important;top:12.7%!important;width:71.4%!important;height:71.4%!important;
+ border-radius:50%!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow:hidden!important;
+}
+html body #desktop-shell .tablet-glass::after,html body #bible-shell .tablet-glass::after{display:none!important;content:none!important}
+html body #desktop-shell #dial{border:0!important;box-shadow:none!important;background:none!important}
+html body #bible-shell .reader-space,html body #bible-shell #eota-test-screen{background:transparent!important}
+html body .rhyme-phone-hardware{display:none!important}
+@media(max-width:600px){html body #desktop-shell.tablet-shell,html body #bible-shell.tablet-shell{width:min(390px,calc(100vw - 24px),calc(var(--host-height,100svh) - 110px))!important}}
 </style>
