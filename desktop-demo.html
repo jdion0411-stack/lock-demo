@@ -267,3 +267,70 @@ panel.querySelector('[data-close]').onclick=()=>{panel.hidden=true;active?.focus
 panel.addEventListener('keydown',e=>{if(e.key==='Escape'){panel.hidden=true;active?.focus()}});
 document.getElementById('desktop-army-film')?.pause();
 })();</script></body></html>
+<style id="rhyme-curved-handheld-v1">/* Shared handheld finish for the live desktop and reader. */
+html body #desktop-shell.tablet-shell,html body #bible-shell.tablet-shell{
+ --handheld-skin:url('/assets/rhyme-handheld-bandanna-skin-v1.webp');
+ width:min(640px,calc(100vw - 64px),calc(var(--host-height,100svh) - 150px))!important;
+ height:auto!important;aspect-ratio:1!important;position:relative!important;
+ border-radius:48% 51% 48% 50% / 49% 48% 52% 50%!important;
+ transform:perspective(1500px) rotateX(9deg) rotateY(-16deg) rotateZ(-4deg)!important;
+ transform-origin:50% 50%!important;overflow:visible!important;isolation:isolate;
+ mask:none!important;-webkit-mask:none!important;clip-path:none!important;
+ background:var(--handheld-skin) center/100% 100%!important;
+ border:0!important;
+ box-shadow:1px 2px 0 #dec58a,3px 5px 0 #95835b,6px 9px 0 #34312d,9px 13px 0 #151b25,12px 17px 0 #080e17,19px 27px 25px -10px #0008,inset 3px 5px 12px #fff5,inset -6px -9px 16px #0009!important;
+ margin:24px auto 42px!important;
+}
+html body #desktop-shell.tablet-shell::before,html body #bible-shell.tablet-shell::before{
+ content:''!important;display:block!important;position:absolute!important;inset:1%!important;
+ width:auto!important;height:auto!important;left:1%!important;top:1%!important;
+ border-radius:inherit!important;background:linear-gradient(125deg,#fff5,transparent 30%,#030917b3 85%),var(--handheld-skin) center/100% 100%!important;
+ transform:translate(9px,13px)!important;z-index:-1!important;pointer-events:none!important;
+ box-shadow:inset -3px -6px 9px #000a!important;
+}
+html body #desktop-shell.tablet-shell::after,html body #bible-shell.tablet-shell::after{
+ content:''!important;display:block!important;position:absolute!important;inset:0!important;
+ width:auto!important;height:auto!important;left:0!important;top:0!important;border-radius:inherit!important;
+ background:radial-gradient(ellipse at 30% 8%,#ffffff20,transparent 35%),linear-gradient(120deg,#ffffff18,transparent 38%,transparent 72%,#0006)!important;
+ box-shadow:inset 0 0 0 1px #e9d8b57a,inset 4px 5px 8px #fff2,inset -5px -7px 12px #0007!important;
+ pointer-events:none!important;z-index:70!important;
+}
+html body #desktop-shell.tablet-shell .pc-bandanna-case-wrap,html body #bible-shell.tablet-shell .pc-bandanna-case-wrap{
+ inset:0!important;border-radius:inherit!important;
+ background:radial-gradient(ellipse at 28% 10%,#ffffff18,transparent 44%),linear-gradient(130deg,transparent 55%,#0006),var(--handheld-skin) center/100% 100%!important;
+ box-shadow:inset 4px 6px 9px #fff3,inset -6px -10px 14px #0008!important;
+}
+html body #desktop-shell.tablet-shell .tablet-glass,html body #bible-shell.tablet-shell .tablet-glass{
+ left:8.5%!important;top:8.5%!important;width:83%!important;height:83%!important;
+ border-radius:50%!important;background:transparent!important;
+ border:1px solid #e8dfc4!important;box-sizing:border-box!important;
+ box-shadow:0 0 0 2px #19212b,0 0 0 3px #bec6c9,inset 1px 2px 8px #fff3,inset -2px -4px 10px #0006!important;
+ overflow:hidden!important;
+}
+html body #desktop-shell .tablet-glass::after,html body #bible-shell .tablet-glass::after{
+ background:linear-gradient(135deg,#fff2,transparent 28%,transparent 80%,#0002)!important;
+ box-shadow:inset 0 0 10px #0005!important;pointer-events:none!important;
+}
+html body #bible-shell #eota-test-screen{background:transparent!important}
+html body #bible-shell .reader-space{
+ background:radial-gradient(ellipse at 50% 50%,#071627e8 0%,#071627d9 54%,#0716279e 100%)!important;
+}
+html body #bible-shell .reader-space::before,html body #bible-shell .reader-space::after{display:none!important;animation:none!important}
+html body #bible-shell #eota-test-ink{fill:#fff1cd!important;paint-order:stroke;stroke:#071320;stroke-width:.7px;stroke-linejoin:round}
+html body #bible-shell #eota-test-seal{fill:#0a1c2be6!important;stroke:#e0c481!important}
+html body #bible-shell #eota-test-seal-name,html body #bible-shell #eota-test-seal-number{fill:#ffe9b1!important}
+html body #bible-shell #reader-row-lines{stroke:#e1c991!important;stroke-opacity:.23!important}
+html body #desktop-shell #eyeotaFixedDesktopSun>.handheld-shield{filter:drop-shadow(0 3px 3px #0009)!important}
+html body #desktop-shell #dial{background:transparent!important}
+html body .desktop-wrap,html body .screen-stage{overflow:visible!important}
+@media(max-width:600px){
+ html body #desktop-shell.tablet-shell,html body #bible-shell.tablet-shell{
+ width:min(520px,calc(100vw - 44px),calc(var(--host-height,100svh) - 125px))!important;
+ transform:perspective(1100px) rotateX(6deg) rotateY(-10deg) rotateZ(-3deg)!important;
+ margin:16px auto 30px!important;
+ box-shadow:1px 2px 0 #dec58a,3px 5px 0 #5c5447,6px 9px 0 #141b25,10px 16px 18px -7px #0008,inset 3px 4px 8px #fff4,inset -4px -6px 10px #0007!important;
+ }
+}
+
+html body #bible-shell .reader-etched-cross{display:none!important}
+</style>
