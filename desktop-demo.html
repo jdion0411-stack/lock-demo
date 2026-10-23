@@ -270,10 +270,10 @@ document.getElementById('desktop-army-film')?.pause();
 <style id="rhyme-curved-handheld-v1">/* Shared handheld finish for the live desktop and reader. */
 html body #desktop-shell.tablet-shell,html body #bible-shell.tablet-shell{
  --handheld-skin:url('/assets/rhyme-handheld-bandanna-skin-v1.webp');
- width:min(640px,calc(100vw - 64px),calc(var(--host-height,100svh) - 150px))!important;
+ width:min(440px,calc(100vw - 76px),calc(var(--host-height,100svh) - 155px))!important;
  height:auto!important;aspect-ratio:1!important;position:relative!important;
- border-radius:48% 51% 48% 50% / 49% 48% 52% 50%!important;
- transform:perspective(1500px) rotateX(9deg) rotateY(-16deg) rotateZ(-4deg)!important;
+ border-radius:46% 51% 47% 50% / 48% 46% 53% 51%!important;
+ transform:perspective(1500px) rotateX(17deg) rotateY(-23deg) rotateZ(-7deg)!important;
  transform-origin:50% 50%!important;overflow:visible!important;isolation:isolate;
  mask:none!important;-webkit-mask:none!important;clip-path:none!important;
  background:var(--handheld-skin) center/100% 100%!important;
@@ -301,7 +301,7 @@ html body #desktop-shell.tablet-shell .pc-bandanna-case-wrap,html body #bible-sh
  box-shadow:inset 4px 6px 9px #fff3,inset -6px -10px 14px #0008!important;
 }
 html body #desktop-shell.tablet-shell .tablet-glass,html body #bible-shell.tablet-shell .tablet-glass{
- left:8.5%!important;top:8.5%!important;width:83%!important;height:83%!important;
+ left:9.5%!important;top:9.5%!important;width:81%!important;height:81%!important;
  border-radius:50%!important;background:transparent!important;
  border:1px solid #e8dfc4!important;box-sizing:border-box!important;
  box-shadow:0 0 0 2px #19212b,0 0 0 3px #bec6c9,inset 1px 2px 8px #fff3,inset -2px -4px 10px #0006!important;
@@ -313,7 +313,7 @@ html body #desktop-shell .tablet-glass::after,html body #bible-shell .tablet-gla
 }
 html body #bible-shell #eota-test-screen{background:transparent!important}
 html body #bible-shell .reader-space{
- background:radial-gradient(ellipse at 50% 50%,#071627e8 0%,#071627d9 54%,#0716279e 100%)!important;
+ background:linear-gradient(#07131e55,#07131e55),var(--handheld-skin) center/cover no-repeat!important;
 }
 html body #bible-shell .reader-space::before,html body #bible-shell .reader-space::after{display:none!important;animation:none!important}
 html body #bible-shell #eota-test-ink{fill:#fff1cd!important;paint-order:stroke;stroke:#071320;stroke-width:.7px;stroke-linejoin:round}
@@ -325,8 +325,8 @@ html body #desktop-shell #dial{background:transparent!important}
 html body .desktop-wrap,html body .screen-stage{overflow:visible!important}
 @media(max-width:600px){
  html body #desktop-shell.tablet-shell,html body #bible-shell.tablet-shell{
- width:min(520px,calc(100vw - 44px),calc(var(--host-height,100svh) - 125px))!important;
- transform:perspective(1100px) rotateX(6deg) rotateY(-10deg) rotateZ(-3deg)!important;
+ width:min(360px,calc(100vw - 62px),calc(var(--host-height,100svh) - 125px))!important;
+ transform:perspective(1100px) rotateX(12deg) rotateY(-18deg) rotateZ(-6deg)!important;
  margin:16px auto 30px!important;
  box-shadow:1px 2px 0 #dec58a,3px 5px 0 #5c5447,6px 9px 0 #141b25,10px 16px 18px -7px #0008,inset 3px 4px 8px #fff4,inset -4px -6px 10px #0007!important;
  }
