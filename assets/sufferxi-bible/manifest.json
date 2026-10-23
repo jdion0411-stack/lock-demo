@@ -1,0 +1,406 @@
+{
+  "version": "sufferxi-draft-1",
+  "status": "draft",
+  "source": "King James Version (public domain)",
+  "source_url": "https://github.com/thiagobodruk/bible/blob/master/json/en_kjv.json",
+  "source_sha256": "f627b3c24a617013a4514ab24b6dd1bb305b09af237994c018f74cb9c7e71f41",
+  "method": "Vocabulary and phrase adaptation matching the site’s Exodus-style slang. Not a scholarly translation; verse-by-verse editorial review is outstanding.",
+  "books": [
+    {
+      "name": "Genesis",
+      "chapters": 50,
+      "verses": 1533,
+      "status": "existing-site-text"
+    },
+    {
+      "name": "Exodus",
+      "chapters": 40,
+      "verses": 1213,
+      "status": "existing-site-text"
+    },
+    {
+      "name": "Leviticus",
+      "chapters": 27,
+      "verses": 859,
+      "file": "03-leviticus.json"
+    },
+    {
+      "name": "Numbers",
+      "chapters": 36,
+      "verses": 1288,
+      "file": "04-numbers.json"
+    },
+    {
+      "name": "Deuteronomy",
+      "chapters": 34,
+      "verses": 959,
+      "file": "05-deuteronomy.json"
+    },
+    {
+      "name": "Joshua",
+      "chapters": 24,
+      "verses": 658,
+      "file": "06-joshua.json"
+    },
+    {
+      "name": "Judges",
+      "chapters": 21,
+      "verses": 618,
+      "file": "07-judges.json"
+    },
+    {
+      "name": "Ruth",
+      "chapters": 4,
+      "verses": 85,
+      "file": "08-ruth.json"
+    },
+    {
+      "name": "1 Samuel",
+      "chapters": 31,
+      "verses": 810,
+      "file": "09-1-samuel.json"
+    },
+    {
+      "name": "2 Samuel",
+      "chapters": 24,
+      "verses": 695,
+      "file": "10-2-samuel.json"
+    },
+    {
+      "name": "1 Kings",
+      "chapters": 22,
+      "verses": 816,
+      "file": "11-1-kings.json"
+    },
+    {
+      "name": "2 Kings",
+      "chapters": 25,
+      "verses": 719,
+      "file": "12-2-kings.json"
+    },
+    {
+      "name": "1 Chronicles",
+      "chapters": 29,
+      "verses": 942,
+      "file": "13-1-chronicles.json"
+    },
+    {
+      "name": "2 Chronicles",
+      "chapters": 36,
+      "verses": 822,
+      "file": "14-2-chronicles.json"
+    },
+    {
+      "name": "Ezra",
+      "chapters": 10,
+      "verses": 280,
+      "file": "15-ezra.json"
+    },
+    {
+      "name": "Nehemiah",
+      "chapters": 13,
+      "verses": 406,
+      "file": "16-nehemiah.json"
+    },
+    {
+      "name": "Esther",
+      "chapters": 10,
+      "verses": 167,
+      "file": "17-esther.json"
+    },
+    {
+      "name": "Job",
+      "chapters": 42,
+      "verses": 1070,
+      "file": "18-job.json"
+    },
+    {
+      "name": "Psalms",
+      "chapters": 150,
+      "verses": 2461,
+      "file": "19-psalms.json"
+    },
+    {
+      "name": "Proverbs",
+      "chapters": 31,
+      "verses": 915,
+      "file": "20-proverbs.json"
+    },
+    {
+      "name": "Ecclesiastes",
+      "chapters": 12,
+      "verses": 222,
+      "file": "21-ecclesiastes.json"
+    },
+    {
+      "name": "Song of Solomon",
+      "chapters": 8,
+      "verses": 117,
+      "file": "22-song-of-solomon.json"
+    },
+    {
+      "name": "Isaiah",
+      "chapters": 66,
+      "verses": 1292,
+      "file": "23-isaiah.json"
+    },
+    {
+      "name": "Jeremiah",
+      "chapters": 52,
+      "verses": 1364,
+      "file": "24-jeremiah.json"
+    },
+    {
+      "name": "Lamentations",
+      "chapters": 5,
+      "verses": 154,
+      "file": "25-lamentations.json"
+    },
+    {
+      "name": "Ezekiel",
+      "chapters": 48,
+      "verses": 1273,
+      "file": "26-ezekiel.json"
+    },
+    {
+      "name": "Daniel",
+      "chapters": 12,
+      "verses": 357,
+      "file": "27-daniel.json"
+    },
+    {
+      "name": "Hosea",
+      "chapters": 14,
+      "verses": 197,
+      "file": "28-hosea.json"
+    },
+    {
+      "name": "Joel",
+      "chapters": 3,
+      "verses": 73,
+      "file": "29-joel.json"
+    },
+    {
+      "name": "Amos",
+      "chapters": 9,
+      "verses": 146,
+      "file": "30-amos.json"
+    },
+    {
+      "name": "Obadiah",
+      "chapters": 1,
+      "verses": 21,
+      "file": "31-obadiah.json"
+    },
+    {
+      "name": "Jonah",
+      "chapters": 4,
+      "verses": 48,
+      "file": "32-jonah.json"
+    },
+    {
+      "name": "Micah",
+      "chapters": 7,
+      "verses": 105,
+      "file": "33-micah.json"
+    },
+    {
+      "name": "Nahum",
+      "chapters": 3,
+      "verses": 47,
+      "file": "34-nahum.json"
+    },
+    {
+      "name": "Habakkuk",
+      "chapters": 3,
+      "verses": 56,
+      "file": "35-habakkuk.json"
+    },
+    {
+      "name": "Zephaniah",
+      "chapters": 3,
+      "verses": 53,
+      "file": "36-zephaniah.json"
+    },
+    {
+      "name": "Haggai",
+      "chapters": 2,
+      "verses": 38,
+      "file": "37-haggai.json"
+    },
+    {
+      "name": "Zechariah",
+      "chapters": 14,
+      "verses": 211,
+      "file": "38-zechariah.json"
+    },
+    {
+      "name": "Malachi",
+      "chapters": 4,
+      "verses": 55,
+      "file": "39-malachi.json"
+    },
+    {
+      "name": "Matthew",
+      "chapters": 28,
+      "verses": 1071,
+      "file": "40-matthew.json"
+    },
+    {
+      "name": "Mark",
+      "chapters": 16,
+      "verses": 678,
+      "file": "41-mark.json"
+    },
+    {
+      "name": "Luke",
+      "chapters": 24,
+      "verses": 1151,
+      "file": "42-luke.json"
+    },
+    {
+      "name": "John",
+      "chapters": 21,
+      "verses": 879,
+      "file": "43-john.json"
+    },
+    {
+      "name": "Acts",
+      "chapters": 28,
+      "verses": 1007,
+      "file": "44-acts.json"
+    },
+    {
+      "name": "Romans",
+      "chapters": 16,
+      "verses": 433,
+      "file": "45-romans.json"
+    },
+    {
+      "name": "1 Corinthians",
+      "chapters": 16,
+      "verses": 437,
+      "file": "46-1-corinthians.json"
+    },
+    {
+      "name": "2 Corinthians",
+      "chapters": 13,
+      "verses": 257,
+      "file": "47-2-corinthians.json"
+    },
+    {
+      "name": "Galatians",
+      "chapters": 6,
+      "verses": 149,
+      "file": "48-galatians.json"
+    },
+    {
+      "name": "Ephesians",
+      "chapters": 6,
+      "verses": 155,
+      "file": "49-ephesians.json"
+    },
+    {
+      "name": "Philippians",
+      "chapters": 4,
+      "verses": 104,
+      "file": "50-philippians.json"
+    },
+    {
+      "name": "Colossians",
+      "chapters": 4,
+      "verses": 95,
+      "file": "51-colossians.json"
+    },
+    {
+      "name": "1 Thessalonians",
+      "chapters": 5,
+      "verses": 89,
+      "file": "52-1-thessalonians.json"
+    },
+    {
+      "name": "2 Thessalonians",
+      "chapters": 3,
+      "verses": 47,
+      "file": "53-2-thessalonians.json"
+    },
+    {
+      "name": "1 Timothy",
+      "chapters": 6,
+      "verses": 113,
+      "file": "54-1-timothy.json"
+    },
+    {
+      "name": "2 Timothy",
+      "chapters": 4,
+      "verses": 83,
+      "file": "55-2-timothy.json"
+    },
+    {
+      "name": "Titus",
+      "chapters": 3,
+      "verses": 46,
+      "file": "56-titus.json"
+    },
+    {
+      "name": "Philemon",
+      "chapters": 1,
+      "verses": 25,
+      "file": "57-philemon.json"
+    },
+    {
+      "name": "Hebrews",
+      "chapters": 13,
+      "verses": 303,
+      "file": "58-hebrews.json"
+    },
+    {
+      "name": "James",
+      "chapters": 5,
+      "verses": 108,
+      "file": "59-james.json"
+    },
+    {
+      "name": "1 Peter",
+      "chapters": 5,
+      "verses": 105,
+      "file": "60-1-peter.json"
+    },
+    {
+      "name": "2 Peter",
+      "chapters": 3,
+      "verses": 61,
+      "file": "61-2-peter.json"
+    },
+    {
+      "name": "1 John",
+      "chapters": 5,
+      "verses": 105,
+      "file": "62-1-john.json"
+    },
+    {
+      "name": "2 John",
+      "chapters": 1,
+      "verses": 13,
+      "file": "63-2-john.json"
+    },
+    {
+      "name": "3 John",
+      "chapters": 1,
+      "verses": 14,
+      "file": "64-3-john.json"
+    },
+    {
+      "name": "Jude",
+      "chapters": 1,
+      "verses": 25,
+      "file": "65-jude.json"
+    },
+    {
+      "name": "Revelation",
+      "chapters": 22,
+      "verses": 404,
+      "file": "66-revelation.json"
+    }
+  ]
+}
