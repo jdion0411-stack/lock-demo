@@ -333,4 +333,29 @@ html body .desktop-wrap,html body .screen-stage{overflow:visible!important}
 }
 
 html body #bible-shell .reader-etched-cross{display:none!important}
-</style>
+</style><style id="rhyme-pocket-phone-v2">
+html body #desktop-shell.tablet-shell,html body #bible-shell.tablet-shell{
+width:min(410px,calc(100vw - 42px),calc(var(--host-height,100svh) - 105px))!important;
+border-radius:49% 51% 49% 51% / 50% 49% 51% 50%!important;
+transform:perspective(1400px) rotateX(3deg) rotateY(-7deg) rotateZ(-2deg)!important;
+margin:18px auto 26px!important;
+box-shadow:1px 1px 0 #d7c49b,2px 3px 0 #77746c,3px 5px 0 #17212c,6px 10px 13px -5px #0009,inset 2px 3px 7px #fff3,inset -2px -3px 7px #0007!important;
+}
+html body #desktop-shell.tablet-shell::before,html body #bible-shell.tablet-shell::before{transform:translate(2px,4px)!important;box-shadow:inset -2px -3px 4px #0009!important}
+html body #desktop-shell.tablet-shell::after,html body #bible-shell.tablet-shell::after{box-shadow:inset 0 0 0 1px #e9d8b57a,inset 2px 2px 4px #fff2,inset -2px -3px 5px #0006!important}
+html body #desktop-shell.tablet-shell .pc-bandanna-case-wrap,html body #bible-shell.tablet-shell .pc-bandanna-case-wrap{box-shadow:inset 2px 3px 5px #fff3,inset -2px -4px 6px #0008!important}
+html body #desktop-shell.tablet-shell .tablet-glass,html body #bible-shell.tablet-shell .tablet-glass{
+left:5.5%!important;top:5.5%!important;width:89%!important;height:89%!important;
+box-shadow:0 0 0 1px #111b25,0 0 0 2px #c7c9c5,inset 1px 1px 4px #fff2,inset -1px -2px 5px #0005!important}
+.rhyme-phone-hardware{position:absolute;inset:0;z-index:75;pointer-events:none;border-radius:inherit}
+.rhyme-phone-hardware .phone-speaker{position:absolute;left:44%;top:2.3%;width:12%;height:1.15%;border-radius:20px;background:repeating-linear-gradient(90deg,#08111b 0 2px,#63707c 2px 3px);box-shadow:0 1px 1px #fff5,inset 0 1px 2px #000}
+.rhyme-phone-hardware .phone-camera{position:absolute;left:59%;top:2%;width:1.8%;height:1.8%;border-radius:50%;background:radial-gradient(circle at 40% 35%,#7397ac 0 12%,#152b45 20% 40%,#040a13 50%);box-shadow:0 0 0 1px #9fa9b0}
+.rhyme-phone-hardware .phone-power{position:absolute;right:-.6%;top:39%;width:1.1%;height:10%;border-radius:4px;background:linear-gradient(90deg,#18232f,#c1b69b,#293340);transform:rotate(-8deg);box-shadow:1px 1px 2px #0008}
+.rhyme-phone-hardware .phone-volume{position:absolute;left:-.5%;top:35%;width:1%;height:12%;border-radius:4px;background:linear-gradient(90deg,#a8a38e,#1c2836);transform:rotate(9deg)}
+@media(max-width:600px){
+html body #desktop-shell.tablet-shell,html body #bible-shell.tablet-shell{width:min(350px,calc(100vw - 36px),calc(var(--host-height,100svh) - 105px))!important;transform:perspective(1200px) rotateX(2deg) rotateY(-4deg) rotateZ(-1deg)!important;margin:14px auto 23px!important}
+}
+</style><script id="rhyme-pocket-phone-hardware">(()=>{
+const shell=document.querySelector('#desktop-shell,#bible-shell');if(!shell||shell.querySelector('.rhyme-phone-hardware'))return;
+const hardware=document.createElement('div');hardware.className='rhyme-phone-hardware';hardware.setAttribute('aria-hidden','true');hardware.innerHTML='<i class="phone-speaker"></i><i class="phone-camera"></i><i class="phone-power"></i><i class="phone-volume"></i>';shell.append(hardware);
+})();</script>
