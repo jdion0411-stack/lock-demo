@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SUFFERXI Rhime PC</title><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SUFFERXI RHIYME PC</title><style>
 
 /* ==========================================================
    VARIABLES
@@ -45,7 +45,7 @@ body {
     min-height: 100vh;
 
     /*
-       Rhyme KNIGHT + DOVE BACKGROUND
+       RHIYME KNIGHT + DOVE BACKGROUND
        The supplied artwork is embedded directly into this HTML,
        so the background works without a separate image file.
     */
@@ -140,7 +140,7 @@ button {
 /* ==========================================================
    NYC AFTER-DARK URBAN CENTER
 
-   The original Rhyme lock remains intact. This layer replaces
+   The original RHIYME lock remains intact. This layer replaces
    the flat white field with an original, stylized New York
    night scene: glowing skyline, lit windows, street-level
    color, soft haze, and slow city motion.
@@ -423,7 +423,7 @@ button {
 /* ==========================================================
    VINYL RECORD CENTER
    Replaces the old eye/fingerprint mark while keeping the
-   existing Rhime PC dimensions and placement.
+   existing RHIYME PC dimensions and placement.
 ========================================================== */
 
 .vinyl-record {
@@ -2184,7 +2184,7 @@ button:active {
 
 
 /* ==========================================================
-   Rhyme RHIME PC MODE
+   RHIYME RHIYME PC MODE
 ========================================================== */
 .dial-stage{position:relative;width:var(--dial-size);margin:0 auto;}
 .dial-mode-arrow{position:absolute;right:-58px;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid rgba(0,242,255,.75);background:rgba(5,15,30,.92);color:#e8fbff;font-size:29px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:180;box-shadow:0 0 18px rgba(0,242,255,.28);transition:.2s ease;}
@@ -2216,7 +2216,7 @@ body.rhyme-mode #dial .center-artwork{filter:hue-rotate(30deg) saturate(.9);}
 
 .rhyme-cycle-controls{display:flex;align-items:center;justify-content:center;gap:14px;margin:4px 0 13px}.rhyme-cycle-controls button{width:48px;height:42px;border-radius:10px;border:1px solid rgba(0,242,255,.48);background:#081728;color:#e9fdff;font-size:24px;font-weight:900;cursor:pointer;box-shadow:0 0 13px rgba(0,242,255,.12)}.rhyme-cycle-controls button:hover{border-color:#00f2ff;box-shadow:0 0 19px rgba(0,242,255,.34)}#rhymeCycleLetter{min-width:52px;text-align:center;font:900 24px/1 Courier New,monospace;color:#fff;text-shadow:0 0 12px rgba(0,242,255,.85)}body.rhyme-mode #dial .letter.rhyme-current-letter{box-shadow:0 0 0 3px rgba(255,255,255,.98),0 0 0 7px rgba(0,242,255,.60),0 0 32px rgba(0,242,255,1)!important;filter:brightness(1.3)!important;z-index:150!important}
 
-/* RHIME PC V3 */
+/* RHIYME PC V3 */
 .analysis-options,.rhyme-results{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 12px}.analysis-chip,.rhyme-result{border:1px solid rgba(0,242,255,.3);background:#081526;color:#e8fbff;border-radius:999px;padding:7px 10px;cursor:pointer;font-size:12px}.analysis-chip.active{border-color:#ffb700;color:#ffd76b}.rhyme-result{font-size:14px;font-weight:700}.rhyme-result:hover{border-color:#00f2ff}.family-label{font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.8px;margin-top:6px}.active-piece-line{color:#fff;font-size:13px;margin:6px 0}.active-piece-line strong{color:#ffd76b}
 
 .rhyme-choice-row{display:grid;grid-template-columns:auto minmax(190px,1fr) minmax(150px,.8fr);gap:8px;align-items:center;margin:10px 0 12px}.rhyme-choice-row label{font-size:12px;font-weight:800;color:#dffcff}.rhyme-choice-row select,.rhyme-choice-row input{min-width:0;border:1px solid rgba(0,242,255,.34);border-radius:9px;background:#08111f;color:#fff;padding:10px 11px}.rhyme-choice-row input[hidden]{display:none!important}@media(max-width:620px){.rhyme-choice-row{grid-template-columns:1fr}.rhyme-choice-row label{margin-top:2px}}
@@ -2476,7 +2476,7 @@ html,body{margin:0!important;padding:0!important;width:100%!important;height:100
             <div class="ring inner-ring" id="innerRing"></div>
 
         </div>
-        <button id="rhymeClose" aria-label="Back to desktop" title="Back to desktop">BACK</button></div><script>const ring=document.getElementById('innerRing'),colors=['#FF1744','#FF6D00','#FFC400','#E6FF00','#76FF03','#00C853','#00BFA5','#00E5FF','#0091EA','#304FFE','#6200EA','#0066FF','#AA00FF','#D500F9','#FF00CC','#FF4081','#F50057','#FF5252','#795548','#607D8B','#37474F','#8D6E63','#9E9D24','#827717','#00897B','#5E35B1'];ring.replaceChildren();[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach((letter,i)=>{const a=(i*360/26-90)*Math.PI/180,node=document.createElement('button');node.type='button';node.className='letter';node.textContent=letter;node.dataset.letter=letter;node.style.left=(50+Math.cos(a)*33.75)+'%';node.style.top=(50+Math.sin(a)*33.75)+'%';node.style.background=colors[i];node.setAttribute('aria-label','Rhyme letter '+letter);node.onclick=()=>{ring.querySelectorAll('.letter').forEach(e=>e.classList.toggle('rhyme-current-letter',e===node))};ring.append(node)});function placeRhymeSymbols(){ring.querySelectorAll('.letter').forEach(letter=>{const a=Math.atan2(parseFloat(letter.style.top)-50,parseFloat(letter.style.left)-50),c=Math.cos(a),n=Math.sin(a);letter.style.setProperty('--rhyme-marker-x',`calc(${50+c*50}% + ${c*12}px)`);letter.style.setProperty('--rhyme-marker-y',`calc(${50+n*50}% + ${n*12}px)`);if(['L','B','P','D','T'].includes(letter.dataset.letter)){letter.style.setProperty('--rhyme-pair-x',`calc(${50+c*50}% + ${c*34}px)`);letter.style.setProperty('--rhyme-pair-y',`calc(${50+n*50}% + ${n*34}px)`)}})}placeRhymeSymbols();function fit(){document.getElementById('dial').style.transform='translate(-50%,-50%) scale('+Math.min(innerWidth/620,innerHeight/620)*.96+')'}fit();addEventListener('resize',fit);const back=document.getElementById('rhymeClose'),orbit=document.createElement('div');orbit.id='rhymeBackOrbit';document.getElementById('dial').append(orbit);orbit.append(back);back.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();parent.postMessage({type:'eota-rhyme-close'},'*')});</script><script>
+        <button id="rhymeClose" aria-label="Back to desktop" title="Back to desktop">BACK</button></div><script>const ring=document.getElementById('innerRing'),colors=['#FF1744','#FF6D00','#FFC400','#E6FF00','#76FF03','#00C853','#00BFA5','#00E5FF','#0091EA','#304FFE','#6200EA','#0066FF','#AA00FF','#D500F9','#FF00CC','#FF4081','#F50057','#FF5252','#795548','#607D8B','#37474F','#8D6E63','#9E9D24','#827717','#00897B','#5E35B1'];ring.replaceChildren();[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach((letter,i)=>{const a=(i*360/26-90)*Math.PI/180,node=document.createElement('button');node.type='button';node.className='letter';node.textContent=letter;node.dataset.letter=letter;node.style.left=(50+Math.cos(a)*33.75)+'%';node.style.top=(50+Math.sin(a)*33.75)+'%';node.style.background=colors[i];node.setAttribute('aria-label','RHIYME letter '+letter);node.onclick=()=>{ring.querySelectorAll('.letter').forEach(e=>e.classList.toggle('rhyme-current-letter',e===node))};ring.append(node)});function placeRhymeSymbols(){ring.querySelectorAll('.letter').forEach(letter=>{const a=Math.atan2(parseFloat(letter.style.top)-50,parseFloat(letter.style.left)-50),c=Math.cos(a),n=Math.sin(a);letter.style.setProperty('--rhyme-marker-x',`calc(${50+c*50}% + ${c*12}px)`);letter.style.setProperty('--rhyme-marker-y',`calc(${50+n*50}% + ${n*12}px)`);if(['L','B','P','D','T'].includes(letter.dataset.letter)){letter.style.setProperty('--rhyme-pair-x',`calc(${50+c*50}% + ${c*34}px)`);letter.style.setProperty('--rhyme-pair-y',`calc(${50+n*50}% + ${n*34}px)`)}})}placeRhymeSymbols();function fit(){document.getElementById('dial').style.transform='translate(-50%,-50%) scale('+Math.min(innerWidth/620,innerHeight/620)*.96+')'}fit();addEventListener('resize',fit);const back=document.getElementById('rhymeClose'),orbit=document.createElement('div');orbit.id='rhymeBackOrbit';document.getElementById('dial').append(orbit);orbit.append(back);back.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();parent.postMessage({type:'eota-rhyme-close'},'*')});</script><script>
 (function(){
  const ring=document.querySelector('#dial .inner-ring');if(!ring)return;
  let canvas;
@@ -2663,4 +2663,4 @@ html,body{margin:0!important;padding:0!important;width:100%!important;height:100
  new MutationObserver(()=>{if(!canvas?.isConnected)draw();}).observe(ring,{childList:true});
  draw();
 })();
-</script></body></html>
+</script><script id="rhiyme-visible-copy">(()=>{const pattern=/\b(?:rhyme|rhime)\b/gi;function visit(root){if(root.nodeType===3){const parent=root.parentElement;if(parent&&!parent.closest('script,style,textarea,input,code,pre,a[href^="mailto:"]')){const value=root.nodeValue.replace(pattern,'RHIYME');if(value!==root.nodeValue)root.nodeValue=value;}return;}if(root.nodeType!==1&&root.nodeType!==9)return;if(root.nodeType===1){for(const name of ['title','alt','aria-label','placeholder']){const value=root.getAttribute(name);if(value){const next=value.replace(pattern,'RHIYME');if(next!==value)root.setAttribute(name,next);}}}for(const child of [...root.childNodes])visit(child);}visit(document.documentElement);new MutationObserver(records=>{for(const record of records){if(record.type==='characterData')visit(record.target);else if(record.type==='attributes')visit(record.target);else for(const node of record.addedNodes)visit(node);}}).observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['title','alt','aria-label','placeholder']});})();</script></body></html>
