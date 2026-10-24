@@ -1261,6 +1261,7 @@ document.getElementById('mini-youtube-close').onclick=close;expand.onclick=()=>{
 <script id="homepage-playing-pc-art-controls">(()=>{
 const wrapper=document.getElementById('eota-youtube-video'),frame=document.getElementById('homepage-featured-youtube'),art=document.getElementById('homepage-playing-pc-art');
 if(!wrapper||!frame||!art)return;
+const showcase=document.getElementById('rhiyme-gaming-pc-showcase'),categories=document.getElementById('rhyme-product-categories');if(showcase&&categories)categories.parentNode.insertBefore(showcase,categories);
 function sync(playing){wrapper.classList.toggle('homepage-video-playing',playing);art.setAttribute('aria-hidden',String(!playing))}
 function init(){if(!window.YT?.Player)return;new YT.Player(frame,{events:{onStateChange:event=>sync(event.data===YT.PlayerState.PLAYING),onError:()=>sync(false)}})}
 if(window.YT?.Player)init();else{const previous=window.onYouTubeIframeAPIReady;window.onYouTubeIframeAPIReady=()=>{if(typeof previous==='function')previous();init()};if(!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')){const tag=document.createElement('script');tag.src='https://www.youtube.com/iframe_api';document.head.appendChild(tag)}}
