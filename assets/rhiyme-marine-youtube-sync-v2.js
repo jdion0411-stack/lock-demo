@@ -62,6 +62,7 @@
   function initialize() {
     if (player || !window.YT || !window.YT.Player) return;
     player = new window.YT.Player(frame, {
+      host: url.origin,
       events: {
         onReady: () => {
           ready = true;
