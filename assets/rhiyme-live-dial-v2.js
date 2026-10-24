@@ -1,0 +1,10 @@
+(()=>{
+const app=document.querySelector('#dial .letter[data-letter="A"]');if(!app)return;document.querySelector('.desktop-canvas')?.setAttribute('role','group');app.dataset.liveBroadcast='';app.setAttribute('role','button');app.setAttribute('tabindex','0');app.setAttribute('aria-label','Live Stream to Site');app.title='Live Stream to Site';app.innerHTML='<span class="desktop-app-icon live-broadcast-icon"><span class="live-broadcast-caption">LIVE<br>TO SITE</span></span>';
+const style=document.createElement('style');style.textContent=`#dial .letter[data-live-broadcast]{pointer-events:auto!important;cursor:pointer}#dial .letter[data-live-broadcast] .desktop-app-icon{background:radial-gradient(circle at 30% 20%,#34576d,#122b3d)!important;border:1px solid #ccb16f!important;display:grid!important;place-items:center!important}#dial .letter[data-live-broadcast] .live-broadcast-caption{font:800 8px/1.1 Arial!important;letter-spacing:0!important;color:#f5dfab!important;text-align:center;display:block;pointer-events:none}#dial .letter[data-live-broadcast].on-air .desktop-app-icon{background:#b51335!important;border-color:#ff8a9d!important;box-shadow:0 0 12px #ff335f!important}#dial .letter[data-live-broadcast]:focus-visible{outline:2px solid white;outline-offset:3px;border-radius:50%}`;document.head.append(style);
+function launch(event){event.preventDefault();event.stopImmediatePropagation();parent.postMessage({type:'rhiyme-live-open'},'*')}
+app.addEventListener('click',launch,true);app.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')launch(e)},true);
+function paint(live){app.classList.toggle('on-air',live);app.setAttribute('aria-label',live?'Live Stream to Site — broadcasting now':'Live Stream to Site');app.title=live?'Broadcasting live to your site':'Live Stream to Site'}
+addEventListener('message',e=>{if(e.source===parent&&e.data?.type==='rhiyme-live-status')paint(e.data.live===true)});
+if(parent===window){const check=()=>fetch('https://rhiyme-live.duskyshark16.chatgpt.site/api/status',{cache:'no-store'}).then(r=>r.json()).then(s=>paint(s.live===true)).catch(()=>paint(false));check();setInterval(check,7000)}
+})();
+
