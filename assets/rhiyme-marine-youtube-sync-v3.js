@@ -143,7 +143,10 @@
                 const result = army.play();
                 if (result && result.catch) result.catch(() => {});
               }
-              startAll();
+              if (performance.now() >= syncingUntil) {
+                syncingUntil = performance.now() + 1400;
+                startAll();
+              }
             }
             if (entries.every(e => e.ready && !e.failed && e.player.getPlayerState() === 1)) hideRetry();
           },
