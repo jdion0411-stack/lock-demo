@@ -79,11 +79,28 @@
     for (const entry of entries) {
       if (!entry.ready) continue;
       if (firstStart) { syncingUntil = performance.now() + 1400; align(entry); }
-      try { entry.player.playVideo(); }
+      try { const state = entry.player.getPlayerState(); if (state !== 1 && state !== 3 && state !== 0) entry.player.playVideo(); }
       catch (_) { showRetry('Tap Play linked videos to allow playback.'); }
     }
   }
-  army.addEventListener('play', startAll);
+  function mediaBudget() {
+    const active = !army.paused && !army.ended;
+    document.documentElement.classList.toggle('linked-media-active', active);
+    document.documentElement.classList.toggle('mobile-youtube-active', active);
+    for (const id of ['codex-visualization', 'eota-desktop-demo']) {
+      const frame = document.getElementById(id);
+      frame?.contentWindow?.postMessage({type:'eota-mobile-youtube-rest', rest:active}, '*');
+      if (id === 'codex-visualization') frame?.contentWindow?.postMessage({type:'eota-reader-rest', rest:active || document.hidden}, '*');
+    }
+    document.querySelectorAll('video[autoplay][muted]:not([controls])').forEach(video => {
+      if (active) video.pause();
+      else { const r = video.getBoundingClientRect(); if (!document.hidden && r.bottom > 0 && r.top < innerHeight) video.play().catch(() => {}); }
+    });
+    document.dispatchEvent(new Event('eota-mobile-youtube-budget'));
+  }
+  army.addEventListener('play', () => { mediaBudget(); startAll(); });
+  army.addEventListener('pause', mediaBudget);
+  army.addEventListener('ended', mediaBudget);
   // Seeking fires for backward and forward timeline changes, including reset to zero.
   // seeked applies the final position even when the army video stays paused.
   army.addEventListener('seeking', seekAll);
@@ -115,6 +132,7 @@
           onReady: () => {
             entry.ready = true;
             entry.failed = false;
+            try { entry.player.setPlaybackQuality('medium'); } catch (_) {}
             if (entries.every(e => e.ready)) clearTimeout(readinessTimer);
             if (requested) {
               align(entry);
@@ -198,7 +216,7 @@
         const elapsed = (now - previous.now) / 1000;
         const delta = time - previous.time;
         const expected = previous.state === 1 ? elapsed : 0;
-        if (delta < -0.7 || delta > expected + 1.6) {
+        if (delta < -0.7 || (previous.state !== 3 && state !== 3 && delta > expected + 5)) {
           syncingUntil = now + 1400;
           samples.clear();
           army.currentTime = Math.max(0, time);
@@ -207,7 +225,7 @@
         }
       } catch (_) {}
     }
-  }, 250);
+  }, 500);
   armTimeout();
   if (window.YT && window.YT.Player) initialize();
   else loadApi();
