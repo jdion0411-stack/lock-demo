@@ -29,3 +29,8 @@ Run `node scripts/check_proposal_analytics.cjs` for isolated event checks withou
 Use GA4 Realtime/DebugView to confirm receipt after deployment; standard reports can take 24-48 hours. Named milestones can be found in the Events report without registering custom parameters. Register parameters as custom dimensions/metrics if you need parameter-based explorations. Check internal-traffic filters in Testing mode before activation; exclusions affect future processing and can be irreversible.
 
 The code audit found one Google tag configuration on the homepage and none on the proposal before this change. Other standalone app pages are outside this change. No Analytics account settings, bot exclusions, consent settings, or filters were changed. A connected GA4 account is needed to inspect those settings. Known-bot exclusion does not establish that all remaining traffic is human.
+
+
+## Quiet reading and measurement version 2
+
+Events now include measurement_version=2. Separate proposal_visible_30s, proposal_visible_60s, proposal_visible_180s and proposal_visible_300s milestones measure visible, focused foreground time even without input. Hidden, unfocused and suspended intervals do not accumulate. These are exposure signals, not confirmed human readership. The existing proposal_active_* events still pause after 60 seconds without interaction; missing active milestones cannot establish that a visitor is a bot or did not read. Repeated city estimates are not recipient identities. This change does not backfill earlier events.
