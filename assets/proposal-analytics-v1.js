@@ -23,6 +23,7 @@
     window.gtag('event', name, {
       send_to: measurementId,
       proposal_id: 'fair_opportunity_access',
+      measurement_version: '2',
       ...parameters
     });
   }
@@ -43,6 +44,8 @@
   send('proposal_open');
   const sentDepths = new Set();
   const sentTimes = new Set();
+  const sentVisibleTimes = new Set();
+  let visibleSeconds = 0;
   let maximumDepth = 0;
   let activeSeconds = 0;
   let lastActivity = performance.now();
@@ -80,8 +83,17 @@
     const now = performance.now();
     const elapsed = (now - previousTick) / 1000;
     previousTick = now;
-    // Ignore suspension gaps and pause after 60 seconds without interaction.
-    if (!isVisible() || elapsed <= 0 || elapsed > 5 || now - lastActivity > 60000) return;
+    // Foreground time includes quiet reading; it does not establish a human reader.
+    // Keep it separate from time with recent input, which pauses on inactivity.
+    if (!isVisible() || elapsed <= 0 || elapsed > 5) return;
+    visibleSeconds += elapsed;
+    for (const threshold of [30, 60, 180, 300]) {
+      if (visibleSeconds >= threshold && !sentVisibleTimes.has(threshold)) {
+        sentVisibleTimes.add(threshold);
+        send('proposal_visible_' + threshold + 's', { visible_seconds: threshold });
+      }
+    }
+    if (now - lastActivity > 60000) return;
     activeSeconds += elapsed;
     for (const threshold of [30, 60, 180, 300]) {
       if (activeSeconds >= threshold && !sentTimes.has(threshold)) {
