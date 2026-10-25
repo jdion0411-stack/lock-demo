@@ -7,6 +7,8 @@
   if (!army || !frames.length) return;
   const entries = frames.map(frame => ({ frame, player: null, ready: false, failed: false, bufferTimer: null, lastTime: 0 }));
   let requested = false, hasStarted = false, apiTag, readinessTimer;
+  let syncingUntil = 0;
+  const samples = new Map();
   const retry = document.createElement('button');
   retry.type = 'button';
   retry.textContent = 'Play linked videos';
@@ -65,6 +67,8 @@
     } catch (_) { showRetry('Tap Play linked videos to retry playback.'); }
   }
   function seekAll() {
+    syncingUntil = performance.now() + 1400;
+    samples.clear();
     requested = true;
     entries.forEach(align);
   }
@@ -74,7 +78,7 @@
     requested = true;
     for (const entry of entries) {
       if (!entry.ready) continue;
-      if (firstStart) align(entry);
+      if (firstStart) { syncingUntil = performance.now() + 1400; align(entry); }
       try { entry.player.playVideo(); }
       catch (_) { showRetry('Tap Play linked videos to allow playback.'); }
     }
@@ -130,6 +134,16 @@
             } else if (event.data === 1) {
               entry.recover.hidden = true;
               entry.recover.style.display = 'none';
+              if (!hasStarted && performance.now() >= syncingUntil) {
+                army.currentTime = Math.max(0, entry.player.getCurrentTime() || 0);
+                seekAll();
+                const result = army.play();
+                if (result && result.catch) result.catch(() => showRetry('Tap the army video to start linked playback.'));
+              } else if (army.paused && !document.hidden && performance.now() >= syncingUntil) {
+                const result = army.play();
+                if (result && result.catch) result.catch(() => {});
+              }
+              startAll();
             }
             if (entries.every(e => e.ready && !e.failed && e.player.getPlayerState() === 1)) hideRetry();
           },
@@ -167,6 +181,30 @@
     try { if (typeof previous === 'function') previous(); }
     finally { initialize(); }
   };
+  // YouTube does not expose a seek event. Detect timeline jumps in either companion.
+  setInterval(() => {
+    const now = performance.now();
+    for (const entry of entries) {
+      if (!entry.ready || entry.failed || !entry.player) continue;
+      try {
+        const time = entry.player.getCurrentTime();
+        const state = entry.player.getPlayerState();
+        const previous = samples.get(entry);
+        samples.set(entry, { time, now, state });
+        if (!hasStarted || now < syncingUntil || !previous || state === 0 || state === -1) continue;
+        const elapsed = (now - previous.now) / 1000;
+        const delta = time - previous.time;
+        const expected = previous.state === 1 ? elapsed : 0;
+        if (delta < -0.7 || delta > expected + 1.6) {
+          syncingUntil = now + 1400;
+          samples.clear();
+          army.currentTime = Math.max(0, time);
+          entries.forEach(other => { if (other !== entry) align(other); });
+          break;
+        }
+      } catch (_) {}
+    }
+  }, 250);
   armTimeout();
   if (window.YT && window.YT.Player) initialize();
   else loadApi();
