@@ -5,7 +5,7 @@
   const frames = ['homepage-additional-youtube', 'homepage-second-companion-youtube']
     .map(id => document.getElementById(id)).filter(Boolean);
   if (!army || !frames.length) return;
-  const entries = frames.map(frame => ({ frame, player: null, ready: false, failed: false }));
+  const entries = frames.map(frame => ({ frame, player: null, ready: false, failed: false, bufferTimer: null, lastTime: 0 }));
   let requested = false, apiTag, readinessTimer;
   const retry = document.createElement('button');
   retry.type = 'button';
@@ -38,6 +38,22 @@
     entry.frame.loading = 'eager';
     entry.frame.referrerPolicy = 'strict-origin-when-cross-origin';
     if (entry.frame.src !== url.toString()) entry.frame.src = url.toString();
+    const recover = document.createElement('button');
+    recover.type = 'button';
+    recover.textContent = 'Resume this video';
+    recover.hidden = true;
+    recover.style.cssText = 'display:none;margin:10px auto;padding:10px 18px;border:1px solid #b99b57;border-radius:20px;background:#102b3d;color:#f3d386;cursor:pointer';
+    recover.setAttribute('aria-label', 'Reload this video from its current playback position');
+    entry.frame.insertAdjacentElement('afterend', recover);
+    entry.recover = recover;
+    recover.addEventListener('click', () => {
+      if (!entry.ready || !entry.player) { showRetry('Tap Play linked videos to reload the player.'); return; }
+      try {
+        const time = Math.max(0, entry.player.getCurrentTime() || entry.lastTime || 0);
+        entry.player.loadVideoById({ videoId: entry.url.pathname.split('/').pop(), startSeconds: time });
+        entry.failed = false;
+      } catch (_) { showRetry('Tap Play linked videos to retry playback.'); }
+    });
   }
   function align(entry) {
     if (!entry.ready || !entry.player) return;
@@ -99,12 +115,27 @@
               if (!army.paused) entry.player.playVideo();
             }
           },
-          onStateChange: () => {
+          onStateChange: event => {
+            clearTimeout(entry.bufferTimer);
+            if (entry.ready) entry.lastTime = entry.player.getCurrentTime() || entry.lastTime;
+            if (event.data === 3) {
+              entry.bufferTimer = setTimeout(() => {
+                if (entry.player.getPlayerState() === 3) {
+                  entry.recover.hidden = false;
+                  entry.recover.style.display = 'block';
+                }
+              }, 10000);
+            } else if (event.data === 1) {
+              entry.recover.hidden = true;
+              entry.recover.style.display = 'none';
+            }
             if (entries.every(e => e.ready && !e.failed && e.player.getPlayerState() === 1)) hideRetry();
           },
           onAutoplayBlocked: () => showRetry('Tap Play linked videos to allow playback.'),
           onError: () => {
             entry.failed = true;
+            entry.recover.hidden = false;
+            entry.recover.style.display = 'block';
             showRetry('A YouTube video could not play here. Tap Play linked videos to retry.');
           }
         }
