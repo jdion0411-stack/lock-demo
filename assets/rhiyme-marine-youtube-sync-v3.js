@@ -6,7 +6,7 @@
     .map(id => document.getElementById(id)).filter(Boolean);
   if (!army || !frames.length) return;
   const entries = frames.map(frame => ({ frame, player: null, ready: false, failed: false, bufferTimer: null, lastTime: 0 }));
-  let requested = false, apiTag, readinessTimer;
+  let requested = false, hasStarted = false, apiTag, readinessTimer;
   const retry = document.createElement('button');
   retry.type = 'button';
   retry.textContent = 'Play linked videos';
@@ -69,10 +69,12 @@
     entries.forEach(align);
   }
   function startAll() {
+    const firstStart = !hasStarted;
+    hasStarted = true;
     requested = true;
     for (const entry of entries) {
       if (!entry.ready) continue;
-      align(entry);
+      if (firstStart) align(entry);
       try { entry.player.playVideo(); }
       catch (_) { showRetry('Tap Play linked videos to allow playback.'); }
     }
