@@ -1272,7 +1272,7 @@ const ids=['homepage-featured-youtube','homepage-linked-youtube'];
 const entries=ids.map(id=>({frame:document.getElementById(id),ready:false,player:null,sample:null}));
 if(entries.some(e=>!e.frame))return;
 let guard=0;
-const status=document.createElement('button');status.type='button';status.textContent='Play both videos';status.style.cssText='display:block;margin:12px auto;padding:10px 20px;border-radius:20px;background:#102b3d;color:#f3d386;border:1px solid #b99b57';entries[1].frame.after(status);
+const status=document.createElement('button');status.type='button';status.hidden=true;status.textContent='Play both videos';status.style.cssText='display:none;margin:12px auto;padding:10px 20px;border-radius:20px;background:#102b3d;color:#f3d386;border:1px solid #b99b57';entries[1].frame.after(status);
 for(const e of entries){const u=new URL(e.frame.src);u.searchParams.set('enablejsapi','1');u.searchParams.set('origin',location.origin);e.frame.src=u.href;e.frame.loading='eager';}
 function link(source,seek,state){guard=performance.now()+1800;for(const e of entries){if(e===source||!e.ready)continue;if(seek)e.player.seekTo(source.player.getCurrentTime(),true);if(state===1)e.player.playVideo();if(state===2)e.player.pauseVideo();}entries.forEach(e=>e.sample=null);}
 function initialize(){for(const e of entries){if(e.player)continue;e.player=new YT.Player(e.frame,{events:{onReady(){e.ready=true;},onStateChange(event){if(performance.now()<guard)return;if(event.data===1||event.data===2)link(e,event.data===1,event.data);},onAutoplayBlocked(){status.textContent='Tap to play both videos';},onError(){status.textContent='Retry linked playback';}}});}}
